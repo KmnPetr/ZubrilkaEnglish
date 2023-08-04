@@ -1,0 +1,4 @@
+UPDATE word SET groupwrd='FIRST300WORDS'WHERE id IN (1,2,3)
+
+
+UPDATE person SET role='ROLE_ADMIN' WHERE id=1;

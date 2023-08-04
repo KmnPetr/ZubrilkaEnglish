@@ -1,0 +1,32 @@
+version: '3.5'
+
+# 28700 - zubrilkaEnglishServer
+# 28701 - zubrilkaEnglish_db
+
+services:
+
+  zubrilka-english-server:
+    #    container_name: zubrilka-english-server
+    build: .
+    ports:
+      - "28700:28700"
+
+  zubrilka-english_db:
+    image: postgres:14.3-alpine
+    restart: always
+#    container_name: zubrilkaEnglish_db
+    ports:
+      - "28701:28701"
+    environment:
+      - POSTGRES_PASSWORD=CFdZZclszCTaUse
+      - POSTGRES_USER=postgres
+    command:
+      # изменяем порт в postgres.config
+      - "postgres"
+      - "-c"
+      - "port=28701"
+    volumes:
+      - zubrilkaEnglish_db_vol:/var/lib/postgresql/data/
+
+volumes:
+  zubrilkaEnglish_db_vol: {}

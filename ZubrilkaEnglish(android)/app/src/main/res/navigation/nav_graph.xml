@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/menuFragment">
+
+    <fragment
+        android:id="@+id/menuFragment"
+        android:name="com.example.zubrilkaenglish.screens.menu.MenuFragment"
+        android:label="fragment_menu"
+        tools:layout="@layout/fragment_menu" >
+        <action
+            android:id="@+id/action_menuFragment_to_allWordsFragment"
+            app:destination="@id/allWordsFragment" />
+        <action
+            android:id="@+id/action_menuFragment_to_trainingFragment"
+            app:destination="@id/trainingFragment" />
+        <action
+            android:id="@+id/action_menuFragment_to_testRoomFragment"
+            app:destination="@id/testRoomFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/allWordsFragment"
+        android:name="com.example.zubrilkaenglish.screens.allWords.AllWordsFragment"
+        android:label="fragment_all_words"
+        tools:layout="@layout/fragment_all_words" />
+    <fragment
+        android:id="@+id/trainingFragment"
+        android:name="com.example.zubrilkaenglish.screens.training.TrainingFragment"
+        android:label="fragment_training"
+        tools:layout="@layout/fragment_training" />
+    <fragment
+        android:id="@+id/testRoomFragment"
+        android:name="com.example.zubrilkaenglish.screens.testRoom.TestRoomFragment"
+        android:label="fragment_test_room"
+        tools:layout="@layout/fragment_test_room" />
+</navigation>
