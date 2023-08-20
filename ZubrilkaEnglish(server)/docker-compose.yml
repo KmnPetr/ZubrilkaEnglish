@@ -1,0 +1,34 @@
+version: '3.5'
+
+# 28700 - ze_app
+# 28701 - ze_db
+
+services:
+  ze_app:
+    container_name: ze_app
+    image: kmnpetr/ze:latest
+    ports:
+      - "28700:28700"
+    networks:
+      - ze_network
+
+  ze_db:
+    image: postgres:14.3-alpine
+    restart: always
+    container_name: ze_db
+    ports:
+      - "28701:5432"
+    environment:
+      - POSTGRES_PASSWORD=CFdZZclszCTaUse
+      - POSTGRES_USER=postgres
+    volumes:
+      - ze_db:/var/lib/postgresql/data/
+    networks:
+      - ze_network
+
+volumes:
+  ze_db:
+
+networks:
+  ze_network:
+    driver: bridge

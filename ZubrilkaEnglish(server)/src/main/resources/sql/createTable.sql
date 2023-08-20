@@ -12,6 +12,7 @@ CREATE TABLE Word(
                      foreign_word varchar(400)NOT NULL,
                      transcription varchar(100),
                      translation varchar(400)NOT NULL,
+                     description varchar(400),
                      groupWrd varchar(50),
                      has_voise varchar(50),
                      has_image varchar(50)
