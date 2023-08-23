@@ -52,6 +52,29 @@ VALUES
     ('stay','[steɪ]','оставаться','','Движения'),
     ('fall','[fɔːl]','падать','fall (fell, fallen)','Движения'),
     ('wear','[weə]','носить (напр. одежду)','','Движения'),
+    step	[stɛp]	шагнуть
+    roll	[rəʊl]	катиться, сворачивать
+    ride (rode, ridden)	[raɪd]	ехать (напр. верхом)
+    lift	[lɪft]	поднимать
+    jump	[ʤʌmp]	прыгать
+    approach	[əˈprəʊʧ]	приближаться
+    cross	[krɒs]	пересекать
+    climb	[klaɪm]	лезть (карабкаться)
+    bear (bore, born)	[beə]	нести
+    shift	[ʃɪft]	сдвигать
+    slip	[slɪp]	поскальзываться
+    rush	[rʌʃ]	торопиться
+    land	[lænd]	приземляться
+    escape	[ɪsˈkeɪp]	сбегать
+    drag	[dræg]	тащить
+    slide (slid, slid)	[slaɪd]	скользить
+    toss	[tɒs]	бросать (метать)
+    accompany	[əˈkʌmpəni]	сопровождать
+    swing (swung, swung)	[swɪŋ]	раскачивать
+    advance	[ədˈvɑːns]	продвигаться
+    swim (swam, swum)	[swɪm]	плыть
+    flee	[fliː]	убегать
+    sink (sank, sunk)	[sɪŋk]	тонуть
 
 --     Глаголы состояния
     ('be','[biː]','быть','be (was, been)','Глаголы состояния'),
@@ -123,6 +146,61 @@ VALUES
     ('test','[tɛst]','проверять','тестировать','Работа'),
     ('prevent','[prɪˈvɛnt]','предотвращать','','Работа'),
     ('publish','[ˈpʌblɪʃ]','публиковать','','Работа'),
+    achieve	[əˈʧiːv]	достигать (добиваться чего-то)
+    conduct	[kənˈdʌkt]	проводить
+    attend	[əˈtɛnd]	участвовать
+    complete	[kəmˈpliːt]	выполнять
+    handle (Handle with care)	[ˈhændl]	обращаться (работать с чем-либо, обычн. вручную)
+    handle (I can handle it)	[ˈhændl]	справляться (напр. с проблемой)
+    deliver	[dɪˈlɪvə]	доставлять
+    operate	[ˈɒpəreɪt]	управлять
+order	[ˈɔːdə]	приказывать
+    measure	[ˈmɛʒə]	измерять
+    engage	[ɪnˈgeɪʤ]	входить в контакт (заниматься)
+    hire	[ˈhaɪə]	нанимать на работу
+    train	[treɪn]	обучать
+    paint	[peɪnt]	красить
+    direct	[dɪˈrɛkt] [daɪˈrɛkt]	руководить (управлять)
+    solve	[sɒlv]	решать (проблему, задачу)
+    file	[faɪl]	вносить в записи
+    employ	[ɪmˈplɔɪ]	принимать на работу
+    make (made, made)	[meɪk]	делать, заставлять
+    try	[traɪ]	пробовать, пытаться
+    happen	[ˈhæpən]	случаться
+set (set, set)	[sɛt]	устанавливать
+    seek (sought, sought)	[siːk]	искать
+    fill	[fɪl]	заполнять
+    pass	[pɑːs]	проходить, передавать
+    attempt	[əˈtɛmpt]	пытаться
+    connect	[kəˈnɛkt]	подключать (соединять)
+    record	[rɪˈkɔːd]	записывать
+    locate	[ləʊˈkeɪt]	обнаружить (выяснить местоположение)
+    search	[sɜːʧ]	искать
+select	[sɪˈlɛkt]	выбирать
+    launch	[lɔːnʧ]	запускать
+adjust	[əˈʤʌst]	настраивать
+succeed	[səkˈsiːd]	достигать цели (преуспевать в чем-то)
+review	[rɪˈvjuː]	пересматривать, делать обзор
+    arrange (an event)	[əˈreɪnʤ]	организовывать (мероприятие)
+benefit	[ˈbɛnɪfɪt]	получать выгоду
+coach	[kəʊʧ]	тренировать
+exercise	[ˈɛksəsaɪz]	упражняться
+monitor	[ˈmɒnɪtə]	наблюдать
+supply	[səˈplaɪ]	обеспечивать
+assist	[əˈsɪst]	помогать
+construct	[kənˈstrʌkt]	строить
+schedule	[ˈʃɛdjuːl]	составлять график, вносить в график
+assign	[əˈsaɪn]	назначать, давать задание
+    dismiss	[dɪsˈmɪs]	увольнять
+practice	[ˈpræktɪs]	практиковаться
+illustrate	[ˈɪləstreɪt]	иллюстрировать
+enhance	[ɪnˈhɑːns]	улучшать, усиливать
+    implement	[ˈɪmplɪmɛnt]	выполнять, применять
+    preserve	[prɪˈzɜːv]	сохранять (уберегать)
+guide	[gaɪd]	вести (направлять)
+deserve	[dɪˈzɜːv]	заслуживать чего-то
+face (something)	[feɪs] ([ˈsʌmθɪŋ])	встретиться с чем-то (напр. с проблемой)
+cause	[kɔːz]	причинять что-либо
 
 --     Чувства, мышление
     ('teach','[tiːʧ]','преподавать','"обучать"; teach (taught, taught)','Чувства, мышление'),
@@ -151,6 +229,58 @@ VALUES
     ('plan','[plæn]','планировать','','Чувства, мышление'),
     ('note','[nəʊt]','замечать','"обращать внимание"','Чувства, мышление'),
     ('identify','[aɪˈdɛntɪfaɪ]','идентифицировать','','Чувства, мышление'),
+          explore	[ɪksˈplɔː]	исследовать
+    predict	[prɪˈdɪkt]	предсказывать
+acknowledge	[əkˈnɒlɪʤ]	признавать, подтверждать получение
+    fear	[fɪə]	бояться
+    conclude	[kənˈkluːd]	делать вывод
+    prefer	[priˈfɜː]	предпочитать
+    appreciate	[əˈpriːʃɪeɪt]	ценить
+    trust	[trʌst]	доверять
+    rely on	[rɪˈlaɪ ɒn]	полагаться на
+question	[ˈkwɛsʧən]	подвергать сомнению, допрашивать
+regard	[rɪˈgɑːd]	учитывать, считать кем-либо, чем-либо
+suspect	[səsˈpɛkt]	подозревать
+suppose	[səˈpəʊz]	предполагать
+perceive	[pəˈsiːv]	воспринимать
+inspire	[ɪnˈspaɪə]	вдохновлять
+analyze	[ˈænəlaɪz]	анализировать
+concentrate	[ˈkɒnsəntreɪt]	сосредоточиваться
+smell (smelt, smelt)	[smɛl]	нюхать, пахнуть
+glance	[glɑːns]	смотреть (бросать взгляд)
+dream (dreamt, dreamt)	[driːm]	мечать (видеть сны)
+react	[ri(ː)ˈækt]	реагировать
+choose	[ʧuːz]	выбирать
+expect	[ɪksˈpɛkt]	ожидать
+miss	[mɪs]	упускать, скучать
+realize	[ˈrɪəlaɪz]	реализовать, осознавать
+    determine	[dɪˈtɜːmɪn]	определять
+recognize	[ˈrɛkəgnaɪz]	узнавать
+compare	[kəmˈpeə]	сравнивать
+miss (someone)	[mɪs]	скучать (по кому-то\чему-то)
+study	[ˈstʌdi]	изучать (учиться)
+forget (forgot, forgot)	[fəˈgɛt]	забывать
+imagine	[ɪˈmæʤɪn]	воображать
+discover	[dɪsˈkʌvə]	совершать открытие
+worry	[ˈwʌri]	беспокоиться
+wait	[weɪt]	ждать
+experience	[ɪksˈpɪərɪəns]	переживать (испытывать что-то на себе)
+tend	[tɛnd]	иметь склонность (к чему-то)
+notice	[ˈnəʊtɪs]	замечать
+wish	[wɪʃ]	желать
+figure out	[ˈfɪgər aʊt]	выяснять (находить решение)
+suffer	[ˈsʌfə]	страдать
+recall	[rɪˈkɔːl]	вспоминать
+stare	[steə]	пристально смотреть, пялиться
+examine	[ɪgˈzæmɪn]	проверять (изучать)
+define	[dɪˈfaɪn]	определять
+observe	[əbˈzɜːv]	наблюдать
+count	[kaʊnt]	считать
+associate	[əˈsəʊʃɪeɪt]	ассоциировать (с чем-то)
+view	[vjuː]	смотреть
+remind	[ˈrɪmaɪnd]	напоминать
+hate	[heɪt]	ненавидеть
+intend	[ɪnˈtɛnd]	намереваться
 
 --     Общение
     ('say','[seɪ]','сказать','say (said, said)','Общение'),
@@ -181,6 +311,97 @@ VALUES
     ('answer','[ˈɑːnsə]','отвечать','','Общение'),
     ('state','[steɪt]','делать заявление','','Общение'),
     ('discuss','[dɪsˈkʌs]','обсуждать','','Общение'),
+    laugh	[lɑːf]	смеяться
+guess	[gɛs]	догадываться
+prove	[pruːv]	доказывать
+sound	[saʊnd]	звучать
+respond	[rɪsˈpɒnd]	отвечать
+reveal	[rɪˈviːl]	выявлять, раскрывать
+treat	[triːt]	лечить (обращаться с кем-либо)
+affect	[əˈfɛkt]	влиять (воздействовать)
+mention	[ˈmɛnʃən]	упоминать
+care	[keə]	заботиться, беспокоиться, относиться не безразлично
+avoid	[əˈvɔɪd]	избегать
+support	[səˈpɔːt]	поддерживать
+sing (sang, sung)	[sɪŋ]	петь
+address	[əˈdrɛs]	обращаться к кому-то
+smile	[smaɪl]	улыбаться
+admit	[ədˈmɪt]	признать
+assume	[əˈsjuːm]	предполагать
+refer	[rɪˈfɜː]	ссылаться на что-то, направлять, отсылать
+announce	[əˈnaʊns]	объявлять
+encourage	[ɪnˈkʌrɪʤ]	воодушевлять, поощрять, побуждать
+introduce	[ˌɪntrəˈdjuːs]	представлять (напр. одного человека другому)
+refuse	[ˌriːˈfjuːz]	отказываться
+express	[ɪksˈprɛs]	выражать
+settle	[ˈsɛtl]	улаживать (вопрос)
+    cry	[kraɪ]	плакать (кричать)
+insist	[ɪnˈsɪst]	настаивать
+ignore	[ɪgˈnɔː]	игнорировать
+deny	[dɪˈnaɪ]	отрицать
+promise	[ˈprɒmɪs]	обещать
+demand	[dɪˈmɑːnd]	требовать
+welcome	[ˈwɛlkəm]	приветствовать
+invite	[ɪnˈvaɪt]	приглашать
+repeat	[rɪˈpiːt]	повторять
+recommend	[ˌrɛkəˈmɛnd]	рекомендовать
+propose	[prəˈpəʊz]	предлагать
+declare	[dɪˈkleə]	объявлять
+matter (It doesn’t matter)	[ˈmætə]	иметь значение
+judge	[ˈʤʌʤ]	судить, осуждать
+ensure	[ɪnˈʃʊə]	обеспечивать (гарантировать, убеждаться в чем-то)
+challenge	[ˈʧælɪnʤ]	бросать вызов
+warn	[wɔːn]	предупреждать
+influence	[ˈɪnflʊəns]	влиять
+blame	[bleɪm]	винить
+complain	[kəmˈpleɪn]	жаловаться
+back	[bæk]	поддерживать, отступать
+cite	[saɪt]	цитировать (ссылаться)
+emphasize	[ˈɛmfəsaɪz]	подчеркивать (делать ударение на чем-то)
+decline	[dɪˈklaɪn]	отклонять (напр. предложение)
+accuse	[əˈkjuːz]	обвинять
+reject	[rɪˈʤɛkt]	отвергать
+convince	[kənˈvɪns]	убеждать
+    approve	[əˈpruːv]	подтверждать, одобрять
+list	[lɪst]	перечислять, составлять список
+permit	[pəˈmɪt]	разрешать
+scream	[skriːm]	кричать
+shout	[ʃaʊt]	выкрикивать, кричать
+inform	[ɪnˈfɔːm]	информировать
+bother	[ˈbɒðə]	беспокоить
+reply	[rɪˈplaɪ]	отвечать
+resolve	[rɪˈzɒlv]	решать (вопрос)
+contact	[ˈkɒntækt]	контактировать, связываться
+interview	[ˈɪntəvjuː]	проводить интервью (беседу)
+quote	[kwəʊt]	цитировать
+urge	[ɜːʤ]	торопить
+whisper	[ˈwɪspə]	шептать
+favor (favour)	[ˈfeɪvə]	оказывать внимание, быть благосклонным
+comment	[ˈkɒmɛnt]	коментировать
+negotiate	[nɪˈgəʊʃɪeɪt]	вести переговоры
+advise	[ədˈvaɪz]	советовать
+criticize	[ˈkrɪtɪsaɪz]	критиковать
+    assure	[əˈʃʊə]	уверять
+yell	[jɛl]	кричать
+communicate	[kəˈmjuːnɪkeɪt]	общаться
+disagree	[ˌdɪsəˈgriː]	не соглашаться
+proceed	[prəˈsiːd]	переходить к чему-то, продолжать как запланировано
+translate	[trænsˈleɪt]	переводить (лингв.)
+interpret	[ɪnˈtɜːprɪt]	толковать, интерпретировать, переводить (устно)
+pause	[pɔːz]	делать паузу
+imply	[ɪmˈplaɪ]	предполагать, подразумевать, намекать
+respect	[rɪsˈpɛkt]	уважать
+characterize	[ˈkærɪktəraɪz]	характеризовать
+appeal	[əˈpiːl]	обращаться, апеллировать
+stress	[strɛs]	делать ударение, подчеркивать (в речи)
+doubt	[daʊt]	сомневаться
+guarantee	[ˌgærənˈtiː]	гарантировать
+honor	[ˈɒnə]	чтить, уважать
+encounter	[ɪnˈkaʊntə]	встречать (случайно встретить кого-то)
+dominate	[ˈdɒmɪneɪt]	доминировать, иметь полный контроль
+accept	[əkˈsɛpt]	принимать
+let (let, let)	[lɛt]	позволять
+date	[deɪt]	встречаться, ходить на свидания
 
 --         Спорт
     ('win','[wɪn]','побеждать','win (won, won)','Спорт'),
@@ -210,4 +431,205 @@ VALUES
     ('target','[ˈtɑːgɪt]','нацелиться','"делать мишенью"','Спорт'),
     ('overcome','[ˌəʊvəˈkʌm]','преодолевать','','Спорт'),
     ('give up','[gɪv ʌp]','сдаваться','give(gave, given)','Спорт'),
-    ('surrender','[səˈrɛndə]','сдаваться','','Спорт');
+    ('surrender','[səˈrɛndə]','сдаваться','','Спорт'),
+
+--     Экономика
+    ('cost','[kɒst]','стоить','cost (cost, cost)','Экономика'),
+    ('earn','[ɜːn]','зарабатывать','','Экономика'),
+    ('make money','[meɪk ˈmʌni]','зарабатывать','make(made, made)','Экономика'),
+    ('promote','[prəˈməʊt]','способствовать','"продвигать", "рекламировать", "повышать по службе"','Экономика'),
+    ('charge','[ʧɑːʤ]','брать плату','','Экономика'),
+    ('estimate','[ˈɛstɪmeɪt]','оценивать','','Экономика'),
+    ('account','[əˈkaʊnt]','считать','"вести учет"','Экономика'),
+    ('invest','[ɪnˈvɛst]','инвестировать','','Экономика'),
+    ('assess','[əˈsɛs]','оценивать','','Экономика'),
+    ('compete','[kəmˈpiːt]','конкурировать','','Экономика'),
+    ('purchase','[ˈpɜːʧəs]','покупать','','Экономика'),
+    ('evaluate','[ɪˈvæljʊeɪt]','оценивать','','Экономика'),
+    ('trade','[treɪd]','торговать','','Экономика'),
+    ('market','[ˈmɑːkɪt]','продвигать на рынке (рекламировать)','','Экономика'),
+    ('withdraw','[wɪðˈdrɔː]','снимать (деньги)','','Экономика'),
+    ('convert','[kənˈvɜːt]','конвертировать','','Экономика'),
+    ('spend','[spɛnd]','тратить','втор. знач. "проводить время"; spend (spent, spent)','Экономика'),
+    ('buy','[baɪ]','покупать','buy (bought, bought)','Экономика'),
+    ('sell','[sɛl]','продавать','sell (sold, sold)','Экономика'),
+    ('deal','[diːl]','вести дела','deal (dealt, dealt)','Экономика'),
+    ('produce','[prəˈdjuːs]','производить','','Экономика'),
+    ('save','[seɪv]','экономить','"делать сбережения"','Экономика'),
+    ('rule','[ruːl]','править','"властвовать"','Экономика'),
+    ('elect','[ɪˈlɛkt]','выбирать (на выборах)','','Экономика'),
+    ('vote','[vəʊt]','голосовать','','Экономика'),
+    ('contribute','[kənˈtrɪbju(ː)t]','вносить вклад (во что-то)','','Экономика'),
+    ('settle','[ˈsɛtl]','расселяться','"создавать поселение"','Экономика'),
+    ('impose','[ɪmˈpəʊz]','налагать (напр. обязательство)','','Экономика'),
+    ('transfer','[trænsˈfɜː]','передавать','"переводить (напр. деньги)"','Экономика'),
+    ('distribute','[dɪsˈtrɪbju(ː)t]','распространять','','Экономика'),
+    ('deposit','[dɪpˈɒzɪtɪ]','вносить деньги','','Экономика'),
+    ('afford','[əˈfɔːd]','повзволять себе','','Экономика'),
+
+--     Человек
+    live	[lɪv]	жить
+    grow up (grew, grown)	[grəʊ ʌp]	расти
+    die	[daɪ]	умереть
+    be born (was, born)	[bi bɔːn]	быть рожденным
+    marry (get married)	[ˈmæri]	жениться (выходить замуж)
+    survive	[səˈvaɪv]	выживать
+    adopt	[əˈdɒpt]	усыновлять (удочерять)
+    retire	[rɪˈtaɪə]	выходить на пенсию
+    breathe	[briːð]	дышать
+    kiss	[kɪs]	целовать
+    bury	[ˈbɛri]	хоронить
+    pray	[preɪ]	молиться
+    graduate	[ˈgrædjʊeɪt]	выпускаться из учебного заведения
+    tire (get tired)	[ˈtaɪə]	уставать
+    adapt	[əˈdæpt]	адаптировать (-ся)
+    pretend	[prɪˈtɛnd]	притворяться
+    divorce (get divorced)	[dɪˈvɔːs]	разводиться (о супругах)
+    inherit	[ɪnˈhɛrɪt]	наследовать
+
+--     Дом
+    sleep (slept, slept)	[sliːp]	спать
+    dress	[drɛs]	одевать (-ся)
+    wake up (woke, woken)	[weɪk ʌp]	будить (просыпаться)
+    eat (ate, eaten)	[iːt]	есть
+    drink (drank, drunk)	[drɪŋk]	пить
+    feed (fed, fed)	[fiːd]	кормить
+    cook	[kʊk]	готовить пищу
+    taste	[teɪst]	пробовать на вкус
+    bake	[beɪk]	печь
+    freeze	[friːz]	замораживать
+    play	[pleɪ]	играть
+    spend (spent, spent)	[spɛnd]	проводить (напр. время)
+    enjoy	[ɪnˈʤɔɪ]	наслаждаться
+    visit	[ˈvɪzɪt]	навещать
+    travel	[ˈtrævl]	путешествовать
+    rest	[rɛst]	отдыхать
+    dance	[dɑːns]	танцевать
+    celebrate	[ˈsɛlɪbreɪt]	праздновать
+    bet (bet, bet)	[bɛt]	делать ставку
+    relax	[rɪˈlæks]	расслабляться
+    gamble	[ˈgæmbl]	играть в азартные игры
+    have fun (had, had)	[həv fʌn]	развлекаться (веселиться)
+
+--     Действия
+    weigh	[weɪ]	весить
+    balance	[ˈbæləns]	балансировать
+    flow (flew, flown)	[fləʊ]	течь
+    transform	[trænsˈfɔːm]	трансформировать (-ся)
+    recover	[rɪˈkʌvə]	восстанавливать (-ся)
+    expose	[ɪksˈpəʊz]	выставлять (подвергать чему-то)
+    pop	[pɒp]	хлопать (выскакивать)
+    indicate	[ˈɪndɪkeɪt]	указывать (служить признаком чего-либо)
+    alternate	[ˈɒltəneɪt]	чередовать
+    double	[ˈdʌbl]	удваивать
+    retain	[rɪˈteɪn]	удерживать
+    fade	[feɪd]	увядать (блекнуть)
+    form	[fɔːm]	формировать
+    shape	[ʃeɪp]	придавать форму
+    change	[ʧeɪnʤ]	менять
+    place	[pleɪs]	размещать
+    rise (rose, risen)	[raɪz]	поднимать (-ся)
+    reflect	[rɪˈflɛkt]	отражать (-ся)
+    enable	[ɪˈneɪbl]	включать (активировать)
+    wave	[weɪv]	развеваться, махать
+    snap	[snæp]	щелкать, трещать
+    display	[dɪsˈpleɪ]	показывать (выставлять на показ)
+    stick (stuck, stuck)	[stɪk]	липнуть
+    reach	[riːʧ]	достигать (дотягиваться)
+    catch (caught, caught)	[kæʧ]	ловить
+    drop	[drɒp]	ронять
+    hang (hung, hung)	[hæŋ]	повесить
+    touch	[tʌʧ]	прикасаться
+    clear	[klɪə]	очищать
+    pour	[pɔː]	лить (напр. воду)
+    stir	[stɜː]	перемешивать
+    clean	[kliːn]	чистить, убирать (мыть, приводить в порядок)
+    wrap	[ræp]	заворачивать
+    wash	[wɒʃ]	стирать (мыть)
+    ring (rang, rung)	[rɪŋ]	звонить
+    embrace	[ɪmˈbreɪs]	обнимать
+    hug	[hʌg]	обнимать
+    put (put, put)	[pʊt]	класть (помещать)
+    use	[juːz]	использовать
+    show	[ʃəʊ]	показывать
+    hold (held, held)	[həʊld]	держать
+    open	[ˈəʊpən]	открывать
+    cut (cut, cut)	[kʌt]	резать
+    pull	[pʊl]	тянуть
+        break (broke, broken)	[breɪk]	ломать
+        cover	[ˈkʌvə]	прикрывать
+        draw (drew, drawn)	[drɔː]	тянуть
+        point	[pɔɪnt]	указывать (на что-либо)
+close	[kləʊz]	закрывать
+    replace	[rɪˈpleɪs]	заменять
+    collect	[kəˈlɛkt]	собирать, забирать
+    grab	[græb]	хватать
+    tie	[taɪ]	связывать
+    press	[prɛs]	давить
+    link	[lɪŋk]	соединять, проводить связь между фактами
+    mix	[mɪks]	перемешивать
+    stretch	[strɛʧ]	растягивать
+    hand	[hænd]	подавать что-то, передавать из рук в руки
+    knock	[nɒk]	стучать
+    bend (bent, bent)	[bɛnd]	гнуть
+lock	[lɒk]	запирать на замок
+    tear (tore, torn)	[teə]	рвать
+    pack	[pæk]	упаковывать
+    attach	[əˈtæʧ]	прикреплять
+    dig (dug, dug)	[dɪg]	копать
+    bind (bound, bound)	[baɪnd]	связывать (веревкой)
+    wind (wound, wound)	[waɪnd]	закручивать
+    wipe	[waɪp]	протирать
+load	[ləʊd]	загружать
+    sweep (swept, swept)	[swiːp]	мести
+squeeze	[skwiːz]	сжимать
+rub	[rʌb]	тереть
+tap	[tæp]	постукивать
+spin (spun, spun)	[spɪn]	вращать
+plant	[plɑːnt]	сажать (растение)
+pick	[pɪk]	выбирать
+gather	[ˈgæðə]	собирать (вместе)
+hide (hid, hidden)	[haɪd]	прятать (-ся)
+blow (blew, blown)	[bləʊ]	дуть
+smoke	[sməʊk]	курить
+act	[ækt]	действовать
+do (did, done)	[duː]	делать
+demonstrate	[ˈdɛmənstreɪt]	демонстрировать
+lean	[liːn]	прислоняться, наклоняться
+fix	[fɪks]	чинить
+nod	[nɒd]	кивать
+pose	[pəʊz]	позировать
+send (sent, sent)	[sɛnd]	отправлять
+burn (burnt\burned, burnt\burned)	[bɜːn]	сжигать
+shut (shut, shut)	[ʃʌt]	закрывать
+line	[laɪn]	выстраивать в линию
+arrange	[əˈreɪnʤ]	приводить в порядок (расставлять)
+install	[ɪnˈstɔːl]	устанавливать
+
+--     Закон
+    testify	[ˈtɛstɪfaɪ]	давать показания
+    justify	[ˈʤʌstɪfaɪ]	оправдывать
+    violate	[ˈvaɪəleɪt]	нарушать
+    accuse	 [əˈkjuːz] 	обвинять
+    charge	 [ʧɑːʤ] 	обвинять (официально)
+    suspect	 [səsˈpɛkt] 	подозревать
+    witness	[ˈwɪtnɪs]	быть свидетелем
+    arrest	[əˈrɛst]	арестовывать
+    investigate	[ɪnˈvɛstɪgeɪt]	расследовать
+    confess	[kənˈfɛs]	сознаваться
+    sue	[sjuː]	подавать в суд
+    convict	[kənˈvɪkt]	выносить приговор
+    free	[friː]	освобождать
+    offend	[əˈfɛnd]	оскорблять
+    disturb	[dɪsˈtɜːb]	беспокоить
+    steal (stole, stolen)	[stiːl]	красть
+    beat (up) (beat, beaten)	[biːt]	бить, избивать
+    rob	[rɒb]	грабить
+    rape	[reɪp]	насиловать
+    murder	[ˈmɜːdə]	убивать
+    kill	[kɪl] 	убивать
+    attack  [əˈtæk] нападать
+    punish	[ˈpʌnɪʃ]	наказывать
+    do time (did, done)	[dʊ taɪm]	сидеть (в тюрьме)
+    interrogate	[ɪnˈtɛrəʊgeɪt]	допрашивать
+    swear (swore, sworn)	[sweə]	клясться
