@@ -1,92 +1,85 @@
+INSERT INTO word(foreign_word, transcription, translation, description, groupwrd)
+VALUES
 --     Пространство
-around (around the world)	[əˈraʊnd]	вокруг (вокруг света)
-at (at the gate)	[æt]	у (у ворот)
-by (house by the lake)	[baɪ]	около, у (дом у озера)
-in (in the room)	[ɪn]	в (в комнате)
-above (above the table)	[əˈbʌv]	над (над столом)
-among (the wolf among us)	[əˈmʌŋ]	среди (волк среди нас)
-behind (behind the building)	[bɪˈhaɪnd]	позади (позади здания)
-beside (beside the house)	[bɪˈsaɪd]	рядом с (рядом с домом)
-between (between two mountains)	[bɪˈtwiːn]	между (между двух гор)
-beyond (beyond the river)	[bɪˈjɒnd]	по ту сторону, за (за рекой)
-in front of (in front of TV)	[ɪn frʌntnɒv]	перед (перед телевизором)
-inside (inside the box)	[ɪnˈsaɪd]	внутри (внутри коробки)
-on (The cat is on the roof)	[ɒn]	на (кошка на крыше)
-out (to walk out)	[aʊt]	вне, наружу (выйти наружу)
-outside (Is there anybody outside?)	[ˌaʊtˈsaɪd]	снаружи (Есть кто-нибудь снаружи?)
-under (underground is under ground)	[ˈʌndə]	под (подземка под землей)
-within (within my heart)	[wɪˈðɪn]	внутри, в (в моем сердце)
-below (below sea level)	[bɪˈləʊ]	ниже (ниже уровня моря)
+    ('around','[əˈraʊnd]','вокруг','Пример: "around the world - вокруг света"','Пространство'),
+    ('at','[æt]','около, на, при, в, по, у, с, за, к, под','Пример: "at the gate - у ворот"','Пространство'),
+    ('by','[baɪ]','около, у, по, на, к, в, от, при, у, через, с, за, под','Пример: "house by the lake - дом у озера"','Пространство'),
+    ('in','[ɪn]','в','Пример: "in the room - в комнате"','Пространство'),
+    ('above','[əˈbʌv]','над','Пример: "above the table - над столом"','Пространство'),
+    ('among','[əˈmʌŋ]','среди','Пример: "the wolf among us - волк среди нас"','Пространство'),
+    ('behind','[bɪˈhaɪnd]','позади','Пример: "behind the building - позади здания"','Пространство'),
+    ('beside','[bɪˈsaɪd]','рядом с','Пример: "beside the house - рядом с домом"','Пространство'),
+    ('between','[bɪˈtwiːn]','между','Пример: "between two mountains - между двух гор"','Пространство'),
+    ('beyond','[bɪˈjɒnd]','по ту сторону, за','Пример: "beyond the river - за рекой"','Пространство'),
+    ('in front of','[ɪn frʌntnɒv]','перед','Пример: "in front of TV - перед телевизором"','Пространство'),
+    ('inside','[ɪnˈsaɪd]','внутри','Пример: "inside the box - внутри коробки"','Пространство'),
+    ('on','[ɒn]','на','Пример: "The cat is on the roof - кошка на крыше"','Пространство'),
+    ('out','[aʊt]','вне, наружу','Пример: "to walk out - выйти наружу"','Пространство'),
+    ('outside','[ˌaʊtˈsaɪd]','снаружи','Пример: "Is there anybody outside? - Есть кто-нибудь снаружи?"','Пространство'),
+    ('under','[ˈʌndə]','под','Пример: "underground is under ground - подземка под землей"','Пространство'),
+    ('within','[wɪˈðɪn]','внутри, в течение','Пример: "within my heart - в моем сердце"','Пространство'),
+    ('below','[bɪˈləʊ]','ниже','Пример: "below sea level - ниже уровня моря"','Пространство'),
 
 --     Время
-    around (around nine o’clock)	[əˈraʊnd]	около (около 9 часов)
-at (at the midday)	[æt]	в (в полдень)
-before (before breakfast)	[bɪˈfɔː]	до (до завтрака)
-by (by two o’clock)	[baɪ]	к какому-то времени (к двум часам)
-in (I’ll be back in ten minutes)	[ɪn]	через какое-то время (вернусь через 10 минут)
-for (I’ve been waiting for you for an hour)	[fɔː]	на протяжении (я ждал тебя на протяжении часа)
-since (I’ve been studying English since I was 10)	[sɪns]	с какого-то времени (я учу английский с 10 лет)
-during (during the war)	[ˈdjʊərɪŋ]	во время (во время войны)
-within (He’s got to be here within an hour)	[wɪˈðɪn]	в течение (Он должен появиться здесь в течение часа)
-on (on Monday)	[ɒn]	в какой-то день недели (в понедельник)
-after (Don’t call me after 9PM)	[ˈɑːftə]	после (не звони мне после 9 вечера)
-till (from dusk till dawn)	[tɪl]	до (от рассвета до заката)
+    ('before','[bɪˈfɔː]','перед, до','Пример: "before breakfast - до завтрака"','Время'),
+    ('for','[fɔː]','для, на протяжении, за, на, к, в, по, о, у, под, относительно','Пример: "I’ve been waiting for you for an hour - я ждал тебя на протяжении часа"','Время'),
+    ('since','[sɪns]','с какого-то времени','Пример: "I’ve been studying English since I was 10 - я учу английский с 10 лет"','Время'),
+    ('during','[ˈdjʊərɪŋ]','во время','Пример: "during the war - во время войны"','Время'),
+    ('after','[ˈɑːftə]','после','Пример: "Don’t call me after 9PM - не звони мне после 9 вечера"','Время'),
+    ('till','[tɪl]','вплоть до','Пример: "from dusk till dawn - от рассвета до заката"','Время'),
 
 --     Пространство
-    down (down the street)	[daʊn]	вниз (вниз по улице)
-up (up the street)	[ʌp]	вверх (вверх по улице)
-from (I am from Russia)	[frɒm]	из (я из России)
-across (go across the river)	[əˈkrɒs]	через (иди через реку)
-along (along the wall)	[əˈlɒŋ]	вдоль (вдоль стены)
-into (into the cave)	[ˈɪntuː]	в, внутрь (в пещеру)
-to (to the next stop)	[tuː]	к чему-то (к следующей остановке)
-toward (toward the city)	[təˈwɔːd]	по направлению к (по направлению к городу)
-through (through the forest)	[θruː]	через (через лес)
-over (over the fence)	[ˈəʊvə]	через (через забор)
-off (off here)	[ɒf]	из, откуда-то (отсюда)
-out of (out of the coverage area)	[aʊt ɒv]	наружу, вне (вне зоны покрытия)
-via (go via Moscow)	[ˈvaɪə]	через (ехать через Москву)
-past (go past the church)	[pɑːst]	мимо (пройти мимо церкви)
+    ('down','[daʊn]','вниз','','Пространство'),
+    ('up','[ʌp]','вверх','','Пространство'),
+    ('from','[frɒm]','из','','Пространство'),
+    ('across','[əˈkrɒs]','через','','Пространство'),
+    ('along','[əˈlɒŋ]','вдоль','','Пространство'),
+    ('into','[ˈɪntuː]','в, внутрь','','Пространство'),
+    ('to','[tuː]','к (чему-то)','','Пространство'),
+    ('toward','[təˈwɔːd]','по направлению к','','Пространство'),
+    ('through','[θruː]','через, сквозь','','Пространство'),
+    ('over','[ˈəʊvə]','над, сверх','','Пространство'),
+    ('off','[ɒf]','с, у, от, из, откуда-то','','Пространство'),
+    ('out of','[aʊt ɒv]','наружу, вне','','Пространство'),
+    ('via','[ˈvaɪə]','через','Пример: "go via Moscow - ехать через Москву"','Пространство'),
+    ('past','[pɑːst]','мимо','сущ.-"прошлое"; прил.-"прошедший, истекший"','Пространство'),
 
 --     Разные предлоги
-    with (coffe with sugar)	[wɪð]	с (кофе с сахаром)
-about (tell me about yourself)	[əˈbaʊt]	о (расскажите мне о себе)
-against (against war)	[əˈgɛnst]	против (против войны)
-without (without you)	[wɪˈðaʊt]	без (без тебя)
-including (two cars including one broken)	[ɪnˈkluːdɪŋ]	включая (две машины, включая одну сломанную)
-according to (according to the rules)	[əˈkɔːdɪŋ tʊ]	в соответствии с (в соответствии с правилами)
-because of (because of the car accident)	[bɪˈkəz ɒv]	из-за (из-за автомобильной аварии)
-despite (despite the bad weather)	[dɪsˈpaɪt]	несмотря на (несмотря на плохую погоду)
-instead of (new part instead of broken one)	[ɪnˈstɛd ɒv]	вместо (новая запчасть вместо сломанной)
-in spite of (in spite of the rain)	[ɪn spaɪt ɒv]	несмотря на (несмотря на дождь)
-regardless of (regardless of what you say)	[rɪˈgɑːdlɪs ɒv]	несмотря на, независимо от (несмотря на то, что ты скажешь)
-thanks to (thanks to the doctor, I’m feeling fine)	[θæŋks tʊ]	благодаря (благодаря доктору, я чувствую себя отлично)
-by means of (by means of tools)	[baɪ miːnz ɒv]	с помощью (с помощью инструментов)
-on behalf of (on behalf of my boss)	[ɒn bɪˈhɑːf ɒv]	от имени (от имени моего босса)
-for (this gift is for you)	[fɔː]	для (этот подарок для тебя)
-compared to (This is nothing compared to the real troubles)	[kəmˈpeə tʊ]	в сравнении с (это ничто в сравнении с настоящими трудностями)
-rather… than (they’d rather buy fish than meat)	[ˈrɑːðə]… [ðæn]	скорее, чем  (они купят скорее рыбу, чем мясо)
-rather than (they’d buy fish rather than meat)	[ˈrɑːðə ðæn]	скорее, чем\а не (они купят рыбу, а не мясо)
+    ('with','[wɪð]','с(чем-то, кем-то)','','Разные предлоги'),
+    ('about','[əˈbaʊt]','о(чём-то)','','Разные предлоги'),
+    ('against','[əˈgɛnst]','против','','Разные предлоги'),
+    ('without','[wɪˈðaʊt]','без(кого-то, чего-то)','','Разные предлоги'),
+    ('including','[ɪnˈkluːdɪŋ]','включая','','Разные предлоги'),
+    ('according to','[əˈkɔːdɪŋ tʊ]','в соответствии с','Пример: "according to the rules - в соответствии с правилами"','Разные предлоги'),
+    ('because of','[bɪˈkəz ɒv]','потому что, из-за','','Разные предлоги'),
+    ('despite','[dɪsˈpaɪt]','несмотря на','','Разные предлоги'),
+    ('instead of','[ɪnˈstɛd ɒv]','вместо','','Разные предлоги'),
+    ('in spite of (despite)','[ɪn spaɪt ɒv (dɪsˈpaɪt)]','несмотря на','','Разные предлоги'),
+    ('regardless of','[rɪˈgɑːdlɪs ɒv]','несмотря на, независимо от','','Разные предлоги'),
+    ('thanks to','[θæŋks tʊ]','благодаря','','Разные предлоги'),
+    ('by means of','[baɪ miːnz ɒv]','с помощью, посредством','','Разные предлоги'),
+    ('on behalf of','[ɒn bɪˈhɑːf ɒv]','от имени','','Разные предлоги'),
+    ('for','[fɔː]','для (кого-то, чего-то)','','Разные предлоги'),
+    ('compared to','[kəmˈpeə tʊ]','в сравнении с','','Разные предлоги'),
+    ('rather… than','[ˈrɑːðə]… [ðæn]','скорее ... , чем ...','','Разные предлоги'),
 
 --     Союзы
-    наверное вопросительные слова можно вынести в другой файл
-    And	[ænd]	и
-But	[bʌt]	но
-however	[haʊˈɛvə]	Однако
-As well as	[æz wɛl æz]	Также как
-Both… and	[bəʊθ]… [ænd]	И …, и …
-Either… or	[ˈaɪðə]… [ɔː] (UK) [ˈɪ: ðə] … [ɔː] (USA)	Или … или…,
-Neither… nor	[ˈnaɪðə]… [nɔː] (UK) [ˈnɪ: ðə] … [ɔː] (USA)	Ни …, ни …
-Before	[bɪˈfɔː]	До, перед
-After	[ˈɑːftə]	После
-While	[waɪl]	Во время
-Since	[sɪns]	С тех пор как
-Until	[ənˈtɪl]	До того как
-If	[ɪf]	Если
-Because	[bɪˈkɒz]	Потому что
-So	[səʊ]	Так что
-So (that)	[səʊ ðæt]	Чтобы, с целью
-Though, although	[ðəʊ] [ɔːlˈðəʊ]	Хотя
-Once	[wʌns]	Как только
-As soon as	[æz suːn æz]	Как только
-As long as	[æz lɒŋ æz]	Пока, при условии
+    ('and','[ænd]','и','','Союзы'),
+    ('but','[bʌt]','но','','Союзы'),
+    ('however','[haʊˈɛvə]','однако','','Союзы'),
+    ('As well as','[æz wɛl æz]','также как','','Союзы'),
+    ('as','[æz]','как','','Союзы'),
+    ('Both... and','[bəʊθ]... [ænd]','И ..., и ...','','Союзы'),
+    ('Either... or','[ˈaɪðə]... [ɔː]','Или ... или...(Либо ... либо ...)','','Союзы'),
+    ('Neither... nor','[ˈnaɪðə]... [nɔː]','Ни ..., ни ...','','Союзы'),
+    ('before','[bɪˈfɔː]','до, перед','','Союзы'),
+    ('after','[ˈɑːftə]','после','','Союзы'),
+    ('while','[waɪl]','во время','','Союзы'),
+    ('until','[ənˈtɪl]','до тех пор как','','Союзы'),
+    ('if','[ɪf]','если','','Союзы'),
+    ('because','[bɪˈkɒz]','потому что','','Союзы'),
+    ('so','[səʊ]','так','"так что", "поэтому", "чтобы", "итак"','Союзы'),
+    ('though, although','[ðəʊ] [ɔːlˈðəʊ]','хотя','','Союзы'),
+    ('once','[wʌns]','однажды','','Союзы'),
+    ('as soon as','[æz suːn æz]','лишь только','','Союзы'),
+    ('as long as','[æz lɒŋ æz]','пока, до тех пор пока','','Союзы');
