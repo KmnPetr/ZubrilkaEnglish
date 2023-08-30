@@ -17,6 +17,7 @@ CREATE TABLE Word(
                      has_voise varchar(50),
                      has_image varchar(50)
 );
+-- DROP TABLE Word;
 -- //////////////эти два вызова идут вмест/////////////////
 CREATE TABLE properties(
                            key varchar(100)UNIQUE NOT NULL,
