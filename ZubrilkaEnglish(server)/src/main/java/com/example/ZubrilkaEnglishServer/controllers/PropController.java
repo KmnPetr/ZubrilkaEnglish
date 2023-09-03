@@ -24,6 +24,10 @@ public class PropController {
     public PropModel getUpdateAt()throws MyExeption {
         return propServise.getUpdatedAt();
     }
+
+    /**
+     * метод установит новое значение update_at в таблице properties
+     */
     @GetMapping("/set_update_at")
     public String setUpdateAt(){
         propServise.setUpdateAt();

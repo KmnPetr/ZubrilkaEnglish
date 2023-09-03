@@ -25,6 +25,9 @@ public class Word {
     @NotEmpty(message = "This field should not be empty.")
     @Column(name = "translation")
     private String translation;
+    @Size(min = 0,max = 400,message = "This field must be between 0 and 400 characters long")
+    @Column(name = "description")
+    private String description;
     @Column(name = "has_voise")
     private String hasVoise;
     @Column(name = "has_image")
@@ -42,6 +45,8 @@ public class Word {
     public void setTranscription(String transcription) {this.transcription = transcription;}
     public String getTranslation() {return translation;}
     public void setTranslation(String translation) {this.translation = translation;}
+    public String getDescription() {return description;}
+    public void setDescription(String description) {this.description = description;}
     public String getHasVoise() {return hasVoise;}
     public void setHasVoise(String hasVoise) {this.hasVoise = hasVoise;}
     public String getHasImage() {return hasImage;}

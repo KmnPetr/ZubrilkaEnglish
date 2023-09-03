@@ -32,7 +32,11 @@ public class PropServise {
             throw new MyExeption("The time of the last database update is not set.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-@Transactional
+
+    /**
+     * метод установит новое значение update_at в таблице properties
+     */
+    @Transactional
     public void setUpdateAt() {
         propRepository.setNewValue("update_at", ZonedDateTime.now().toString());
     }

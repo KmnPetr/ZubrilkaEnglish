@@ -19,6 +19,7 @@ public class WordDTO {
     @Size(min = 1,max = 400,message = "This field must be between 1 and 400 characters long")
     @NotEmpty(message = "This field should not be empty.")
     private String translation;
+    private String description;
     private String hasVoise;
     private String hasImage;
     private String groupWord;
@@ -34,6 +35,8 @@ public class WordDTO {
     public void setTranscription(String transcription) {this.transcription = transcription;}
     public String getTranslation() {return translation;}
     public void setTranslation(String translation) {this.translation = translation;}
+    public String getDescription() {return description;}
+    public void setDescription(String description) {this.description = description;}
     public String getHasVoise() {return hasVoise;}
     public void setHasVoise(String hasVoise) {this.hasVoise = hasVoise;}
     public String getHasImage() {return hasImage;}
