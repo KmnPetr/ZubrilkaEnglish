@@ -11,28 +11,41 @@
         android:label="fragment_menu"
         tools:layout="@layout/fragment_menu" >
         <action
-            android:id="@+id/action_menuFragment_to_allWordsFragment"
-            app:destination="@id/allWordsFragment" />
-        <action
             android:id="@+id/action_menuFragment_to_trainingFragment"
             app:destination="@id/trainingFragment" />
         <action
-            android:id="@+id/action_menuFragment_to_testRoomFragment"
-            app:destination="@id/testRoomFragment" />
+            android:id="@+id/action_menuFragment_to_directoryWordsFragment"
+            app:destination="@id/directoryWordsFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/allWordsFragment"
-        android:name="com.example.zubrilkaenglish.screens.allWords.AllWordsFragment"
-        android:label="fragment_all_words"
-        tools:layout="@layout/fragment_all_words" />
     <fragment
         android:id="@+id/trainingFragment"
         android:name="com.example.zubrilkaenglish.screens.training.TrainingFragment"
         android:label="fragment_training"
         tools:layout="@layout/fragment_training" />
     <fragment
-        android:id="@+id/testRoomFragment"
-        android:name="com.example.zubrilkaenglish.screens.testRoom.TestRoomFragment"
-        android:label="fragment_test_room"
-        tools:layout="@layout/fragment_test_room" />
+        android:id="@+id/directoryWordsFragment"
+        android:name="com.example.zubrilkaenglish.screens.directoryWords.DirectoryWordsFragment"
+        android:label="fragment_directory_words"
+        tools:layout="@layout/fragment_directory_words" >
+        <action
+            android:id="@+id/action_directoryWordsFragment_to_menuFragment"
+            app:destination="@id/menuFragment" />
+        <action
+            android:id="@+id/action_directoryWordsFragment_to_listWordsFragment"
+            app:destination="@id/listWordsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/listWordsFragment"
+        android:name="com.example.zubrilkaenglish.screens.listlWords.ListWordsFragment"
+        android:label="fragment_list_words"
+        tools:layout="@layout/fragment_list_words" >
+        <action
+            android:id="@+id/action_listWordsFragment_to_wordDetailsFragment"
+            app:destination="@id/wordDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/wordDetailsFragment"
+        android:name="com.example.zubrilkaenglish.screens.wordDetails.WordDetailsFragment"
+        android:label="fragment_word_details"
+        tools:layout="@layout/fragment_word_details" />
 </navigation>

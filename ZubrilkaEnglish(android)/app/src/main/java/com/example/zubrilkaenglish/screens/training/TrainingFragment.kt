@@ -24,6 +24,14 @@ class TrainingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(TrainingViewModel::class.java)
+
+        viewModel.getListWordsWithProgres().observe(viewLifecycleOwner){list->
+            list.forEach {
+                val text = "Слово: ${it.word.foreignWord}\t"+"Перевод: ${it.word.translation}\t"+"\n"+
+                        "NumCorrAnsv: ${it.progressWord.numCorrAnsv}\t"+"StatProgress: ${it.progressWord.statProgress}\t"+"SleepTime: ${it.progressWord.sleepTime}\t"+"\n"
+                binding.listWordsWithProgress.append(text)
+            }
+        }
     }
 
 }

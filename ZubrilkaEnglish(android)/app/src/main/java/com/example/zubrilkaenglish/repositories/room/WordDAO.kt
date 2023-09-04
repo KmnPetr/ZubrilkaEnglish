@@ -15,4 +15,6 @@ interface WordDAO {
     suspend fun deleteAllWords()
     @Insert
     suspend fun insertListWords(listWords: List<Word>)
+    @Query("SELECT * FROM all_word_table WHERE id = :id LIMIT 1")
+    suspend fun getWordById(id: Int): Word
 }

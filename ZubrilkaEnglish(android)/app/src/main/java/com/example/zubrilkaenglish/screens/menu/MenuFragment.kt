@@ -34,7 +34,7 @@ class MenuFragment : Fragment() {
             findNavController().navigate(R.id.action_menuFragment_to_trainingFragment)
         }
         binding.buttonListWeb.setOnClickListener {
-            findNavController().navigate(R.id.action_menuFragment_to_allWordsFragment)
+            findNavController().navigate(R.id.action_menuFragment_to_directoryWordsFragment)
         }
     }
 }
