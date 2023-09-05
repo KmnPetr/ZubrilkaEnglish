@@ -1,0 +1,51 @@
+package com.example.zubrilkaenglish.screens.training.anyfiles
+
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+
+class CardAdapter(val listener: Listener):RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+
+    val cardList=ArrayList<ICard>()
+
+    /**
+     * библиотечная функция определяет тип класса, находящегося в коллекции
+     * реализация определения типа вынесена в сам класс шаблон
+     */
+    override fun getItemViewType(position: Int): Int {
+        return cardList[position].getItemViewType()
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    /**
+     * сами классы холдеры и реализация метода сращивания классов шаблонов с их xml файлом
+     * вынесены в класс фабрику ViewHolderFactory
+     */
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return ViewHolderFactory.create(parent, viewType)
+    }
+
+    override fun getItemCount(): Int {
+        return cardList.size
+    }
+
+    /**
+     * реализация классов холдеров вынесено в класс фабрику ViewHolderFactory
+     */
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is ViewHolderFactory.WordCardHolder){
+            holder.bind((cardList[position] as WordCard),listener)
+        }
+        else if (holder is ViewHolderFactory.NewsCardHolder){
+            holder.bind((cardList[position] as NewsCard),listener)
+        }
+    }
+
+    interface Listener{
+        fun onClickYesButton(wordCard: WordCard)
+        fun onClickNoButton(wordCard: WordCard)
+        fun onClickLookButton(wordCard: WordCard)
+    }
+}
