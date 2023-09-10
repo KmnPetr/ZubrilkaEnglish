@@ -1,11 +1,14 @@
-package com.example.zubrilkaenglish.screens.training.anyfiles
+package com.example.zubrilkaenglish.screens.training
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.zubrilkaenglish.models.ICard
+import com.example.zubrilkaenglish.models.NewsCard
+import com.example.zubrilkaenglish.models.WordCard
 
 class CardAdapter(val listener: Listener):RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
-    val cardList=ArrayList<ICard>()
+    var cardList:ArrayList<ICard> = ArrayList()
 
     /**
      * библиотечная функция определяет тип класса, находящегося в коллекции
@@ -41,6 +44,12 @@ class CardAdapter(val listener: Listener):RecyclerView.Adapter<RecyclerView.View
         else if (holder is ViewHolderFactory.NewsCardHolder){
             holder.bind((cardList[position] as NewsCard),listener)
         }
+    }
+
+    fun setList(listForTreining: ArrayList<ICard>) {
+        cardList = listForTreining
+        notifyDataSetChanged()
+        println("адаптер был перезапущен")
     }
 
     interface Listener{

@@ -1,4 +1,6 @@
-package com.example.zubrilkaenglish.screens.training.anyfiles
+package com.example.zubrilkaenglish.models
+
+import com.example.zubrilkaenglish.models.ICard
 
 class NewsCard(val news:String): ICard {
 

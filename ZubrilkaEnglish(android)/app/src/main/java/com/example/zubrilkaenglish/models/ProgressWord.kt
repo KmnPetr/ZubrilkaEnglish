@@ -18,9 +18,9 @@ data class ProgressWord(
     @ColumnInfo(name = "wordId")
     val wordId: Int,
     @ColumnInfo(name = "numCorrAnsv")
-    val numCorrAnsv: Int?,
+    var numCorrAnsv: Int = 0,
     @ColumnInfo(name = "statProgress")
-    val statProgress: StatProgress?,
+    var statProgress: String = StatProgress.NEW.value,
     @ColumnInfo(name = "sleepTime")
     var sleepTime: String?
 )

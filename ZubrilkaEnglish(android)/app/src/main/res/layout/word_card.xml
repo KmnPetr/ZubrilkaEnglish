@@ -6,7 +6,33 @@
     android:layout_height="match_parent"
     android:visibility="visible">
 
-    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/numCorrAnsv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="numCorrAnsv"
+            android:textColor="#4CAF50"
+            android:layout_marginRight="20dp"/>
+
+        <TextView
+            android:id="@+id/statusCard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="statusCard"/>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/foreignWord"
@@ -17,7 +43,7 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <TextView
         android:id="@+id/transcription"
@@ -70,5 +96,6 @@
         android:text="look"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/noButton" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

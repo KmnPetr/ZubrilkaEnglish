@@ -1,4 +1,4 @@
-package com.example.zubrilkaenglish.screens.training.anyfiles
+package com.example.zubrilkaenglish.models
 
 interface ICard {
 

@@ -1,4 +1,4 @@
-package com.example.zubrilkaenglish.screens.training.anyfiles
+package com.example.zubrilkaenglish.screens.training
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.NewsCardBinding
 import com.example.zubrilkaenglish.databinding.WordCardBinding
+import com.example.zubrilkaenglish.models.ICard
+import com.example.zubrilkaenglish.models.NewsCard
+import com.example.zubrilkaenglish.models.WordCard
 
 class ViewHolderFactory {
 
@@ -14,9 +17,11 @@ class ViewHolderFactory {
         val binding= WordCardBinding.bind(item)
 
         fun bind(wordCard: WordCard, listener: CardAdapter.Listener){
-            binding.foreignWord.text=wordCard.foreignWord
-            binding.transcription.text=wordCard.transcription
-            binding.translation.text=wordCard.translation
+            binding.numCorrAnsv.text = "("+wordCard.progressWord.numCorrAnsv.toString()+")"
+            binding.statusCard.text = "status: "+ wordCard.progressWord.statProgress
+            binding.foreignWord.text = wordCard.word.foreignWord
+            binding.transcription.text = wordCard.word.transcription
+            binding.translation.text = wordCard.word.translation
 
             //блок if else решает проблему переиспользуемости холдеров
             if (wordCard.cardHasChanged){

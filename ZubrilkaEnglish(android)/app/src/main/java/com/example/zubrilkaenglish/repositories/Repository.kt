@@ -3,6 +3,7 @@ package com.example.zubrilkaenglish.repositories
 import android.widget.Toast
 import com.example.zubrilkaenglish.models.ProgressWord
 import com.example.zubrilkaenglish.models.Word
+import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.repositories.retrofit.RetrofitService
 import com.example.zubrilkaenglish.repositories.room.RoomService
 import com.example.zubrilkaenglish.utils.MyApplication
@@ -11,7 +12,6 @@ import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import java.text.SimpleDateFormat
 import java.util.Date
-import com.example.zubrilkaenglish.models.WordWithProgress
 
 class Repository {
     private val retrofitService=RetrofitService()
@@ -83,7 +83,7 @@ class Repository {
      */
     suspend fun addWordToTraining(idWord: Int?) {
         try {
-            val progressWord = ProgressWord(null,idWord!!,0,StatProgress.ACTIVE,SimpleDateFormat("yyyy-MM-dd").format(Date()))
+            val progressWord = ProgressWord(null,idWord!!,0,StatProgress.NEW.value,SimpleDateFormat("yyyy-MM-dd").format(Date()))
             roomService.addWordToTraining(progressWord)
             Toast.makeText(MyApplication.context,"Слово/фраза добавлено(а) в изучаемые.",Toast.LENGTH_LONG).show()
         }catch (e: Exception){
@@ -91,7 +91,23 @@ class Repository {
         }
     }
 
-    suspend fun getAllWordsWithProgress(): List<WordWithProgress>? {
-        return roomService.getAllWordsWithProgress()
+    suspend fun getListWordsCards(): List<WordCard>? {
+        return roomService.getListWordsCards()
     }
+
+    /**
+     * обновит ProgressWord
+     */
+    suspend fun updateProgressWord(progressWord: ProgressWord) {
+        roomService.updateProgressWord(progressWord)
+    }
+
+    /**
+     * найдет ProgressWord по id
+     */
+    suspend fun getProgressWordById(progId: Int?): ProgressWord? {
+        return roomService.getProgressWordById(progId)
+    }
+
+
 }

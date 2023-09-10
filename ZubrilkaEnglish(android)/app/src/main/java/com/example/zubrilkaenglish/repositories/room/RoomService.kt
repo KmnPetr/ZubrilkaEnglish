@@ -2,7 +2,7 @@ package com.example.zubrilkaenglish.repositories.room
 
 import com.example.zubrilkaenglish.models.Word
 import com.example.zubrilkaenglish.models.ProgressWord
-import com.example.zubrilkaenglish.models.WordWithProgress
+import com.example.zubrilkaenglish.models.WordCard
 
 class RoomService{
 
@@ -46,7 +46,15 @@ class RoomService{
         dataBase.getProgressDAO().insertProgressWord(progressWord)
     }
 
-    suspend fun getAllWordsWithProgress(): List<WordWithProgress>? {
-        return dataBase.getProgressDAO().getAllWordsWithProgress()
+    suspend fun getListWordsCards(): List<WordCard>? {
+        return dataBase.getProgressDAO().getListWordsCards()
+    }
+
+    suspend fun updateProgressWord(progressWord: ProgressWord) {
+        dataBase.getProgressDAO().updateProgressWord(progressWord)
+    }
+
+    suspend fun getProgressWordById(progId: Int?): ProgressWord? {
+        return dataBase.getProgressDAO().getProgressWordById(progId)
     }
 }
