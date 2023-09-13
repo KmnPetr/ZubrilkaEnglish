@@ -7,6 +7,7 @@ import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.repositories.retrofit.RetrofitService
 import com.example.zubrilkaenglish.repositories.room.RoomService
 import com.example.zubrilkaenglish.utils.MyApplication
+import com.example.zubrilkaenglish.utils.SIM_FORM_DATE
 import com.example.zubrilkaenglish.utils.StatProgress
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
@@ -83,7 +84,7 @@ class Repository {
      */
     suspend fun addWordToTraining(idWord: Int?) {
         try {
-            val progressWord = ProgressWord(null,idWord!!,0,StatProgress.NEW.value,SimpleDateFormat("yyyy-MM-dd").format(Date()))
+            val progressWord = ProgressWord(null,idWord!!,0,StatProgress.NEW.value,SimpleDateFormat(SIM_FORM_DATE).format(Date()))
             roomService.addWordToTraining(progressWord)
             Toast.makeText(MyApplication.context,"Слово/фраза добавлено(а) в изучаемые.",Toast.LENGTH_LONG).show()
         }catch (e: Exception){

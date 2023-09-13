@@ -20,11 +20,15 @@ import com.example.zubrilkaenglish.models.ICard
 import com.example.zubrilkaenglish.models.NewsCard
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.utils.MyApplication
+import com.example.zubrilkaenglish.utils.SIM_FORM_DATE
 import com.example.zubrilkaenglish.utils.StatProgress
-
+import com.google.android.material.slider.Slider
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
 
 class TrainingFragment : Fragment(), CardAdapter.Listener {
 
@@ -62,12 +66,13 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
         viewModel.getWordsCards().observe(viewLifecycleOwner){listWordCard->
             var listForTreining = ArrayList<ICard>()
             listWordCard.forEach { it ->
-                listForTreining.add(it)
+                if (it.progressWord.statProgress!=StatProgress.LEARNED.value&&compareDate(it.progressWord.sleepTime)){
+                    listForTreining.add(it)
+                }
             }
             listForTreining.add(NewsCard("news will be here"))
 
             adapter.setList(listForTreining)
-
         }
     }
 
@@ -145,9 +150,15 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
         dialog.setContentView(R.layout.popup_dialog)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        val textView: TextView = dialog.findViewById(R.id.textView333)
+        val textDialog: TextView = dialog.findViewById(R.id.textDialog)
         val btnYes: Button = dialog.findViewById(R.id.btnYes)
         val btnCansel: Button = dialog.findViewById(R.id.btnCansel)
+        ////////////////////////////////////////////////////////
+        val slider: Slider = dialog.findViewById(R.id.slider)
+        slider.addOnChangeListener { slider, value, fromUser ->
+            textDialog.text = value.toString()
+        }
+        ////////////////////////////////////////////////////////
 
         btnYes.setOnClickListener {
             when(wordCard.progressWord.statProgress){
@@ -164,9 +175,19 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
 
             wordCard.progressWord.numCorrAnsv = 0
 
+                //вычисляем дату времени, до которой должна заснуть карточка
+                val calendar = Calendar.getInstance()
+                calendar.time = Date()
+                calendar.add(Calendar.DAY_OF_MONTH, 3)
+                val newDateString = SimpleDateFormat(SIM_FORM_DATE).format(calendar.time)
+                println("Новая дата: $newDateString")
+            wordCard.progressWord.sleepTime = newDateString
+
+            //отправляем все обновления в репозиторий
             viewModel.updateWordCard(wordCard)
 
             dialog.dismiss()
+            adapter.notifyItemChanged(binding.viewPager2.currentItem)
             flippingСard()
         }
         btnCansel.setOnClickListener {
@@ -174,5 +195,21 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
             flippingСard()
         }
         dialog.show()
+    }
+
+    /**
+     * функция вернет false, если входящая в параметры дата еще не наступила
+     */
+    private fun compareDate(sleepTime: String?): Boolean{
+        try {
+            if (sleepTime==null){
+                return true
+            }else if(SimpleDateFormat(SIM_FORM_DATE).parse(sleepTime).before(Date())){
+                return true
+            }
+        } catch (e: Exception) {
+            return false
+        }
+        return false
     }
 }
