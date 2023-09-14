@@ -153,12 +153,27 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
         val textDialog: TextView = dialog.findViewById(R.id.textDialog)
         val btnYes: Button = dialog.findViewById(R.id.btnYes)
         val btnCansel: Button = dialog.findViewById(R.id.btnCansel)
-        ////////////////////////////////////////////////////////
         val slider: Slider = dialog.findViewById(R.id.slider)
-        slider.addOnChangeListener { slider, value, fromUser ->
-            textDialog.text = value.toString()
+
+        //Настройка слайдера
+        when(wordCard.progressWord.statProgress){
+            StatProgress.NEW.value ->{
+                slider.valueTo = 6F
+                slider.value = 3F
+            }
+            StatProgress.PARTIALLY_LEARNED.value ->{
+                slider.valueTo = 14F
+                slider.value = 7F
+            }
+            StatProgress.ALMOST_LEARNED.value ->{
+                slider.valueTo = 30F
+                slider.value = 15F
+            }
         }
-        ////////////////////////////////////////////////////////
+        textDialog.text = "Кажется вы уже запомнили эту карточку. Рекомендуем вам повторить ее спустя некоторое время. Карточка уснет на "+slider.value.toInt().toString()+ " дня(дней)."
+        slider.addOnChangeListener { slider, value, fromUser ->
+            textDialog.text = "Кажется вы уже запомнили эту карточку. Рекомендуем вам повторить ее спустя некоторое время. Карточка уснет на "+value.toInt().toString()+ " дня(дней)."
+        }
 
         btnYes.setOnClickListener {
             when(wordCard.progressWord.statProgress){
@@ -178,7 +193,7 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
                 //вычисляем дату времени, до которой должна заснуть карточка
                 val calendar = Calendar.getInstance()
                 calendar.time = Date()
-                calendar.add(Calendar.DAY_OF_MONTH, 3)
+                calendar.add(Calendar.DAY_OF_MONTH, slider.value.toInt())
                 val newDateString = SimpleDateFormat(SIM_FORM_DATE).format(calendar.time)
                 println("Новая дата: $newDateString")
             wordCard.progressWord.sleepTime = newDateString
