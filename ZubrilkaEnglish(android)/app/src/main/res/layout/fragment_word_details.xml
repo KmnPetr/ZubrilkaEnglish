@@ -4,13 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#A878D5"
+    android:background="#C6B5D6"
     tools:context=".screens.wordDetails.WordDetailsFragment" >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="#4EFFFFFF">
+
+        <ImageButton
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="#00000000"
+            android:scaleType="centerCrop"
+            android:src="@drawable/points"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/foreignWord"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="foreignWord"
         android:textSize="34sp"
         android:textStyle="bold"
         android:gravity="center"
@@ -25,6 +44,7 @@
         android:id="@+id/transcription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="[transcription]"
         android:layout_marginTop="16dp"
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
@@ -35,6 +55,7 @@
         android:id="@+id/translation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="translation"
         android:layout_marginTop="32dp"
         android:textSize="34sp"
         android:gravity="center"
@@ -46,6 +67,7 @@
         android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="description"
         android:layout_marginTop="16dp"
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
@@ -56,6 +78,7 @@
         android:id="@+id/groupWord"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="groupWord"
         android:layout_marginTop="32dp"
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
@@ -72,4 +95,5 @@
         android:src="@android:drawable/ic_menu_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

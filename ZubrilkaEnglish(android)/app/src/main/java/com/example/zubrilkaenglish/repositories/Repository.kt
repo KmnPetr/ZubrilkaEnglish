@@ -110,5 +110,41 @@ class Repository {
         return roomService.getProgressWordById(progId)
     }
 
+    /**
+     * достанет из базы все карточки с прогрессом пользователя и рассортирует в мапу
+     */
+    suspend fun getMapMyCards(): Map<String, List<WordCard>> {
+        val listWordsCards = roomService.getListWordsCards()
+        val mapMyCards = mutableMapOf<String,ArrayList<WordCard>>()
 
+        mapMyCards["активные"] = ArrayList()
+        mapMyCards["спящие"] = ArrayList()
+        mapMyCards["выученные"] = ArrayList()
+        listWordsCards?.forEach {
+            if (it.progressWord.statProgress!=StatProgress.LEARNED.value&&compareDate(it.progressWord.sleepTime)){
+                mapMyCards["активные"]?.add(it)
+            }else if (it.progressWord.statProgress!=StatProgress.LEARNED.value&&!compareDate(it.progressWord.sleepTime)){
+                mapMyCards["спящие"]?.add(it)
+            }else if(it.progressWord.statProgress==StatProgress.LEARNED.value){
+                mapMyCards["выученные"]?.add(it)
+            }
+        }
+        return mapMyCards
+    }
+
+    /**
+     * функция вернет false, если входящая в параметры дата еще не наступила
+     */
+    private fun compareDate(sleepTime: String?): Boolean{
+        try {
+            if (sleepTime==null){
+                return true
+            }else if(SimpleDateFormat(SIM_FORM_DATE).parse(sleepTime).before(Date())){
+                return true
+            }
+        } catch (e: Exception) {
+            return false
+        }
+        return false
+    }
 }

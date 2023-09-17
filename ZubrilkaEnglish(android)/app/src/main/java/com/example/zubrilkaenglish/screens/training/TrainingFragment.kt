@@ -12,14 +12,12 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.viewpager2.widget.ViewPager2
 import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.FragmentTrainingBinding
 import com.example.zubrilkaenglish.models.ICard
 import com.example.zubrilkaenglish.models.NewsCard
 import com.example.zubrilkaenglish.models.WordCard
-import com.example.zubrilkaenglish.utils.MyApplication
 import com.example.zubrilkaenglish.utils.SIM_FORM_DATE
 import com.example.zubrilkaenglish.utils.StatProgress
 import com.google.android.material.slider.Slider
@@ -91,8 +89,11 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
         wordCard.cardHasChanged=true
 
         if (wordCard.progressWord.numCorrAnsv>=3){
-            showPopUpDialog(wordCard)
+            //обновляем значение numCorrAnsv в viewModel и в репозитории
+            wordCard.progressWord.numCorrAnsv = viewModel.plusCorAnsv(wordCard.progressWord.wordId)?.progressWord?.numCorrAnsv!!
             adapter.notifyItemChanged(binding.viewPager2.currentItem)
+            //показываем окошко диалога
+            showPopUpDialog(wordCard)
         }else{
             //обновляем значение numCorrAnsv в viewModel и в репозитории
             wordCard.progressWord.numCorrAnsv = viewModel.plusCorAnsv(wordCard.progressWord.wordId)?.progressWord?.numCorrAnsv!!
@@ -155,24 +156,25 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
         val btnCansel: Button = dialog.findViewById(R.id.btnCansel)
         val slider: Slider = dialog.findViewById(R.id.slider)
 
-        //Настройка слайдера
-        when(wordCard.progressWord.statProgress){
-            StatProgress.NEW.value ->{
-                slider.valueTo = 6F
-                slider.value = 3F
-            }
-            StatProgress.PARTIALLY_LEARNED.value ->{
-                slider.valueTo = 14F
-                slider.value = 7F
-            }
-            StatProgress.ALMOST_LEARNED.value ->{
-                slider.valueTo = 30F
-                slider.value = 15F
-            }
-        }
         textDialog.text = "Кажется вы уже запомнили эту карточку. Рекомендуем вам повторить ее спустя некоторое время. Карточка уснет на "+slider.value.toInt().toString()+ " дня(дней)."
         slider.addOnChangeListener { slider, value, fromUser ->
             textDialog.text = "Кажется вы уже запомнили эту карточку. Рекомендуем вам повторить ее спустя некоторое время. Карточка уснет на "+value.toInt().toString()+ " дня(дней)."
+        }
+        //Настройка слайдера
+        when(wordCard.progressWord.statProgress){
+            StatProgress.NEW.value ->{
+                slider.valueTo = 10F
+                slider.value = 5F
+            }
+            StatProgress.PARTIALLY_LEARNED.value ->{
+                slider.valueTo = 18F
+                slider.value = 9F
+            }
+            StatProgress.ALMOST_LEARNED.value ->{
+                slider.value = 0F
+                slider.visibility = View.GONE
+                textDialog.text = "Кажется вы уже запомнили эту карточку. Нажав \"OK\", вы перенесете эту карточку в группу \"изученные\"."
+            }
         }
 
         btnYes.setOnClickListener {

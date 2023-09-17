@@ -1,4 +1,4 @@
-package com.example.zubrilkaenglish.screens.listlWords
+package com.example.zubrilkaenglish.screens.directoryWords.listlWords
 
 import android.view.LayoutInflater
 import android.view.View

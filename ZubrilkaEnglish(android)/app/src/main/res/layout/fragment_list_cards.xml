@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#9FE4AD08"
+    android:background="#4ADD73"
     tools:context=".screens.directoryWords.listlWords.ListWordsFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvlistWords"
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"

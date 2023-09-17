@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.FragmentWordDetailsBinding
 import com.example.zubrilkaenglish.utils.MYBUNDLE
 
@@ -28,16 +30,16 @@ class WordDetailsFragment : Fragment() {
 
         viewModel.idWord.value = MYBUNDLE["id_pressed_word"]
 
+
         viewModel.getWordDetails().observe(viewLifecycleOwner){word->
             binding.foreignWord.text = word.foreignWord
             binding.transcription.text = word.transcription
             binding.translation.text = word.translation
             binding.description.text = word.description
             binding.groupWord.text = "Группа: "+word.groupWord
-
-            //инициализацию кнопок лучше не поднимать выше предыдущих действий
-            initButtons()
         }
+        //инициализацию кнопок лучше не поднимать выше предыдущих действий
+        initButtons()
     }
     fun initButtons(){
         binding.addTraining.setOnClickListener {

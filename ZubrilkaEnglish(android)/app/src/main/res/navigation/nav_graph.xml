@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_menuFragment_to_directoryWordsFragment"
             app:destination="@id/directoryWordsFragment" />
+        <action
+            android:id="@+id/action_menuFragment_to_myCardsFragment"
+            app:destination="@id/myCardsFragment" />
     </fragment>
     <fragment
         android:id="@+id/trainingFragment"
@@ -36,7 +39,7 @@
     </fragment>
     <fragment
         android:id="@+id/listWordsFragment"
-        android:name="com.example.zubrilkaenglish.screens.listlWords.ListWordsFragment"
+        android:name="com.example.zubrilkaenglish.screens.directoryWords.listlWords.ListWordsFragment"
         android:label="fragment_list_words"
         tools:layout="@layout/fragment_list_words" >
         <action
@@ -48,4 +51,21 @@
         android:name="com.example.zubrilkaenglish.screens.wordDetails.WordDetailsFragment"
         android:label="fragment_word_details"
         tools:layout="@layout/fragment_word_details" />
+    <fragment
+        android:id="@+id/myCardsFragment"
+        android:name="com.example.zubrilkaenglish.screens.myCards.MyCardsFragment"
+        android:label="fragment_my_cards"
+        tools:layout="@layout/fragment_my_cards" >
+        <action
+            android:id="@+id/action_myCardsFragment_to_listCardsFragment"
+            app:destination="@id/listCardsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/listCardsFragment"
+        android:name="com.example.zubrilkaenglish.screens.myCards.listCards.ListCardsFragment"
+        android:label="ListCardsFragment" >
+        <action
+            android:id="@+id/action_listCardsFragment_to_wordDetailsFragment"
+            app:destination="@id/wordDetailsFragment" />
+    </fragment>
 </navigation>

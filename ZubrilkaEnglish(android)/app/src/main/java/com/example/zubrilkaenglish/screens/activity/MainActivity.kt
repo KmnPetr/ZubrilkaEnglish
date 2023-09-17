@@ -19,8 +19,6 @@ class MainActivity : AppCompatActivity() {
 
         mainViewModel=ViewModelProvider(this).get(MainViewModel::class.java)
 
-
-
 //        navController=Navigation.findNavController(this, R.id.nav_host_fragment_activity_main)//TODO ???
 
     }

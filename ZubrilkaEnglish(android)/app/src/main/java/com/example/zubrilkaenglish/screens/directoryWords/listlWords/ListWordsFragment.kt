@@ -1,4 +1,4 @@
-package com.example.zubrilkaenglish.screens.listlWords
+package com.example.zubrilkaenglish.screens.directoryWords.listlWords
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
