@@ -1,15 +1,22 @@
 package com.example.zubrilkaenglish.screens.wordDetails
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.FragmentWordDetailsBinding
 import com.example.zubrilkaenglish.utils.MYBUNDLE
+import com.example.zubrilkaenglish.utils.MyApplication
 
 class WordDetailsFragment : Fragment() {
 
@@ -42,8 +49,33 @@ class WordDetailsFragment : Fragment() {
         initButtons()
     }
     fun initButtons(){
+        binding.options.setOnClickListener {
+            showPopUpOptions()
+        }
         binding.addTraining.setOnClickListener {
                 viewModel.addWordToTraining()
         }
+    }
+
+    /**
+     * функция покажет всплывающий набор опций над выбранным словом
+     */
+    private fun showPopUpOptions() {
+
+
+        val popupMenu = PopupMenu(requireActivity(),binding.options)
+        popupMenu.inflate(R.menu.optionsword_menu)
+
+        popupMenu.setOnMenuItemClickListener { item->
+            when(item.itemId){
+                R.id.addToTrain->{
+                    viewModel.addWordToTraining()
+                    true
+                }
+                else-> false
+            }
+        }
+
+        popupMenu.show()
     }
 }
