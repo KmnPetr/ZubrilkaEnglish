@@ -30,12 +30,12 @@ class TrainingViewModel : ViewModel() {
      */
     fun plusCorAnsv(wordId: Int): WordCard? {
         listWordsCards.value?.forEach {
-            if (it.progressWord.wordId==wordId){
-                var numCorAnsv = it.progressWord.numCorrAnsv
-                numCorAnsv++
-                it.progressWord.numCorrAnsv = numCorAnsv
+            if (it.progressWord?.wordId==wordId){
+                var numCorAnsv = it.progressWord?.numCorrAnsv
+                numCorAnsv = numCorAnsv!! + 1
+                it.progressWord?.numCorrAnsv = numCorAnsv
                 viewModelScope.launch {
-                    repository.updateProgressWord(it.progressWord)
+                    repository.updateProgressWord(it.progressWord!!)
                 }
                 return it
             }
@@ -48,10 +48,10 @@ class TrainingViewModel : ViewModel() {
      */
     fun resetCorAnsv(wordId: Int): WordCard? {
         listWordsCards.value?.forEach {
-            if (it.progressWord.wordId==wordId){
-                it.progressWord.numCorrAnsv = 0
+            if (it.progressWord?.wordId==wordId){
+                it.progressWord?.numCorrAnsv = 0
                 viewModelScope.launch {
-                    repository.updateProgressWord(it.progressWord)
+                    repository.updateProgressWord(it.progressWord!!)
                 }
                 return it
             }
@@ -61,11 +61,11 @@ class TrainingViewModel : ViewModel() {
 
     fun updateWordCard(wordCard: WordCard) {
         viewModelScope.launch {
-            repository.updateProgressWord(wordCard.progressWord)
+            repository.updateProgressWord(wordCard.progressWord!!)
         }
 
         listWordsCards.value?.forEach {
-            if (it.progressWord.wordId==wordCard.progressWord.wordId){
+            if (it.progressWord?.wordId==wordCard.progressWord?.wordId){
                 it.progressWord = wordCard.progressWord
             }
         }

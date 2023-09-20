@@ -64,7 +64,7 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
         viewModel.getWordsCards().observe(viewLifecycleOwner){listWordCard->
             var listForTreining = ArrayList<ICard>()
             listWordCard.forEach { it ->
-                if (it.progressWord.statProgress!=StatProgress.LEARNED.value&&compareDate(it.progressWord.sleepTime)){
+                if (it.progressWord?.statProgress!=StatProgress.LEARNED.value&&compareDate(it.progressWord?.sleepTime)){
                     listForTreining.add(it)
                 }
             }
@@ -88,15 +88,15 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
     override fun onClickYesButton(wordCard: WordCard) {
         wordCard.cardHasChanged=true
 
-        if (wordCard.progressWord.numCorrAnsv>=3){
+        if (wordCard.progressWord?.numCorrAnsv!! >=3){
             //обновляем значение numCorrAnsv в viewModel и в репозитории
-            wordCard.progressWord.numCorrAnsv = viewModel.plusCorAnsv(wordCard.progressWord.wordId)?.progressWord?.numCorrAnsv!!
+            wordCard.progressWord!!.numCorrAnsv = viewModel.plusCorAnsv(wordCard.progressWord!!.wordId)?.progressWord?.numCorrAnsv!!
             adapter.notifyItemChanged(binding.viewPager2.currentItem)
             //показываем окошко диалога
             showPopUpDialog(wordCard)
         }else{
             //обновляем значение numCorrAnsv в viewModel и в репозитории
-            wordCard.progressWord.numCorrAnsv = viewModel.plusCorAnsv(wordCard.progressWord.wordId)?.progressWord?.numCorrAnsv!!
+            wordCard.progressWord!!.numCorrAnsv = viewModel.plusCorAnsv(wordCard.progressWord!!.wordId)?.progressWord?.numCorrAnsv!!
             adapter.notifyItemChanged(binding.viewPager2.currentItem)
             flippingСard()
         }
@@ -109,8 +109,8 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
     override fun onClickNoButton(wordCard: WordCard) {
         wordCard.cardHasChanged=true
 
-        val updatedWordCard = viewModel.resetCorAnsv(wordCard.progressWord.wordId)
-        wordCard.progressWord.numCorrAnsv = updatedWordCard?.progressWord?.numCorrAnsv!!
+        val updatedWordCard = viewModel.resetCorAnsv(wordCard.progressWord!!.wordId)
+        wordCard.progressWord!!.numCorrAnsv = updatedWordCard?.progressWord?.numCorrAnsv!!
 
 
         adapter.notifyItemChanged(binding.viewPager2.currentItem)
@@ -161,7 +161,7 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
             textDialog.text = "Кажется вы уже запомнили эту карточку. Рекомендуем вам повторить ее спустя некоторое время. Карточка уснет на "+value.toInt().toString()+ " дня(дней)."
         }
         //Настройка слайдера
-        when(wordCard.progressWord.statProgress){
+        when(wordCard.progressWord?.statProgress){
             StatProgress.NEW.value ->{
                 slider.valueTo = 10F
                 slider.value = 5F
@@ -178,19 +178,19 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
         }
 
         btnYes.setOnClickListener {
-            when(wordCard.progressWord.statProgress){
+            when(wordCard.progressWord?.statProgress){
                 StatProgress.NEW.value ->{
-                    wordCard.progressWord.statProgress = StatProgress.PARTIALLY_LEARNED.value
+                    wordCard.progressWord?.statProgress = StatProgress.PARTIALLY_LEARNED.value
                 }
                 StatProgress.PARTIALLY_LEARNED.value ->{
-                    wordCard.progressWord.statProgress = StatProgress.ALMOST_LEARNED.value
+                    wordCard.progressWord?.statProgress = StatProgress.ALMOST_LEARNED.value
                 }
                 StatProgress.ALMOST_LEARNED.value ->{
-                    wordCard.progressWord.statProgress = StatProgress.LEARNED.value
+                    wordCard.progressWord?.statProgress = StatProgress.LEARNED.value
                 }
             }
 
-            wordCard.progressWord.numCorrAnsv = 0
+            wordCard.progressWord?.numCorrAnsv = 0
 
                 //вычисляем дату времени, до которой должна заснуть карточка
                 val calendar = Calendar.getInstance()
@@ -198,7 +198,7 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
                 calendar.add(Calendar.DAY_OF_MONTH, slider.value.toInt())
                 val newDateString = SimpleDateFormat(SIM_FORM_DATE).format(calendar.time)
                 println("Новая дата: $newDateString")
-            wordCard.progressWord.sleepTime = newDateString
+            wordCard.progressWord?.sleepTime = newDateString
 
             //отправляем все обновления в репозиторий
             viewModel.updateWordCard(wordCard)

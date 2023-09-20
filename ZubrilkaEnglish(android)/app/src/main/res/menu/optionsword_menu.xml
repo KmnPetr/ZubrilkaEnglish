@@ -5,5 +5,20 @@
         android:id="@+id/addToTrain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:title="добавить в тренеровочный список" />
+        android:title="Учить" />
+    <item
+        android:id="@+id/resetProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="Сборосить прогресс карточки" />
+    <item
+        android:id="@+id/markLearned"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="Пометить выученной" />
+    <item
+        android:id="@+id/deleteCard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="Удалить карточку" />
 </menu>

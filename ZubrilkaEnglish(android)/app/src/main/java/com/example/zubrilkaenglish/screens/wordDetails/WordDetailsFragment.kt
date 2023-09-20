@@ -15,8 +15,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.FragmentWordDetailsBinding
+import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.utils.MYBUNDLE
 import com.example.zubrilkaenglish.utils.MyApplication
+import com.example.zubrilkaenglish.utils.SIM_FORM_DATE
+import com.example.zubrilkaenglish.utils.StatProgress
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class WordDetailsFragment : Fragment() {
 
@@ -65,6 +70,33 @@ class WordDetailsFragment : Fragment() {
 
         val popupMenu = PopupMenu(requireActivity(),binding.options)
         popupMenu.inflate(R.menu.optionsword_menu)
+        val addToTrain = popupMenu.menu.findItem(R.id.addToTrain)
+        val resetProgress = popupMenu.menu.findItem(R.id.resetProgress)
+        val markLearned = popupMenu.menu.findItem(R.id.markLearned)
+        val deleteCard = popupMenu.menu.findItem(R.id.deleteCard)
+
+        viewModel.getWordCard().observe(viewLifecycleOwner){wordCard->
+            if(wordCard.progressWord!=null) {
+                addToTrain.isEnabled = false
+                addToTrain.isVisible = false
+                if(wordCard.progressWord?.statProgress == StatProgress.LEARNED.value){
+                    markLearned.isEnabled = false
+                }else markLearned.isEnabled = true
+                if(wordCard.progressWord?.statProgress==StatProgress.NEW.value&&
+                    wordCard.progressWord?.numCorrAnsv==0&&
+                    compareDate(wordCard.progressWord?.sleepTime)){
+                    resetProgress.isEnabled = false
+                }else resetProgress.isEnabled = true
+            }else{
+                resetProgress.isEnabled = false
+                resetProgress.isVisible = false
+                markLearned.isEnabled = false
+                markLearned.isVisible = false
+                deleteCard.isEnabled = false
+                deleteCard.isVisible = false
+            }
+
+        }
 
         popupMenu.setOnMenuItemClickListener { item->
             when(item.itemId){
@@ -77,5 +109,21 @@ class WordDetailsFragment : Fragment() {
         }
 
         popupMenu.show()
+    }
+
+    /**
+     * функция вернет false, если входящая в параметры дата еще не наступила
+     */
+    private fun compareDate(sleepTime: String?): Boolean{
+        try {
+            if (sleepTime==null){
+                return true
+            }else if(SimpleDateFormat(SIM_FORM_DATE).parse(sleepTime).before(Date())){
+                return true
+            }
+        } catch (e: Exception) {
+            return false
+        }
+        return false
     }
 }

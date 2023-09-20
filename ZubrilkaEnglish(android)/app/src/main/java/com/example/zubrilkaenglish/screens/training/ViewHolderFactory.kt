@@ -17,8 +17,8 @@ class ViewHolderFactory {
         val binding= WordCardBinding.bind(item)
 
         fun bind(wordCard: WordCard, listener: CardAdapter.Listener){
-            binding.numCorrAnsv.text = "("+wordCard.progressWord.numCorrAnsv.toString()+")"
-            binding.statusCard.text = "status: "+ wordCard.progressWord.statProgress
+            binding.numCorrAnsv.text = "("+wordCard.progressWord?.numCorrAnsv.toString()+")"
+            binding.statusCard.text = "status: "+ wordCard.progressWord?.statProgress
             binding.foreignWord.text = wordCard.word.foreignWord
             binding.transcription.text = wordCard.word.transcription
             binding.translation.text = wordCard.word.translation

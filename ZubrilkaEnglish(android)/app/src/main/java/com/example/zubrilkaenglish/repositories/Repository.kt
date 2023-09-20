@@ -121,11 +121,11 @@ class Repository {
         mapMyCards["спящие"] = ArrayList()
         mapMyCards["выученные"] = ArrayList()
         listWordsCards?.forEach {
-            if (it.progressWord.statProgress!=StatProgress.LEARNED.value&&compareDate(it.progressWord.sleepTime)){
+            if (it.progressWord?.statProgress!=StatProgress.LEARNED.value&&compareDate(it.progressWord?.sleepTime)){
                 mapMyCards["активные"]?.add(it)
-            }else if (it.progressWord.statProgress!=StatProgress.LEARNED.value&&!compareDate(it.progressWord.sleepTime)){
+            }else if (it.progressWord?.statProgress!=StatProgress.LEARNED.value&&!compareDate(it.progressWord?.sleepTime)){
                 mapMyCards["спящие"]?.add(it)
-            }else if(it.progressWord.statProgress==StatProgress.LEARNED.value){
+            }else if(it.progressWord?.statProgress==StatProgress.LEARNED.value){
                 mapMyCards["выученные"]?.add(it)
             }
         }
@@ -146,5 +146,12 @@ class Repository {
             return false
         }
         return false
+    }
+
+    /**
+     * функция достанет Word из БД в виде WordCard вместе с прогрессом пользователя по этой карточке
+     */
+    suspend fun getWordCardById(wordId: Int?): WordCard {
+        return roomService.getWordCardById(wordId)
     }
 }

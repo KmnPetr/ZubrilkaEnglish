@@ -57,4 +57,11 @@ class RoomService{
     suspend fun getProgressWordById(progId: Int?): ProgressWord? {
         return dataBase.getProgressDAO().getProgressWordById(progId)
     }
+
+    /**
+     * функция достанет Word из БД в виде WordCard вместе с прогрессом пользователя по этой карточке
+     */
+    suspend fun getWordCardById(wordId: Int?): WordCard {
+        return dataBase.getWordDAO().getWordCardById(wordId)
+    }
 }

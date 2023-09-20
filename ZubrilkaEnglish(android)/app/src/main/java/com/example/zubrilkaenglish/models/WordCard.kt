@@ -7,7 +7,7 @@ data class WordCard(
     @Embedded
     val word: Word,
     @Embedded
-    var progressWord: ProgressWord
+    var progressWord: ProgressWord?
 ): ICard {
     @Ignore
     var cardHasChanged:Boolean=false
