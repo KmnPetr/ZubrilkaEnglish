@@ -1,5 +1,7 @@
 package com.example.zubrilkaenglish.screens.directoryWords.listlWords
 
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.zubrilkaenglish.databinding.FragmentListWordsBinding
 import com.example.zubrilkaenglish.models.Word
+import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.screens.activity.MainViewModel
 import com.example.zubrilkaenglish.utils.MYBUNDLE
 
@@ -43,7 +46,7 @@ class ListWordsFragment : Fragment() {
      * функция раздобудет список Words
      * согласно преданной информации в MYBUNDLE из класса вызвавшаго этот фрагмент
      */
-    private fun getListWords(): ArrayList<Word>? {
+    private fun getListWords(): ArrayList<WordCard>? {
         val numberPosition = MYBUNDLE.get("number_position_into_list")
         val keyTopic = mainViewModel.namesTopics.value!![numberPosition!!]
         val listWords = mainViewModel.mapWordsByTopic.value?.get(keyTopic)

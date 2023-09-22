@@ -17,4 +17,6 @@ interface ProgressDAO {
     suspend fun updateProgressWord(progressWord: ProgressWord)
     @Query("SELECT * FROM progress_word WHERE progId = :progId")
     suspend fun getProgressWordById(progId: Int?): ProgressWord?
+    @Query("DELETE FROM progress_word WHERE wordId = :idWord")
+    suspend fun deleteProgressByWordId(idWord: Int?)
 }

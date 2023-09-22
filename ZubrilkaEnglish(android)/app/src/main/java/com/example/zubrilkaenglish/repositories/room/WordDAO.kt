@@ -18,9 +18,16 @@ interface WordDAO {
     suspend fun insertListWords(listWords: List<Word>)
     @Query("SELECT * FROM all_word_table WHERE id = :id LIMIT 1")
     suspend fun getWordById(id: Int): Word
+
     /**
      * функция достанет Word из БД в виде WordCard вместе с прогрессом пользователя по этой карточке
      */
     @Query("SELECT * FROM all_word_table w LEFT JOIN progress_word c ON w.id = c.wordId WHERE w.id = :wordId")
     suspend fun getWordCardById(wordId: Int?): WordCard
+
+    /**
+     * функция вернет список всех WordCard, в том числе и тех, у которых нет(null) ProgressWord
+     */
+    @Query("SELECT * FROM all_word_table w LEFT JOIN progress_word c ON w.id = c.wordId")
+    suspend fun getAllWordCards(): List<WordCard>
 }

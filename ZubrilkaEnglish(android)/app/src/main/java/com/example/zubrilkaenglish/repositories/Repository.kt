@@ -154,4 +154,47 @@ class Repository {
     suspend fun getWordCardById(wordId: Int?): WordCard {
         return roomService.getWordCardById(wordId)
     }
+
+    /**
+     * сбросит учебный прогресс по карточке
+     */
+    suspend fun resetProgressWordCardById(idWord: Int?) {
+        val progressWord = roomService.getWordCardById(idWord).progressWord
+        if (progressWord != null) {
+            progressWord.numCorrAnsv = 0
+            progressWord.statProgress = StatProgress.NEW.value
+            progressWord.sleepTime = SimpleDateFormat(SIM_FORM_DATE).format(Date())
+            roomService.updateProgressWord(progressWord)
+            Toast.makeText(MyApplication.context,"Прогресс сброшен",Toast.LENGTH_SHORT).show()
+        }else Toast.makeText(MyApplication.context,"Ошибка",Toast.LENGTH_SHORT).show()
+    }
+
+    /**
+     * установит статус прогресса WordCard как "learned"
+     */
+    suspend fun markWordCardLearned(idWord: Int?) {
+        val progressWord = roomService.getWordCardById(idWord).progressWord
+        if (progressWord != null) {
+            progressWord.statProgress = StatProgress.LEARNED.value
+            progressWord.numCorrAnsv = 0
+            progressWord.sleepTime = SimpleDateFormat(SIM_FORM_DATE).format(Date())
+            roomService.updateProgressWord(progressWord)
+            Toast.makeText(MyApplication.context,"Карточка помечена как \"выученная\"",Toast.LENGTH_SHORT).show()
+        }else Toast.makeText(MyApplication.context,"Ошибка",Toast.LENGTH_SHORT).show()
+    }
+
+    /**
+     * удалит ProgressWord по id Word
+     */
+    suspend fun deleteProgressByWordId(idWord: Int?) {
+        roomService.deleteProgressByWordId(idWord)
+        Toast.makeText(MyApplication.context,"Слово/фраза удалена из ваших карточек",Toast.LENGTH_SHORT).show()
+    }
+
+    /**
+     * функция вернет список всех WordCard, в том числе и тех, у которых нет(null) ProgressWord
+     */
+    suspend fun getAllWordCards(): List<WordCard> {
+        return roomService.getAllWordCards()
+    }
 }

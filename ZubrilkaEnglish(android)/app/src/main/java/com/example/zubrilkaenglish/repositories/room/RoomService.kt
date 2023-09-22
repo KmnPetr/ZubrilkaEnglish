@@ -64,4 +64,16 @@ class RoomService{
     suspend fun getWordCardById(wordId: Int?): WordCard {
         return dataBase.getWordDAO().getWordCardById(wordId)
     }
+
+    suspend fun deleteProgressByWordId(idWord: Int?) {
+        dataBase.getProgressDAO().deleteProgressByWordId(idWord)
+    }
+
+    /**
+     * функция вернет список всех WordCard, в том числе и тех, у которых нет(null) ProgressWord
+     */
+    suspend fun getAllWordCards(): List<WordCard> {
+        return dataBase.getWordDAO().getAllWordCards()
+    }
+
 }

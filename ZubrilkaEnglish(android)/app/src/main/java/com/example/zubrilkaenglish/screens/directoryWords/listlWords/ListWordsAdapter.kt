@@ -1,18 +1,24 @@
 package com.example.zubrilkaenglish.screens.directoryWords.listlWords
 
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.WordViewBinding
 import com.example.zubrilkaenglish.models.Word
+import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.utils.MYBUNDLE
+import com.example.zubrilkaenglish.utils.StatProgress
 
 class ListWordsAdapter(navController: NavController) : RecyclerView.Adapter<ListWordsAdapter.AllWordHolder>() {
 
-    var listWords= emptyList<Word>()
+    var listWords= emptyList<WordCard>()
     //navController нужен для перехода на другой фрагмент при нажатии на элемент списка
     private val navController = navController
 
@@ -27,10 +33,26 @@ class ListWordsAdapter(navController: NavController) : RecyclerView.Adapter<List
                 navController.navigate(R.id.action_listWordsFragment_to_wordDetailsFragment)
             }
         }
-        fun bind(word: Word) {
-            idWord = word.id
-            binding.foreignWord.text=word.foreignWord
-            binding.translation.text=word.translation
+        fun bind(wordCard: WordCard) {
+            idWord = wordCard.word.id
+            binding.foreignWord.text=wordCard.word.foreignWord
+            binding.translation.text=wordCard.word.translation
+
+            if (wordCard.progressWord==null){
+                binding.linearLayout.setBackgroundColor(Color.GRAY)
+            }else if(wordCard.progressWord?.statProgress == StatProgress.NEW.value){
+                val gradient = GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(Color.RED, Color.GRAY, Color.GRAY, Color.GRAY, Color.GRAY, Color.GRAY, Color.GRAY))
+                gradient.shape = GradientDrawable.RECTANGLE
+                binding.linearLayout.background = gradient
+            }else if(wordCard.progressWord?.statProgress == StatProgress.ALMOST_LEARNED.value||wordCard.progressWord?.statProgress == StatProgress.PARTIALLY_LEARNED.value){
+                val gradient = GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(Color.YELLOW, Color.GRAY, Color.GRAY, Color.GRAY, Color.GRAY, Color.GRAY, Color.GRAY))
+                gradient.shape = GradientDrawable.RECTANGLE
+                binding.linearLayout.background = gradient
+            }else if(wordCard.progressWord?.statProgress == StatProgress.LEARNED.value){
+                val gradient = GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(Color.GREEN, Color.GRAY, Color.GRAY, Color.GRAY, Color.GRAY, Color.GRAY, Color.GRAY))
+                gradient.shape = GradientDrawable.RECTANGLE
+                binding.linearLayout.background = gradient
+            }
         }
     }
 
@@ -47,7 +69,7 @@ class ListWordsAdapter(navController: NavController) : RecyclerView.Adapter<List
         holder.bind(listWords[position])
     }
 
-    public fun setList(list:List<Word>){
+    public fun setList(list:List<WordCard>){
         listWords=list
         notifyDataSetChanged()
     }

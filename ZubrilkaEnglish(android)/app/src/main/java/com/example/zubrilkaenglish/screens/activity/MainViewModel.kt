@@ -7,14 +7,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.zubrilkaenglish.repositories.Repository
 import com.example.zubrilkaenglish.models.Word
+import com.example.zubrilkaenglish.models.WordCard
 import kotlinx.coroutines.launch
 
 class MainViewModel: ViewModel() {
 
     private val repository = Repository()
 
-    val listAllWords: MutableLiveData<List<Word>> = MutableLiveData()
-    val mapWordsByTopic: MutableLiveData<Map<String, ArrayList<Word>>> = MutableLiveData()
+    val listAllWords: MutableLiveData<List<WordCard>> = MutableLiveData()
+    val mapWordsByTopic: MutableLiveData<Map<String, ArrayList<WordCard>>> = MutableLiveData()
     val namesTopics: MutableLiveData<List<String>> = MutableLiveData()
 
     init {
@@ -26,7 +27,10 @@ class MainViewModel: ViewModel() {
      */
     private fun getListWordsFromRepository() {
         viewModelScope.launch {
-            listAllWords.value=repository.getAllWords()
+            //этот вызов нельзя убирать, данные с сервера не подгрузятся
+            repository.getAllWords()
+
+            listAllWords.value = repository.getAllWordCards()
 
             //заполняем mapWordsByTopic
             mapWordsByTopic.value = listAllWords.value?.let { sortWordsByTopic(it) }
@@ -39,16 +43,16 @@ class MainViewModel: ViewModel() {
     /**
      * функция отсортирует массив элементов Word по темам/группам
      */
-    fun sortWordsByTopic(listWords: List<Word>): MutableMap<String, ArrayList<Word>> {
-        val mapWords = mutableMapOf<String,ArrayList<Word>>()
+    fun sortWordsByTopic(listWords: List<WordCard>): MutableMap<String, ArrayList<WordCard>> {
+        val mapWords = mutableMapOf<String,ArrayList<WordCard>>()
 
-        mapWords["Все слова"] = listWords as ArrayList<Word>
+        mapWords["Все слова"] = listWords as ArrayList<WordCard>
 
-        listWords.forEach { word ->
-            if (mapWords[word.groupWord] == null) {
-                mapWords[word.groupWord] = ArrayList()
+        listWords.forEach { wordCard ->
+            if (mapWords[wordCard.word.groupWord] == null) {
+                mapWords[wordCard.word.groupWord] = ArrayList()
             }
-            mapWords[word.groupWord]?.add(word)
+            mapWords[wordCard.word.groupWord]?.add(wordCard)
         }
 
         return mapWords
@@ -57,7 +61,7 @@ class MainViewModel: ViewModel() {
     /**
      * функция создаст список тем/названий групп слов из ключей mapWordsByTopic
      */
-    private fun fillNamesTopics(mapWords: Map<String, List<Word>>): List<String> {
+    private fun fillNamesTopics(mapWords: Map<String, List<WordCard>>): List<String> {
 
         var topicsName = mapWords.keys.toList()
 

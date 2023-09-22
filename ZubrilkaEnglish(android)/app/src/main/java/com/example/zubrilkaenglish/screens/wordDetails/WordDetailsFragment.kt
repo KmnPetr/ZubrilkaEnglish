@@ -40,6 +40,7 @@ class WordDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(requireActivity()).get(WordDetailsViewModel::class.java)
 
+        //довольно важная строчка
         viewModel.idWord.value = MYBUNDLE["id_pressed_word"]
 
 
@@ -56,9 +57,6 @@ class WordDetailsFragment : Fragment() {
     fun initButtons(){
         binding.options.setOnClickListener {
             showPopUpOptions()
-        }
-        binding.addTraining.setOnClickListener {
-                viewModel.addWordToTraining()
         }
     }
 
@@ -102,6 +100,18 @@ class WordDetailsFragment : Fragment() {
             when(item.itemId){
                 R.id.addToTrain->{
                     viewModel.addWordToTraining()
+                    true
+                }
+                R.id.resetProgress->{
+                    viewModel.resetProgressCard()
+                    true
+                }
+                R.id.markLearned->{
+                    viewModel.markCardLearned()
+                    true
+                }
+                R.id.deleteCard->{
+                    viewModel.deleteCard()
                     true
                 }
                 else-> false

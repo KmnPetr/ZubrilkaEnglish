@@ -48,4 +48,38 @@ class WordDetailsViewModel : ViewModel() {
         }
         return wordCard
     }
+
+    /**
+     * сбросит прогресс по карточке
+     */
+    fun resetProgressCard() {
+        viewModelScope.launch {
+            repository.resetProgressWordCardById(idWord.value)
+            //обовим wordCard в viewModel
+            wordCard.value = repository.getWordCardById(idWord.value)
+        }
+    }
+
+    /**
+     * пометит карточку выученной
+     */
+    fun markCardLearned() {
+        viewModelScope.launch {
+            repository.markWordCardLearned(idWord.value)
+            //обовим wordCard в viewModel
+            wordCard.value = repository.getWordCardById(idWord.value)
+
+        }
+    }
+
+    /**
+     * удалит инфу/прогресс пользователя по этому слову
+     */
+    fun deleteCard() {
+        viewModelScope.launch {
+            repository.deleteProgressByWordId(idWord.value)
+            //обовим wordCard в viewModel
+            wordCard.value = repository.getWordCardById(idWord.value)
+        }
+    }
 }
