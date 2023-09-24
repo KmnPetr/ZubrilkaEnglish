@@ -7,24 +7,22 @@
     android:background="#C6B5D6"
     tools:context=".screens.wordDetails.WordDetailsFragment" >
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+    <FrameLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="#4EFFFFFF">
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
             android:id="@+id/options"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:background="#33FFFFFF"
             android:scaleType="centerCrop"
             android:src="@drawable/points"
+            android:background="#00000000"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
 
     <TextView
         android:id="@+id/foreignWord"

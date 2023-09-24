@@ -38,18 +38,30 @@ class ListWordsAdapter(navController: NavController) : RecyclerView.Adapter<List
             binding.foreignWord.text=wordCard.word.foreignWord
             binding.translation.text=wordCard.word.translation
 
+            //добавим прозрачности
+            val transpGray = Color.argb(128, Color.red(Color.GRAY), Color.green(Color.GRAY), Color.blue(Color.GRAY))
+            val transpRed = Color.argb(128, Color.red(Color.RED), Color.green(Color.RED), Color.blue(Color.RED))
+            val transpYellow = Color.argb(128, Color.red(Color.YELLOW), Color.green(Color.YELLOW), Color.blue(Color.YELLOW))
+            val transpGreen = Color.argb(128, Color.red(Color.GREEN), Color.green(Color.GREEN), Color.blue(Color.GREEN))
+
             if (wordCard.progressWord==null){
-                binding.linearLayout.setBackgroundColor(Color.GRAY)
+                binding.linearLayout.setBackgroundColor(transpGray)
             }else if(wordCard.progressWord?.statProgress == StatProgress.NEW.value){
-                val gradient = GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(Color.RED, Color.GRAY, Color.GRAY, Color.GRAY, Color.GRAY, Color.GRAY, Color.GRAY))
+                val gradient = GradientDrawable(
+                    GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(
+                        transpRed, transpGray, transpGray, transpGray, transpGray, transpGray, transpGray))
                 gradient.shape = GradientDrawable.RECTANGLE
                 binding.linearLayout.background = gradient
             }else if(wordCard.progressWord?.statProgress == StatProgress.ALMOST_LEARNED.value||wordCard.progressWord?.statProgress == StatProgress.PARTIALLY_LEARNED.value){
-                val gradient = GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(Color.YELLOW, Color.GRAY, Color.GRAY, Color.GRAY, Color.GRAY, Color.GRAY, Color.GRAY))
+                val gradient = GradientDrawable(
+                    GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(
+                        transpYellow, transpGray, transpGray, transpGray, transpGray, transpGray, transpGray))
                 gradient.shape = GradientDrawable.RECTANGLE
                 binding.linearLayout.background = gradient
             }else if(wordCard.progressWord?.statProgress == StatProgress.LEARNED.value){
-                val gradient = GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(Color.GREEN, Color.GRAY, Color.GRAY, Color.GRAY, Color.GRAY, Color.GRAY, Color.GRAY))
+                val gradient = GradientDrawable(
+                    GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(
+                        transpGreen, transpGray, transpGray, transpGray, transpGray, transpGray, transpGray))
                 gradient.shape = GradientDrawable.RECTANGLE
                 binding.linearLayout.background = gradient
             }

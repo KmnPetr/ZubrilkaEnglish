@@ -4,8 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#4ADD73"
+    android:background="@drawable/fon_1"
+    android:layout_gravity="top"
+    android:scaleX="1"
+    android:scaleY="1"
     tools:context=".screens.directoryWords.listlWords.ListWordsFragment">
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

@@ -1,23 +1,16 @@
 package com.example.zubrilkaenglish.screens.wordDetails
 
-import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import android.widget.PopupMenu
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.FragmentWordDetailsBinding
-import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.utils.MYBUNDLE
-import com.example.zubrilkaenglish.utils.MyApplication
 import com.example.zubrilkaenglish.utils.SIM_FORM_DATE
 import com.example.zubrilkaenglish.utils.StatProgress
 import java.text.SimpleDateFormat
@@ -58,13 +51,25 @@ class WordDetailsFragment : Fragment() {
         binding.options.setOnClickListener {
             showPopUpOptions()
         }
+
+        //увеличивает размер кнопки при нажатии
+        binding.options.setOnTouchListener { view, motionEvent ->
+            when (motionEvent.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    view.animate().scaleX(1.2f).scaleY(1.2f).setDuration(150).start()
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    view.animate().scaleX(1f).scaleY(1f).setDuration(150).start()
+                }
+            }
+            false
+        }
     }
 
     /**
      * функция покажет всплывающий набор опций над выбранным словом
      */
     private fun showPopUpOptions() {
-
 
         val popupMenu = PopupMenu(requireActivity(),binding.options)
         popupMenu.inflate(R.menu.optionsword_menu)
