@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.zubrilkaenglish.databinding.FragmentMyCardsBinding
+import com.example.zubrilkaenglish.utils.customizeBackground
 
 class MyCardsFragment : Fragment() {
 
@@ -31,6 +32,8 @@ class MyCardsFragment : Fragment() {
         recyclerView = binding.recyclerView
         adapter = MyCardsAdapter(findNavController())
         recyclerView.adapter = adapter
+
+        customizeBackground(binding.background,resources)
 
         viewModel.getMapMyCards().observe(viewLifecycleOwner){map->
             val namesFolders = map.keys.toList().map {  it+"   (слов: "+ (map[it]?.size ?: "null") + ")"  }

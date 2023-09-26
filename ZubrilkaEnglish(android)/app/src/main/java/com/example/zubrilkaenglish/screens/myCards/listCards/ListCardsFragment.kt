@@ -1,17 +1,21 @@
 package com.example.zubrilkaenglish.screens.myCards.listCards
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.FragmentListCardsBinding
 import com.example.zubrilkaenglish.screens.myCards.MyCardsViewModel
 import com.example.zubrilkaenglish.utils.MYBUNDLE
+import com.example.zubrilkaenglish.utils.customizeBackground
 
 class ListCardsFragment : Fragment() {
 
@@ -35,10 +39,13 @@ class ListCardsFragment : Fragment() {
         recyclerView = binding.recyclerView
         recyclerView.adapter = adapter
 
+
         myCardsViewModel.getMapMyCards().observe(viewLifecycleOwner){map->
             val numNameFolder: Int? = MYBUNDLE.get("number_position_into_list")
             val nameFolder: String = map.keys.toList()[numNameFolder!!]
             map[nameFolder]?.let { adapter.setList(it) }
         }
+
+        customizeBackground(binding.background,resources)
     }
 }

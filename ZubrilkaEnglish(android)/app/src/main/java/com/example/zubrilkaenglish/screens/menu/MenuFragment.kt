@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.FragmentMenuBinding
+import com.example.zubrilkaenglish.utils.customizeBackground
 
 class MenuFragment : Fragment() {
     private lateinit var viewModel: MenuViewModel
@@ -27,6 +28,7 @@ class MenuFragment : Fragment() {
 
         viewModel=ViewModelProvider(this).get(MenuViewModel::class.java)
 
+        customizeBackground(binding.background,resources)
         initButton()
     }
     private fun initButton(){
