@@ -23,6 +23,8 @@ class Repository {
      */
     suspend fun getAllWords():List<Word>{
 
+//TODO непонятная ошибка при обновлении даты на сервере и перезагрузке данных с сервера, скорее всего изза нарушения порядка айдишников
+
         if(checkUpdateAtOnServer()){
             val list=retrofitService.getAllWords()
             if (list != null) {
@@ -193,6 +195,7 @@ class Repository {
 
     /**
      * функция вернет список всех WordCard, в том числе и тех, у которых нет(null) ProgressWord
+     * Запрос будет произведен к БД без попытки подключения к сети
      */
     suspend fun getAllWordCards(): List<WordCard> {
         return roomService.getAllWordCards()

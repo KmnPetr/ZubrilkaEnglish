@@ -36,6 +36,9 @@
         <action
             android:id="@+id/action_directoryWordsFragment_to_listWordsFragment"
             app:destination="@id/listWordsFragment" />
+        <action
+            android:id="@+id/action_directoryWordsFragment_to_wordDetailsFragment"
+            app:destination="@id/wordDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/listWordsFragment"
