@@ -49,7 +49,6 @@ class CardAdapter(val listener: Listener):RecyclerView.Adapter<RecyclerView.View
     fun setList(listForTreining: ArrayList<ICard>) {
         cardList = listForTreining
         notifyDataSetChanged()
-        println("адаптер был перезапущен")
     }
 
     interface Listener{

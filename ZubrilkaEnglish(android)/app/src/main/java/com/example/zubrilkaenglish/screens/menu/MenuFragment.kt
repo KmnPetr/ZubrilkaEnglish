@@ -41,5 +41,8 @@ class MenuFragment : Fragment() {
         binding.buttonMyCards.setOnClickListener {
             findNavController().navigate(R.id.action_menuFragment_to_myCardsFragment)
         }
+        binding.catalogCards.setOnClickListener {
+            findNavController().navigate(R.id.action_menuFragment_to_catalogCardsFragment)
+        }
     }
 }

@@ -51,4 +51,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonListWeb" />
 
+    <Button
+        android:id="@+id/catalogCards"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="catalogCards"
+        app:layout_constraintEnd_toEndOf="@+id/buttonMyCards"
+        app:layout_constraintStart_toStartOf="@+id/buttonMyCards"
+        app:layout_constraintTop_toBottomOf="@+id/buttonMyCards" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

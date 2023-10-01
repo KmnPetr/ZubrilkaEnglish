@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_menuFragment_to_myCardsFragment"
             app:destination="@id/myCardsFragment" />
+        <action
+            android:id="@+id/action_menuFragment_to_catalogCardsFragment"
+            app:destination="@id/catalogCardsFragment" />
     </fragment>
     <fragment
         android:id="@+id/trainingFragment"
@@ -30,9 +33,6 @@
         android:name="com.example.zubrilkaenglish.screens.directoryWords.DirectoryWordsFragment"
         android:label="fragment_directory_words"
         tools:layout="@layout/fragment_directory_words" >
-        <action
-            android:id="@+id/action_directoryWordsFragment_to_menuFragment"
-            app:destination="@id/menuFragment" />
         <action
             android:id="@+id/action_directoryWordsFragment_to_listWordsFragment"
             app:destination="@id/listWordsFragment" />
@@ -71,4 +71,9 @@
             android:id="@+id/action_listCardsFragment_to_wordDetailsFragment"
             app:destination="@id/wordDetailsFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/catalogCardsFragment"
+        android:name="com.example.zubrilkaenglish.screens.catalogCards.CatalogCardsFragment"
+        android:label="fragment_catalog_cards"
+        tools:layout="@layout/fragment_catalog_cards" />
 </navigation>
