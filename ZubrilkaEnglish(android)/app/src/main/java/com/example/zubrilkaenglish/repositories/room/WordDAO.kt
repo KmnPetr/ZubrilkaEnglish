@@ -28,6 +28,6 @@ interface WordDAO {
     /**
      * функция вернет список всех WordCard, в том числе и тех, у которых нет(null) ProgressWord
      */
-    @Query("SELECT * FROM all_word_table w LEFT JOIN progress_word c ON w.id = c.wordId")
+    @Query("SELECT w.*, c.* FROM all_word_table w LEFT JOIN progress_word c ON w.id = c.wordId")
     suspend fun getAllWordCards(): List<WordCard>
 }

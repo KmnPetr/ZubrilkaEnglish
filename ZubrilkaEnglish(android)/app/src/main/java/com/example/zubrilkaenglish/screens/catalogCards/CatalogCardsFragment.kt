@@ -40,6 +40,8 @@ class CatalogCardsFragment : Fragment() {
         adapter = ViewPager2Adapter(this)
         viewPager2.adapter = adapter
 
+        SearchObject.instance //требует заранее прогрузки для скачивания данных с БД
+
         tabLayoutListener()
         viewPager2Listener()
         searchListener()
@@ -57,13 +59,29 @@ class CatalogCardsFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val updatedText = s.toString() // Получить новый текст из CharSequence
                 if(updatedText.trim().isNotEmpty()){
-                    val tabLayout: TabLayout = binding.tabLayout
-                    val tab = tabLayout.newTab()
-                    tab.text = "Поиск"
-                    tabLayout.addTab(tab)
-                    tabLayout.getTabAt(tabLayout.tabCount - 1)?.select()
+                    //передаем данные с поисковой строки в viewModel
+                    viewModel.changeListSearchWord(updatedText.trim())
+                    //создаем фрагмент по поиску слов
+                    if (!viewModel.searchCreated){
+                        viewModel.searchCreated = true
+                        viewModel.lastPositionTablayout = tabLayout.selectedTabPosition
+
+                        val tabLayout: TabLayout = binding.tabLayout
+                        val tab = tabLayout.newTab()
+                        tab.text = "Поиск"
+                        tabLayout.addTab(tab)
+                        adapter.addSearchFragment(viewModel)
+                        tabLayout.getTabAt(tabLayout.tabCount - 1)?.select()
+                    }
                 }else{
+                    //удаляем фрагмент по поиску слов
+                    if (viewModel.searchCreated){
+                        viewModel.searchCreated = false
+
+                        tabLayout.getTabAt(viewModel.lastPositionTablayout)?.select()
+                        adapter.removeSearchFragment()
                         tabLayout.removeTabAt(tabLayout.tabCount - 1)
+                    }
                 }
             }
 
@@ -81,6 +99,7 @@ class CatalogCardsFragment : Fragment() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 tabLayout.getTabAt(position)?.select()
+                if (position!=2) viewModel.lastPositionTablayout = position
             }
         })
     }
@@ -92,6 +111,7 @@ class CatalogCardsFragment : Fragment() {
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 viewPager2.currentItem = tab.position
+                if (tab.position!=2) viewModel.lastPositionTablayout = tab.position
             }
             override fun onTabUnselected(tab: TabLayout.Tab) {/*Выполняется, когда выбор снят с вкладки*/ }
             override fun onTabReselected(tab: TabLayout.Tab) {/*Выполняется, когда выбирается уже выбранная вкладка*/ }

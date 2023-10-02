@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#CCFF90"
     tools:context=".screens.catalogCards.CatalogCardsFragment">
 
 
@@ -52,6 +53,7 @@
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout"
+        android:background="@android:color/transparent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
