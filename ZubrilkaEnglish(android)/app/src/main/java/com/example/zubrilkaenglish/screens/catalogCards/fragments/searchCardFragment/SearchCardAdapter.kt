@@ -1,4 +1,4 @@
-package com.example.zubrilkaenglish.screens.catalogCards.fragments.SearchCardFragment
+package com.example.zubrilkaenglish.screens.catalogCards.fragments.searchCardFragment
 
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable

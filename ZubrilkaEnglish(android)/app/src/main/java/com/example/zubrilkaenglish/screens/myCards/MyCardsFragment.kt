@@ -36,7 +36,7 @@ class MyCardsFragment : Fragment() {
         customizeBackground(binding.background,resources)
 
         viewModel.getMapMyCards().observe(viewLifecycleOwner){map->
-            val namesFolders = map.keys.toList().map {  it+"   (слов: "+ (map[it]?.size ?: "null") + ")"  }
+            val namesFolders = map.keys.toList().map {  it+"   (слов: "+ (map[it]?.size?: "null") + ")"  }
             adapter.setList(namesFolders)
         }
     }

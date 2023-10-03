@@ -1,18 +1,17 @@
 package com.example.zubrilkaenglish.screens.catalogCards
 
-import android.annotation.SuppressLint
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.viewpager2.widget.ViewPager2
 import com.example.zubrilkaenglish.databinding.FragmentCatalogCardsBinding
 import com.example.zubrilkaenglish.utils.SearchObject
+import com.example.zubrilkaenglish.utils.customizeBackground
 import com.google.android.material.tabs.TabLayout
 
 class CatalogCardsFragment : Fragment() {
@@ -37,10 +36,13 @@ class CatalogCardsFragment : Fragment() {
 
         tabLayout = binding.tabLayout
         viewPager2 = binding.viewPager2
-        adapter = ViewPager2Adapter(this)
+        adapter = ViewPager2Adapter(this,viewModel)
         viewPager2.adapter = adapter
 
         SearchObject.instance //требует заранее прогрузки для скачивания данных с БД
+
+
+        customizeBackground(binding.background,resources)
 
         tabLayoutListener()
         viewPager2Listener()
@@ -70,7 +72,7 @@ class CatalogCardsFragment : Fragment() {
                         val tab = tabLayout.newTab()
                         tab.text = "Поиск"
                         tabLayout.addTab(tab)
-                        adapter.addSearchFragment(viewModel)
+                        adapter.addSearchFragment()
                         tabLayout.getTabAt(tabLayout.tabCount - 1)?.select()
                     }
                 }else{
