@@ -6,8 +6,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.FolderViewBinding
+import com.example.zubrilkaenglish.screens.catalogCards.fragments.RecyclerItemListener
 
-class TopicsCardsAdapter(): RecyclerView.Adapter<TopicsCardsAdapter.TopicCardHolder>() {
+class TopicsCardsAdapter(private val listener: RecyclerItemListener): RecyclerView.Adapter<TopicsCardsAdapter.TopicCardHolder>() {
 
     private var listFolders = emptyList<String>()
 
@@ -18,7 +19,7 @@ class TopicsCardsAdapter(): RecyclerView.Adapter<TopicsCardsAdapter.TopicCardHol
     }
 
     override fun onBindViewHolder(holder: TopicCardHolder, position: Int) {
-        holder.bind(listFolders[position])
+        holder.bind(listFolders[position],position,listener)
     }
 
     override fun getItemCount(): Int {
@@ -31,16 +32,14 @@ class TopicsCardsAdapter(): RecyclerView.Adapter<TopicsCardsAdapter.TopicCardHol
     }
 
     class TopicCardHolder(view: View): RecyclerView.ViewHolder(view){
-        val binding = FolderViewBinding.bind(view)
+        private val binding = FolderViewBinding.bind(view)
 
-        init {
-            view.setOnClickListener {
-//                println("Нажат элемент: "+ binding.nameFolder.text)
-            }
-        }
-
-        fun bind(nameFolder: String){
+        fun bind(nameFolder: String, position: Int, listener: RecyclerItemListener){
             binding.nameFolder.text = nameFolder
+
+            binding.root.setOnClickListener {
+                listener.onClickFolder(position)
+            }
         }
     }
 }

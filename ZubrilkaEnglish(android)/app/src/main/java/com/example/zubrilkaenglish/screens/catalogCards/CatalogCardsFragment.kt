@@ -8,8 +8,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.viewpager2.widget.ViewPager2
 import com.example.zubrilkaenglish.databinding.FragmentCatalogCardsBinding
+import com.example.zubrilkaenglish.screens.catalogCards.fragments.RecyclerItemListener
 import com.example.zubrilkaenglish.utils.SearchObject
 import com.example.zubrilkaenglish.utils.customizeBackground
 import com.google.android.material.tabs.TabLayout
@@ -47,7 +49,9 @@ class CatalogCardsFragment : Fragment() {
         tabLayoutListener()
         viewPager2Listener()
         searchListener()
+
     }
+
 
     /**
      * прослушивает ввод текста в поисковик(editText)
@@ -119,4 +123,5 @@ class CatalogCardsFragment : Fragment() {
             override fun onTabReselected(tab: TabLayout.Tab) {/*Выполняется, когда выбирается уже выбранная вкладка*/ }
         })
     }
+
 }

@@ -45,7 +45,7 @@ class CatalogCardsViewModel : ViewModel() {
     /**
      * функция отсортирует массив элементов Word по темам/группам
      */
-    fun sortWordsByTopic(listWords: List<WordCard>): MutableMap<String, ArrayList<WordCard>> {
+    private fun sortWordsByTopic(listWords: List<WordCard>): MutableMap<String, ArrayList<WordCard>> {
         val mapWords = mutableMapOf<String,ArrayList<WordCard>>()
 
         mapWords["Все слова"] = listWords as ArrayList<WordCard>

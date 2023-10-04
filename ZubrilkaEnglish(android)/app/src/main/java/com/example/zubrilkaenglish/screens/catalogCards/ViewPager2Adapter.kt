@@ -32,4 +32,7 @@ class ViewPager2Adapter(parentFragment: CatalogCardsFragment,
         fragmentList.removeLast()
         notifyDataSetChanged()
     }
+    fun getList(): MutableList<Fragment> {
+        return fragmentList
+    }
 }
