@@ -12,15 +12,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.Button
-import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
-import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.FragmentCatalogCardsBinding
 import com.example.zubrilkaenglish.databinding.PopupWordcardBinding
-import com.example.zubrilkaenglish.databinding.WordViewBinding
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.screens.catalogCards.fragments.CatalogItemFragment
 import com.example.zubrilkaenglish.screens.catalogCards.fragments.FragmentItem
@@ -29,10 +25,8 @@ import com.example.zubrilkaenglish.utils.SIM_FORM_DATE
 import com.example.zubrilkaenglish.utils.SearchObject
 import com.example.zubrilkaenglish.utils.StatProgress
 import com.example.zubrilkaenglish.utils.customizeBackground
-import com.google.android.material.slider.Slider
 import com.google.android.material.tabs.TabLayout
 import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Date
 
 class CatalogCardsFragment : Fragment() {
@@ -93,6 +87,36 @@ class CatalogCardsFragment : Fragment() {
         binding.transcription.text = wordCard.word.transcription
         binding.translation.text = wordCard.word.translation
         binding.description.text = wordCard.word.description
+
+        val addToTrain = binding.addToTrain
+        val markLearned = binding.markLearned
+        val resetProgress = binding.resetProgress
+        val deleteCard = binding.deleteCard
+
+        if(wordCard.progressWord!=null) {
+            addToTrain.isEnabled = false
+            addToTrain.visibility = View.GONE
+            if(wordCard.progressWord?.statProgress == StatProgress.LEARNED.value){
+                markLearned.isEnabled = false
+            }else markLearned.isEnabled = true
+            if(wordCard.progressWord?.statProgress==StatProgress.NEW.value&&
+                wordCard.progressWord?.numCorrAnsv==0&&
+                compareDate(wordCard.progressWord?.sleepTime)){
+                resetProgress.isEnabled = false
+            }else resetProgress.isEnabled = true
+        }else{
+            resetProgress.isEnabled = false
+            resetProgress.visibility = View.GONE
+            markLearned.isEnabled = false
+            markLearned.visibility = View.GONE
+            deleteCard.isEnabled = false
+            deleteCard.visibility = View.GONE
+        }
+
+        if (addToTrain.isEnabled){ addToTrain.setOnClickListener { viewModel.addWordToTraining(wordCard) } }
+        if (markLearned.isEnabled){ markLearned.setOnClickListener { viewModel.markCardLearned(wordCard) } }
+        if (resetProgress.isEnabled){ resetProgress.setOnClickListener { viewModel.resetProgressCard(wordCard) } }
+        if (deleteCard.isEnabled){ deleteCard.setOnClickListener { viewModel.deleteCard(wordCard) } }
 
         dialog.show()
     }
@@ -214,4 +238,19 @@ class CatalogCardsFragment : Fragment() {
         })
     }
 
+    /**
+     * функция вернет false, если входящая в параметры дата еще не наступила
+     */
+    private fun compareDate(sleepTime: String?): Boolean{
+        try {
+            if (sleepTime==null){
+                return true
+            }else if(SimpleDateFormat(SIM_FORM_DATE).parse(sleepTime).before(Date())){
+                return true
+            }
+        } catch (e: Exception) {
+            return false
+        }
+        return false
+    }
 }

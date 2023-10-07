@@ -35,12 +35,6 @@ class MenuFragment : Fragment() {
         binding.buttonGo.setOnClickListener {
             findNavController().navigate(R.id.action_menuFragment_to_trainingFragment)
         }
-        binding.buttonListWeb.setOnClickListener {
-            findNavController().navigate(R.id.action_menuFragment_to_directoryWordsFragment)
-        }
-        binding.buttonMyCards.setOnClickListener {
-            findNavController().navigate(R.id.action_menuFragment_to_myCardsFragment)
-        }
         binding.catalogCards.setOnClickListener {
             findNavController().navigate(R.id.action_menuFragment_to_catalogCardsFragment)
         }

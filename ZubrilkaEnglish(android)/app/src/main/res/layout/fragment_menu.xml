@@ -29,36 +29,13 @@
         app:layout_constraintVertical_bias="0.40" />
 
     <Button
-        android:id="@+id/buttonListWeb"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Каталог слов и фраз"
-        android:backgroundTint="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/buttonGo"
-        app:layout_constraintStart_toStartOf="@+id/buttonGo"
-        app:layout_constraintTop_toBottomOf="@+id/buttonGo"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <Button
-        android:id="@+id/buttonMyCards"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Мои карточки"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonListWeb" />
-
-    <Button
         android:id="@+id/catalogCards"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:text="catalogCards"
-        app:layout_constraintEnd_toEndOf="@+id/buttonMyCards"
-        app:layout_constraintStart_toStartOf="@+id/buttonMyCards"
-        app:layout_constraintTop_toBottomOf="@+id/buttonMyCards" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonGo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -26,15 +26,7 @@ class CatalogCardsViewModel : ViewModel() {
     val isRecyclerChanged: MutableLiveData<ArrayList<Boolean>> = MutableLiveData()
 
     init {
-        //заполняем некоторые переменные данными
-        viewModelScope.launch {
-            val listAllCards = repository.getAllWordCards()
-            mapWordsByTopic.value = sortWordsByTopic(listAllCards)
-            namesTopics.value = fillNamesTopics(mapWordsByTopic.value as MutableMap<String, ArrayList<WordCard>>)
-
-            mapUserCards.value = repository.getMapMyCards()
-            namesTopicsUserCards.value = mapUserCards.value?.keys?.toList()
-        }
+        dataDownload()
     }
 
 
@@ -69,5 +61,58 @@ class CatalogCardsViewModel : ViewModel() {
     private fun fillNamesTopics(mapWords: Map<String, List<WordCard>>): List<String> {
         val topicsName = mapWords.keys.toList()
         return topicsName
+    }
+
+    /**
+     * добавит карточку в изучаемые
+     */
+    fun addWordToTraining(wordCard: WordCard) {
+        viewModelScope.launch {
+            repository.addWordToTraining(wordCard.word.id)
+        }
+        dataDownload()
+    }
+    /**
+     * установит прогресс по карточке, как выученной
+     */
+    fun markCardLearned(wordCard: WordCard) {
+        viewModelScope.launch {
+            repository.markWordCardLearned(wordCard.word.id)
+        }
+        dataDownload()
+    }
+
+    /**
+     * сбросит имеющийся учебный прогресс по карточке
+     */
+    fun resetProgressCard(wordCard: WordCard) {
+        viewModelScope.launch {
+            repository.resetProgressWordCardById(wordCard.word.id)
+        }
+        dataDownload()
+    }
+
+    /**
+     * удалит карточку из изучаемых
+     */
+    fun deleteCard(wordCard: WordCard) {
+        viewModelScope.launch {
+            repository.deleteProgressByWordId(wordCard.word.id)
+        }
+        dataDownload()
+    }
+
+    /**
+     * загрузит\обновит данные из репозитория
+     */
+    private fun dataDownload(){
+        viewModelScope.launch {
+            val listAllCards = repository.getAllWordCards()
+            mapWordsByTopic.value = sortWordsByTopic(listAllCards)
+            namesTopics.value = fillNamesTopics(mapWordsByTopic.value as MutableMap<String, ArrayList<WordCard>>)
+
+            mapUserCards.value = repository.getMapMyCards()
+            namesTopicsUserCards.value = mapUserCards.value?.keys?.toList()
+        }
     }
 }
