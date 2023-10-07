@@ -18,8 +18,8 @@ class ViewPager2Adapter(parentFragment: CatalogCardsFragment,
         return fragmentList[position]
     }
 
-    fun addSearchFragment(){
-        fragmentList.add(SearchCardFragment(viewModel))
+    fun addSearchFragment(searchCardFragment: SearchCardFragment){
+        fragmentList.add(searchCardFragment)
         notifyDataSetChanged()
     }
     fun removeSearchFragment(){

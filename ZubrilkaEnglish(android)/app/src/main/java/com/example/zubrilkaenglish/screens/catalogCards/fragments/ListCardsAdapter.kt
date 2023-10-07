@@ -11,19 +11,48 @@ import com.example.zubrilkaenglish.databinding.WordViewBinding
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.utils.StatProgress
 
-class ListCardsAdapter() : RecyclerView.Adapter<ListCardsAdapter.CardHolder>() {
+class ListCardsAdapter(val fragmentItem: FragmentItem) : RecyclerView.Adapter<ListCardsAdapter.CardHolder>() {
 
     private var listCards= emptyList<WordCard>()
 
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardHolder {
+        val view= LayoutInflater.from(parent.context).inflate(R.layout.word_view,parent,false)
+        return CardHolder(view)
+    }
+
+    override fun getItemCount(): Int {
+        return listCards.size
+    }
+
+    override fun onBindViewHolder(holder: CardHolder, position: Int) {
+        holder.bind(listCards[position], fragmentItem)
+    }
+
+    fun setList(list:List<WordCard>){
+        listCards=list
+        notifyDataSetChanged()
+    }
     class CardHolder(view: View) : RecyclerView.ViewHolder(view){
         private val binding= WordViewBinding.bind(view)
         private var idWord: Int? = null
 
-        fun bind(wordCard: WordCard) {
+        fun bind(wordCard: WordCard, fragmentItem: FragmentItem) {
             idWord = wordCard.word.id
             binding.foreignWord.text=wordCard.word.foreignWord
             binding.translation.text=wordCard.word.translation
 
+            setUpBackground(wordCard)
+
+            binding.root.setOnClickListener {
+                fragmentItem.owner.onClickCard(wordCard)
+            }
+        }
+
+        /**
+         * функция настроит цвет и прозрачность элемента карточки исходя из ее статуса выученности юзером
+         */
+        private fun setUpBackground(wordCard: WordCard) {
             //добавим прозрачности
             val transpGray = Color.argb(128, Color.red(Color.GRAY), Color.green(Color.GRAY), Color.blue(
                 Color.GRAY))
@@ -55,25 +84,6 @@ class ListCardsAdapter() : RecyclerView.Adapter<ListCardsAdapter.CardHolder>() {
                 gradient.shape = GradientDrawable.RECTANGLE
                 this.itemView.background = gradient
             }
-
         }
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardHolder {
-        val view= LayoutInflater.from(parent.context).inflate(R.layout.word_view,parent,false)
-        return CardHolder(view)
-    }
-
-    override fun getItemCount(): Int {
-        return listCards.size
-    }
-
-    override fun onBindViewHolder(holder: CardHolder, position: Int) {
-        holder.bind(listCards[position])
-    }
-
-    fun setList(list:List<WordCard>){
-        listCards=list
-        notifyDataSetChanged()
     }
 }

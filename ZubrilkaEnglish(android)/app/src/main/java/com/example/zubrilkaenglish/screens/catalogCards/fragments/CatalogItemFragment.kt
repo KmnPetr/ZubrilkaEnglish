@@ -10,13 +10,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.zubrilkaenglish.databinding.FragmentCatalogItemBinding
 import com.example.zubrilkaenglish.models.WordCard
+import com.example.zubrilkaenglish.screens.catalogCards.CatalogCardsFragment
 import com.example.zubrilkaenglish.screens.catalogCards.CatalogCardsViewModel
 
 class CatalogItemFragment(
     val viewModel_CC: CatalogCardsViewModel,
     val positionInPager: Int,
     val mapFoldersCards: MutableLiveData<Map<String, List<WordCard>>>,
-    val namesFolders: MutableLiveData<List<String>>
+    val namesFolders: MutableLiveData<List<String>>,
+    override val owner: CatalogCardsFragment
 ) : Fragment(), FragmentItem {
     private lateinit var binding: FragmentCatalogItemBinding
     lateinit var folderAdapter: FoldersCardsAdapter
@@ -36,7 +38,7 @@ class CatalogItemFragment(
         super.onViewCreated(view, savedInstanceState)
 
         folderAdapter = FoldersCardsAdapter(this)
-        cardAdapter = ListCardsAdapter()
+        cardAdapter = ListCardsAdapter(this)
         viewLifecycleOwner_1 = viewLifecycleOwner
 
         recyclerView = binding.recyclerView

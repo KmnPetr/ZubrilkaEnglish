@@ -12,8 +12,10 @@ import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.zubrilkaenglish.databinding.FragmentCatalogCardsBinding
+import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.screens.catalogCards.fragments.CatalogItemFragment
 import com.example.zubrilkaenglish.screens.catalogCards.fragments.FragmentItem
+import com.example.zubrilkaenglish.screens.catalogCards.fragments.searchCardFragment.SearchCardFragment
 import com.example.zubrilkaenglish.utils.SearchObject
 import com.example.zubrilkaenglish.utils.customizeBackground
 import com.google.android.material.tabs.TabLayout
@@ -55,6 +57,17 @@ class CatalogCardsFragment : Fragment() {
         overrideClickBack()
     }
 
+    /**
+     * показывает popup окошко при нажатии на элемент карточки
+     */
+    fun onClickCard(wordCard: WordCard){
+        println("нажато слово: "+ wordCard.word.foreignWord)
+    }
+
+    /**
+     * переопределяет поведение системой кнопки "Back"
+     * в случае если открыта какаято папка, сначала закроет и следующим нажатием закроет фрагмент
+     */
     private fun overrideClickBack() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -82,12 +95,14 @@ class CatalogCardsFragment : Fragment() {
                 viewModel,
                 0,
                 viewModel.mapWordsByTopic,
-                viewModel.namesTopics),
+                viewModel.namesTopics,
+                this),
             CatalogItemFragment(//фрагмент для показа слов находящихся в собственности юзера и показа их по степени изученности
                 viewModel,
                 1,
                 viewModel.mapUserCards,
-                viewModel.namesTopicsUserCards)
+                viewModel.namesTopicsUserCards,
+                this)
         )
         adapter.setList(list)
 
@@ -118,7 +133,7 @@ class CatalogCardsFragment : Fragment() {
                         val tab = tabLayout.newTab()
                         tab.text = "Поиск"
                         tabLayout.addTab(tab)
-                        adapter.addSearchFragment()
+                        adapter.addSearchFragment(SearchCardFragment(viewModel,this@CatalogCardsFragment))
                         tabLayout.getTabAt(tabLayout.tabCount - 1)?.select()
                     }
                 }else{
