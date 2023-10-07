@@ -3,11 +3,10 @@ package com.example.zubrilkaenglish.screens.catalogCards.fragments.topicsCardsFr
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.core.view.MenuProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.zubrilkaenglish.databinding.FragmentTopicsCardsBinding
 import com.example.zubrilkaenglish.screens.catalogCards.CatalogCardsViewModel
@@ -39,7 +38,7 @@ class TopicsCardsFragment(viewModel: CatalogCardsViewModel) : Fragment(), Recycl
         recyclerView = binding.recyclerView
         recyclerView.adapter = folderAdapter
 
-        var isRecyclerChanged: Boolean = false
+        isRecyclerChanged = false
 
         viewModel_CC.namesTopics.observe(viewLifecycleOwner){list->
             val modifiedList = list.map { it+"   (слов: "+ (viewModel_CC.mapWordsByTopic.value?.get(it)?.size ?: "null") + ")"}
@@ -48,16 +47,14 @@ class TopicsCardsFragment(viewModel: CatalogCardsViewModel) : Fragment(), Recycl
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                println("КНОПКА НАЗАД")
                 if (isRecyclerChanged){
-                    println("КНОПКА НАЗАД")
                     isRecyclerChanged = false
-                }else{
-                    requireActivity().onBackPressed()
+
+                    //возвращаем назад вид папок
+                    recyclerView.adapter = folderAdapter
+                } else{
+                    findNavController().popBackStack()
                 }
-                // Здесь вы можете определить желаемое поведение кнопки "назад"
-                // Например, закрытие фрагмента или выполнение определенных действий перед закрытием
-                // Если вы не хотите ничего делать при нажатии кнопки "назад", то просто оставьте этот метод пустым
             }
         })
     }
