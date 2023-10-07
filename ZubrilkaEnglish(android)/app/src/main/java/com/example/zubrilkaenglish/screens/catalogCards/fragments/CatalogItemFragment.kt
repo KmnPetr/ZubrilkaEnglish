@@ -13,16 +13,16 @@ import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.screens.catalogCards.CatalogCardsViewModel
 
 class CatalogItemFragment(
-    override val viewModel_CC: CatalogCardsViewModel,
-    override val positionInPager: Int,
-    override val mapFoldersCards: MutableLiveData<Map<String, List<WordCard>>>,
-    override val namesFolders: MutableLiveData<List<String>>
+    val viewModel_CC: CatalogCardsViewModel,
+    val positionInPager: Int,
+    val mapFoldersCards: MutableLiveData<Map<String, List<WordCard>>>,
+    val namesFolders: MutableLiveData<List<String>>
 ) : Fragment(), FragmentItem {
     private lateinit var binding: FragmentCatalogItemBinding
-    override lateinit var folderAdapter: FoldersCardsAdapter
-    override lateinit var cardAdapter: ListCardsAdapter
-    override lateinit var recyclerView: RecyclerView
-    override lateinit var viewLifecycleOwner_1: LifecycleOwner
+    lateinit var folderAdapter: FoldersCardsAdapter
+    lateinit var cardAdapter: ListCardsAdapter
+    lateinit var recyclerView: RecyclerView
+    lateinit var viewLifecycleOwner_1: LifecycleOwner
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,5 +46,25 @@ class CatalogItemFragment(
             val modifiedList = list.map { it+"   (слов: "+ (mapFoldersCards.value?.get(it)?.size ?: "null") + ")"}
             folderAdapter.setList(modifiedList)
         }
+    }
+
+    /**
+     * выполняется при нажатии на элемент папки
+     */
+    override fun onClickFolder(positionFolder: Int) {
+        recyclerView.adapter = cardAdapter
+
+        viewModel_CC.isRecyclerChanged.value?.set(positionInPager,true)
+
+        mapFoldersCards.observe(viewLifecycleOwner_1){
+            it[namesFolders.value?.get(positionFolder)]?.let { it1 -> cardAdapter.setList(it1) }
+        }
+    }
+
+    /**
+     * выполняется если надо вернуться от списка карочек к списку папок
+     */
+    override fun rollBackRecycler() {
+        recyclerView.adapter = folderAdapter
     }
 }
