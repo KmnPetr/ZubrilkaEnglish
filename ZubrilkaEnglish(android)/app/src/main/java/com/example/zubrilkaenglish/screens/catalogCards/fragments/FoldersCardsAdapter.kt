@@ -1,4 +1,4 @@
-package com.example.zubrilkaenglish.screens.catalogCards.fragments.topicsCardsFragment
+package com.example.zubrilkaenglish.screens.catalogCards.fragments
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,9 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.FolderViewBinding
-import com.example.zubrilkaenglish.screens.catalogCards.fragments.RecyclerItemListener
 
-class TopicsCardsAdapter(private val listener: RecyclerItemListener): RecyclerView.Adapter<TopicsCardsAdapter.TopicCardHolder>() {
+class FoldersCardsAdapter(private val listener: FragmentItem): RecyclerView.Adapter<FoldersCardsAdapter.TopicCardHolder>() {
 
     private var listFolders = emptyList<String>()
 
@@ -34,7 +33,7 @@ class TopicsCardsAdapter(private val listener: RecyclerItemListener): RecyclerVi
     class TopicCardHolder(view: View): RecyclerView.ViewHolder(view){
         private val binding = FolderViewBinding.bind(view)
 
-        fun bind(nameFolder: String, position: Int, listener: RecyclerItemListener){
+        fun bind(nameFolder: String, position: Int, listener: FragmentItem){
             binding.nameFolder.text = nameFolder
 
             binding.root.setOnClickListener {

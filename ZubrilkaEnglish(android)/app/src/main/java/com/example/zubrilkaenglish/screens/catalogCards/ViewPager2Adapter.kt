@@ -3,19 +3,13 @@ package com.example.zubrilkaenglish.screens.catalogCards
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.zubrilkaenglish.screens.catalogCards.fragments.searchCardFragment.SearchCardFragment
-import com.example.zubrilkaenglish.screens.catalogCards.fragments.topicsCardsFragment.TopicsCardsFragment
-import com.example.zubrilkaenglish.screens.catalogCards.fragments.userCardsFragment.UserCardsFragment
 
 class ViewPager2Adapter(parentFragment: CatalogCardsFragment,
                         private val viewModel: CatalogCardsViewModel
 ): FragmentStateAdapter(parentFragment) {
 
-    private val fragmentList = mutableListOf<Fragment>()
+    private var fragmentList = mutableListOf<Fragment>()
 
-    init {
-        fragmentList.add(TopicsCardsFragment(viewModel))
-        fragmentList.add(UserCardsFragment(viewModel))
-    }
     override fun getItemCount(): Int {
         return fragmentList.size
     }
@@ -32,7 +26,12 @@ class ViewPager2Adapter(parentFragment: CatalogCardsFragment,
         fragmentList.removeLast()
         notifyDataSetChanged()
     }
-    fun getList(): MutableList<Fragment> {
-        return fragmentList
+
+    fun setList(list:MutableList<Fragment>){
+        fragmentList=  list
+        notifyDataSetChanged()
+    }
+    fun getFragment(position: Int):  Fragment{
+        return fragmentList[position]
     }
 }

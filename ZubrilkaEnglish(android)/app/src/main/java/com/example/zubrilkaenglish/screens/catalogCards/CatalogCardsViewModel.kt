@@ -16,11 +16,14 @@ class CatalogCardsViewModel : ViewModel() {
     var lastPositionTablayout: Int = 0 //указ.последний используемый фрагмент для возврата на него после удаления поискового фрагмента
     val listSearchWords: MutableLiveData<List<WordCard>> = MutableLiveData()
 
-    val mapWordsByTopic: MutableLiveData<Map<String, ArrayList<WordCard>>> = MutableLiveData()
+    val mapWordsByTopic: MutableLiveData<Map<String, List<WordCard>>> = MutableLiveData()
     val namesTopics: MutableLiveData<List<String>> = MutableLiveData()
 
     val mapUserCards: MutableLiveData<Map<String, List<WordCard>>> = MutableLiveData()
     val namesTopicsUserCards: MutableLiveData<List<String>> = MutableLiveData()
+
+    //в списке находится информация, изменялся ли в показываемом на данный момент фрагменте список папок на список слов содержащихся в папках
+    val isRecyclerChanged: MutableLiveData<ArrayList<Boolean>> = MutableLiveData()
 
     init {
         //заполняем некоторые переменные данными
@@ -64,7 +67,7 @@ class CatalogCardsViewModel : ViewModel() {
      * функция создаст список тем/названий групп слов из ключей mapWordsByTopic
      */
     private fun fillNamesTopics(mapWords: Map<String, List<WordCard>>): List<String> {
-        var topicsName = mapWords.keys.toList()
+        val topicsName = mapWords.keys.toList()
         return topicsName
     }
 }

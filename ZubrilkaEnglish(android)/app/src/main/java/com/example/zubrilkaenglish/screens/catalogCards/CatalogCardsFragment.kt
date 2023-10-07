@@ -9,9 +9,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.zubrilkaenglish.databinding.FragmentCatalogCardsBinding
-import com.example.zubrilkaenglish.screens.catalogCards.fragments.RecyclerItemListener
+import com.example.zubrilkaenglish.screens.catalogCards.fragments.CatalogItemFragment
+import com.example.zubrilkaenglish.screens.catalogCards.fragments.FragmentItem
 import com.example.zubrilkaenglish.utils.SearchObject
 import com.example.zubrilkaenglish.utils.customizeBackground
 import com.google.android.material.tabs.TabLayout
@@ -46,10 +48,50 @@ class CatalogCardsFragment : Fragment() {
 
         customizeBackground(binding.background,resources)
 
+        setListFragment()
         tabLayoutListener()
         viewPager2Listener()
         searchListener()
+        overrideClickBack()
+    }
 
+    private fun overrideClickBack() {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val position = viewPager2.currentItem
+
+                if (viewModel.isRecyclerChanged.value?.get(position)==true){
+                    viewModel.isRecyclerChanged.value?.set(position, false)
+                    val fragment = adapter.getFragment(position)
+                    if (fragment is FragmentItem){
+                        fragment.rollBackRecycler()
+                    }
+                }else{
+                    findNavController().popBackStack()
+                }
+            }
+        })
+    }
+
+    /**
+     * настроит список показываемых фрагментов viewPager2 а также настроит isRecyclerChanged в viewModel
+     */
+    private fun setListFragment() {
+        val list: MutableList<Fragment> = mutableListOf(
+            CatalogItemFragment(//фрагмент для показа всех слов по темам
+                viewModel,
+                0,
+                viewModel.mapWordsByTopic,
+                viewModel.namesTopics),
+            CatalogItemFragment(//фрагмент для показа слов находящихся в собственности юзера и показа их по степени изученности
+                viewModel,
+                1,
+                viewModel.mapUserCards,
+                viewModel.namesTopicsUserCards)
+        )
+        adapter.setList(list)
+
+        viewModel.isRecyclerChanged.value = arrayListOf(false,false,false)//сразу 3 элемента добавлю, чтобы избежать проблем с третьим фрагментом для поиска слов
     }
 
 
