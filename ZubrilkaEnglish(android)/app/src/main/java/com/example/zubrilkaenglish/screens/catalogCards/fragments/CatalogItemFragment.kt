@@ -24,7 +24,6 @@ class CatalogItemFragment(
     lateinit var folderAdapter: FoldersCardsAdapter
     lateinit var cardAdapter: ListCardsAdapter
     lateinit var recyclerView: RecyclerView
-    lateinit var viewLifecycleOwner_1: LifecycleOwner
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,7 +38,6 @@ class CatalogItemFragment(
 
         folderAdapter = FoldersCardsAdapter(this)
         cardAdapter = ListCardsAdapter(this)
-        viewLifecycleOwner_1 = viewLifecycleOwner
 
         recyclerView = binding.recyclerView
         recyclerView.adapter = folderAdapter
@@ -48,17 +46,24 @@ class CatalogItemFragment(
             val modifiedList = list.map { it+"   (слов: "+ (mapFoldersCards.value?.get(it)?.size ?: "null") + ")"}
             folderAdapter.setList(modifiedList)
         }
+
+        binding.rollBack.visibility = View.GONE
+        binding.rollBack.isEnabled = false
+        binding.rollBack.setOnClickListener { rollBackRecycler() }
     }
 
     /**
      * выполняется при нажатии на элемент папки
      */
     override fun onClickFolder(positionFolder: Int) {
+        binding.rollBack.visibility = View.VISIBLE
+        binding.rollBack.isEnabled = true
+
         recyclerView.adapter = cardAdapter
 
         viewModel_CC.isRecyclerChanged.value?.set(positionInPager,true)
 
-        mapFoldersCards.observe(viewLifecycleOwner_1){
+        mapFoldersCards.observe(viewLifecycleOwner){
             it[namesFolders.value?.get(positionFolder)]?.let { it1 -> cardAdapter.setList(it1) }
         }
     }
@@ -67,6 +72,10 @@ class CatalogItemFragment(
      * выполняется если надо вернуться от списка карочек к списку папок
      */
     override fun rollBackRecycler() {
+        viewModel_CC.isRecyclerChanged.value?.set(positionInPager,false)
         recyclerView.adapter = folderAdapter
+
+        binding.rollBack.visibility = View.GONE
+        binding.rollBack.isEnabled = false
     }
 }
