@@ -78,7 +78,7 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
     override fun onDestroyView() {
         super.onDestroyView()
         /*посоветовали отменить регистрацию
-        binding.pager.unregisterOnPageChangeCallback(this)*/
+        binding.pager.unregisterOnPageChangeCallback(this)*/ //TODO
     }
 
     /**

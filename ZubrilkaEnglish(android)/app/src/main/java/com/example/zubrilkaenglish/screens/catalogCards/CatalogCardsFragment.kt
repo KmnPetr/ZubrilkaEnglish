@@ -1,5 +1,8 @@
 package com.example.zubrilkaenglish.screens.catalogCards
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.text.Editable
@@ -8,17 +11,29 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.Button
+import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
+import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.FragmentCatalogCardsBinding
+import com.example.zubrilkaenglish.databinding.PopupWordcardBinding
+import com.example.zubrilkaenglish.databinding.WordViewBinding
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.screens.catalogCards.fragments.CatalogItemFragment
 import com.example.zubrilkaenglish.screens.catalogCards.fragments.FragmentItem
 import com.example.zubrilkaenglish.screens.catalogCards.fragments.searchCardFragment.SearchCardFragment
+import com.example.zubrilkaenglish.utils.SIM_FORM_DATE
 import com.example.zubrilkaenglish.utils.SearchObject
+import com.example.zubrilkaenglish.utils.StatProgress
 import com.example.zubrilkaenglish.utils.customizeBackground
+import com.google.android.material.slider.Slider
 import com.google.android.material.tabs.TabLayout
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
 
 class CatalogCardsFragment : Fragment() {
 
@@ -61,7 +76,25 @@ class CatalogCardsFragment : Fragment() {
      * показывает popup окошко при нажатии на элемент карточки
      */
     fun onClickCard(wordCard: WordCard){
-        println("нажато слово: "+ wordCard.word.foreignWord)
+        val inflater = LayoutInflater.from(requireActivity())
+        val binding: PopupWordcardBinding = PopupWordcardBinding.inflate(inflater,null,false)
+
+        val dialog = Dialog(requireActivity())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(true)
+        dialog.setContentView(binding.root)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val displayMetrics = resources.displayMetrics
+        val screenWidth = displayMetrics.widthPixels
+        binding.root.layoutParams.width = (screenWidth*0.66).toInt()
+
+        binding.foreignWord.text = wordCard.word.foreignWord
+        binding.transcription.text = wordCard.word.transcription
+        binding.translation.text = wordCard.word.translation
+        binding.description.text = wordCard.word.description
+
+        dialog.show()
     }
 
     /**
