@@ -1,5 +1,7 @@
 package com.example.bookAnalyzer.logic;
 
+import com.example.bookAnalyzer.models.WordCount;
+
 import java.io.File;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -7,7 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 public class BooksBody {
 
@@ -21,23 +23,44 @@ public class BooksBody {
             charsObject.add(chars);
         });
         fillMapStrings();
+
     }
 
     private void fillMapStrings(){
-        ArrayList<Character> string = new ArrayList<Character>();
-        string.ensureCapacity(20);
+        Map<String, WordCount> map = new HashMap<>();
 
         charsObject.forEach(chars -> {
-            for (int i = 0; i < chars.length; i++) {
-                if (isEnglishChar(chars[i])){
-                    string.add(chars[i]);
-                }else{
-                    String someWord = String.valueOf(string);
-                    string.clear();
-                    System.out.println(someWord);
+
+            StringBuilder stringBuilder = new StringBuilder();
+            String str = "";
+
+            for (char aChar : chars) {
+                if (isEnglishChar(aChar)) {
+                    stringBuilder.append(aChar);
+                } else {
+                    str = stringBuilder.toString();
+                    if (!str.isEmpty()) {
+                        if (map.containsKey(str)){
+                            map.get(str).countPlusPlus();
+                        }else {
+                            map.put(str,new WordCount(str));
+                        }
+                    }
+                    stringBuilder.delete(0, stringBuilder.length());
                 }
             }
         });
+
+        map.values().forEach(it->{
+            if (Character.isUpperCase(it.getWord().charAt(0))) {
+                String lowerChars = Character.toLowerCase(it.getWord().charAt(0)) + it.getWord().substring(1);
+                System.out.println("///////"+lowerChars);
+            }
+        });
+
+        map.values().stream()
+                .sorted((wc1, wc2) -> wc2.getCount() - wc1.getCount())
+                .forEach(it-> System.out.println(it.getWord()+"\t"+it.getCount()));
     }
 
 
