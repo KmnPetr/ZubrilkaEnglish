@@ -16,4 +16,8 @@ public class WordCount {
     public void countPlusPlus() {
         count++;
     }
+
+    public void increaseCount(int count) {
+        this.count+=count;
+    }
 }

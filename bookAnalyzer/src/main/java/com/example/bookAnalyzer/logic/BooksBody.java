@@ -5,10 +5,7 @@ import com.example.bookAnalyzer.models.WordCount;
 import java.io.File;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiConsumer;
 
 public class BooksBody {
@@ -51,13 +48,23 @@ public class BooksBody {
             }
         });
 
-        map.values().forEach(it->{
+        //убираем слова нач. с большой буквы,
+        // их значение количества перемещаем в слова нач. с прописной буквы
+        List<WordCount> listValues = new LinkedList<>(map.values());
+
+        listValues.forEach(it->{
             if (Character.isUpperCase(it.getWord().charAt(0))) {
-                String lowerChars = Character.toLowerCase(it.getWord().charAt(0)) + it.getWord().substring(1);
-                System.out.println("///////"+lowerChars);
+                String lowerChars = Character
+                        .toLowerCase(it.getWord().charAt(0)) + it.getWord().substring(1);
+
+                if (map.containsKey(lowerChars)){
+                    map.get(lowerChars).increaseCount(it.getCount());
+                    map.remove(it.getWord());
+                }
             }
         });
 
+        //сортируем по количеству, выводим на экран
         map.values().stream()
                 .sorted((wc1, wc2) -> wc2.getCount() - wc1.getCount())
                 .forEach(it-> System.out.println(it.getWord()+"\t"+it.getCount()));
