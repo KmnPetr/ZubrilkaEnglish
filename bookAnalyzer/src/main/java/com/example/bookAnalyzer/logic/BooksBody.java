@@ -6,24 +6,28 @@ import java.io.File;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 public class BooksBody {
 
     private List<char[]> charsObject = new ArrayList();
-    private Map<String, Integer> mapStrings = new HashMap<>();
+    private Map<String, WordCount> mapStrings = new HashMap<>();
+    private Integer totalNumberWords = 0;
 
     public BooksBody() {
 
         listPathBooks().forEach(pathBook->{
-            char[] chars = makeArrayChars(pathBook);
-            charsObject.add(chars);
+            charsObject.add(makeArrayChars(pathBook));
         });
-        fillMapStrings();
 
+        mapStrings = fillMapStrings();
+        printMapStrings(1000);
     }
 
-    private void fillMapStrings(){
+    /**
+     * вернет мапу слов на основании заранее подготовленного обьекта чаров(charsObject)
+     */
+    private Map<String, WordCount> fillMapStrings(){
         Map<String, WordCount> map = new HashMap<>();
 
         charsObject.forEach(chars -> {
@@ -64,10 +68,98 @@ public class BooksBody {
             }
         });
 
-        //сортируем по количеству, выводим на экран
-        map.values().stream()
+        //подсчитываем процент употребления слов
+        map.values()
+                .forEach(it-> totalNumberWords+= it.getCount());
+
+        System.out.println("Общее количество слов: "+ totalNumberWords);
+
+        map.values().forEach(it->it.setPercent(calculatePercent(it)));
+
+
+
+        //создаем новые ключи для всех форм глаголов "do", "be" и для "not" с его приставкой "..'t"
+        if(map.containsKey("do")
+                &&map.containsKey("don")
+                &&map.containsKey("does")
+                &&map.containsKey("doesn")
+                &&map.containsKey("did")
+                &&map.containsKey("didn")
+                &&map.containsKey("done")
+                &&map.containsKey("doing")){
+            String DO = "do(don't, does, doesn't, did, didn't, done, doing)";
+            map.put(DO,new WordCount(DO));
+            map.get(DO).increaseCount(map.get("do").getCount());
+            map.get(DO).increaseCount(map.get("don").getCount());
+            map.get(DO).increaseCount(map.get("does").getCount());
+            map.get(DO).increaseCount(map.get("doesn").getCount());
+            map.get(DO).increaseCount(map.get("did").getCount());
+            map.get(DO).increaseCount(map.get("didn").getCount());
+            map.get(DO).increaseCount(map.get("done").getCount());
+            map.get(DO).increaseCount(map.get("doing").getCount());
+            map.get(DO).setPercent(calculatePercent(map.get(DO)));
+        }
+        if(map.containsKey("be")
+                &&map.containsKey("am")
+                &&map.containsKey("is")
+                &&map.containsKey("isn")
+                &&map.containsKey("are")
+                &&map.containsKey("aren")
+                &&map.containsKey("was")
+                &&map.containsKey("wasn")
+                &&map.containsKey("were")
+                &&map.containsKey("weren")
+                &&map.containsKey("been")){
+            String BE = "be(am, is, isn't, are, aren't, was, wasn't, were, weren't, been)";
+            map.put(BE,new WordCount(BE));
+            map.get(BE).increaseCount(map.get("be").getCount());
+            map.get(BE).increaseCount(map.get("am").getCount());
+            map.get(BE).increaseCount(map.get("is").getCount());
+            map.get(BE).increaseCount(map.get("isn").getCount());
+            map.get(BE).increaseCount(map.get("are").getCount());
+            map.get(BE).increaseCount(map.get("aren").getCount());
+            map.get(BE).increaseCount(map.get("was").getCount());
+            map.get(BE).increaseCount(map.get("wasn").getCount());
+            map.get(BE).increaseCount(map.get("were").getCount());
+            map.get(BE).increaseCount(map.get("weren").getCount());
+            map.get(BE).increaseCount(map.get("been").getCount());
+            map.get(BE).setPercent(calculatePercent(map.get(BE)));
+        }
+        if(map.containsKey("not")&&map.containsKey("t")){
+            String NOT = "not(...'t)";
+            map.put(NOT,new WordCount(NOT));
+            map.get(NOT).increaseCount(map.get("not").getCount());
+            map.get(NOT).increaseCount(map.get("t").getCount());
+            map.get(NOT).setPercent(calculatePercent(map.get(NOT)));
+        }
+
+        return map;
+    }
+
+    /**
+     * выведет в консоль список строчек в порядке их частоупотребимости
+     * количество выводимых строчек вводим в параметры, т.к. консоль не всегда справляется с показом более 10000-30000 тыс.строк
+     */
+    private void printMapStrings(Integer countPrint){
+        ArrayList<WordCount> wordCountList = mapStrings.values().stream()
                 .sorted((wc1, wc2) -> wc2.getCount() - wc1.getCount())
-                .forEach(it-> System.out.println(it.getWord()+"\t"+it.getCount()));
+                .collect(Collectors.toCollection(ArrayList::new));
+        int countPrint2;
+        if (countPrint>wordCountList.size()) countPrint2=wordCountList.size();
+        else countPrint2 = countPrint;
+
+        for (int i = 0; i < countPrint2; i++) {
+            System.out.println(
+                    (i+1)
+                            + ".\t"
+                            + wordCountList.get(i).getWord()
+                            + "\t"
+                            + wordCountList.get(i).getCount()
+                            + "\t"
+                            + "\t"
+                            + "\t"
+                            + wordCountList.get(i).getPercent() + "%");
+        }
     }
 
 
@@ -118,9 +210,6 @@ public class BooksBody {
             chars = fileContent.toCharArray();
         }catch (Exception e){e.printStackTrace();}
 
-        System.out.println("File: "+ filePath);
-        System.out.println("chars: "+ chars.length);
-
         return chars;
     }
 
@@ -131,5 +220,14 @@ public class BooksBody {
      */
     private boolean isEnglishChar(char c){
         return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+    }
+
+    /**
+     * метод вычисляет процент отдельно взятого слова на основании общего количества слов
+     * общее количество слов следует вычислять строго до добавления дополнительных ключей в мапу
+     */
+    private float calculatePercent(WordCount wordCount){
+        if (totalNumberWords==null||totalNumberWords==0) throw new RuntimeException("общее количество слов(totalNumberWords) еще не вычеслено");
+        return (float) wordCount.getCount() /totalNumberWords*100;
     }
 }
