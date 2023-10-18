@@ -33,5 +33,3 @@ build/
 .vscode/
 
 ##########my secret files############
-/readme.txt
-/src/main/resources/application.properties
