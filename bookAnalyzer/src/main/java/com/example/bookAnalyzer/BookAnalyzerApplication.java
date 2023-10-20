@@ -1,19 +1,23 @@
 package com.example.bookAnalyzer;
 
-import com.example.bookAnalyzer.logic.BooksBody;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
+import org.springframework.context.ApplicationContext;
 
 @SpringBootApplication
 public class BookAnalyzerApplication {
 
 	public static void main(String[] args){
-//		SpringApplication.run(BookAnalyzerApplication.class, args);
 
+		ApplicationContext context = SpringApplication.run(BookAnalyzerApplication.class, args);
 
-		String filePath = "/books/Baldachchi_Wish-You-Well_RuLit_Me.txt";
+		WordSorter wordSorter = context.getBean(WordSorter.class);
+		wordSorter.setPrecent();
+//		wordSorter.printAllWords();
+//		wordSorter.printWordsWithZeroPercent();
+		wordSorter.printCountWordsWithZeroPercent();
+		wordSorter.collectNonStandardWord();
 
-		BooksBody booksBody = new BooksBody();
 	}
 
 }

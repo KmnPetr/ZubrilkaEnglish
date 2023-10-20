@@ -1,6 +1,8 @@
 package com.example.bookAnalyzer.logic;
 
 import com.example.bookAnalyzer.models.WordCount;
+import lombok.Getter;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.InputStream;
@@ -8,6 +10,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * класс берет книги на английском из репозитория и потрошит их
+ */
+@Component
+@Getter
 public class BooksBody {
 
     private List<char[]> charsObject = new ArrayList();
@@ -21,7 +28,7 @@ public class BooksBody {
         });
 
         mapStrings = fillMapStrings();
-        printMapStrings(1000);
+//        printMapStrings(1000);
     }
 
     /**
@@ -100,17 +107,20 @@ public class BooksBody {
             map.get(DO).setPercent(calculatePercent(map.get(DO)));
         }
         if(map.containsKey("be")
+                &&map.containsKey("m")
                 &&map.containsKey("am")
                 &&map.containsKey("is")
                 &&map.containsKey("isn")
                 &&map.containsKey("are")
                 &&map.containsKey("aren")
+                &&map.containsKey("will")
+                &&map.containsKey("ll")
                 &&map.containsKey("was")
                 &&map.containsKey("wasn")
                 &&map.containsKey("were")
                 &&map.containsKey("weren")
                 &&map.containsKey("been")){
-            String BE = "be(am, is, isn't, are, aren't, was, wasn't, were, weren't, been)";
+            String BE = "be(m, am, is, isn't, are, aren't, will, ll, was, wasn't, were, weren't, been)";
             map.put(BE,new WordCount(BE));
             map.get(BE).increaseCount(map.get("be").getCount());
             map.get(BE).increaseCount(map.get("am").getCount());
@@ -118,6 +128,8 @@ public class BooksBody {
             map.get(BE).increaseCount(map.get("isn").getCount());
             map.get(BE).increaseCount(map.get("are").getCount());
             map.get(BE).increaseCount(map.get("aren").getCount());
+            map.get(BE).increaseCount(map.get("will").getCount());
+            map.get(BE).increaseCount(map.get("ll").getCount());
             map.get(BE).increaseCount(map.get("was").getCount());
             map.get(BE).increaseCount(map.get("wasn").getCount());
             map.get(BE).increaseCount(map.get("were").getCount());
