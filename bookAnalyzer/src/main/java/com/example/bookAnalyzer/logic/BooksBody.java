@@ -22,13 +22,11 @@ public class BooksBody {
     private Integer totalNumberWords = 0;
 
     public BooksBody() {
-
         listPathBooks().forEach(pathBook->{
             charsObject.add(makeArrayChars(pathBook));
         });
 
         mapStrings = fillMapStrings();
-//        printMapStrings(1000);
     }
 
     /**
@@ -74,6 +72,13 @@ public class BooksBody {
                 }
             }
         });
+
+        //подсчитываем общее количество символов
+            int number = 0;
+            for (char[] chars : charsObject) {
+                number += chars.length;
+            }
+            System.out.println("Общее количество символов: "+ number);
 
         //подсчитываем процент употребления слов
         map.values()
@@ -241,5 +246,13 @@ public class BooksBody {
     private float calculatePercent(WordCount wordCount){
         if (totalNumberWords==null||totalNumberWords==0) throw new RuntimeException("общее количество слов(totalNumberWords) еще не вычеслено");
         return (float) wordCount.getCount() /totalNumberWords*100;
+    }
+
+    /**
+     * вызовет метод Run класса LetterByLetterSearch, который выполнит поиск фраз по тексту
+     */
+    public void FrasesSearchRun() {
+        LetterByLetterSearch s = new LetterByLetterSearch(charsObject);
+        s.Run();
     }
 }
