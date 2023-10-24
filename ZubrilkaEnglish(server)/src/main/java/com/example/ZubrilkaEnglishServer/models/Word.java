@@ -3,11 +3,15 @@ package com.example.ZubrilkaEnglishServer.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Word")
+@Getter
+@Setter
 public class Word {
     @Id
     @Column(name = "id")
@@ -33,23 +37,8 @@ public class Word {
     private String hasImage;
     @Column(name = "groupwrd")
     private String groupWord;
+    @Column(name = "sorting_value")
+    private Integer sorting_value;
 
     public Word() {}
-
-    public int getId() {return id;}
-    public void setId(int id) {this.id = id;}
-    public String getForeignWord() {return foreignWord;}
-    public void setForeignWord(String foreignWord) {this.foreignWord = foreignWord;}
-    public String getTranscription() {return transcription;}
-    public void setTranscription(String transcription) {this.transcription = transcription;}
-    public String getTranslation() {return translation;}
-    public void setTranslation(String translation) {this.translation = translation;}
-    public String getDescription() {return description;}
-    public void setDescription(String description) {this.description = description;}
-    public String getHasVoise() {return hasVoise;}
-    public void setHasVoise(String hasVoise) {this.hasVoise = hasVoise;}
-    public String getHasImage() {return hasImage;}
-    public void setHasImage(String hasImage) {this.hasImage = hasImage;}
-    public String getGroupWord() {return groupWord;}
-    public void setGroupWord(String groupWord) {this.groupWord = groupWord;}
 }

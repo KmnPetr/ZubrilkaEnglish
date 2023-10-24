@@ -2,12 +2,15 @@ package com.example.ZubrilkaEnglishServer.dto;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
 public class WordDTO {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -24,25 +27,7 @@ public class WordDTO {
     private String hasImage;
     private String groupWord;
     private LocalDateTime updatedAt;
+    private Integer sorting_value;
 
     public WordDTO() {}
-
-    public int getId() {return id;}
-    public void setId(int id) {this.id = id;}
-    public String getForeignWord() {return foreignWord;}
-    public void setForeignWord(String foreignWord) {this.foreignWord = foreignWord;}
-    public String getTranscription() {return transcription;}
-    public void setTranscription(String transcription) {this.transcription = transcription;}
-    public String getTranslation() {return translation;}
-    public void setTranslation(String translation) {this.translation = translation;}
-    public String getDescription() {return description;}
-    public void setDescription(String description) {this.description = description;}
-    public String getHasVoise() {return hasVoise;}
-    public void setHasVoise(String hasVoise) {this.hasVoise = hasVoise;}
-    public String getHasImage() {return hasImage;}
-    public void setHasImage(String hasImage) {this.hasImage = hasImage;}
-    public String getGroupWord() {return groupWord;}
-    public void setGroupWord(String groupWord) {this.groupWord = groupWord;}
-    public LocalDateTime getUpdatedAt() {return updatedAt;}
-    public void setUpdatedAt(LocalDateTime updatedAt) {this.updatedAt = updatedAt;}
 }
