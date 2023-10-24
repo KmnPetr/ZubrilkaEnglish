@@ -21,7 +21,7 @@ jobs:
           java-version: 17
 
       - name: Build and Package with Maven
-        run: mvn -f ZubrilkaEnglish_server/.mvn clean package
+        run: mvn -f ZubrilkaEnglish_server clean package
 
       - name: Display a message
         run: echo "Hello from GitHub Actions"
