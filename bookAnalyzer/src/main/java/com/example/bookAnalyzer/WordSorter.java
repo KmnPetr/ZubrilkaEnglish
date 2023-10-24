@@ -33,7 +33,7 @@ public class WordSorter {
     public void setCount(){
         wordList.forEach(w->{
             if (mapStrings.containsKey(w.getForeignWord())){
-                w.setCount(mapStrings.get(w.getForeignWord()).getCount());
+                w.setSorting_value(mapStrings.get(w.getForeignWord()).getCount());
             }
         });
 
@@ -46,7 +46,7 @@ public class WordSorter {
     public void printNumberWordsWithZeroCount() {
         List<Word> filteredList = wordList
                 .stream()
-                .filter(word -> word.getCount()==0)
+                .filter(word -> word.getSorting_value()==0)
                 .toList();
 
         System.out.println("Найдено "+ filteredList.size() + " Word с нулевым count.");
@@ -81,7 +81,7 @@ public class WordSorter {
         System.out.println("/////////////////////////////////////////////////////////////");
         wordList
                 .stream()
-                .filter(w->w.getCount()<x||w.getCount()==0)
+                .filter(w->w.getSorting_value()<x||w.getSorting_value()==0)
                 .sorted((w1,w2)->w1.compare(w2,w1))
                 .forEach(w-> {
 
@@ -98,7 +98,7 @@ public class WordSorter {
                     }
                     String finalString = stringBuilder.toString();
 
-                    System.out.println(finalString + "count: " + w.getCount());
+                    System.out.println(finalString + "count: " + w.getSorting_value());
                 });
         System.out.println("/////////////////////////////////////////////////////////////");
         System.out.println("/////////////////////////////////////////////////////////////");
@@ -110,7 +110,7 @@ public class WordSorter {
     public List<Word> getAllWordsWithCountBelowX(int x) {
         List<Word> list = wordList
                 .stream()
-                .filter(w->w.getCount()<x||w.getCount()==0).toList();
+                .filter(w->w.getSorting_value()<x||w.getSorting_value()==0).toList();
         return list;
     }
 

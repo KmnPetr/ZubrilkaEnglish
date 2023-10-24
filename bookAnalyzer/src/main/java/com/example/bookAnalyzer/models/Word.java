@@ -31,22 +31,18 @@ public class Word implements Comparator<Word> {
     @Size(min = 0, max = 400, message = "This field must be between 0 and 400 characters long")
     @Column(name = "description")
     private String description;
-//    @Column(name = "has_voise")
-//    private String hasVoise;
-//    @Column(name = "has_image")
-//    private String hasImage;
     @Column(name = "groupwrd")
     private String groupWord;
 
-    //количество раз употреблений в тексте
-    @Transient
-    private int count;
+
+    @Column(name = "sorting_value")
+    private Integer sorting_value;
 
     public Word() {}
 
     @Override
     public int compare(Word o1, Word o2) {
-        float f = o1.count-o2.count;
+        float f = o1.sorting_value-o2.sorting_value;
         if (f>0)return 1;
         else if (f<0)return -1;
         else return 0;
