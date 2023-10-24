@@ -10,17 +10,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      
-      - name: Change directory
-        run: cd ZubrilkaEnglish(server)
-        
+
       - name: Set up Maven
         uses: actions/setup-java@v2
         with:
           java-version: '17'
-        
+
       - name: Build and Package with Maven
         run: mvn clean package
-      
+
       - name: Display a message
         run: echo "Hello from GitHub Actions"
