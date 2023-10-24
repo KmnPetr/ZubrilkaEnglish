@@ -250,11 +250,4 @@ public class BooksBody {
         if (totalNumberWords==null||totalNumberWords==0) throw new RuntimeException("общее количество слов(totalNumberWords) еще не вычеслено");
         return (float) wordCount.getCount() /totalNumberWords*100;
     }
-
-    /**
-     * вызовет метод Run класса LetterByLetterSearch, который выполнит поиск фраз по тексту
-     */
-    public void FrasesSearchRun() {
-        phrasesSearch.search("As you understand");
-    }
 }

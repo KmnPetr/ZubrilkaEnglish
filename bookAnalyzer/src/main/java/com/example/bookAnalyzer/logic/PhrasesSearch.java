@@ -65,16 +65,14 @@ public class PhrasesSearch {
     //находящаяся доп информация в круглых скобочках не будет учавствовать в поиске
     public int search(String str){
 
+
         this.str = str;
         count = 0;
 
-        System.out.println("Строка:\t"+str);
         lineArr = str.toCharArray();
 
         toLowerChars(lineArr);
         lineArr = removeInParentheses(lineArr);
-
-        System.out.println(lineArr);
 
         for (char[] chars : charsObject) {
 
@@ -92,8 +90,11 @@ public class PhrasesSearch {
 
                     if (lineEnded) {
                         //фраза найдена
-                        count++;
-                        reset();
+                        if(!isEnglishChar(chars[i+1])&&!isEnglishChar(chars[lastIndex-2])){
+                            //проверка, что стоящие перед и после фразы символы не буквы
+                            count++;
+                            reset();
+                        }
                     }
                 } else {
                     //буквы не сошлись
@@ -134,7 +135,6 @@ public class PhrasesSearch {
             }
         }
 
-        System.out.println("Count: "+ count);
         return count;
     }
 

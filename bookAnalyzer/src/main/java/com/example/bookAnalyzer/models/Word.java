@@ -38,14 +38,15 @@ public class Word implements Comparator<Word> {
     @Column(name = "groupwrd")
     private String groupWord;
 
+    //количество раз употреблений в тексте
     @Transient
-    private float percent;
+    private int count;
 
     public Word() {}
 
     @Override
     public int compare(Word o1, Word o2) {
-        float f = o1.percent-o2.percent;
+        float f = o1.count-o2.count;
         if (f>0)return 1;
         else if (f<0)return -1;
         else return 0;
