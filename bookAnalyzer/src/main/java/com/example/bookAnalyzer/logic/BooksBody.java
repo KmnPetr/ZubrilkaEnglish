@@ -20,6 +20,7 @@ public class BooksBody {
     private List<char[]> charsObject = new ArrayList();
     private Map<String, WordCount> mapStrings = new HashMap<>();
     private Integer totalNumberWords = 0;
+    private PhrasesSearch phrasesSearch;
 
     public BooksBody() {
         listPathBooks().forEach(pathBook->{
@@ -27,6 +28,8 @@ public class BooksBody {
         });
 
         mapStrings = fillMapStrings();
+
+        phrasesSearch = new PhrasesSearch(charsObject);
     }
 
     /**
@@ -252,7 +255,6 @@ public class BooksBody {
      * вызовет метод Run класса LetterByLetterSearch, который выполнит поиск фраз по тексту
      */
     public void FrasesSearchRun() {
-        LetterByLetterSearch s = new LetterByLetterSearch(charsObject);
-        s.Run();
+        phrasesSearch.search("As you understand");
     }
 }
