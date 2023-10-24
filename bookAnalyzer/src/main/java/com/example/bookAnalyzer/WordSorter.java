@@ -138,4 +138,18 @@ public class WordSorter {
             i++;
         }
     }
+
+    /**
+     * отправит результаты сортировок в БД
+     */
+    public void updateDateInBD(){
+        wordServise.updateDateInBD(wordList);
+    }
+
+    /**
+     * даем пользовательским телефонам понять, что данные обновились
+     */
+    public void setUpdateAt() {
+        wordServise.setUpdateAt();
+    }
 }

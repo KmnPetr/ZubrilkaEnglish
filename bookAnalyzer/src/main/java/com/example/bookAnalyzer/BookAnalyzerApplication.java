@@ -34,6 +34,9 @@ public class BookAnalyzerApplication {
 		//выводим на экран оставшиеся редкоупотребляемые слова
 		wordSorter.printAllWordsWithCountBelowX(50);
 
+		//закоментируй следующие две строки если не уверен
+		wordSorter.updateDateInBD();//отправит данные в БД
+		wordSorter.setUpdateAt();//даем пользовательским телефонам понять, что данные обновились
 
 
 		//замер времени

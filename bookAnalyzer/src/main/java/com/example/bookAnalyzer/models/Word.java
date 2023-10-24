@@ -21,20 +21,20 @@ public class Word implements Comparator<Word> {
     @NotEmpty(message = "Word should not be empty.")
     @Column(name = "foreign_word")
     private String foreignWord;
-    @Size(min = 0, max = 100, message = "The maximum size of this field is 100 characters")
-    @Column(name = "transcription")
-    private String transcription;
-    @Size(min = 1, max = 400, message = "This field must be between 1 and 400 characters long")
-    @NotEmpty(message = "This field should not be empty.")
-    @Column(name = "translation")
-    private String translation;
-    @Size(min = 0, max = 400, message = "This field must be between 0 and 400 characters long")
-    @Column(name = "description")
-    private String description;
+//    @Size(min = 0, max = 100, message = "The maximum size of this field is 100 characters")
+//    @Column(name = "transcription")
+//    private String transcription;
+//    @Size(min = 1, max = 400, message = "This field must be between 1 and 400 characters long")
+//    @NotEmpty(message = "This field should not be empty.")
+//    @Column(name = "translation")
+//    private String translation;
+//    @Size(min = 0, max = 400, message = "This field must be between 0 and 400 characters long")
+//    @Column(name = "description")
+//    private String description;
     @Column(name = "groupwrd")
     private String groupWord;
 
-
+    //ради этого поля и существует весь этот app
     @Column(name = "sorting_value")
     private Integer sorting_value;
 
