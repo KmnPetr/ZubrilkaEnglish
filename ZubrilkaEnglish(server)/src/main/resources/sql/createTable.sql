@@ -16,10 +16,11 @@ CREATE TABLE Word(
                      groupWrd varchar(50),
                      has_voise varchar(50),
                      has_image varchar(50),
-                     sorting_value integer
+                     sorting_value integer default 0
 );
 -- DROP TABLE Word;
--- ALTER TABLE Word ADD COLUMN sorting_value integer;
+-- ALTER TABLE Word ADD COLUMN sorting_value integer default 0;
+-- ALTER TABLE Word DROP COLUMN sorting_value;
 -- //////////////эти два вызова идут вмест/////////////////
 CREATE TABLE properties(
                            key varchar(100)UNIQUE NOT NULL,
