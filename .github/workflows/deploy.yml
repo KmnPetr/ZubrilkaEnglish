@@ -11,6 +11,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Change directory
+        run: cd ZubrilkaEnglish_server
+
       - name: Set up Maven
         uses: actions/setup-java@v2
         with:
