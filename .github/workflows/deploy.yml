@@ -20,8 +20,11 @@ jobs:
           distribution: adopt
           java-version: 17
 
-      - name: Build and Package with Maven
+      - name: Mvn Clean Package
         run: mvn -f ZubrilkaEnglish_server clean package
+
+      - name: Mvn Clean Package
+        run: docker build -t kmnpetr/ze ./ZubrilkaEnglish_server
 
       - name: Display a message
         run: echo "Hello from GitHub Actions"
