@@ -33,7 +33,7 @@ jobs:
       #      - name: Docker Build
       #        run: docker build -t kmnpetr/ze ./ZubrilkaEnglish_server
 
-      - name: Enter to Server
+      - name: Stop APP on server
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_IP }}
@@ -43,7 +43,15 @@ jobs:
             docker ps -a || true
             docker compose -f /home/ze/docker-compose.yml down || true
             docker images || true
-            docker rmi kmnpetr/ze
+            docker rmi kmnpetr/ze || true
+
+      - name: Send docker-compose.yml to server
+        run: |
+          scp ./ZubrilkaEnglish_server/docker-compose.yml ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }}:/home/ze
+        env:
+          SERVER_IP: ${{ secrets.SERVER_IP }}
+          SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
+          SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
 
       - name: Display a message
         run: echo "Hello from GitHub Actions"
