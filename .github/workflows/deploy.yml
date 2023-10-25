@@ -44,10 +44,11 @@ jobs:
             docker rmi kmnpetr/ze || true
             mkdir /home/ze/ || true
 
-
+        #короче эти два шага лучше использовать вместе и лишний раз не трогать, а то неадекватно вести себя начинают
       - name: Checkout
         uses: actions/checkout@v2
 
+        #короче эти два шага лучше использовать вместе и лишний раз не трогать, а то неадекватно вести себя начинают
       - name: Send docker-compose.yml to server
         uses: kostya-ten/ssh-server-deploy@v4
         with:
