@@ -45,6 +45,8 @@ jobs:
             mkdir /home/ze/ || true
 
 
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Send docker-compose.yml to server
         uses: kostya-ten/ssh-server-deploy@v4
         with:
