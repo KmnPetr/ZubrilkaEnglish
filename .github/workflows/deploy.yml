@@ -11,14 +11,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Change directory
-        run: cd ZubrilkaEnglish_server
+#      - name: Change directory
+#        run: cd ZubrilkaEnglish_server
 
-      - name: Set up Java
-        uses: actions/setup-java@v2
-        with:
-          distribution: adopt
-          java-version: 17
+#      - name: Set up Java
+#        uses: actions/setup-java@v2
+#        with:
+#          distribution: adopt
+#          java-version: 17
 
 #      - name: Mvn Clean Package
 #        run: mvn -f ZubrilkaEnglish_server clean package
@@ -46,21 +46,13 @@ jobs:
 #            docker rmi kmnpetr/ze || true
 
 
-
-      - name: Create ~/.ssh directory
-        run: mkdir -p ~/.ssh
-        env:
-          HOME: ${{ github.workspace }}
-
-      - name: Add host key to known hosts
-        run: ssh-keyscan ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
-
       - name: Send docker-compose.yml to server
-        run: scp ./ZubrilkaEnglish_server/docker-compose.yml ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }}:/home/ze
+        run: scp ./ZubrilkaEnglish_server/docker-compose.yml /home/ze
         env:
           SERVER_IP: ${{ secrets.SERVER_IP }}
           SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
           SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
+
 
       - name: Display a message
         run: echo "Hello from GitHub Actions"
