@@ -45,9 +45,17 @@ jobs:
 #            docker images || true
 #            docker rmi kmnpetr/ze || true
 
+      - name: Create ~/.ssh directory
+        run: mkdir -p ~/.ssh
+        env:
+          HOME: ${{ github.workspace }}
+
+      - name: Add host key to known hosts
+        run: ssh-keyscan ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+
       - name: Send docker-compose.yml to server
         run: |
-          ssh-keyscan ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+#          ssh-keyscan ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
           scp ./ZubrilkaEnglish_server/docker-compose.yml ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }}:/home/ze
         env:
           SERVER_IP: ${{ secrets.SERVER_IP }}
