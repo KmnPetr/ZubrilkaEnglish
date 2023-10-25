@@ -42,6 +42,7 @@ jobs:
             docker compose -f /home/ze/docker-compose.yml down || true
             docker images || true
             docker rmi kmnpetr/ze || true
+            mkdir /home/ze/ || true
 
 
       - name: Send docker-compose.yml to server
@@ -55,7 +56,6 @@ jobs:
           scp_target: /home/ze
           before_script: |
             echo "Start Deploy"
-            mkdir /home/ze/ || true
           after_script: |
             echo "And Deploy"
 
