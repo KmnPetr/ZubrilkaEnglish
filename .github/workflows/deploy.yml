@@ -54,9 +54,7 @@ jobs:
         run: ssh-keyscan ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
 
       - name: Send docker-compose.yml to server
-        run: |
-#          ssh-keyscan ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
-          scp ./ZubrilkaEnglish_server/docker-compose.yml ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }}:/home/ze
+        run: scp ./ZubrilkaEnglish_server/docker-compose.yml ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }}:/home/ze
         env:
           SERVER_IP: ${{ secrets.SERVER_IP }}
           SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
