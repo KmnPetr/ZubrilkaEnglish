@@ -10,7 +10,6 @@ public class BookAnalyzerApplication {
 
 	public static void main(String[] args){
 		ApplicationContext context = SpringApplication.run(BookAnalyzerApplication.class, args);
-
 		//замер времени
 		long startTime = System.currentTimeMillis();
 
@@ -41,6 +40,9 @@ public class BookAnalyzerApplication {
 
 		//замер времени
 		System.out.println("Время выполнения операции: "+(System.currentTimeMillis()-startTime)+" милисек.");
+		System.out.println("Закончено.");
+
+		SpringApplication.exit(context);
 	}
 
 }
