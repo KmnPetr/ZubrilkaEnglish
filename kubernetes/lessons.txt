@@ -1,0 +1,24 @@
+https://youtu.be/IYq8PPmxvi4?si=KWvA82CnD98grMEn  \\видео поднятия учебного кластера
+https://labs.play-with-k8s.com/               //сайт учебного кластера
+
+kubeadm init --apiserver-advertise-address $(hostname -i) --pod-network-cidr 10.5.0.0/16  //создание мастер ноды
+kubectl apply -f https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter.yaml       //какаято команда
+kubectl get nodes  //список нод
+kubeadm join 192.168.0.14:6443 --token jr5v5d.bp7n3mtvs5aokl4u \
+       --discovery-token-ca-cert-hash sha256:9101b90319357d16309fdc75935d0013dc52d6644eb259c6cb5bb1578cda63cf  //команду копировать с мастера на воркер ноду для подключения
+
+Вечерняя школа
+#1
+#2 ПОДЫ
+https://github.com/slurm-personal/school-dev-k8s     //непонятный гит с лекциями от вечерней школы
+
+kubectl get pod
+kubectl get po //тоже самое
+
+kubectl create -f pod.yaml (запуск ямла, ямл образец в соседнем файле)
+kubectl describe po my-pod //описание пода
+
+kubectl delete po my-pod
+kubectl delete -f pod.yaml
+
+#3
