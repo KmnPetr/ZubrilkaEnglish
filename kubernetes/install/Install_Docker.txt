@@ -32,6 +32,8 @@
 
                   sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
+                  docker --version
+
             Установка cri-dockerd  https://github.com/Mirantis/cri-dockerd
 
                 5) Установка гита
@@ -59,7 +61,7 @@
                         9) распакуем скачанный Go файл https://go.dev/doc/install
 
                          (первая часть команды не обязательна)
-                         sudo tar -C /usr/local -xzf go1.21.3.linux-amd64.tar.gz
+                         rm -rf /usr/local/go && tar -C /usr/local -xzf go1.21.3.linux-amd64.tar.gz
 
                         (export PATH=$PATH:/usr/local/go/bin)  (исправленные комманды вводить их)
                                                                 echo 'export PATH=$PATH:/usr/local/go/bin' >>~/.profile

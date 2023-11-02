@@ -21,4 +21,25 @@ kubectl describe po my-pod //описание пода
 kubectl delete po my-pod
 kubectl delete -f pod.yaml
 
-#3
+#3 REPLICASET
+
+kubectl delete po --all //удалит все поды
+kubectl delete all --all -A //снесет все обьекты со всех нэймспэйсов //это опасно
+kubectl delete replicaset --all
+
+kubectl create -f replicaset.yaml //пременяется только один раз
+kubectl apply -f replicaset.yaml  //перечитает файл применит изменения
+
+kubectl get replicasets
+kubectl get rs  //то же самое
+
+kubectl get po -l app=my-app //поиск подов по лэйблу
+
+kubectl scale --replicas 3 replicaset my-replicaset  //увеличение реплик вручную
+
+kubectl set image replicaset my-replicaset nginx=nginx:1.12 // обновление образа вручную
+
+kubectl explain <чтото>  // открывает документашку
+
+    DEPLOYMENT
+

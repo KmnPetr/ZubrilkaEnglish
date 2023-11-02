@@ -42,5 +42,8 @@ kubectl apply -f calico.yaml
 kubectl get pods -A
 kubectl get nodes
 
+(получаем заново ссылку для воркер ноды)
+kubeadm token create --print-join-command
+
 
 ВИДЕО: https://youtu.be/o6bxo0Oeg6o?si=4CGNPv7RRsbLWI_8
