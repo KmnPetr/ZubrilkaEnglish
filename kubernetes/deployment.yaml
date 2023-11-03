@@ -5,6 +5,14 @@ metadata:
   name: my-deployment
 spec:
   replicas: 2
+  #способ обновления реплик
+  strategy:
+#    type: Recreate
+    rollingUpdate:
+      #кол. реплик которые сразу можно поднять
+      maxSurge: 25%
+      #кол. реплик которые сразу можно гасить
+      maxUnavailable: 25%
   selector:
     matchLabels:
       app: my-app
@@ -18,4 +26,14 @@ spec:
           name: nginx
           ports:
             - containerPort: 80
+          resources:
+            requests:
+              #милиц-cpu 1000мили-cpu = 1ядро
+              cpu: 10m
+              #мегабайты
+              memory: 100Mi
+            limits:
+              cpu: 100m
+              memory: 100Mi
+
 ...

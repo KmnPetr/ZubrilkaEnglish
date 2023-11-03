@@ -42,4 +42,22 @@ kubectl set image replicaset my-replicaset nginx=nginx:1.12 // обновлен�
 kubectl explain <чтото>  // открывает документашку
 
     DEPLOYMENT
+kubectl apply -f deployment.yaml
+kubectl get deploy
+kubectl set image deployment my-deployment '*=<image>'
+kubectl edit deployment my-deployment (выводит временный файл с описанием деплоймента, после его редактирования изменения применяются но не сохраняються в файл)
+kubectl rollout undo deployment my-deployment (откатит изменения, он при создании нового rs не удаляет старый а просто скелит поле replicas)
+revisionHistoryLimit: 10 (глубина хранения старых репликасетов после обновлений)
 
+kubectl explain deployment.spec.strategy (обьяснит значение этого поля)
+
+strategy (это способ обновления: грохать сразу все старые реплики или постепенно, есть доп инфа видео №3 прим.1:08:00время)
+
+        NAMESPACES
+разделение пространства имен
+могут ли одни приложения ходить в другие нэймспэийсы и многое другое зависит от политик
+
+        RESOURCES
+Limits ограничения по изпользованию приложением памяти и ядер
+Requests количество ресурсов, которое резервируется для пода на ноде
+QoS Class поле которое указывает важность пода, в случае если ресерсов будет не хватать, от него зависит кто первый съедет с ноды
