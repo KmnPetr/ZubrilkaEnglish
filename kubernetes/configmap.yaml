@@ -1,0 +1,20 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-configmap-env
+data:
+  dbhost: "postgresql"
+  DEBAG: "false"
+  #создастся файл с именем default.conf и заполнит его этим текстом снизу
+  default.conf: |
+    server {
+      listen 80 default_server;
+      server_name _;
+      default_type text/plane;
+      location / {
+        return 200 'Nihao debil';
+        #return 200 '$hostname\n';
+      }
+    }
+...

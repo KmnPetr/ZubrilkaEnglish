@@ -1,11 +1,3 @@
-https://youtu.be/IYq8PPmxvi4?si=KWvA82CnD98grMEn  \\видео поднятия учебного кластера
-https://labs.play-with-k8s.com/               //сайт учебного кластера
-
-kubeadm init --apiserver-advertise-address $(hostname -i) --pod-network-cidr 10.5.0.0/16  //создание мастер ноды
-kubectl apply -f https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter.yaml       //какаято команда
-kubectl get nodes  //список нод
-kubeadm join 192.168.0.14:6443 --token jr5v5d.bp7n3mtvs5aokl4u \
-       --discovery-token-ca-cert-hash sha256:9101b90319357d16309fdc75935d0013dc52d6644eb259c6cb5bb1578cda63cf  //команду копировать с мастера на воркер ноду для подключения
 
 Вечерняя школа
 #1
@@ -61,3 +53,32 @@ strategy (это способ обновления: грохать сразу в
 Limits ограничения по изпользованию приложением памяти и ядер
 Requests количество ресурсов, которое резервируется для пода на ноде
 QoS Class поле которое указывает важность пода, в случае если ресерсов будет не хватать, от него зависит кто первый съедет с ноды
+
+#4 ПЕРЕМЕННЫЕ ОКРУЖЕНИЯ
+
+kubectl apply -f configmap.yaml (конфигмап надо заапплаить)
+kubectl get cm (просмотреть существующие конфигмапы)
+kubectl exec -t my-deployment-7bc97c6ff4-ghvph -- env (посмотреть переменные внутри пода)
+
+СЕКРЕТЫ
+
+generic - пароли токены приложений
+docker-registry - данные афторизации в docker registry(секретные данные ключи доступа к различным репозиториям типа git email и др.)
+tls - TLS сертификаты для Ingress
+
+kubectl create secret generic test --from-literal=test1=asdf --from-literal=dbpassword=1q2wpass123 (создаст секрет)
+kubectl get secrets (выведет кол. созданных секретов без их показа)
+delete --all делать не надо удаляться ключи доступа к наймспэйсам
+Opaque - непрозрачный  generic==Opaque
+kubectl get secrets test -o yaml (покажет ключи и значения закодированные в b64)
+echo MXEyd3Bhc3MxMjM= | base64 -d (раскодирует секрет)
+
+пересылаем файлы через переменные через конфигмап
+kubectl exec -it my-deployment-5f8455c477-6d56t -- env (можно посмотреть секрет если у разработчика не отобрали exec права)
+kubectl exec -it my-deployment-5db5bdc77-f4bdn -- busybox sh (можно зайти внутрь пода и просмотреть файлы)
+kubectl port-forward my-deployment-5db5bdc77-f4bdn 8080:80 & (так можно постучаться на порт нжинкса) далее введем-->> curl 127.0.0.1:8080
+ps ax | grep 8080   далее ->> kill -9 4023
+
+Donward API
+
+все поля передачи переменных заполнил в deployment.yaml
