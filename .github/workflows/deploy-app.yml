@@ -53,10 +53,15 @@ jobs:
 
       - name: Docker Build And Push
         run: |
+          echo "step 1"
           Version=$(xmlstarlet sel -N p=http://maven.apache.org/POM/4.0.0 -t -v "/p:project/p:version" $File)
+          echo "step 2"
           ImageName="ze-app:${Version}"
+          echo "step 3"
           docker build -t kmnpetr/$ImageName ./ZubrilkaEnglish_server
+          echo "step 4"
           docker push kmnpetr/$ImageName
+          echo "step 5"
 
 #
 #      - name: Stop APP on server
