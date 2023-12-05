@@ -25,9 +25,13 @@ jobs:
           
           xmlstarlet ed -L -N p=http://maven.apache.org/POM/4.0.0 -u "/p:project/p:version" -v $NewVersion $File
           
+          echo "step 1"
           git add .
+          echo "step 2"
           git commit -m "[skip ci] Workwlow modification: App-version = $NewVersion"
+          echo "step 3"
           git push origin main
+          echo "step 4"
 
 #      - name: Set up Java
 #        uses: actions/setup-java@v2
