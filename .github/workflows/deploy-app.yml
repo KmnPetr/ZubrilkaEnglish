@@ -9,11 +9,11 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v2
-#
-#      - name: Setup git config
-#        run: |
-#          git config user.name "GitHub Actions Bot"
-#          git config user.email "<>"
+
+      - name: Setup git config
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "<>"
 
       - name: Сhanging the application version
         run: |
@@ -30,36 +30,33 @@ jobs:
           
           xmlstarlet ed -L -N p=http://maven.apache.org/POM/4.0.0 -u "/p:project/p:version" -v $NewVersion $File
           
-          echo "step 1"
           git add .
-          echo "step 2"
           git commit -m "[skip ci] Workwlow modification: App-version = $NewVersion"
-          echo "step 3"
           git push origin main
 
-#      - name: Set up Java
-#        uses: actions/setup-java@v2
-#        with:
-#          distribution: adopt
-#          java-version: 17
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: adopt
+          java-version: 17
 
 
-#      - name: Mvn Clean Package
-#        run: mvn -f ./ZubrilkaEnglish_server clean package
-#
-#      - name: Login to Docker Hub
-#        uses: docker/login-action@v1
-#        with:
-#          username: ${{ secrets.DOCKERHUB_USERNAME }}
-#          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Mvn Clean Package
+        run: mvn -f ./ZubrilkaEnglish_server clean package
 
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Docker Build And Push
+        run: |
+          Version=$(xmlstarlet sel -N p=http://maven.apache.org/POM/4.0.0 -t -v "/p:project/p:version" $File)
+          ImageName="ze-app:${Version}"
+          docker build -t kmnpetr/$ImageName ./ZubrilkaEnglish_server
+          docker push kmnpetr/$ImageName
 
-#      - name: Docker Build
-#        run: docker build -t kmnpetr/ze ./ZubrilkaEnglish_server
-#
-#      - name: Docker Push
-#        run: docker push kmnpetr/ze
 #
 #      - name: Stop APP on server
 #        uses: appleboy/ssh-action@master
