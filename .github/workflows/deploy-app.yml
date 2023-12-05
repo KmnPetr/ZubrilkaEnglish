@@ -25,7 +25,7 @@ jobs:
           echo "Old version: ${Version}"
           IFS='.' read -r -a arr <<< "$Version"
           #если в следующей строке возникнет ошибка,возможно скрипт пытается прибавить 1 к нулю
-          ((arr[2]++))
+          (([int]arr[2]+1))
           NewVersion=$(IFS="."; echo "${arr[*]}")
           echo "NewVersion: ${NewVersion}"
           
@@ -33,6 +33,8 @@ jobs:
           
           git add .
           git commit -m "[skip ci] Workwlow modification: App-version = $NewVersion"
+          #для работы коммита требуется настроить name и email для гита(смотреть шаг Setup git config)
+          #а также дать разрешение на запись через веб страницу github (репозиторий>>Settings>>Actions>>General>>Workflow permissions)
           git push origin main
 
       - name: Set up Java
@@ -53,15 +55,10 @@ jobs:
 
       - name: Docker Build And Push
         run: |
-          echo "step 1"
           Version=$(xmlstarlet sel -N p=http://maven.apache.org/POM/4.0.0 -t -v "/p:project/p:version" ./ZubrilkaEnglish_server/pom.xml)
-          echo "step 2"
           ImageName="ze-app:${Version}"
-          echo "step 3"
           docker build -t kmnpetr/$ImageName ./ZubrilkaEnglish_server
-          echo "step 4"
           docker push kmnpetr/$ImageName
-          echo "step 5"
 
 #
 #      - name: Stop APP on server
