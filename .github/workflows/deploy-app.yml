@@ -40,7 +40,7 @@ jobs:
           
           xmlstarlet ed -L -N p=http://maven.apache.org/POM/4.0.0 -u "/p:project/p:version" -v $result ./ZubrilkaEnglish_server/pom.xml
           
-          cat $file
+          cat $File
 
 #      - name: Docker Build
 #        run: docker build -t kmnpetr/ze ./ZubrilkaEnglish_server
