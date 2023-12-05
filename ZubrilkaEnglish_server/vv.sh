@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Укажите путь к вашему XML файлу
 file="pom.xml"
 apt-get install -y xmlstarlet
 
