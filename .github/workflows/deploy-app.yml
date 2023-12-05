@@ -27,19 +27,29 @@ jobs:
 
       - name: Сhanging the application version
         run: |
+          echo "step 1"
           File="./ZubrilkaEnglish_server/pom.xml"
           
+          echo "step 2"
           sudo apt-get install -y xmlstarlet
           
+          echo "step 3"
           Version=$(xmlstarlet sel -N p=http://maven.apache.org/POM/4.0.0 -t -v "/p:project/p:version" ./ZubrilkaEnglish_server/pom.xml)
+          echo "step 4"
           echo "Old version: ${Version}"
+          echo "step 5"
           IFS='.' read -r -a arr <<< "$Version"
+          echo "step 6"
           ((arr[2]++))
+          echo "step 7"
           NewVersion=$(IFS="."; echo "${arr[*]}")
+          echo "step 8"
           echo "NewVersion: ${NewVersion}"
           
+          echo "step 9"
           xmlstarlet ed -L -N p=http://maven.apache.org/POM/4.0.0 -u "/p:project/p:version" -v $result ./ZubrilkaEnglish_server/pom.xml
           
+          echo "step 10"
           cat $File
 
 #      - name: Docker Build
