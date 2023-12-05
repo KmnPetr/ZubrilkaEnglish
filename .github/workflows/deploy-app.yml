@@ -7,29 +7,29 @@ jobs:
 
     steps:
 
-      - name: Set up Java
-        uses: actions/setup-java@v2
-        with:
-          distribution: adopt
-          java-version: 17
+#      - name: Set up Java
+#        uses: actions/setup-java@v2
+#        with:
+#          distribution: adopt
+#          java-version: 17
 
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Mvn Clean Package
-        run: mvn -f ./ZubrilkaEnglish_server clean package
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+#      - name: Mvn Clean Package
+#        run: mvn -f ./ZubrilkaEnglish_server clean package
+#
+#      - name: Login to Docker Hub
+#        uses: docker/login-action@v1
+#        with:
+#          username: ${{ secrets.DOCKERHUB_USERNAME }}
+#          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Сhanging the application version
         run: |
-          file="./ZubrilkaEnglish_server/pom.xml"
+          File="./ZubrilkaEnglish_server/pom.xml"
           
-          apt-get install -y xmlstarlet
+          sudo apt-get install -y xmlstarlet
           
           Version=$(xmlstarlet sel -N p=http://maven.apache.org/POM/4.0.0 -t -v "/p:project/p:version" ./ZubrilkaEnglish_server/pom.xml)
           echo "Old version: ${Version}"
