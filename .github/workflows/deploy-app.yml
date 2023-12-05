@@ -33,7 +33,7 @@ jobs:
           
           Version=$(xmlstarlet sel -N p=http://maven.apache.org/POM/4.0.0 -t -v "/p:project/p:version" ./ZubrilkaEnglish_server/pom.xml)
           echo "Old version: ${Version}"
-          IFS='.' read -r -a arr <<< "Version"
+          IFS='.' read -r -a arr <<< "$Version"
           ((arr[2]++))
           NewVersion=$(IFS="."; echo "${arr[*]}")
           echo "NewVersion: ${NewVersion}"
