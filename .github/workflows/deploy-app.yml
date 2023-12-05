@@ -25,7 +25,7 @@ jobs:
           echo "Old version: ${Version}"
           IFS='.' read -r -a arr <<< "$Version"
           #если в следующей строке возникнет ошибка,возможно скрипт пытается прибавить 1 к нулю
-          ((arr[2]+1))
+          ((arr[2]+=1))
           NewVersion=$(IFS="."; echo "${arr[*]}")
           echo "NewVersion: ${NewVersion}"
           
