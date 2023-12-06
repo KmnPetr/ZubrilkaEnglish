@@ -3,9 +3,9 @@ version: '3.5'
 services:
   ze_app:
     container_name: ze_app
-#    image: kmnpetr/ze:latest
-    build:
-      context: .
+    image: kmnpetr/ze-app:latest
+#    build:
+#      context: .
     ports:
       - "28700:28700"
     environment:
