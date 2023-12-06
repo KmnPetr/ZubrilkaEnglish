@@ -1,4 +1,4 @@
-name: Deploy_App
+name: Test-App
 on: workflow_dispatch
 
 jobs:
