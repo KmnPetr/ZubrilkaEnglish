@@ -57,8 +57,10 @@ jobs:
         run: |
           Version=$(xmlstarlet sel -N p=http://maven.apache.org/POM/4.0.0 -t -v "/p:project/p:version" ./ZubrilkaEnglish_server/pom.xml)
           ImageName="ze-app:${Version}"
+
           docker build -t kmnpetr/$ImageName ./ZubrilkaEnglish_server
-          docker push kmnpetr/$ImageName
+          docker tag kmnpetr/$ImageName kmnpetr/ze-app:latest
+          docker push kmnpetr/ze-app:latest
 
 #
 #      - name: Stop APP on server
