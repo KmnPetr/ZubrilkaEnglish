@@ -28,7 +28,7 @@ public class PropController {
     /**
      * метод установит новое значение update_at в таблице properties
      */
-    @GetMapping("/set_update_at")
+    @GetMapping("/set_update_at")//ограничено, только для админа
     public String setUpdateAt(){
         propServise.setUpdateAt();
         return "The DB update time is successfully set";

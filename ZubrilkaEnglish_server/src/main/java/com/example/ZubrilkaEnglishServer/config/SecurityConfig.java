@@ -49,7 +49,8 @@ public class SecurityConfig {
                         "/error",
                         "/hello",//временно сделаем ее доступной
                         "/words",
-                        "/properties/get_update_at").permitAll()//на эти странички пускаем всех пользователей
+                        "/properties/get_update_at",
+                        "/healthcheck").permitAll()//на эти странички пускаем всех пользователей
                 .anyRequest().hasAnyRole("USER","ADMIN")
                 .and()
                 .formLogin()
