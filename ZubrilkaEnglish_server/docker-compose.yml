@@ -8,6 +8,7 @@ services:
       - "28700:28700"
     environment:
       spring.datasource.url: "jdbc:postgresql://608686.cloud4box.ru:5432/postgres"
+      spring.datasource.password: "CFdZZclszCTaUse"
       checkenv: "новоезначение"
     networks:
       - ze_network
