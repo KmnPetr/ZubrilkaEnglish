@@ -3,10 +3,11 @@ version: '3.5'
 services:
   ze_app:
     container_name: ze_app
-    image: kmnpetr/ze-app:latest
+    image: kmnpetr/ze-app:test
     ports:
       - "28700:28700"
     environment:
+      spring.datasource.url: "jdbc:postgresql://608686.cloud4box.ru:5432/postgres"
       checkenv: "новоезначение"
     networks:
       - ze_network

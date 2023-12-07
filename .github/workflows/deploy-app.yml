@@ -36,6 +36,18 @@ jobs:
           #для работы коммита требуется настроить name и email для гита(смотреть шаг Setup git config)
           #а также дать разрешение на запись через веб страницу github (репозиторий>>Settings>>Actions>>General>>Workflow permissions)
           git push origin main
+          
+          echo "NEW_VARIABLE=${NewVersion}" >> $GITHUB_ENV
+
+
+      - name: Check Env
+        run: |
+          echo $NEW_VARIABLE
+          echo $NEW_VARIABLE
+          echo $NEW_VARIABLE
+          echo $NEW_VARIABLE
+          echo $NEW_VARIABLE
+          
 
       - name: Set up Java
         uses: actions/setup-java@v2
