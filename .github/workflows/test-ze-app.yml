@@ -28,7 +28,7 @@ jobs:
           ((arr[2]+=1))
           NewVersion=$(IFS="."; echo "${arr[*]}")
           echo "NewVersion: ${NewVersion}"
-          "NEW_VARIABLE=${NewVersion}" >> $GITHUB_ENV
+          echo "NEW_VARIABLE=${NewVersion}" >> $GITHUB_ENV
           
           xmlstarlet ed -L -N p=http://maven.apache.org/POM/4.0.0 -u "/p:project/p:version" -v $NewVersion $File
           
