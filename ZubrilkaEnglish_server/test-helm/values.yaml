@@ -22,3 +22,5 @@ resources:
 env:
   MYSQL_PORT: 3306
   MYSQL_USER: root
+  spring.datasource.url: "jdbc:postgresql://608686.cloud4box.ru:5432/postgres"
+  spring.datasource.password: "CFdZZclszCTaUse"
