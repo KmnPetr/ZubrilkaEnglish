@@ -1,7 +1,0 @@
-helm upgrade --install ze-app-helmchart .
-    --set image=$IMAGE
-    --set imageTag=$IMAGE_TAG
-    --debug
-    --atomic
-    --timeout 120s
-    --namespace $NAMESPACE
