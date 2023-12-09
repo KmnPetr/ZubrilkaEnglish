@@ -1,3 +1,4 @@
 helm upgrade --install ze-app . --set image.tag=test --debug --atomic --timeout 300s
 
 helm uninstall ze-app
+

@@ -1,15 +1,10 @@
-
 annotations:
   test: ok
-
 replicas: 1
-
 image:
   repository: kmnpetr/ze-app
   tag: test
-
 port: 28700
-
 resources:
   requests:
     cpu: 150m
@@ -17,10 +12,16 @@ resources:
   limits:
     cpu: 200m
     memory: 150Mi
-
-
 env:
-  MYSQL_PORT: 3306
-  MYSQL_USER: root
   spring.datasource.url: "jdbc:postgresql://608686.cloud4box.ru:5432/postgres"
   spring.datasource.password: "CFdZZclszCTaUse"
+
+
+service:
+  type: NodePort
+  #the port of the service itself
+  port: 80
+  #the port of the served pods
+  targetPort: 28700
+  #node port
+  nodePort: 30000
