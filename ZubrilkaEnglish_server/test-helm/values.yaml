@@ -17,8 +17,7 @@ env:
   spring.datasource.password: "CFdZZclszCTaUse"
 
 
-service:
-  type: NodePort
+serviceNodePort:
   #the port of the service itself
   port: 80
   #the port of the served pods
