@@ -12,9 +12,9 @@ resources:
   limits:
     cpu: 350m
     memory: 500Mi
-#env:
-#  spring.datasource.url: "jdbc:postgresql://608686.cloud4box.ru:5432/postgres"
-#  spring.datasource.password: "CFdZZclszCTaUse"
+env:
+  spring.datasource.url: "jdbc:postgresql://608686.cloud4box.ru:5432/postgres"
+  spring.datasource.password: "CFdZZclszCTaUse"
 
 serviceNodePort:
   port: 80
