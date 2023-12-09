@@ -24,7 +24,6 @@ jobs:
           Version=$(xmlstarlet sel -N p=http://maven.apache.org/POM/4.0.0 -t -v "/p:project/p:version" $File)
           echo "Old version: ${Version}"
           IFS='.' read -r -a arr <<< "$Version"
-          #если в следующей строке возникнет ошибка,возможно скрипт пытается прибавить 1 к нулю
           ((arr[2]+=1))
           NewVersion=$(IFS="."; echo "${arr[*]}")
           echo "NewVersion: ${NewVersion}"
@@ -37,16 +36,16 @@ jobs:
           #а также дать разрешение на запись через веб страницу github (репозиторий>>Settings>>Actions>>General>>Workflow permissions)
           git push origin main
           
-          echo "NEW_VARIABLE=${NewVersion}" >> $GITHUB_ENV
+          echo "TAG_IMAGE=${NewVersion}" >> $GITHUB_ENV
 
 
       - name: Check Env
         run: |
-          echo $NEW_VARIABLE
-          echo $NEW_VARIABLE
-          echo $NEW_VARIABLE
-          echo $NEW_VARIABLE
-          echo $NEW_VARIABLE
+          echo $TAG_IMAGE
+          echo $TAG_IMAGE
+          echo $TAG_IMAGE
+          echo $TAG_IMAGE
+          echo $TAG_IMAGE
           
 
       - name: Set up Java
@@ -67,49 +66,24 @@ jobs:
 
       - name: Docker Build And Push
         run: |
-          Version=$(xmlstarlet sel -N p=http://maven.apache.org/POM/4.0.0 -t -v "/p:project/p:version" ./ZubrilkaEnglish_server/pom.xml)
-          ImageName="ze-app:${Version}"
+          ImageName="ze-app:${TAG_IMAGE}"
           docker build -t kmnpetr/$ImageName ./ZubrilkaEnglish_server
           docker push kmnpetr/$ImageName
 
-#
-#      - name: Stop APP on server
-#        uses: appleboy/ssh-action@master
-#        with:
-#          host: ${{ secrets.SERVER_IP }}
-#          username: ${{ secrets.SERVER_USERNAME }}
-#          password: ${{ secrets.SERVER_PASSWORD }}
-#          script: |
-#            docker ps -a || true
-#            docker compose -f /home/ze/docker-compose.yml down || true
-#            docker images || true
-#            docker rmi kmnpetr/ze || true
-#            mkdir /home/ze/ || true
-#
-#        #короче эти два шага лучше использовать вместе и лишний раз не трогать, а то неадекватно вести себя начинают
-#      - name: Checkout
-#        uses: actions/checkout@v2
-#
-#        #короче эти два шага лучше использовать вместе и лишний раз не трогать, а то неадекватно вести себя начинают
-#      - name: Send docker-compose.yml to server
-#        uses: kostya-ten/ssh-server-deploy@v4
-#        with:
-#          host: ${{ secrets.SERVER_IP }}
-#          port: 22
-#          username: ${{ secrets.SERVER_USERNAME }}
-#          password: ${{ secrets.SERVER_PASSWORD }}
-#          scp_source: ./ZubrilkaEnglish_server/docker-compose.yml
-#          scp_target: /home/ze
-#          before_script: |
-#            echo "Start Deploy"
-#          after_script: |
-#            echo "And Deploy"
-#
-#      - name: Up docker-compose.yml
-#        uses: appleboy/ssh-action@master
-#        with:
-#          host: ${{ secrets.SERVER_IP }}
-#          username: ${{ secrets.SERVER_USERNAME }}
-#          password: ${{ secrets.SERVER_PASSWORD }}
-#          script: |
-#            docker compose -f /home/ze/docker-compose.yml up -d
+      - name: Git Pull On Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          script: |
+            git -C /home/ZubrilkaEnglish-private- pull
+
+      - name: Helm Upgrade
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          script: |
+            helm upgrade --install ze-app-dev /home/ZubrilkaEnglish-private-/ZubrilkaEnglish_server/test-helm/ --set image.tag=$TAG_IMAGE --debug --atomic --timeout 300s

@@ -1,4 +1,5 @@
-helm upgrade --install ze-app . --set image.tag=test --debug --atomic --timeout 300s
+helm upgrade --install ze-app-dev . --set image.tag=test --debug --atomic --timeout 300s
 
-helm uninstall ze-app
+helm uninstall ze-app-dev
 
+echo "source <(kubectl completion bash)" >> ~/.bashrc (включает автодополнение в консоли куба)
