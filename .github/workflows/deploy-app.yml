@@ -85,5 +85,6 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
+          envs: TAG_IMAGE
           script: |
-            helm upgrade --install ze-app-dev /home/ZubrilkaEnglish-private-/ZubrilkaEnglish_server/test-helm/ --set image.tag=$TAG_IMAGE --debug --atomic --timeout 300s
+            helm upgrade --install ze-app-dev /home/ZubrilkaEnglish-private-/ZubrilkaEnglish_server/test-helm/ --set image.tag=$(echo $TAG_IMAGE) --debug --atomic --timeout 300s
