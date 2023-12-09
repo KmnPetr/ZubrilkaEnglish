@@ -16,11 +16,7 @@ env:
   spring.datasource.url: "jdbc:postgresql://608686.cloud4box.ru:5432/postgres"
   spring.datasource.password: "CFdZZclszCTaUse"
 
-
 serviceNodePort:
-  #the port of the service itself
   port: 80
-  #the port of the served pods
   targetPort: 28700
-  #node port
   nodePort: 30000

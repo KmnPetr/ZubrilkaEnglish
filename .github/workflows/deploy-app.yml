@@ -38,22 +38,11 @@ jobs:
           
           echo "TAG_IMAGE=${NewVersion}" >> $GITHUB_ENV
 
-
-      - name: Check Env
-        run: |
-          echo $TAG_IMAGE
-          echo $TAG_IMAGE
-          echo $TAG_IMAGE
-          echo $TAG_IMAGE
-          echo $TAG_IMAGE
-          
-
       - name: Set up Java
         uses: actions/setup-java@v2
         with:
           distribution: adopt
           java-version: 17
-
 
       - name: Mvn Clean Package
         run: mvn -f ./ZubrilkaEnglish_server clean package
@@ -87,4 +76,5 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           envs: TAG_IMAGE
           script: |
-            helm upgrade --install ze-app-dev /home/ZubrilkaEnglish-private-/ZubrilkaEnglish_server/test-helm/ --set image.tag=$(echo $TAG_IMAGE) --debug --atomic --timeout 300s
+            helm uninstall ze-app-dev || true
+            helm upgrade --install ze-app-dev /home/ZubrilkaEnglish-private-/ZubrilkaEnglish_server/test-helm/ --set image.tag=$(echo $TAG_IMAGE) --set env.spring.datasource.password=$(echo $secrets.BD_PASSWORD) --debug --atomic --timeout 300s
