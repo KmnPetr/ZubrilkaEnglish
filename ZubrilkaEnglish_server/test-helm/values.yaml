@@ -8,10 +8,10 @@ port: 28700
 resources:
   requests:
     cpu: 150m
-    memory: 100Mi
+    memory: 300Mi
   limits:
     cpu: 200m
-    memory: 150Mi
+    memory: 400Mi
 env:
   spring.datasource.url: "jdbc:postgresql://608686.cloud4box.ru:5432/postgres"
   spring.datasource.password: "CFdZZclszCTaUse"
