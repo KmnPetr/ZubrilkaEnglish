@@ -13,7 +13,7 @@ resources:
     cpu: 350m
     memory: 500Mi
 env:
-  spring.datasource.url: "jdbc:postgresql://608686.cloud4box.ru:5432/postgres"
+  spring.datasource.url: "jdbc:postgresql://598224.cloud4box.ru:5432/postgres"
   spring.datasource.password: "CFdZZclszCTaUse"
   spring.datasource.username: "postgres"
   spring.datasource.driver-class-name: "org.postgresql.Driver"
