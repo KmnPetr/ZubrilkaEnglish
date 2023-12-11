@@ -85,8 +85,8 @@ jobs:
             helm upgrade --install dev \
             /home/ZubrilkaEnglish-private-/ZubrilkaEnglish_server/test-helm/ \
             --set image.tag=$(echo $TAG_IMAGE) \
-            --set env:spring.datasource.url=$(echo $BD_URL) \
-            --set env:spring.datasource.password=$(echo $BD_PASSWORD) \
+            --set env.spring.datasource.url=$(echo $BD_URL) \
+            --set env.spring.datasource.password=$(echo $BD_PASSWORD) \
             --set env.jwt_secret=$(echo $JWT_SECRET) \
             --debug \
             --atomic \
