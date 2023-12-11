@@ -3,6 +3,7 @@ annotations:
 replicas: 1
 image:
   repository: kmnpetr/ze-app
+  #it is necessary to insert for deploy process
   tag: test
 port: 28700
 resources:
@@ -13,8 +14,10 @@ resources:
     cpu: 350m
     memory: 500Mi
 env:
-  spring.datasource.url: "jdbc:postgresql://46.8.19.22:5432/postgres"
-  spring.datasource.password: "CFdZZclszCTaUse"
+  #it is necessary to insert from git secrets
+  spring.datasource.url: "url"
+  #it is necessary to insert from git secrets
+  spring.datasource.password: "password"
   spring.datasource.username: "postgres"
   spring.datasource.driver-class-name: "org.postgresql.Driver"
   spring.jpa.properties.hibernate.dialect: "org.hibernate.dialect.PostgreSQLDialect"
