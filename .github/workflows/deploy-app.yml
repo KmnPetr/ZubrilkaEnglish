@@ -1,9 +1,14 @@
 name: Deploy_App
 on: workflow_dispatch
 
+env:
+  BD_URL: ${{ secrets.BD_URL }}
+  BD_PASSWORD: ${{ secrets.BD_PASSWORD }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
 
     steps:
 
@@ -74,7 +79,14 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
-          envs: TAG_IMAGE
+          envs: TAG_IMAGE, BD_URL, BD_PASSWORD
           script: |
             helm uninstall dev || true
-            helm upgrade --install dev /home/ZubrilkaEnglish-private-/ZubrilkaEnglish_server/test-helm/ --set image.tag=$(echo $TAG_IMAGE) --set env.spring.datasource.url=$(echo $BD_URL) --set env.spring.datasource.password=$(echo $BD_PASSWORD) --debug --atomic --timeout 300s
+            helm upgrade --install dev \
+            /home/ZubrilkaEnglish-private-/ZubrilkaEnglish_server/test-helm/ \
+            --set image.tag=$(echo $TAG_IMAGE) \
+            --set env.spring.datasource.url=$(echo $BD_URL) \
+            --set env.spring.datasource.password=$(echo $BD_PASSWORD) \
+            --debug \
+            --atomic \
+            --timeout 300s
