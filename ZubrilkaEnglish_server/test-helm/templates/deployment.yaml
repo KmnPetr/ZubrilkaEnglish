@@ -25,10 +25,16 @@ spec:
             - containerPort: {{ .Values.port}}
           resources:
 {{toYaml .Values.resources | indent 12}}
-{{- if .Values.env}}
           env:
-          {{- range $key, $val := .Values.env }}
+            - name: "spring.datasource.url"
+              value: {{ .Values.env.db_url }}
+            - name: "spring.datasource.password"
+              value: {{ .Values.env.db_password }}
+            - name: "jwt_secret"
+              value: {{ .Values.env.jwt_secret }}
+          {{- if .Values.other_env}}
+          {{- range $key, $val := .Values.other_env }}
             - name: {{ $key | quote }}
               value: {{ $val | quote }}
           {{- end }}
-{{- end }}
+          {{- end }}
