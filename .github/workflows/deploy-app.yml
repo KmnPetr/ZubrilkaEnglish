@@ -9,6 +9,7 @@ jobs:
     env:
       BD_URL: ${{ secrets.BD_URL }}
       BD_PASSWORD: ${{ secrets.BD_PASSWORD }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
     steps:
 
@@ -79,15 +80,15 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
-          envs: TAG_IMAGE, BD_URL, BD_PASSWORD
+          envs: TAG_IMAGE, BD_URL, BD_PASSWORD, JWT_SECRET
           script: |
             helm uninstall dev || true
             helm upgrade --install dev \
             /home/ZubrilkaEnglish-private-/ZubrilkaEnglish_server/test-helm/ \
             --set image.tag=$(echo $TAG_IMAGE) \
-            --set env.spring.datasource.url=$(echo $BD_URL) \
-            --set env.spring.datasource.password=$(echo $BD_PASSWORD) \
-            --set env.jwt_secret=$(echo $JWT_SECRET) \
+            --set env.db_url=${BD_URL} \
+            --set env.db_password=${BD_PASSWORD} \
+            --set env.jwt_secret=${JWT_SECRET} \
             --debug \
             --atomic \
             --timeout 300s
