@@ -1,14 +1,14 @@
 name: Deploy_App
 on: workflow_dispatch
 
-env:
-  BD_URL: ${{ secrets.BD_URL }}
-  BD_PASSWORD: ${{ secrets.BD_PASSWORD }}
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      BD_URL: ${{ secrets.BD_URL }}
+      BD_PASSWORD: ${{ secrets.BD_PASSWORD }}
 
     steps:
 
