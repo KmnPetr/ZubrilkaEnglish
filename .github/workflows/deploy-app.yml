@@ -6,11 +6,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    env:
-      BD_URL: ${{ secrets.BD_URL }}
-      BD_PASSWORD: ${{ secrets.BD_PASSWORD }}
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
-
     steps:
 
       - name: Checkout
@@ -80,15 +75,12 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
-          envs: TAG_IMAGE, BD_URL, BD_PASSWORD, JWT_SECRET
+          envs: TAG_IMAGE
           script: |
             helm uninstall dev || true
             helm upgrade --install dev \
             /home/ZubrilkaEnglish-private-/ZubrilkaEnglish_server/test-helm/ \
             --set image.tag=$(echo $TAG_IMAGE) \
-            --set env.spring.datasource.url=${BD_URL} \
-            --set env.spring.datasource.password=${BD_PASSWORD} \
-            --set env.jwt_secret=${JWT_SECRET} \
             --debug \
             --atomic \
             --timeout 300s
