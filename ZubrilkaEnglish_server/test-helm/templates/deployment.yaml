@@ -25,10 +25,30 @@ spec:
             - containerPort: {{ .Values.port}}
           resources:
 {{toYaml .Values.resources | indent 12}}
-{{- if .Values.env}}
           env:
+            - name: "spring.datasource.url"
+              valueFrom:
+                secretKeyRef:
+                  name: "ze-secret"
+                  key: "BD_URL"
+            - name: "spring.datasource.password"
+              valueFrom:
+                secretKeyRef:
+                  name: "ze-secret"
+                  key: "BD_PASSWORD"
+            - name: "spring.datasource.username"
+              valueFrom:
+                secretKeyRef:
+                  name: "ze-secret"
+                  key: "BD_USER"
+            - name: "jwt_secret"
+              valueFrom:
+                secretKeyRef:
+                  name: "ze-secret"
+                  key: "JWT_SECRET"
+          {{- if .Values.env}}
           {{- range $key, $val := .Values.env }}
             - name: {{ $key | quote }}
               value: {{ $val | quote }}
           {{- end }}
-{{- end }}
+          {{- end }}
