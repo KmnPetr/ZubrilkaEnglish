@@ -1,5 +1,7 @@
 package com.example.ZubrilkaEnglishServer.controllers;
 
+import com.example.ZubrilkaEnglishServer.repositories.CheckConnectionDB;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -10,6 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/healthcheck")
 public class HealthCheckController {
 
+    private final CheckConnectionDB checkConnectionDB;
+
+    @Autowired
+    public HealthCheckController(CheckConnectionDB checkConnectionDB) {
+        this.checkConnectionDB = checkConnectionDB;
+    }
+
     @GetMapping()
     public ResponseEntity<String> healthCheck(){
         System.out.println("healthcheck");
@@ -17,5 +26,16 @@ public class HealthCheckController {
                 "All ok.",
                 HttpStatus.OK
         );
+    }
+    @GetMapping("/startup")
+    public ResponseEntity<String> startUpHealthCheck(){
+        System.out.println("startup-healthcheck");
+        try {
+            checkConnectionDB.checkDB();
+        }catch (Exception e){
+            System.out.println("sDatabase not available.");
+            return new ResponseEntity<>("Database not available.",HttpStatus.SERVICE_UNAVAILABLE);
+        }
+        return new ResponseEntity<>("App started.",HttpStatus.OK);
     }
 }

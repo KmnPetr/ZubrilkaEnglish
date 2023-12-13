@@ -71,7 +71,7 @@ spec:
           startupProbe:
             httpGet:
               port: {{ .Values.port}}
-              path: /healthcheck
+              path: /healthcheck/startup
             failureThreshold: 60
             periodSeconds: 5
           #в случае падения выведет последние 80 строчек логов или 2Ki логов
