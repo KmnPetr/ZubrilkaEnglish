@@ -31,11 +31,13 @@ public class HealthCheckController {
     public ResponseEntity<String> startUpHealthCheck(){
         System.out.println("startup-healthcheck");
         try {
-            checkConnectionDB.checkDB();
+            checkConnectionDB.selectOne();
         }catch (Exception e){
-            System.out.println("sDatabase not available.");
+            System.out.println("Database not available.");
+            e.printStackTrace();
             return new ResponseEntity<>("Database not available.",HttpStatus.SERVICE_UNAVAILABLE);
         }
+
         return new ResponseEntity<>("App started.",HttpStatus.OK);
     }
 }
