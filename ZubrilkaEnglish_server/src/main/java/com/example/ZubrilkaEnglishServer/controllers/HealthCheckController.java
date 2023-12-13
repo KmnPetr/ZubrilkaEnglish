@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/healthcheck")
 public class HealthCheckController {
 
-    private final CheckConnectionDB checkConnectionDB;
+    private final CheckConnectionDB checkConnectionDB;//Костыль как есть, надо переносить проверку доступности БД в initConteiner
 
     @Autowired
     public HealthCheckController(CheckConnectionDB checkConnectionDB) {
@@ -21,7 +21,6 @@ public class HealthCheckController {
 
     @GetMapping()
     public ResponseEntity<String> healthCheck(){
-        System.out.println("healthcheck");
         return new ResponseEntity<>(
                 "All ok.",
                 HttpStatus.OK
