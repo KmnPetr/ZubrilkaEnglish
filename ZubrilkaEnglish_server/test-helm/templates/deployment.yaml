@@ -52,3 +52,27 @@ spec:
               value: {{ $val | quote }}
           {{- end }}
           {{- end }}
+          startupProbe:
+            httpGet:
+              port: 80
+              path: /
+            failureThreshold: 30
+            periodSeconds: 10
+          #в случае падения выведет последние 80 строчек логов или 2Ki логов
+          terminationMessagePolicy: FallbackToLogsOnError
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthcheck
+              port: {{ .Values.port}}
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
+          startupProbe:
+            httpGet:
+              port: {{ .Values.port}}
+              path: /healthcheck
+            failureThreshold: 60
+            periodSeconds: 5
+          #в случае падения выведет последние 80 строчек логов или 2Ki логов
+          terminationMessagePolicy: FallbackToLogsOnError

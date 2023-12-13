@@ -1,6 +1,5 @@
 package com.example.ZubrilkaEnglishServer.controllers;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -13,7 +12,7 @@ public class HealthCheckController {
 
     @GetMapping()
     public ResponseEntity<String> healthCheck(){
-
+        System.out.println("healthcheck");
         return new ResponseEntity<>(
                 "All ok.",
                 HttpStatus.OK
