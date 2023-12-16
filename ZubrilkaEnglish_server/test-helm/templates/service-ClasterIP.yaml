@@ -18,7 +18,8 @@ kind: Ingress
 metadata:
   name: {{.Chart.Name}}-{{.Release.Name}}-ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /{{.Chart.Name}}-{{.Release.Name}}
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /zeappdev
 spec:
   rules:
     - host: 598224.cloud4box.ru
