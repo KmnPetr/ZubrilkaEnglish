@@ -57,7 +57,7 @@ spec:
           livenessProbe:
             failureThreshold: 3
             httpGet:
-              path: /{{ .Values.env.server.servlet.context-path }}/healthcheck
+              path: /healthcheck
               port: {{ .Values.port}}
             periodSeconds: 10
             successThreshold: 1
@@ -65,7 +65,7 @@ spec:
           startupProbe:
             httpGet:
               port: {{ .Values.port}}
-              path: /{{ .Values.env.server.servlet.context-path }}/healthcheck/startup
+              path: /healthcheck/startup
             failureThreshold: 60
             periodSeconds: 5
           #в случае падения выведет последние 80 строчек логов или 2Ki логов
