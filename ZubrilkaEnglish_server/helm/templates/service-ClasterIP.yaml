@@ -28,5 +28,5 @@ spec:
                 name: {{.Chart.Name}}-{{.Release.Name}}-clusterip
                 port:
                   number: 80
-            path: /
+            path: /ze-app
             pathType: Prefix
