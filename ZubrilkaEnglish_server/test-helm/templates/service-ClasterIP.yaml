@@ -21,7 +21,7 @@ metadata:
     kubernetes.io/ingress.class: nginx
 spec:
   rules:
-    - host: 598224.cloud4box.ru
+    - host: {{ .Values.ingress.host }}
       http:
         paths:
           - backend:

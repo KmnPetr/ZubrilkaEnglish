@@ -22,3 +22,6 @@ serviceNodePort:
   port: 80
   targetPort: 28700
   nodePort: 30000
+
+ingress:
+  host: "*"
