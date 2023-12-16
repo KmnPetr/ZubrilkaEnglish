@@ -1,3 +1,3 @@
-helm upgrade --install ze-app-dev . --set image.tag=test --debug --atomic --timeout 300s
+helm upgrade --install dev . --set image.tag=1.0.54 --debug --atomic --timeout 300s
 
-helm uninstall ze-app-dev
+helm uninstall dev
