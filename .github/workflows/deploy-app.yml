@@ -83,7 +83,7 @@ jobs:
           script: |
             helm uninstall dev || true
             helm upgrade --install dev \
-            /home/ZubrilkaEnglish-private-/ZubrilkaEnglish_server/test-helm/ \
+            /home/ZubrilkaEnglish-private-/ZubrilkaEnglish_server/helm/ \
             --set image.tag=$(echo $TAG_IMAGE) \
             --debug \
             --atomic \
