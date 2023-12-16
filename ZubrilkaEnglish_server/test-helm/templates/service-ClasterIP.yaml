@@ -29,5 +29,5 @@ spec:
                 name: {{.Chart.Name}}-{{.Release.Name}}-clusterip
                 port:
                   number: 80
-            path: /
+            path: /{{.Chart.Name}}-{{.Release.Name}}
             pathType: Prefix
