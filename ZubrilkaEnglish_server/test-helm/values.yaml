@@ -24,4 +24,4 @@ serviceNodePort:
   nodePort: 30000
 
 ingress:
-  host: "*.*"
+  host: "ze-app-dev.598224.cloud4box.ru"

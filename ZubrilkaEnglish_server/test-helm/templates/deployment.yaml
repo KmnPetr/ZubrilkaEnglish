@@ -52,12 +52,6 @@ spec:
               value: {{ $val | quote }}
           {{- end }}
           {{- end }}
-          startupProbe:
-            httpGet:
-              port: 80
-              path: /
-            failureThreshold: 30
-            periodSeconds: 10
           #в случае падения выведет последние 80 строчек логов или 2Ki логов
           terminationMessagePolicy: FallbackToLogsOnError
           livenessProbe:
