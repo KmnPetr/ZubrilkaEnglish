@@ -19,7 +19,12 @@ metadata:
   name: {{.Chart.Name}}-{{.Release.Name}}-ingress
   annotations:
     kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: "letsencrypt-staging"
 spec:
+  tls:
+    - hosts:
+        - 598224.cloud4box.ru
+      secretName: app-tls
   rules:
     - http:
         paths:
@@ -28,5 +33,5 @@ spec:
                 name: {{.Chart.Name}}-{{.Release.Name}}-clusterip
                 port:
                   number: 80
-            path: /ze-app
+            path: {{ .Values.env.CONTEXT_PATH }}
             pathType: Prefix
