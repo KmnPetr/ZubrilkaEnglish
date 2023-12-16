@@ -19,6 +19,7 @@ env:
   spring.jpa.properties.hibernate.show_sql: "false"
   #поменять перед пуском в прод
   server.servlet.context-path: "/ze-app-dev"
+  fff: тасамая
 
 serviceNodePort:
   port: 80
