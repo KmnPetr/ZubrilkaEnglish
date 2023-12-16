@@ -70,7 +70,6 @@
       <artifactId>modelmapper</artifactId>
       <version>3.1.1</version>
     </dependency>
-    <!--		чтоб геттеры и сеттеры больше не писать-->
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
