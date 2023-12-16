@@ -46,7 +46,6 @@ spec:
                 secretKeyRef:
                   name: "ze-secret"
                   key: "JWT_SECRET"
-            - name:
           {{- if .Values.env}}
           {{- range $key, $val := .Values.env }}
             - name: {{ $key | quote }}
