@@ -26,7 +26,8 @@ spec:
         - 598224.cloud4box.ru
       secretName: app-tls
   rules:
-    - http:
+    - host: 598224.cloud4box.ru
+      http:
         paths:
           - backend:
               service:
