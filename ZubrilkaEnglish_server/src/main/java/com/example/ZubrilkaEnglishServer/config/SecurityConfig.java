@@ -41,15 +41,15 @@ public class SecurityConfig {
                 .authorizeHttpRequests()//настройка авторизации
                 .requestMatchers(
                         "/admin",
-                        "/create",
-                        "/properties/set_update_at").hasRole("ADMIN")//к этим страничкам доступ имеет только админ
+                        "/create"
+                ).hasRole("ADMIN")//к этим страничкам доступ имеет только админ
                 .requestMatchers(
                         "/auth/login",
                         "auth/registration",
                         "/error",
                         "/hello",//временно сделаем ее доступной
                         "/words",
-                        "/properties/get_update_at",
+                        "/properties/get_dictionary_version",
                         "/healthcheck/**").permitAll()//на эти странички пускаем всех пользователей
                 .anyRequest().hasAnyRole("USER","ADMIN")
                 .and()
