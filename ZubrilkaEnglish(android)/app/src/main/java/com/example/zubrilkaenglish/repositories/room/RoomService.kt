@@ -25,17 +25,17 @@ class RoomService{
         dataBase.getWordDAO().deleteAllWords()
     }
 
-    suspend fun getUpdatedAt(): String? {
-            return dataBase.getPropDAO().getUpdatedAt()?.value
+    suspend fun getDictionaryVersion(): String? {
+            return dataBase.getPropDAO().getDictionaryVersion()?.value
     }
 
     /**
      * функция добавит новое значение по ключу update_at или обновит старое
      */
-    suspend fun insertNewUpdatedAt(newUpdatedAt: String?) {
-        if(dataBase.getPropDAO().getUpdatedAt()!=null){
-            dataBase.getPropDAO().updateUpdatedAt(newUpdatedAt)
-        }else dataBase.getPropDAO().insertNewUpdatedAt(newUpdatedAt)
+    suspend fun insertNewDictionaryVersion(newDictionaryVersion: String?) {
+        if(dataBase.getPropDAO().getDictionaryVersion()!=null){
+            dataBase.getPropDAO().updateDictionaryVersion(newDictionaryVersion)
+        }else dataBase.getPropDAO().insertNewDictionaryVersion(newDictionaryVersion)
     }
 
     /**

@@ -15,9 +15,9 @@ class RetrofitService {
         }
     }
 
-    suspend fun getUpdateAt(): String? {
+    suspend fun getDictionaryVersion(): String? {
         try{
-            return RetrofitInstance.propApi.getUpdateAt().body()?.value
+            return RetrofitInstance.propApi.getDictionaryVersion().body()?.value
         }catch (e:Exception){
             e.printStackTrace()
             Toast.makeText(MyApplication.context,"ошибка подключения к серверу",Toast.LENGTH_LONG).show()

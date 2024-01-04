@@ -13,6 +13,7 @@ import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import java.text.SimpleDateFormat
 import java.util.Date
+import kotlin.math.log
 
 class Repository {
     private val retrofitService=RetrofitService()
@@ -25,7 +26,7 @@ class Repository {
 
 //TODO непонятная ошибка при обновлении даты на сервере и перезагрузке данных с сервера, скорее всего изза нарушения порядка айдишников
 
-        if(checkUpdateAtOnServer()){
+        if(checkDictionaryVersionOnServer()){
             val list=retrofitService.getAllWords()
             if (list != null) {
                 println("получили список с инета. Его размер = "+list.size)
@@ -34,8 +35,8 @@ class Repository {
                 roomService.insertListWords(list)
                 println("положили список в БД")
 
-                val newUpdateAt=retrofitService.getUpdateAt()
-                roomService.insertNewUpdatedAt(newUpdateAt)
+                val newDictionaryVersion=retrofitService.getDictionaryVersion()
+                roomService.insertNewDictionaryVersion(newDictionaryVersion)
 
             }else{
                 println("список с сервера был null")
@@ -45,38 +46,30 @@ class Repository {
     }
 
     /**
-     * функция получит Word из БД по id
-     */
-    suspend fun getWordByIdFromDB(id:Int):Word{
-        return roomService.getWordById(id)
-    }
-
-    /**
      * если на сервере имеется более свежая версия списков данных, метод вернет true или если в базе нет сведений о дате последней версии вернет true
      */
-    private suspend fun checkUpdateAtOnServer():Boolean{
-        val serverUpAt: String? =retrofitService.getUpdateAt()
-        println(serverUpAt)
-        val roomUpAt:String?=roomService.getUpdatedAt()
-        println(roomUpAt)
+    private suspend fun checkDictionaryVersionOnServer():Boolean{
+        val serverDicVers: String? =retrofitService.getDictionaryVersion()
+        println("Dictionary version from server: $serverDicVers")
+        val roomDicVers:String?=roomService.getDictionaryVersion()
+        println("Dictionary version from room: $roomDicVers")
 
-        if (serverUpAt==null){
-            println("serverUpAt is null")
+        if (serverDicVers==null){
+            println("server Dictionary Version is null")
             return false
-        }else if(roomUpAt==null){
-            println("roomUpAt is null")
+        }else if(roomDicVers==null){
+            println("room Dictionary Version is null")
             return true
         }else {
-            val parsedServUpAt= ZonedDateTime.parse(serverUpAt, DateTimeFormatter.ISO_ZONED_DATE_TIME)
-            val parsedRoomUpAt= ZonedDateTime.parse(roomUpAt, DateTimeFormatter.ISO_ZONED_DATE_TIME)
 
-            if(parsedServUpAt.isAfter(parsedRoomUpAt)){
-                println("parsedServUpAt is after parsedRoomUpAt")
-                return true
-            }else {
-                println("parsedServUpAt is before or is equals parsedRoomUpAt")
+            if(serverDicVers==roomDicVers){
+                println("Версия словаря на сервере изменилась, загружаем новый список")
                 return false
+            }else{
+                println("Старая версия актуальна, оставляем...")
+                return true
             }
+
         }
     }
 

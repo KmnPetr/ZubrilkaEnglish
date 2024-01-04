@@ -1,17 +1,15 @@
 package com.example.zubrilkaenglish.repositories.room
 
 import androidx.room.Dao
-import androidx.room.Insert
 import androidx.room.Query
 import com.example.zubrilkaenglish.models.PropModel
-import okhttp3.Response
 
 @Dao
 interface PropDAO {
-    @Query("SELECT*FROM prop_table WHERE prop_table.`key`='update_at'")
-    suspend fun getUpdatedAt(): PropModel?
-    @Query("UPDATE prop_table SET value=:newUpdateAt WHERE 'key'='update_at'")
-    suspend fun updateUpdatedAt(newUpdateAt: String?)
-    @Query("INSERT INTO prop_table ('key', value) VALUES ('update_at', :newUpdatedAt)")
-    suspend fun insertNewUpdatedAt(newUpdatedAt: String?)
+    @Query("SELECT*FROM prop_table WHERE prop_table.`key`='dictionary_version'")
+    suspend fun getDictionaryVersion(): PropModel?
+    @Query("UPDATE prop_table SET value=:newDictionaryVersion WHERE 'key'='dictionary_version'")
+    suspend fun updateDictionaryVersion(newDictionaryVersion: String?)
+    @Query("INSERT INTO prop_table ('key', value) VALUES ('dictionary_version', :newDictionaryVersion)")
+    suspend fun insertNewDictionaryVersion(newDictionaryVersion: String?)
 }
