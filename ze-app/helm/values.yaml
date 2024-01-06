@@ -1,0 +1,25 @@
+annotations:
+  test: ok
+replicas: 1
+image:
+  repository: kmnpetr/ze-app
+  #it is necessary to insert for deploy process
+  tag: test
+port: 28700
+resources:
+  requests:
+    cpu: 250m
+    memory: 400Mi
+  limits:
+    cpu: 350m
+    memory: 500Mi
+env:
+  CONTEXT_PATH: "/ze-app"
+
+serviceNodePort:
+  port: 80
+  targetPort: 28700
+  nodePort: 30000
+
+ingress:
+  host:

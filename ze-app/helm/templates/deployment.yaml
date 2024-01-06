@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Chart.Name}}-{{.Release.Name}}
+  labels:
+    app: {{.Chart.Name}}-{{.Release.Name}}
+{{- if .Values.annotations}}
+  annotations:
+{{ toYaml .Values.annotations | indent 4 }}
+{{- end }}
+spec:
+  replicas: {{ .Values.replicas | default 1}}
+  selector:
+    matchLabels:
+      app: {{.Chart.Name}}-{{.Release.Name}}
+  template:
+    metadata:
+      labels:
+        app: {{.Chart.Name}}-{{.Release.Name}}
+    spec:
+      containers:
+        - name: {{.Chart.Name}}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag}}"
+          ports:
+            - containerPort: {{ .Values.port}}
+          resources:
+{{toYaml .Values.resources | indent 12}}
+          env:
+            - name: "spring.r2dbc.url"
+              valueFrom:
+                secretKeyRef:
+                  name: "ze-secret"
+                  key: "BD_URL"
+            - name: "spring.r2dbc.password"
+              valueFrom:
+                secretKeyRef:
+                  name: "ze-secret"
+                  key: "BD_PASSWORD"
+            - name: "spring.r2dbc.username"
+              valueFrom:
+                secretKeyRef:
+                  name: "ze-secret"
+                  key: "BD_USER"
+            - name: "jwt_secret"
+              valueFrom:
+                secretKeyRef:
+                  name: "ze-secret"
+                  key: "JWT_SECRET"
+          {{- if .Values.env}}
+          {{- range $key, $val := .Values.env }}
+            - name: {{ $key | quote }}
+              value: {{ $val | quote }}
+          {{- end }}
+          {{- end }}
+          #в случае падения выведет последние 80 строчек логов или 2Ki логов
+          terminationMessagePolicy: FallbackToLogsOnError
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: {{ .Values.env.CONTEXT_PATH }}/healthcheck
+              port: {{ .Values.port}}
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
+          startupProbe:
+            httpGet:
+              port: {{ .Values.port}}
+              path: {{ .Values.env.CONTEXT_PATH }}/healthcheck/startup
+            failureThreshold: 60
+            periodSeconds: 5
+          #в случае падения выведет последние 80 строчек логов или 2Ki логов
+          terminationMessagePolicy: FallbackToLogsOnError
