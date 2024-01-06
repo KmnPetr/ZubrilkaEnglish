@@ -1,0 +1,94 @@
+name: Deploy_App
+on: workflow_dispatch
+
+#on:
+#  push:
+#    branches:
+#      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup git config
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "<>"
+
+
+      - name: Сhanging the application version
+        run: |
+          File="./ze-app/pom.xml"
+          
+          sudo apt-get install -y xmlstarlet
+          
+          Version=$(xmlstarlet sel -N p=http://maven.apache.org/POM/4.0.0 -t -v "/p:project/p:version" $File)
+          echo "Old version: ${Version}"
+          IFS='.' read -r -a arr <<< "$Version"
+          ((arr[2]+=1))
+          NewVersion=$(IFS="."; echo "${arr[*]}")
+          echo "NewVersion: ${NewVersion}"
+          
+          xmlstarlet ed -L -N p=http://maven.apache.org/POM/4.0.0 -u "/p:project/p:version" -v $NewVersion $File
+          
+          git add .
+          git commit -m "[skip ci] Workwlow modification: App-version = $NewVersion"
+          #для работы коммита требуется настроить name и email для гита(смотреть шаг Setup git config)
+          #а также дать разрешение на запись через веб страницу github (репозиторий>>Settings>>Actions>>General>>Workflow permissions)
+          git push origin main
+          
+          echo "TAG_IMAGE=${NewVersion}" >> $GITHUB_ENV
+
+
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: adopt
+          java-version: 17
+
+      - name: Mvn Clean Package
+        run: mvn -f ./ze-app clean package -DskipTests
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Docker Build And Push
+        run: |
+          ImageName="ze-app:${TAG_IMAGE}"
+          docker build -t kmnpetr/$ImageName ./ze-app
+          docker push kmnpetr/$ImageName
+
+
+      - name: Git Pull On Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          script: |
+            git -C /home/ZubrilkaEnglish-private- pull
+
+
+      - name: Helm Upgrade
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          envs: TAG_IMAGE
+          script: |
+            helm uninstall dev || true
+            helm upgrade --install dev \
+            /home/ZubrilkaEnglish-private-/ze-app/helm/ \
+            --set image.tag=$(echo $TAG_IMAGE) \
+            --debug \
+            --atomic \
+            --timeout 300s
