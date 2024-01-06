@@ -41,12 +41,14 @@ public class WordsService {
 
         Integer DBdicVers = Integer.valueOf(Objects.requireNonNull(propService.getDictionaryVersion().block()).getValue());
         if (DBdicVers>wordsCache.getDictionaryVersion()){
+            log.info("Начата замена кэша.");
             List<Word> newList = wordsRepository.findAll().toStream().toList();
             wordsCache.setListAllWords(newList);
 
             wordsCache.setDictionaryVersion(DBdicVers);
 
             log.info("Произведена замена кэша.");
+
         }
     }
 }

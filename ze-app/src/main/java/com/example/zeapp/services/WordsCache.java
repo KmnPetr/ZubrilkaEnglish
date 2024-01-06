@@ -10,7 +10,7 @@ import java.util.List;
 @Component
 @Data
 public class WordsCache {
-    public List<Word> listAllWords = new ArrayList<>();
+    private List<Word> listAllWords = new ArrayList<>();
     private Integer dictionaryVersion = 0;
 
     public WordsCache() {
