@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -60,19 +61,27 @@
                 android:id="@+id/deleteCard"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@android:drawable/ic_menu_delete" />
+                android:background="#00FFFFFF"
+                android:scaleType="centerCrop"
+                android:src="@drawable/urn_button" />
 
             <ImageButton
                 android:id="@+id/resetProgress"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@android:drawable/ic_menu_rotate" />
+                android:background="#00FFFFFF"
+                android:scaleType="centerCrop"
+                android:src="@drawable/reset_button" />
 
             <ImageButton
                 android:id="@+id/markLearned"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="?android:attr/textCheckMarkInverse"/>
+                android:adjustViewBounds="false"
+                android:background="#00FFFFFF"
+                android:cropToPadding="false"
+                android:scaleType="centerCrop"
+                android:src="@drawable/check_mark_button" />
 
             <ImageButton
                 android:id="@+id/addToTrain"
