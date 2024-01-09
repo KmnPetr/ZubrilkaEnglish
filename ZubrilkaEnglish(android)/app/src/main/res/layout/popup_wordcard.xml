@@ -82,7 +82,7 @@
                 android:background="#00FFFFFF"
                 android:cropToPadding="false"
                 android:scaleType="centerCrop"
-                android:src="@drawable/check_mark_button" />
+                android:src="@drawable/check_mark2" />
 
             <ImageButton
                 android:id="@+id/addToTrain"
