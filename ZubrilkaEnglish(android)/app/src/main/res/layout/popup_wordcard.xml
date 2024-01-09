@@ -55,7 +55,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:gravity="right">
+            android:gravity="right"
+            android:paddingTop="15dp">
 
             <ImageButton
                 android:id="@+id/deleteCard"
@@ -87,7 +88,9 @@
                 android:id="@+id/addToTrain"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@android:drawable/ic_input_add" />
+                android:background="#00FFFFFF"
+                android:scaleType="centerCrop"
+                android:src="@drawable/add_button" />
         </LinearLayout>
 
     </LinearLayout>
