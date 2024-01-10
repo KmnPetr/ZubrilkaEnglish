@@ -67,25 +67,31 @@
         app:layout_constraintStart_toStartOf="@+id/transcription"
         app:layout_constraintTop_toBottomOf="@+id/transcription" />
 
-    <Button
+    <ImageButton
         android:id="@+id/yesButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:text="yes"
+        android:background="#00FFFFFF"
+        android:scaleType="centerCrop"
+        android:src="@drawable/check_mark_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <Button
+    <ImageButton
         android:id="@+id/noButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:text="no"
+        android:background="#00FFFFFF"
+        android:scaleType="centerCrop"
+        android:src="@drawable/red_cross_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/yesButton" />
+
+
 
     <Button
         android:id="@+id/lookButton"

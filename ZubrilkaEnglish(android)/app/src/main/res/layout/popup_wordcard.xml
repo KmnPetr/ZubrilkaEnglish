@@ -78,9 +78,7 @@
                 android:id="@+id/markLearned"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:adjustViewBounds="false"
                 android:background="#00FFFFFF"
-                android:cropToPadding="false"
                 android:scaleType="centerCrop"
                 android:src="@drawable/check_mark2" />
 
