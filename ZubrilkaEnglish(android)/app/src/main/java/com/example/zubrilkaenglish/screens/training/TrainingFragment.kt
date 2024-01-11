@@ -74,10 +74,12 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
 
                 }
             }
+            listForTreining.shuffle()
             listForTreining.add(NewsCard("news will be here"))
 
             adapter.setList(listForTreining)
 
+            //задаем первоначальное отображение количества карточек
             countCards.text = "${binding.viewPager2.currentItem + 1} / $countWordCards"
         }
 
