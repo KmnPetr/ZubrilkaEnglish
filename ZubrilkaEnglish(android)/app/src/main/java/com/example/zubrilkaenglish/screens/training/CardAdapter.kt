@@ -2,6 +2,7 @@ package com.example.zubrilkaenglish.screens.training
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.zubrilkaenglish.databinding.FragmentCatalogCardsBinding
 import com.example.zubrilkaenglish.models.ICard
 import com.example.zubrilkaenglish.models.NewsCard
 import com.example.zubrilkaenglish.models.WordCard
@@ -49,6 +50,13 @@ class CardAdapter(val listener: Listener):RecyclerView.Adapter<RecyclerView.View
     fun setList(listForTreining: ArrayList<ICard>) {
         cardList = listForTreining
         notifyDataSetChanged()
+    }
+
+    /**
+     * функция даст сведения о классе обьекта из листа по позиции в листе
+     */
+    public fun isWordCard(position: Int): Boolean{
+        return cardList[position] is WordCard
     }
 
     interface Listener{

@@ -13,6 +13,7 @@ import android.view.Window
 import android.widget.Button
 import android.widget.TextView
 import androidx.viewpager2.widget.ViewPager2
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.FragmentTrainingBinding
 import com.example.zubrilkaenglish.models.ICard
@@ -32,7 +33,9 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
 
     private lateinit var viewModel: TrainingViewModel
     private lateinit var binding: FragmentTrainingBinding
-    private val adapter= CardAdapter(this)
+    private val adapter = CardAdapter(this)
+    private var countWordCards: Int = 0
+    private lateinit var countCards : TextView
 
 
     override fun onCreateView(
@@ -47,6 +50,7 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(TrainingViewModel::class.java)
+        countCards = binding.countCards
 
 
         binding.viewPager2.adapter=adapter
@@ -54,7 +58,7 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
         binding.viewPager2.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
             override fun onPageScrollStateChanged(state: Int) {
                 super.onPageScrollStateChanged(state)
-                viewModel.userScrolls =0
+                viewModel.userScrolls = 0
             }
         })
 
@@ -66,12 +70,18 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
             listWordCard.forEach { it ->
                 if (it.progressWord?.statProgress!=StatProgress.LEARNED.value&&compareDate(it.progressWord?.sleepTime)){
                     listForTreining.add(it)
+                    countWordCards++
+
                 }
             }
             listForTreining.add(NewsCard("news will be here"))
 
             adapter.setList(listForTreining)
+
+            countCards.text = "${binding.viewPager2.currentItem + 1} / $countWordCards"
         }
+
+        showCountCards()
     }
 
 
@@ -98,7 +108,7 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
             //обновляем значение numCorrAnsv в viewModel и в репозитории
             wordCard.progressWord!!.numCorrAnsv = viewModel.plusCorAnsv(wordCard.progressWord!!.wordId)?.progressWord?.numCorrAnsv!!
             adapter.notifyItemChanged(binding.viewPager2.currentItem)
-            flippingСard()
+            flippingCard()
         }
     }
 
@@ -115,7 +125,7 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
 
         adapter.notifyItemChanged(binding.viewPager2.currentItem)
 
-        flippingСard()
+        flippingCard()
     }
 
     /**
@@ -130,7 +140,7 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
      * перелистывание фрагмента на следующий
      * с защитой от перелистывания во время скролла пальцем
      */
-    private fun flippingСard(){
+    private fun flippingCard(){
         viewModel.userScrolls =1
         GlobalScope.launch{
             delay(700L)
@@ -205,11 +215,11 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
 
             dialog.dismiss()
             adapter.notifyItemChanged(binding.viewPager2.currentItem)
-            flippingСard()
+            flippingCard()
         }
         btnCansel.setOnClickListener {
             dialog.dismiss()
-            flippingСard()
+            flippingCard()
         }
         dialog.show()
     }
@@ -228,5 +238,25 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
             return false
         }
         return false
+    }
+
+    /**
+     * метод занимается показом количества карточек находящихся в обудении на данный момент
+     */
+    fun showCountCards() {
+        val viewPager2 = binding.viewPager2
+
+        countCards.text = "${viewPager2.currentItem + 1} / $countWordCards"
+
+        binding.viewPager2.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback(){
+            override fun onPageScrollStateChanged(state: Int) {
+                super.onPageScrollStateChanged(state)
+                if (state == 0&&adapter.isWordCard(viewPager2.currentItem)){
+                    countCards.text = "${viewPager2.currentItem + 1} / $countWordCards"
+                } else if (state == 0&&!adapter.isWordCard(viewPager2.currentItem)){
+                    countCards.text = ""
+                }
+            }
+        })
     }
 }
