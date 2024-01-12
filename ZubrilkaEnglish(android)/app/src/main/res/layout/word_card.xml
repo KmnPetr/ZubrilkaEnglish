@@ -75,7 +75,7 @@
         android:layout_marginBottom="16dp"
         android:background="#00FFFFFF"
         android:scaleType="centerCrop"
-        android:src="@drawable/check_mark_button"
+        android:src="@drawable/check_mark3_small"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -87,7 +87,7 @@
         android:layout_marginBottom="16dp"
         android:background="#00FFFFFF"
         android:scaleType="centerCrop"
-        android:src="@drawable/red_cross_button"
+        android:src="@drawable/red_cross_button_small"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/yesButton" />
 
@@ -101,7 +101,7 @@
         android:layout_marginBottom="16dp"
         android:background="#00FFFFFF"
         android:scaleType="centerCrop"
-        android:src="@drawable/eye"
+        android:src="@drawable/eye_small"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/noButton" />
 
