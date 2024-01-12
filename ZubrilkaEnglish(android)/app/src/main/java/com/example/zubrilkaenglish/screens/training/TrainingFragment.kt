@@ -80,7 +80,7 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
             adapter.setList(listForTreining)
 
             //задаем первоначальное отображение количества карточек
-            countCards.text = "${binding.viewPager2.currentItem + 1} / $countWordCards"
+            countCards.text = "( ${binding.viewPager2.currentItem + 1} / $countWordCards )"
         }
 
         showCountCards()
@@ -248,13 +248,13 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
     fun showCountCards() {
         val viewPager2 = binding.viewPager2
 
-        countCards.text = "${viewPager2.currentItem + 1} / $countWordCards"
+        countCards.text = "( ${binding.viewPager2.currentItem + 1} / $countWordCards )"
 
         binding.viewPager2.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback(){
             override fun onPageScrollStateChanged(state: Int) {
                 super.onPageScrollStateChanged(state)
                 if (state == 0&&adapter.isWordCard(viewPager2.currentItem)){
-                    countCards.text = "${viewPager2.currentItem + 1} / $countWordCards"
+                    countCards.text = "( ${binding.viewPager2.currentItem + 1} / $countWordCards )"
                 } else if (state == 0&&!adapter.isWordCard(viewPager2.currentItem)){
                     countCards.text = ""
                 }

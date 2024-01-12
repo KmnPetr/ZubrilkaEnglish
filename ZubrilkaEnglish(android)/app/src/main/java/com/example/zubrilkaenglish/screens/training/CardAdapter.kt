@@ -2,7 +2,6 @@ package com.example.zubrilkaenglish.screens.training
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.zubrilkaenglish.databinding.FragmentCatalogCardsBinding
 import com.example.zubrilkaenglish.models.ICard
 import com.example.zubrilkaenglish.models.NewsCard
 import com.example.zubrilkaenglish.models.WordCard
