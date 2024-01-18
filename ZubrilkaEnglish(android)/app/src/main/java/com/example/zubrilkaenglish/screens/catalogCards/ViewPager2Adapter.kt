@@ -4,6 +4,10 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.zubrilkaenglish.screens.catalogCards.fragments.searchCardFragment.SearchCardFragment
 
+/**
+ * перелистывается между фрагментами
+ * например межу фрагментов всех слов, изучаемых пользователем слов, и слов из поисковика
+ */
 class ViewPager2Adapter(parentFragment: CatalogCardsFragment,
                         private val viewModel: CatalogCardsViewModel
 ): FragmentStateAdapter(parentFragment) {

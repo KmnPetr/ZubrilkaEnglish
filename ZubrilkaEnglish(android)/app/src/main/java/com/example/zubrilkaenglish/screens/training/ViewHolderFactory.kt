@@ -60,6 +60,9 @@ class ViewHolderFactory {
             binding.lookButton.setOnClickListener {
                 listener.onClickLookButton(wordCard)
             }
+            binding.optionsButton.setOnClickListener{
+                listener.onClickOptionsButton(wordCard)
+            }
         }
     }
     class NewsCardHolder(item: View): RecyclerView.ViewHolder(item){

@@ -11,6 +11,9 @@ import com.example.zubrilkaenglish.databinding.WordViewBinding
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.utils.StatProgress
 
+/**
+ * адаптер занимается показом списка каточек (слов, фраз)
+ */
 class ListCardsAdapter(val fragmentItem: FragmentItem) : RecyclerView.Adapter<ListCardsAdapter.CardHolder>() {
 
     private var listCards= emptyList<WordCard>()
@@ -42,7 +45,12 @@ class ListCardsAdapter(val fragmentItem: FragmentItem) : RecyclerView.Adapter<Li
             binding.foreignWord.text=wordCard.word.foreignWord
             binding.translation.text=wordCard.word.translation
 
-            setUpBackground(wordCard)
+
+
+
+            binding.linearLayout.setCardBackgroundColor(setUpBackground(wordCard))
+
+//            setUpBackground(wordCard)
 
             binding.root.setOnClickListener {
                 fragmentItem.owner.onClickCard(wordCard)
@@ -52,38 +60,59 @@ class ListCardsAdapter(val fragmentItem: FragmentItem) : RecyclerView.Adapter<Li
         /**
          * функция настроит цвет и прозрачность элемента карточки исходя из ее статуса выученности юзером
          */
-        private fun setUpBackground(wordCard: WordCard) {
+        private fun setUpBackground(wordCard: WordCard): Int {
             //добавим прозрачности
-            val transpGray = Color.argb(128, Color.red(Color.GRAY), Color.green(Color.GRAY), Color.blue(
+            val transp : Int = 50
+            val transpGray = Color.argb(transp, Color.red(Color.GRAY), Color.green(Color.GRAY), Color.blue(
                 Color.GRAY))
-            val transpRed = Color.argb(128, Color.red(Color.RED), Color.green(Color.RED), Color.blue(
+            val transpRed = Color.argb(transp, Color.red(Color.RED), Color.green(Color.RED), Color.blue(
                 Color.RED))
-            val transpYellow = Color.argb(128, Color.red(Color.YELLOW), Color.green(Color.YELLOW), Color.blue(
+            val transpYellow = Color.argb(transp, Color.red(Color.YELLOW), Color.green(Color.YELLOW), Color.blue(
                 Color.YELLOW))
-            val transpGreen = Color.argb(128, Color.red(Color.GREEN), Color.green(Color.GREEN), Color.blue(
+            val transpGreen = Color.argb(transp, Color.red(Color.GREEN), Color.green(Color.GREEN), Color.blue(
                 Color.GREEN))
 
+
+
             if (wordCard.progressWord==null){
-                this.itemView.setBackgroundColor(transpGray)
+                return transpGray
             }else if(wordCard.progressWord?.statProgress == StatProgress.NEW.value){
-                val gradient = GradientDrawable(
-                    GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(
-                        transpRed, transpGray, transpGray, transpGray, transpGray, transpGray, transpGray))
-                gradient.shape = GradientDrawable.RECTANGLE
-                this.itemView.background = gradient
+                return transpRed
             }else if(wordCard.progressWord?.statProgress == StatProgress.ALMOST_LEARNED.value||wordCard.progressWord?.statProgress == StatProgress.PARTIALLY_LEARNED.value){
-                val gradient = GradientDrawable(
-                    GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(
-                        transpYellow, transpGray, transpGray, transpGray, transpGray, transpGray, transpGray))
-                gradient.shape = GradientDrawable.RECTANGLE
-                this.itemView.background = gradient
+                return transpYellow
             }else if(wordCard.progressWord?.statProgress == StatProgress.LEARNED.value){
-                val gradient = GradientDrawable(
-                    GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(
-                        transpGreen, transpGray, transpGray, transpGray, transpGray, transpGray, transpGray))
-                gradient.shape = GradientDrawable.RECTANGLE
-                this.itemView.background = gradient
+                return transpGreen
+            }else {
+                return transpGray
             }
+
+            /**
+             * старый код,
+             * делает типа, чтобы карточка была слева красная а справа серая
+             * Не получилось обьект GradientDrawable установить фоном для CardView
+             * оставлю, может потом что придумаю
+             */
+            //if (wordCard.progressWord==null){
+            //    this.itemView.setBackgroundColor(transpGray)
+            //}else if(wordCard.progressWord?.statProgress == StatProgress.NEW.value){
+            //    val gradient = GradientDrawable(
+            //        GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(
+            //            transpRed, transpGray, transpGray, transpGray, transpGray, transpGray, transpGray))
+            //    gradient.shape = GradientDrawable.RECTANGLE
+            //    this.itemView.background = gradient
+            //}else if(wordCard.progressWord?.statProgress == StatProgress.ALMOST_LEARNED.value||wordCard.progressWord?.statProgress == StatProgress.PARTIALLY_LEARNED.value){
+            //    val gradient = GradientDrawable(
+            //        GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(
+            //            transpYellow, transpGray, transpGray, transpGray, transpGray, transpGray, transpGray))
+            //    gradient.shape = GradientDrawable.RECTANGLE
+            //    this.itemView.background = gradient
+            //}else if(wordCard.progressWord?.statProgress == StatProgress.LEARNED.value){
+            //    val gradient = GradientDrawable(
+            //        GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(
+            //            transpGreen, transpGray, transpGray, transpGray, transpGray, transpGray, transpGray))
+            //    gradient.shape = GradientDrawable.RECTANGLE
+            //    this.itemView.background = gradient
+            //}
         }
     }
 }

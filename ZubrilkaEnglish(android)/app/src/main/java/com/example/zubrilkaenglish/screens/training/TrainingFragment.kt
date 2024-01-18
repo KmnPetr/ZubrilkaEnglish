@@ -13,12 +13,12 @@ import android.view.Window
 import android.widget.Button
 import android.widget.TextView
 import androidx.viewpager2.widget.ViewPager2
-import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.FragmentTrainingBinding
 import com.example.zubrilkaenglish.models.ICard
 import com.example.zubrilkaenglish.models.NewsCard
 import com.example.zubrilkaenglish.models.WordCard
+import com.example.zubrilkaenglish.screens.training.popup.PopupOptions
 import com.example.zubrilkaenglish.utils.SIM_FORM_DATE
 import com.example.zubrilkaenglish.utils.StatProgress
 import com.google.android.material.slider.Slider
@@ -29,6 +29,9 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 
+/**
+ * фрагмент отвечает за отображение основного экрана с процессом изучения карточек
+ */
 class TrainingFragment : Fragment(), CardAdapter.Listener {
 
     private lateinit var viewModel: TrainingViewModel
@@ -139,6 +142,14 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
     }
 
     /**
+     * функция вызывается при нажатии на кнопку "три точки"
+     */
+    override fun onClickOptionsButton(wordCard: WordCard) {
+        showOptionsPopup(wordCard)
+    }
+
+
+    /**
      * перелистывание фрагмента на следующий
      * с защитой от перелистывания во время скролла пальцем
      */
@@ -151,6 +162,14 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
                 binding.viewPager2.setCurrentItem((binding.viewPager2.currentItem + 1),true)
             }
         }
+    }
+
+    /**
+     * функция покажет функциональное попап окошко
+     */
+    private fun showOptionsPopup(wordCard: WordCard) {
+        val dialog = PopupOptions(requireActivity())
+        dialog.show()
     }
 
     /**

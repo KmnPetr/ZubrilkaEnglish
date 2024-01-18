@@ -29,6 +29,11 @@ import com.google.android.material.tabs.TabLayout
 import java.text.SimpleDateFormat
 import java.util.Date
 
+/**
+ * основной фрагмент во вкладке каталога карт
+ * содержит в себе другие фрагменты с показом списка папок, списков слов,
+ * поисковика по словам
+ */
 class CatalogCardsFragment : Fragment() {
 
     private lateinit var viewModel: CatalogCardsViewModel
