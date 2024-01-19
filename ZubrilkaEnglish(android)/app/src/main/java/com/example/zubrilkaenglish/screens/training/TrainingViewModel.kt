@@ -3,15 +3,22 @@ package com.example.zubrilkaenglish.screens.training
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.zubrilkaenglish.models.ICard
 import com.example.zubrilkaenglish.models.WordCard
+import com.example.zubrilkaenglish.repositories.CardsRepository
 import com.example.zubrilkaenglish.repositories.Repository
 import kotlinx.coroutines.launch
 
 class TrainingViewModel : ViewModel() {
 
     private val repository = Repository()
+    private val cardsRepository = CardsRepository.instance
 
     private val listWordsCards:MutableLiveData<List<WordCard>> = MutableLiveData()
+
+    private val listForTreining : MutableLiveData<ArrayList<ICard>?> = MutableLiveData()
+
+    var countWordCards: Int = 0
 
     //служебная переменная используемая для защиты от автоперелистывания во время скролла пальцем
     var userScrolls: Int = 0
@@ -71,4 +78,52 @@ class TrainingViewModel : ViewModel() {
         }
 
     }
+
+    /**
+     * функция вызывается на желание юзерa, пометить карточку выученной
+     */
+    fun setCardAsLearned(wordCard: WordCard) {
+        viewModelScope.launch {
+            val wordCard: WordCard? = cardsRepository.setCardAsLearned(wordCard)
+
+            if (wordCard!=null) changeWordCardInList(wordCard)
+        }
+    }
+
+    /**
+     * функция изменит один элемент на новый
+     */
+    private fun changeWordCardInList(wordCard: WordCard) {
+
+        val newList : ArrayList<ICard>? = listForTreining.value
+
+        if (newList != null){
+            newList.forEachIndexed{ index, it ->
+                if (it is WordCard && it.word.id == wordCard.word.id){
+                    newList[index] = wordCard
+                }
+            }
+            listForTreining.value = newList
+        }
+    }
+
+    /**
+     * запросит у репозитория список карточек для изучения
+     */
+    fun getListForTreining(): MutableLiveData<ArrayList<ICard>?> {
+
+        if (listForTreining.value==null){
+            viewModelScope.launch {
+                val newList: ArrayList<ICard> = cardsRepository.getListForTreining()
+
+                newList.forEach {
+                    //надо както посчитать количество именно слов среди других неучебных карточек
+                    if (it is WordCard) countWordCards++
+                }
+                listForTreining.value = newList
+            }
+        }
+        return listForTreining
+    }
+
 }

@@ -47,6 +47,8 @@ class ViewHolderFactory {
                     binding.lookButton.isEnabled=false
                     binding.lookButton.setColorFilter(ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) }))
                 }
+
+                println("ОТРАБОТАЛ МЕТОД BIND КАРТОЧКИ: "+ wordCard.word.foreignWord)
             }
 
             binding.yesButton.setOnClickListener {

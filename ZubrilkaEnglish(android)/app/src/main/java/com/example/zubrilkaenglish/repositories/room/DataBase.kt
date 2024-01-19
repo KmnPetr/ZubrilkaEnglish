@@ -34,9 +34,9 @@ abstract class DataBase:RoomDatabase(){
                     DataBase::class.java,
                     "DataBase"
                 ).build()
-                return database as DataBase
+                database as DataBase
             }else{
-                return database as DataBase
+                database as DataBase
             }
         }
     }

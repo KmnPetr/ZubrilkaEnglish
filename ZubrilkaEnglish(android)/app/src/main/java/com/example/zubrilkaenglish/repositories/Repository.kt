@@ -1,6 +1,8 @@
 package com.example.zubrilkaenglish.repositories
 
 import android.widget.Toast
+import com.example.zubrilkaenglish.models.ICard
+import com.example.zubrilkaenglish.models.NewsCard
 import com.example.zubrilkaenglish.models.ProgressWord
 import com.example.zubrilkaenglish.models.Word
 import com.example.zubrilkaenglish.models.WordCard
