@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import android.view.Window
 import android.widget.Toast
 import com.example.zubrilkaenglish.databinding.PopupOptionsTrainCardBinding
+import com.example.zubrilkaenglish.events.CardEventBus
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.screens.training.TrainingViewModel
 import com.example.zubrilkaenglish.utils.MyApplication
@@ -22,6 +23,7 @@ class PopupOptions(
     wordCard: WordCard
 ) : Dialog(context) {
     private var binding = PopupOptionsTrainCardBinding.inflate(layoutInflater)
+    private val cardEventBus = CardEventBus.instance
 
     init {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -37,7 +39,7 @@ class PopupOptions(
      */
     private fun setListeners(wordCard: WordCard, viewModel: TrainingViewModel) {
         binding.markLearned.setOnClickListener {
-            viewModel.setCardAsLearned(wordCard)
+            cardEventBus.publishEventCard("set_card_as_learned",wordCard)
             Toast.makeText(MyApplication.context,"click markLearned",Toast.LENGTH_SHORT).show()
             dismiss()
         }

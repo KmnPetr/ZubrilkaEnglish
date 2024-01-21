@@ -3,6 +3,7 @@ package com.example.zubrilkaenglish.screens.training
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.zubrilkaenglish.events.CardEventBus
 import com.example.zubrilkaenglish.models.ICard
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.repositories.CardsRepository
@@ -13,6 +14,7 @@ class TrainingViewModel : ViewModel() {
 
     private val repository = Repository()
     private val cardsRepository = CardsRepository.instance
+    private val cardEventBus = CardEventBus.instance
 
     private val listWordsCards:MutableLiveData<List<WordCard>> = MutableLiveData()
 
@@ -23,47 +25,15 @@ class TrainingViewModel : ViewModel() {
     //служебная переменная используемая для защиты от автоперелистывания во время скролла пальцем
     var userScrolls: Int = 0
 
-    fun getWordsCards(): MutableLiveData<List<WordCard>> {
-        if (listWordsCards.value==null){
-            viewModelScope.launch {
-                listWordsCards.value = repository.getListWordsCards()
-            }
-        }
-        return listWordsCards
+    init {
+        subscribeAnCardsEvents()
     }
 
     /**
-     * функция увеличит количество правильных ответов на 1
+     * подпишется на различные события по карточкам
      */
-    fun plusCorAnsv(wordId: Int): WordCard? {
-        listWordsCards.value?.forEach {
-            if (it.progressWord?.wordId==wordId){
-                var numCorAnsv = it.progressWord?.numCorrAnsv
-                numCorAnsv = numCorAnsv!! + 1
-                it.progressWord?.numCorrAnsv = numCorAnsv
-                viewModelScope.launch {
-                    repository.updateProgressWord(it.progressWord!!)
-                }
-                return it
-            }
-        }
-        return null
-    }
-
-    /**
-     * функция сбросит значение numCorrAnsv
-     */
-    fun resetCorAnsv(wordId: Int): WordCard? {
-        listWordsCards.value?.forEach {
-            if (it.progressWord?.wordId==wordId){
-                it.progressWord?.numCorrAnsv = 0
-                viewModelScope.launch {
-                    repository.updateProgressWord(it.progressWord!!)
-                }
-                return it
-            }
-        }
-        return null
+    private fun subscribeAnCardsEvents() {
+        //TODO тут пока ничего не надо, карточки и так обновляются ссылочно
     }
 
     fun updateWordCard(wordCard: WordCard) {
@@ -77,34 +47,6 @@ class TrainingViewModel : ViewModel() {
             }
         }
 
-    }
-
-    /**
-     * функция вызывается на желание юзерa, пометить карточку выученной
-     */
-    fun setCardAsLearned(wordCard: WordCard) {
-        viewModelScope.launch {
-            val wordCard: WordCard? = cardsRepository.setCardAsLearned(wordCard)
-
-            if (wordCard!=null) changeWordCardInList(wordCard)
-        }
-    }
-
-    /**
-     * функция изменит один элемент на новый
-     */
-    private fun changeWordCardInList(wordCard: WordCard) {
-
-        val newList : ArrayList<ICard>? = listForTreining.value
-
-        if (newList != null){
-            newList.forEachIndexed{ index, it ->
-                if (it is WordCard && it.word.id == wordCard.word.id){
-                    newList[index] = wordCard
-                }
-            }
-            listForTreining.value = newList
-        }
     }
 
     /**
@@ -125,5 +67,4 @@ class TrainingViewModel : ViewModel() {
         }
         return listForTreining
     }
-
 }

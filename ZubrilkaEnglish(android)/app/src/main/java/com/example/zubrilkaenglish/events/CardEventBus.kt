@@ -11,8 +11,11 @@ class CardEventBus private constructor(){
 
 
     private val cardEvent: Map<String,MutableLiveData<WordCard>> = mapOf(
+        "intention_increase_progress_card" to MutableLiveData(),
+        "intention_reset_numCorrAnsv" to MutableLiveData(),
+        "wordCard_has_changed" to MutableLiveData(),
         "suggest_put_card_sleep" to MutableLiveData(),
-        "intention_increase_progress_card" to MutableLiveData()
+        "set_card_as_learned" to MutableLiveData()
     )
 
     /**

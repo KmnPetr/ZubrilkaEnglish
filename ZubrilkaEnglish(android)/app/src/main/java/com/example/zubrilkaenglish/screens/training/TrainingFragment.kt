@@ -88,6 +88,10 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
         cardEventBus.subscribeAnEvent("suggest_put_card_sleep")?.observe(viewLifecycleOwner){wordCard->
             //TODO потом решу
         }
+        cardEventBus.subscribeAnEvent("wordCard_has_changed")?.observe(viewLifecycleOwner){wordCard->
+            adapter.notifyItemChanged(binding.viewPager2.currentItem)
+            flippingCard()
+        }
     }
 
 
@@ -97,9 +101,12 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
      */
     override fun onClickYesButton(wordCard: WordCard) {
 
+        wordCard.cardHasChanged=true
         cardEventBus.publishEventCard("intention_increase_progress_card",wordCard)
+
 //        wordCard.cardHasChanged=true
-//
+
+
 //        if (wordCard.progressWord?.numCorrAnsv!! >=3){
 //            //обновляем значение numCorrAnsv в viewModel и в репозитории
 //            wordCard.progressWord!!.numCorrAnsv = viewModel.plusCorAnsv(wordCard.progressWord!!.wordId)?.progressWord?.numCorrAnsv!!
@@ -111,7 +118,6 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
 //            wordCard.progressWord!!.numCorrAnsv = viewModel.plusCorAnsv(wordCard.progressWord!!.wordId)?.progressWord?.numCorrAnsv!!
 //            adapter.notifyItemChanged(binding.viewPager2.currentItem)
 //            flippingCard()
-//        }
     }
 
     /**
@@ -120,13 +126,7 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
      */
     override fun onClickNoButton(wordCard: WordCard) {
         wordCard.cardHasChanged=true
-
-        val updatedWordCard = viewModel.resetCorAnsv(wordCard.progressWord!!.wordId)
-        wordCard.progressWord!!.numCorrAnsv = updatedWordCard?.progressWord?.numCorrAnsv!!
-
-        adapter.notifyItemChanged(binding.viewPager2.currentItem)
-
-        flippingCard()
+        cardEventBus.publishEventCard("intention_reset_numCorrAnsv",wordCard)
     }
 
     /**
