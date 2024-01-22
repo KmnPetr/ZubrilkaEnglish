@@ -32,7 +32,7 @@ class ViewPager2Adapter(parentFragment: CatalogCardsFragment,
     }
 
     fun setList(list:MutableList<Fragment>){
-        fragmentList=  list
+        fragmentList =  list
         notifyDataSetChanged()
     }
     fun getFragment(position: Int):  Fragment{

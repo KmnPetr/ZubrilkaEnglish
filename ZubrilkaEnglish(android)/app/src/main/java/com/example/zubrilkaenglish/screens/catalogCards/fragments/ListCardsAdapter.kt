@@ -1,7 +1,6 @@
 package com.example.zubrilkaenglish.screens.catalogCards.fragments
 
 import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,7 @@ import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.utils.StatProgress
 
 /**
- * адаптер занимается показом списка каточек (слов, фраз)
+ * адаптер занимается показом списка карточек (слов, фраз)
  */
 class ListCardsAdapter(val fragmentItem: FragmentItem) : RecyclerView.Adapter<ListCardsAdapter.CardHolder>() {
 
@@ -29,7 +28,7 @@ class ListCardsAdapter(val fragmentItem: FragmentItem) : RecyclerView.Adapter<Li
     }
 
     override fun onBindViewHolder(holder: CardHolder, position: Int) {
-        holder.bind(listCards[position], fragmentItem)
+        holder.bind(listCards[position], fragmentItem,position)
     }
 
     fun setList(list:List<WordCard>){
@@ -40,20 +39,15 @@ class ListCardsAdapter(val fragmentItem: FragmentItem) : RecyclerView.Adapter<Li
         private val binding= WordViewBinding.bind(view)
         private var idWord: Int? = null
 
-        fun bind(wordCard: WordCard, fragmentItem: FragmentItem) {
+        fun bind(wordCard: WordCard, fragmentItem: FragmentItem,position: Int) {
             idWord = wordCard.word.id
             binding.foreignWord.text=wordCard.word.foreignWord
             binding.translation.text=wordCard.word.translation
 
-
-
-
             binding.linearLayout.setCardBackgroundColor(setUpBackground(wordCard))
 
-//            setUpBackground(wordCard)
-
             binding.root.setOnClickListener {
-                fragmentItem.owner.onClickCard(wordCard)
+                fragmentItem.owner.onClickCard(wordCard,position)
             }
         }
 

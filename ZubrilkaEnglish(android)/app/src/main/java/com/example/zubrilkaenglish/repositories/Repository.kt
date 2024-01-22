@@ -1,8 +1,6 @@
 package com.example.zubrilkaenglish.repositories
 
 import android.widget.Toast
-import com.example.zubrilkaenglish.models.ICard
-import com.example.zubrilkaenglish.models.NewsCard
 import com.example.zubrilkaenglish.models.ProgressWord
 import com.example.zubrilkaenglish.models.Word
 import com.example.zubrilkaenglish.models.WordCard
@@ -11,11 +9,8 @@ import com.example.zubrilkaenglish.repositories.room.RoomService
 import com.example.zubrilkaenglish.utils.MyApplication
 import com.example.zubrilkaenglish.utils.SIM_FORM_DATE
 import com.example.zubrilkaenglish.utils.StatProgress
-import org.threeten.bp.ZonedDateTime
-import org.threeten.bp.format.DateTimeFormatter
 import java.text.SimpleDateFormat
 import java.util.Date
-import kotlin.math.log
 
 class Repository {
     private val retrofitService=RetrofitService()

@@ -7,10 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.zubrilkaenglish.databinding.FragmentSearchCardBinding
+import com.example.zubrilkaenglish.eventBus.events.CardEvent
 import com.example.zubrilkaenglish.screens.catalogCards.CatalogCardsFragment
 import com.example.zubrilkaenglish.screens.catalogCards.CatalogCardsViewModel
 import com.example.zubrilkaenglish.screens.catalogCards.fragments.FragmentItem
 import com.example.zubrilkaenglish.screens.catalogCards.fragments.ListCardsAdapter
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 
 class SearchCardFragment(
     viewModel: CatalogCardsViewModel,
@@ -38,6 +41,28 @@ class SearchCardFragment(
 
         viewModel_CC.listSearchWords.observe(viewLifecycleOwner){
             adapter.setList(it)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        EventBus.getDefault().unregister(this)
+    }
+    /**
+     * метод используется библиотечкой green robot
+     * при публикации кем-то события "card_changed"
+     */
+    @Subscribe
+    fun event_CardChanged(event: CardEvent){
+        when(event.typeEvent){
+            "card_changed" -> {
+                    adapter.notifyItemChanged(event.properties!!.get("positionAdapter") as Int)
+            }
         }
     }
 

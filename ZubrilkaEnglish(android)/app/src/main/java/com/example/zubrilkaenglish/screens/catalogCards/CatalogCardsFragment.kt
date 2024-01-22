@@ -1,8 +1,5 @@
 package com.example.zubrilkaenglish.screens.catalogCards
 
-import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.text.Editable
@@ -11,21 +8,23 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.zubrilkaenglish.databinding.FragmentCatalogCardsBinding
-import com.example.zubrilkaenglish.databinding.PopupWordcardBinding
+import com.example.zubrilkaenglish.eventBus.events.CardEvent
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.screens.catalogCards.fragments.CatalogItemFragment
 import com.example.zubrilkaenglish.screens.catalogCards.fragments.FragmentItem
+import com.example.zubrilkaenglish.screens.catalogCards.fragments.PopupWordCard
 import com.example.zubrilkaenglish.screens.catalogCards.fragments.searchCardFragment.SearchCardFragment
+import com.example.zubrilkaenglish.screens.training.popup.PopupDialog
 import com.example.zubrilkaenglish.utils.SIM_FORM_DATE
 import com.example.zubrilkaenglish.utils.SearchObject
-import com.example.zubrilkaenglish.utils.StatProgress
 import com.example.zubrilkaenglish.utils.customizeBackground
 import com.google.android.material.tabs.TabLayout
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -74,56 +73,8 @@ class CatalogCardsFragment : Fragment() {
     /**
      * показывает popup окошко при нажатии на элемент карточки
      */
-    fun onClickCard(wordCard: WordCard){
-        val inflater = LayoutInflater.from(requireActivity())
-        val binding: PopupWordcardBinding = PopupWordcardBinding.inflate(inflater,null,false)
-
-        val dialog = Dialog(requireActivity())
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setCancelable(true)
-        dialog.setContentView(binding.root)
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-        val displayMetrics = resources.displayMetrics
-        val screenWidth = displayMetrics.widthPixels
-        binding.root.layoutParams.width = (screenWidth*0.66).toInt()
-
-        binding.foreignWord.text = wordCard.word.foreignWord
-        binding.transcription.text = wordCard.word.transcription
-        binding.translation.text = wordCard.word.translation
-        binding.description.text = wordCard.word.description
-
-        val addToTrain = binding.addToTrain
-        val markLearned = binding.markLearned
-        val resetProgress = binding.resetProgress
-        val deleteCard = binding.deleteCard
-
-        if(wordCard.progressWord!=null) {
-            addToTrain.isEnabled = false
-            addToTrain.visibility = View.GONE
-            if(wordCard.progressWord?.statProgress == StatProgress.LEARNED.value){
-                markLearned.isEnabled = false
-            }else markLearned.isEnabled = true
-            if(wordCard.progressWord?.statProgress==StatProgress.NEW.value&&
-                wordCard.progressWord?.numCorrAnsv==0&&
-                compareDate(wordCard.progressWord?.sleepTime)){
-                resetProgress.isEnabled = false
-            }else resetProgress.isEnabled = true
-        }else{
-            resetProgress.isEnabled = false
-            resetProgress.visibility = View.GONE
-            markLearned.isEnabled = false
-            markLearned.visibility = View.GONE
-            deleteCard.isEnabled = false
-            deleteCard.visibility = View.GONE
-        }
-
-        if (addToTrain.isEnabled){ addToTrain.setOnClickListener { viewModel.addWordToTraining(wordCard) } }
-        if (markLearned.isEnabled){ markLearned.setOnClickListener { viewModel.markCardLearned(wordCard) } }
-        if (resetProgress.isEnabled){ resetProgress.setOnClickListener { viewModel.resetProgressCard(wordCard) } }
-        if (deleteCard.isEnabled){ deleteCard.setOnClickListener { viewModel.deleteCard(wordCard) } }
-
-        dialog.show()
+    fun onClickCard(wordCard: WordCard,position: Int){
+        PopupWordCard(requireContext(),viewModel,wordCard,position).show()
     }
 
     /**
@@ -243,19 +194,4 @@ class CatalogCardsFragment : Fragment() {
         })
     }
 
-    /**
-     * функция вернет false, если входящая в параметры дата еще не наступила
-     */
-    private fun compareDate(sleepTime: String?): Boolean{
-        try {
-            if (sleepTime==null){
-                return true
-            }else if(SimpleDateFormat(SIM_FORM_DATE).parse(sleepTime).before(Date())){
-                return true
-            }
-        } catch (e: Exception) {
-            return false
-        }
-        return false
-    }
 }

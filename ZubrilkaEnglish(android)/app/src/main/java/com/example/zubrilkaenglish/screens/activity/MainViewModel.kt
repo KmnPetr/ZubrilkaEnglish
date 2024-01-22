@@ -8,11 +8,14 @@ import androidx.lifecycle.viewModelScope
 import com.example.zubrilkaenglish.repositories.Repository
 import com.example.zubrilkaenglish.models.Word
 import com.example.zubrilkaenglish.models.WordCard
+import com.example.zubrilkaenglish.repositories.CardsRepository
 import kotlinx.coroutines.launch
 
 class MainViewModel: ViewModel() {
 
     private val repository = Repository()
+    //инициализируем синглетон в первый раз
+    private val cardsRepository = CardsRepository.instance
 
     val listAllWords: MutableLiveData<List<WordCard>> = MutableLiveData()
     val mapWordsByTopic: MutableLiveData<Map<String, ArrayList<WordCard>>> = MutableLiveData()

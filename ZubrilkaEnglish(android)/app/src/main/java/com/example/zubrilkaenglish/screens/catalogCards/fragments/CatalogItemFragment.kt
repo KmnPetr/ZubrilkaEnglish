@@ -8,10 +8,16 @@ import android.view.ViewGroup
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.zubrilkaenglish.databinding.FragmentCatalogItemBinding
+import com.example.zubrilkaenglish.eventBus.events.CardEvent
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.screens.catalogCards.CatalogCardsFragment
 import com.example.zubrilkaenglish.screens.catalogCards.CatalogCardsViewModel
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 
+/**
+ * фрагмент содержит список слов или список папок
+ */
 class CatalogItemFragment(
     val viewModel_CC: CatalogCardsViewModel,
     val positionInPager: Int,
@@ -35,6 +41,8 @@ class CatalogItemFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+
         folderAdapter = FoldersCardsAdapter(this)
         cardAdapter = ListCardsAdapter(this)
 
@@ -49,6 +57,30 @@ class CatalogItemFragment(
         binding.rollBack.visibility = View.GONE
         binding.rollBack.isEnabled = false
         binding.rollBack.setOnClickListener { rollBackRecycler() }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        EventBus.getDefault().unregister(this)
+    }
+    /**
+     * метод используется библиотечкой green robot
+     * при публикации кем-то события "card_changed"
+     */
+    @Subscribe
+    fun event_CardChanged(event: CardEvent){
+        when(event.typeEvent){
+            "card_changed" -> {
+                if (recyclerView.adapter is ListCardsAdapter){
+                    cardAdapter.notifyItemChanged(event.properties!!.get("positionAdapter") as Int)
+                }
+            }
+        }
     }
 
     /**
