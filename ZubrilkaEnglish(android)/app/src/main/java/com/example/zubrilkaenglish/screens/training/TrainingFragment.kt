@@ -1,32 +1,26 @@
 package com.example.zubrilkaenglish.screens.training
 
-import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import android.widget.Button
 import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
-import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.FragmentTrainingBinding
-import com.example.zubrilkaenglish.events.CardEventBus
+import com.example.zubrilkaenglish.eventBus.events.Event_CardChanged
+import com.example.zubrilkaenglish.eventBus.events.Event_IncreaseProgressCard
+import com.example.zubrilkaenglish.eventBus.events.Event_Reset_numCorrAnsv
+import com.example.zubrilkaenglish.eventBus.events.Event_SleepCard
 import com.example.zubrilkaenglish.models.WordCard
+import com.example.zubrilkaenglish.screens.training.popup.PopupDialog
 import com.example.zubrilkaenglish.screens.training.popup.PopupOptions
-import com.example.zubrilkaenglish.utils.SIM_FORM_DATE
-import com.example.zubrilkaenglish.utils.StatProgress
-import com.google.android.material.slider.Slider
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 
 /**
  * фрагмент отвечает за отображение основного экрана с процессом изучения карточек
@@ -37,7 +31,6 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
     private lateinit var binding: FragmentTrainingBinding
     private val adapter = CardAdapter(this)
     private lateinit var countCards : TextView
-    private var cardEventBus = CardEventBus.instance
 
 
     override fun onCreateView(
@@ -72,28 +65,38 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
                 adapter.setList(list)
             }
             countCards.text = "( ${binding.viewPager2.currentItem + 1} / ${viewModel.countWordCards} )"
-
-            println("ЗАМЕНА ЛИСТА АДАПТЕРА")
         }
 
         showCountCards()
-        subscribeOnEventBus()
+
+        EventBus.getDefault().register(this)
     }
 
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
+    }
 
     /**
-     * подпишется на различные события CardEventBus
+     * метод используется библиотечкой green robot
+     * при публикации кем-то события Event_CardChanged
      */
-    private fun subscribeOnEventBus(){
-        cardEventBus.subscribeAnEvent("suggest_put_card_sleep")?.observe(viewLifecycleOwner){wordCard->
-            //TODO потом решу
-        }
-        cardEventBus.subscribeAnEvent("wordCard_has_changed")?.observe(viewLifecycleOwner){wordCard->
-            adapter.notifyItemChanged(binding.viewPager2.currentItem)
-            flippingCard()
-        }
+    @Subscribe
+    fun event_CardChanged(event: Event_CardChanged){
+        adapter.notifyItemChanged(binding.viewPager2.currentItem)
+        flippingCard()
     }
-
+    /**
+     * метод используется библиотечкой green robot
+     * при публикации кем-то события Event_SleepCard
+     */
+    @Subscribe
+    fun sleepEvent(event: Event_SleepCard){
+        //отменим перелистывание
+        viewModel.userScrolls = 0
+        //покажем окошко
+        PopupDialog(requireContext(),event.wordCard,viewModel).show()
+    }
 
     /**
      * слушатель при нажатии на кнопку "Yes"
@@ -102,22 +105,7 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
     override fun onClickYesButton(wordCard: WordCard) {
 
         wordCard.cardHasChanged=true
-        cardEventBus.publishEventCard("intention_increase_progress_card",wordCard)
-
-//        wordCard.cardHasChanged=true
-
-
-//        if (wordCard.progressWord?.numCorrAnsv!! >=3){
-//            //обновляем значение numCorrAnsv в viewModel и в репозитории
-//            wordCard.progressWord!!.numCorrAnsv = viewModel.plusCorAnsv(wordCard.progressWord!!.wordId)?.progressWord?.numCorrAnsv!!
-//            adapter.notifyItemChanged(binding.viewPager2.currentItem)
-//            //показываем окошко диалога
-//            showPopUpDialog(wordCard)
-//        }else{
-//            //обновляем значение numCorrAnsv в viewModel и в репозитории
-//            wordCard.progressWord!!.numCorrAnsv = viewModel.plusCorAnsv(wordCard.progressWord!!.wordId)?.progressWord?.numCorrAnsv!!
-//            adapter.notifyItemChanged(binding.viewPager2.currentItem)
-//            flippingCard()
+        EventBus.getDefault().post(Event_IncreaseProgressCard(wordCard))
     }
 
     /**
@@ -126,7 +114,7 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
      */
     override fun onClickNoButton(wordCard: WordCard) {
         wordCard.cardHasChanged=true
-        cardEventBus.publishEventCard("intention_reset_numCorrAnsv",wordCard)
+        EventBus.getDefault().post(Event_Reset_numCorrAnsv(wordCard))
     }
 
     /**
@@ -141,8 +129,7 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
      * функция вызывается при нажатии на кнопку "три точки"
      */
     override fun onClickOptionsButton(wordCard: WordCard) {
-        val dialog = PopupOptions(requireActivity(),viewModel,wordCard)
-        dialog.show()
+        PopupOptions(requireActivity(),wordCard).show()
     }
 
 
@@ -159,95 +146,6 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
                 binding.viewPager2.setCurrentItem((binding.viewPager2.currentItem + 1),true)
             }
         }
-    }
-
-    /**
-     * функция создаст popUp окошко
-     */
-    private fun showPopUpDialog(wordCard: WordCard) {
-        val dialog = Dialog(requireActivity())
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setCancelable(false)
-        dialog.setContentView(R.layout.popup_dialog)
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-        val textDialog: TextView = dialog.findViewById(R.id.textDialog)
-        val btnYes: Button = dialog.findViewById(R.id.btnYes)
-        val btnCansel: Button = dialog.findViewById(R.id.btnCansel)
-        val slider: Slider = dialog.findViewById(R.id.slider)
-
-        textDialog.text = "Кажется вы уже запомнили эту карточку. Рекомендуем вам повторить ее спустя некоторое время. Карточка уснет на "+slider.value.toInt().toString()+ " дня(дней)."
-        slider.addOnChangeListener { slider, value, fromUser ->
-            textDialog.text = "Кажется вы уже запомнили эту карточку. Рекомендуем вам повторить ее спустя некоторое время. Карточка уснет на "+value.toInt().toString()+ " дня(дней)."
-        }
-        //Настройка слайдера
-        when(wordCard.progressWord?.statProgress){
-            StatProgress.NEW.value ->{
-                slider.valueTo = 10F
-                slider.value = 5F
-            }
-            StatProgress.PARTIALLY_LEARNED.value ->{
-                slider.valueTo = 18F
-                slider.value = 9F
-            }
-            StatProgress.ALMOST_LEARNED.value ->{
-                slider.value = 0F
-                slider.visibility = View.GONE
-                textDialog.text = "Кажется вы уже запомнили эту карточку. Нажав \"OK\", вы перенесете эту карточку в группу \"изученные\"."
-            }
-        }
-
-        btnYes.setOnClickListener {
-            when(wordCard.progressWord?.statProgress){
-                StatProgress.NEW.value ->{
-                    wordCard.progressWord?.statProgress = StatProgress.PARTIALLY_LEARNED.value
-                }
-                StatProgress.PARTIALLY_LEARNED.value ->{
-                    wordCard.progressWord?.statProgress = StatProgress.ALMOST_LEARNED.value
-                }
-                StatProgress.ALMOST_LEARNED.value ->{
-                    wordCard.progressWord?.statProgress = StatProgress.LEARNED.value
-                }
-            }
-
-            wordCard.progressWord?.numCorrAnsv = 0
-
-                //вычисляем дату времени, до которой должна заснуть карточка
-                val calendar = Calendar.getInstance()
-                calendar.time = Date()
-                calendar.add(Calendar.DAY_OF_MONTH, slider.value.toInt())
-                val newDateString = SimpleDateFormat(SIM_FORM_DATE).format(calendar.time)
-                println("Новая дата: $newDateString")
-            wordCard.progressWord?.sleepTime = newDateString
-
-            //отправляем все обновления в репозиторий
-            viewModel.updateWordCard(wordCard)
-
-            dialog.dismiss()
-            adapter.notifyItemChanged(binding.viewPager2.currentItem)
-            flippingCard()
-        }
-        btnCansel.setOnClickListener {
-            dialog.dismiss()
-            flippingCard()
-        }
-        dialog.show()
-    }
-
-    /**
-     * функция вернет false, если входящая в параметры дата еще не наступила
-     */
-    private fun compareDate(sleepTime: String?): Boolean{
-        try {
-            if (sleepTime==null){
-                return true
-            }else if(SimpleDateFormat(SIM_FORM_DATE).parse(sleepTime).before(Date())){
-                return true
-            }
-        } catch (e: Exception) {
-            return false
-        }
-        return false
     }
 
     /**

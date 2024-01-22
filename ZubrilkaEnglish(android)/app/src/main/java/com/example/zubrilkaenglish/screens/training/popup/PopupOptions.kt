@@ -7,10 +7,10 @@ import android.graphics.drawable.ColorDrawable
 import android.view.Window
 import android.widget.Toast
 import com.example.zubrilkaenglish.databinding.PopupOptionsTrainCardBinding
-import com.example.zubrilkaenglish.events.CardEventBus
+import com.example.zubrilkaenglish.eventBus.events.Event_SetCardAsLearned
 import com.example.zubrilkaenglish.models.WordCard
-import com.example.zubrilkaenglish.screens.training.TrainingViewModel
 import com.example.zubrilkaenglish.utils.MyApplication
+import org.greenrobot.eventbus.EventBus
 
 /**
  * в обязанности класса входит
@@ -19,11 +19,9 @@ import com.example.zubrilkaenglish.utils.MyApplication
  */
 class PopupOptions(
     context: Context,
-    viewModel: TrainingViewModel,
     wordCard: WordCard
 ) : Dialog(context) {
     private var binding = PopupOptionsTrainCardBinding.inflate(layoutInflater)
-    private val cardEventBus = CardEventBus.instance
 
     init {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -31,15 +29,15 @@ class PopupOptions(
         setContentView(binding.root)
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        setListeners(wordCard,viewModel)
+        setListeners(wordCard)
     }
 
     /**
      * функция установит слушатели на все кнопки диалогового окна
      */
-    private fun setListeners(wordCard: WordCard, viewModel: TrainingViewModel) {
+    private fun setListeners(wordCard: WordCard) {
         binding.markLearned.setOnClickListener {
-            cardEventBus.publishEventCard("set_card_as_learned",wordCard)
+            EventBus.getDefault().post(Event_SetCardAsLearned(wordCard))
             Toast.makeText(MyApplication.context,"click markLearned",Toast.LENGTH_SHORT).show()
             dismiss()
         }

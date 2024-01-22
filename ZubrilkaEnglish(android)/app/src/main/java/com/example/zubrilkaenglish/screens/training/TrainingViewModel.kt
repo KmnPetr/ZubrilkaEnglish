@@ -3,7 +3,6 @@ package com.example.zubrilkaenglish.screens.training
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.zubrilkaenglish.events.CardEventBus
 import com.example.zubrilkaenglish.models.ICard
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.repositories.CardsRepository
@@ -14,7 +13,6 @@ class TrainingViewModel : ViewModel() {
 
     private val repository = Repository()
     private val cardsRepository = CardsRepository.instance
-    private val cardEventBus = CardEventBus.instance
 
     private val listWordsCards:MutableLiveData<List<WordCard>> = MutableLiveData()
 
@@ -22,19 +20,11 @@ class TrainingViewModel : ViewModel() {
 
     var countWordCards: Int = 0
 
-    //служебная переменная используемая для защиты от автоперелистывания во время скролла пальцем
+    //служебная переменная используемая для защиты от автоперелистывания во время скролла пальцем,
+    // при значении 0 планируемое перелистывание будет отменено
     var userScrolls: Int = 0
 
-    init {
-        subscribeAnCardsEvents()
-    }
 
-    /**
-     * подпишется на различные события по карточкам
-     */
-    private fun subscribeAnCardsEvents() {
-        //TODO тут пока ничего не надо, карточки и так обновляются ссылочно
-    }
 
     fun updateWordCard(wordCard: WordCard) {
         viewModelScope.launch {

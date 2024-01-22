@@ -77,4 +77,6 @@ dependencies {
     // https://mvnrepository.com/artifact/org.apache.lucene/lucene-snowball
     implementation 'org.apache.lucene:lucene-snowball:3.0.3'
 
+    //для использования Event Bus от компании Green Robot
+    implementation 'org.greenrobot:eventbus:3.2.0'
 }

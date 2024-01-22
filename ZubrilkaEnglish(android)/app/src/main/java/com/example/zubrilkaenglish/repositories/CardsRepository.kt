@@ -1,6 +1,12 @@
 package com.example.zubrilkaenglish.repositories
 
-import com.example.zubrilkaenglish.events.CardEventBus
+import com.example.zubrilkaenglish.eventBus.events.Event_CardChanged
+import com.example.zubrilkaenglish.eventBus.events.Event_IncreaseProgressCard
+import com.example.zubrilkaenglish.eventBus.events.Event_IntentSleepCard
+import com.example.zubrilkaenglish.eventBus.events.Event_Reset_numCorrAnsv
+import com.example.zubrilkaenglish.eventBus.events.Event_SetCardAsLearned
+import com.example.zubrilkaenglish.eventBus.events.Event_SleepCard
+import com.example.zubrilkaenglish.eventBus.events.iCardEvent
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.repositories.room.RoomService
 import com.example.zubrilkaenglish.utils.SIM_FORM_DATE
@@ -10,7 +16,10 @@ import com.example.zubrilkaenglish.models.NewsCard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 
 /**
@@ -22,27 +31,56 @@ class CardsRepository private constructor(){
         val instance: CardsRepository by lazy { CardsRepository() }
     }
     private val roomService = RoomService()
-    private val cardEventBus: CardEventBus = CardEventBus.instance
 
     init {
-        subscribeAnCardsIntents()
+        EventBus.getDefault().register(this)
+    }
+
+    @Subscribe
+    fun subscribeOnEventBus(event: iCardEvent){
+        when(event){
+            is Event_IncreaseProgressCard -> increaseProgressCard(event.wordCard)
+            is Event_Reset_numCorrAnsv -> resetNumCorrAnsv(event.wordCard)
+            is Event_SetCardAsLearned -> setCardAsLearned(event.wordCard)
+            is Event_IntentSleepCard -> setSleepCard(event.wordCard,event.countDay)
+        }
     }
 
     /**
-     * подпишется на различные пожелания других классов об изменениях карточек
+     * усыпит карточку
      */
-    private fun subscribeAnCardsIntents() {
-        cardEventBus.subscribeAnEvent("intention_increase_progress_card")?.observeForever{wordCard->
-            increaseProgressCard(wordCard)
+    private fun setSleepCard(wordCard: WordCard, countDay: Int) {
+        //установим новый статус карточки
+        when(wordCard.progressWord?.statProgress){
+            StatProgress.NEW.value ->{
+                wordCard.progressWord?.statProgress = StatProgress.PARTIALLY_LEARNED.value
+            }
+            StatProgress.PARTIALLY_LEARNED.value ->{
+                wordCard.progressWord?.statProgress = StatProgress.ALMOST_LEARNED.value
+            }
+            StatProgress.ALMOST_LEARNED.value ->{
+                wordCard.progressWord?.statProgress = StatProgress.LEARNED.value
+            }
         }
-        cardEventBus.subscribeAnEvent("intention_reset_numCorrAnsv")?.observeForever { wordCard->
-            resetNumCorrAnsv(wordCard)
-        }
-        cardEventBus.subscribeAnEvent("set_card_as_learned")?.observeForever { wordCard->
-            setCardAsLearned(wordCard)
-        }
-    }
+        //сбросим колич. правильных ответов
+        wordCard.progressWord?.numCorrAnsv = 0
 
+        //вычисляем дату времени, до которой должна заснуть карточка
+        val calendar = Calendar.getInstance()
+        calendar.time = Date()
+        calendar.add(Calendar.DAY_OF_MONTH, countDay)
+        val newDateString = SimpleDateFormat(SIM_FORM_DATE).format(calendar.time)
+        println("Новая дата: $newDateString")
+        wordCard.progressWord?.sleepTime = newDateString
+
+
+        //обновим данные в репозитории
+        GlobalScope.launch(Dispatchers.Default) {
+            wordCard.progressWord?.let { roomService.updateProgressWord(it) }
+        }
+        //уведомим view
+        EventBus.getDefault().post(Event_CardChanged(wordCard))
+    }
 
 
     /**
@@ -55,8 +93,6 @@ class CardsRepository private constructor(){
         listAllCards?.forEach { it ->
             if (it.progressWord?.statProgress!=StatProgress.LEARNED.value&&compareDate(it.progressWord?.sleepTime)){
                 listForTreining.add(it)
-//                countWordCards++
-
             }
         }
 
@@ -99,20 +135,19 @@ class CardsRepository private constructor(){
             wordCard.progressWord?.let { roomService.updateProgressWord(it) }
         }
 
-        cardEventBus.publishEventCard("wordCard_has_changed" ,wordCard)
+        EventBus.getDefault().post(Event_CardChanged(wordCard))
 
-//        if (wordCard.progressWord?.numCorrAnsv!! >=3){
-//            //обновляем значение numCorrAnsv в viewModel и в репозитории
-//            wordCard.progressWord!!.numCorrAnsv = viewModel.plusCorAnsv(wordCard.progressWord!!.wordId)?.progressWord?.numCorrAnsv!!
-//            adapter.notifyItemChanged(binding.viewPager2.currentItem)
-//            //показываем окошко диалога
-//            showPopUpDialog(wordCard)
-//        }else{
-//            //обновляем значение numCorrAnsv в viewModel и в репозитории
-//            wordCard.progressWord!!.numCorrAnsv = viewModel.plusCorAnsv(wordCard.progressWord!!.wordId)?.progressWord?.numCorrAnsv!!
-//            adapter.notifyItemChanged(binding.viewPager2.currentItem)
-//            flippingCard()
+        suggestCardSleep(wordCard)
+    }
 
+    /**
+     * в случае если юзер ответил правильно достаточное количество раз на карточку
+     * функция предложит ему усыпить карточку
+     */
+    private fun suggestCardSleep(wordCard: WordCard) {
+        if (wordCard.progressWord?.numCorrAnsv!! >= 3){
+            EventBus.getDefault().post(Event_SleepCard(wordCard))
+        }
     }
 
     /**
@@ -130,7 +165,7 @@ class CardsRepository private constructor(){
                 wordCard.progressWord?.let { roomService.updateProgressWord(it) }
         }
 
-        cardEventBus.publishEventCard("wordCard_has_changed" ,wordCard)
+        EventBus.getDefault().post(Event_CardChanged(wordCard))
     }
 
     /**
@@ -147,6 +182,6 @@ class CardsRepository private constructor(){
             wordCard.progressWord?.let { roomService.updateProgressWord(it) }
         }
 
-        cardEventBus.publishEventCard("wordCard_has_changed" ,wordCard)
+        EventBus.getDefault().post(Event_CardChanged(wordCard))
     }
 }
