@@ -1,12 +1,7 @@
 package com.example.zubrilkaenglish.repositories
 
-import com.example.zubrilkaenglish.eventBus.events.Event_CardChanged
-import com.example.zubrilkaenglish.eventBus.events.Event_IncreaseProgressCard
-import com.example.zubrilkaenglish.eventBus.events.Event_IntentSleepCard
-import com.example.zubrilkaenglish.eventBus.events.Event_Reset_numCorrAnsv
-import com.example.zubrilkaenglish.eventBus.events.Event_SetCardAsLearned
-import com.example.zubrilkaenglish.eventBus.events.Event_SleepCard
-import com.example.zubrilkaenglish.eventBus.events.iCardEvent
+import com.example.zubrilkaenglish.eventBus.events.CardEvent
+import com.example.zubrilkaenglish.eventBus.events.iEvent
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.repositories.room.RoomService
 import com.example.zubrilkaenglish.utils.SIM_FORM_DATE
@@ -36,50 +31,58 @@ class CardsRepository private constructor(){
         EventBus.getDefault().register(this)
     }
 
+    /**
+     * метод используется библиотечкой EventBus
+     * для прослушивания запросов от различных view
+     */
     @Subscribe
-    fun subscribeOnEventBus(event: iCardEvent){
-        when(event){
-            is Event_IncreaseProgressCard -> increaseProgressCard(event.wordCard)
-            is Event_Reset_numCorrAnsv -> resetNumCorrAnsv(event.wordCard)
-            is Event_SetCardAsLearned -> setCardAsLearned(event.wordCard)
-            is Event_IntentSleepCard -> setSleepCard(event.wordCard,event.countDay)
+    fun subscribeOnCardEvent(event: CardEvent){
+        when(event.typeEvent){
+            "intent_sleep" -> setSleepCard(event)
+            "increase_progress" -> increaseProgressCard(event)
+            "reset_numCorrAnsv" -> resetNumCorrAnsv(event)
+            "set_as_learned" -> setCardAsLearned(event)
         }
     }
 
     /**
      * усыпит карточку
      */
-    private fun setSleepCard(wordCard: WordCard, countDay: Int) {
+    private fun setSleepCard(event: CardEvent) {
         //установим новый статус карточки
-        when(wordCard.progressWord?.statProgress){
+        when(event.wordCard.progressWord?.statProgress){
             StatProgress.NEW.value ->{
-                wordCard.progressWord?.statProgress = StatProgress.PARTIALLY_LEARNED.value
+                event.wordCard.progressWord?.statProgress = StatProgress.PARTIALLY_LEARNED.value
             }
             StatProgress.PARTIALLY_LEARNED.value ->{
-                wordCard.progressWord?.statProgress = StatProgress.ALMOST_LEARNED.value
+                event.wordCard.progressWord?.statProgress = StatProgress.ALMOST_LEARNED.value
             }
             StatProgress.ALMOST_LEARNED.value ->{
-                wordCard.progressWord?.statProgress = StatProgress.LEARNED.value
+                event.wordCard.progressWord?.statProgress = StatProgress.LEARNED.value
             }
         }
         //сбросим колич. правильных ответов
-        wordCard.progressWord?.numCorrAnsv = 0
+        event.wordCard.progressWord?.numCorrAnsv = 0
 
         //вычисляем дату времени, до которой должна заснуть карточка
         val calendar = Calendar.getInstance()
         calendar.time = Date()
-        calendar.add(Calendar.DAY_OF_MONTH, countDay)
+        calendar.add(Calendar.DAY_OF_MONTH, event.properties!!.get("countDay") as Int)
         val newDateString = SimpleDateFormat(SIM_FORM_DATE).format(calendar.time)
         println("Новая дата: $newDateString")
-        wordCard.progressWord?.sleepTime = newDateString
+        event.wordCard.progressWord?.sleepTime = newDateString
 
 
         //обновим данные в репозитории
         GlobalScope.launch(Dispatchers.Default) {
-            wordCard.progressWord?.let { roomService.updateProgressWord(it) }
+            event.wordCard.progressWord?.let { roomService.updateProgressWord(it) }
         }
         //уведомим view
-        EventBus.getDefault().post(Event_CardChanged(wordCard))
+        EventBus.getDefault().post(CardEvent(
+            "card_changed",
+            event.wordCard,
+            event.properties)
+        )
     }
 
 
@@ -123,21 +126,26 @@ class CardsRepository private constructor(){
      * сохраняет новое значение в БД
      * уведомляет eventBus об изменении карточки
      */
-    fun increaseProgressCard(wordCard: WordCard) {
+    fun increaseProgressCard(event: CardEvent) {
 
         //увеличиваем значение на 1
-        if (wordCard.progressWord?.numCorrAnsv!=null) wordCard.progressWord!!.numCorrAnsv+=1
+        if (event.wordCard.progressWord?.numCorrAnsv!=null) event.wordCard.progressWord!!.numCorrAnsv+=1
 
-        println("new value: "+wordCard.progressWord?.numCorrAnsv)
+        println("new value: "+ event.wordCard.progressWord?.numCorrAnsv)
 
         //обновим данные в репозитории
         GlobalScope.launch(Dispatchers.Default) {
-            wordCard.progressWord?.let { roomService.updateProgressWord(it) }
+            event.wordCard.progressWord?.let { roomService.updateProgressWord(it) }
         }
 
-        EventBus.getDefault().post(Event_CardChanged(wordCard))
+        //уведомим view
+        EventBus.getDefault().post(CardEvent(
+            "card_changed",
+            event.wordCard,
+            event.properties))
 
-        suggestCardSleep(wordCard)
+        //проверим, не пора ли карточке спать
+        suggestCardSleep(event.wordCard)
     }
 
     /**
@@ -146,7 +154,10 @@ class CardsRepository private constructor(){
      */
     private fun suggestCardSleep(wordCard: WordCard) {
         if (wordCard.progressWord?.numCorrAnsv!! >= 3){
-            EventBus.getDefault().post(Event_SleepCard(wordCard))
+            EventBus.getDefault().post(CardEvent(
+                "sleep_event",
+                wordCard)
+            )
         }
     }
 
@@ -155,17 +166,20 @@ class CardsRepository private constructor(){
      * сохраняет новое значение в БД
      * уведомляет eventBus об изменении карточки
      */
-    private fun resetNumCorrAnsv(wordCard: WordCard){
+    private fun resetNumCorrAnsv(event: CardEvent){
 
         //сброс значения
-        wordCard.progressWord?.numCorrAnsv = 0
+        event.wordCard.progressWord?.numCorrAnsv = 0
 
         //обновим данные в репозитории
         GlobalScope.launch(Dispatchers.Default) {
-                wordCard.progressWord?.let { roomService.updateProgressWord(it) }
+            event.wordCard.progressWord?.let { roomService.updateProgressWord(it) }
         }
 
-        EventBus.getDefault().post(Event_CardChanged(wordCard))
+        EventBus.getDefault().post(CardEvent(
+            "card_changed",
+            event.wordCard,
+            event.properties))
     }
 
     /**
@@ -173,15 +187,18 @@ class CardsRepository private constructor(){
      * сохранит изменения в BD
      * уведомит cardEventBus об измении карточки
      */
-    private fun setCardAsLearned(wordCard: WordCard) {
-        wordCard.progressWord?.statProgress = StatProgress.LEARNED.value
-        wordCard.progressWord?.numCorrAnsv = 0
-        wordCard.progressWord?.sleepTime = SimpleDateFormat(SIM_FORM_DATE).format(Date())
+    private fun setCardAsLearned(event: CardEvent) {
+        event.wordCard.progressWord?.statProgress = StatProgress.LEARNED.value
+        event.wordCard.progressWord?.numCorrAnsv = 0
+        event.wordCard.progressWord?.sleepTime = SimpleDateFormat(SIM_FORM_DATE).format(Date())
         //обновим данные в репозитории
         GlobalScope.launch(Dispatchers.Default) {
-            wordCard.progressWord?.let { roomService.updateProgressWord(it) }
+            event.wordCard.progressWord?.let { roomService.updateProgressWord(it) }
         }
 
-        EventBus.getDefault().post(Event_CardChanged(wordCard))
+        EventBus.getDefault().post(CardEvent(
+            "card_changed",
+            event.wordCard,
+            event.properties))
     }
 }

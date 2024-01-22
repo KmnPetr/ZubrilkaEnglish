@@ -6,38 +6,22 @@ import androidx.lifecycle.viewModelScope
 import com.example.zubrilkaenglish.models.ICard
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.repositories.CardsRepository
-import com.example.zubrilkaenglish.repositories.Repository
 import kotlinx.coroutines.launch
 
 class TrainingViewModel : ViewModel() {
 
-    private val repository = Repository()
     private val cardsRepository = CardsRepository.instance
-
-    private val listWordsCards:MutableLiveData<List<WordCard>> = MutableLiveData()
 
     private val listForTreining : MutableLiveData<ArrayList<ICard>?> = MutableLiveData()
 
+    //количество именно учебных карточек WordCard
+    //так как в списке могут содержаться и неучебные карточки
     var countWordCards: Int = 0
 
     //служебная переменная используемая для защиты от автоперелистывания во время скролла пальцем,
     // при значении 0 планируемое перелистывание будет отменено
     var userScrolls: Int = 0
 
-
-
-    fun updateWordCard(wordCard: WordCard) {
-        viewModelScope.launch {
-            repository.updateProgressWord(wordCard.progressWord!!)
-        }
-
-        listWordsCards.value?.forEach {
-            if (it.progressWord?.wordId==wordCard.progressWord?.wordId){
-                it.progressWord = wordCard.progressWord
-            }
-        }
-
-    }
 
     /**
      * запросит у репозитория список карточек для изучения

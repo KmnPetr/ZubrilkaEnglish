@@ -6,29 +6,18 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.View
 import android.view.Window
-import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.PopupDialogSleepCardBinding
-import com.example.zubrilkaenglish.eventBus.events.Event_CardChanged
-import com.example.zubrilkaenglish.eventBus.events.Event_IntentSleepCard
+import com.example.zubrilkaenglish.eventBus.events.CardEvent
 import com.example.zubrilkaenglish.models.WordCard
-import com.example.zubrilkaenglish.screens.training.TrainingFragment
-import com.example.zubrilkaenglish.screens.training.TrainingViewModel
-import com.example.zubrilkaenglish.utils.SIM_FORM_DATE
 import com.example.zubrilkaenglish.utils.StatProgress
 import org.greenrobot.eventbus.EventBus
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
 
 class PopupDialog(
     context: Context,
-    wordCard: WordCard,
-    viewModel: TrainingViewModel
+    wordCard: WordCard
 ) : Dialog(context) {
     private val binding = PopupDialogSleepCardBinding.inflate(layoutInflater)
-    private var viewModel: TrainingViewModel
     init {
-        this.viewModel = viewModel
 
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setCancelable(false)
@@ -66,13 +55,18 @@ class PopupDialog(
 
         binding.btnYes.setOnClickListener {
             //отправим желание пользователя на усыпление карточки
-            EventBus.getDefault().post(Event_IntentSleepCard(wordCard,binding.slider.value.toInt()))
+            EventBus.getDefault().post(CardEvent(
+                "intent_sleep",
+                wordCard,
+                mapOf("countDay" to binding.slider.value.toInt())
+            ))
             dismiss()
         }
         binding.btnCansel.setOnClickListener {
             //просто уведомим view чтобы она перелистнула пейджер
             //по сути изменений нет
-            EventBus.getDefault().post(Event_CardChanged(wordCard))
+            EventBus.getDefault().post(CardEvent("card_changed", wordCard)
+            )
             dismiss()
         }
     }

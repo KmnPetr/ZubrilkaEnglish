@@ -9,10 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.example.zubrilkaenglish.databinding.FragmentTrainingBinding
-import com.example.zubrilkaenglish.eventBus.events.Event_CardChanged
-import com.example.zubrilkaenglish.eventBus.events.Event_IncreaseProgressCard
-import com.example.zubrilkaenglish.eventBus.events.Event_Reset_numCorrAnsv
-import com.example.zubrilkaenglish.eventBus.events.Event_SleepCard
+import com.example.zubrilkaenglish.eventBus.events.CardEvent
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.screens.training.popup.PopupDialog
 import com.example.zubrilkaenglish.screens.training.popup.PopupOptions
@@ -79,23 +76,22 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
 
     /**
      * метод используется библиотечкой green robot
-     * при публикации кем-то события Event_CardChanged
+     * при публикации кем-то события Event_Changed
      */
     @Subscribe
-    fun event_CardChanged(event: Event_CardChanged){
-        adapter.notifyItemChanged(binding.viewPager2.currentItem)
-        flippingCard()
-    }
-    /**
-     * метод используется библиотечкой green robot
-     * при публикации кем-то события Event_SleepCard
-     */
-    @Subscribe
-    fun sleepEvent(event: Event_SleepCard){
-        //отменим перелистывание
-        viewModel.userScrolls = 0
-        //покажем окошко
-        PopupDialog(requireContext(),event.wordCard,viewModel).show()
+    fun event_CardChanged(event: CardEvent){
+        when(event.typeEvent){
+            "card_changed" -> {
+                adapter.notifyItemChanged(binding.viewPager2.currentItem)
+                flippingCard()
+            }
+            "sleep_event" -> {
+                //отменим перелистывание
+                viewModel.userScrolls = 0
+                //покажем окошко
+                PopupDialog(requireContext(),event.wordCard).show()
+            }
+        }
     }
 
     /**
@@ -105,7 +101,7 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
     override fun onClickYesButton(wordCard: WordCard) {
 
         wordCard.cardHasChanged=true
-        EventBus.getDefault().post(Event_IncreaseProgressCard(wordCard))
+        EventBus.getDefault().post(CardEvent("increase_progress",wordCard))
     }
 
     /**
@@ -114,7 +110,8 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
      */
     override fun onClickNoButton(wordCard: WordCard) {
         wordCard.cardHasChanged=true
-        EventBus.getDefault().post(Event_Reset_numCorrAnsv(wordCard))
+        //отправим запрос на сброс значения numCorrAnsv
+        EventBus.getDefault().post(CardEvent("reset_numCorrAnsv", wordCard))
     }
 
     /**

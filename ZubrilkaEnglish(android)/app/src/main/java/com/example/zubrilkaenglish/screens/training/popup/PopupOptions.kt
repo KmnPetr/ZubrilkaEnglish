@@ -7,7 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import android.view.Window
 import android.widget.Toast
 import com.example.zubrilkaenglish.databinding.PopupOptionsTrainCardBinding
-import com.example.zubrilkaenglish.eventBus.events.Event_SetCardAsLearned
+import com.example.zubrilkaenglish.eventBus.events.CardEvent
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.utils.MyApplication
 import org.greenrobot.eventbus.EventBus
@@ -37,7 +37,8 @@ class PopupOptions(
      */
     private fun setListeners(wordCard: WordCard) {
         binding.markLearned.setOnClickListener {
-            EventBus.getDefault().post(Event_SetCardAsLearned(wordCard))
+            //попросим репозиторий сделать карточку выученной
+            EventBus.getDefault().post(CardEvent("set_as_learned",wordCard))
             Toast.makeText(MyApplication.context,"click markLearned",Toast.LENGTH_SHORT).show()
             dismiss()
         }
