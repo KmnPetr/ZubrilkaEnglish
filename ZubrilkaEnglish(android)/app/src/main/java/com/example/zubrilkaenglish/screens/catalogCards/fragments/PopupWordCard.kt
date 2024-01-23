@@ -91,7 +91,6 @@ class PopupWordCard(
         }
         if (deleteCard.isEnabled){
             deleteCard.setOnClickListener {
-                viewModel.deleteCard(wordCard)
                 EventBus.getDefault().post(CardEvent("delete_card",wordCard, mapOf("positionAdapter" to position)))
                 dismiss()
             }

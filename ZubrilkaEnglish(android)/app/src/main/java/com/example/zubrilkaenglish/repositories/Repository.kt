@@ -1,12 +1,9 @@
 package com.example.zubrilkaenglish.repositories
 
-import android.widget.Toast
-import com.example.zubrilkaenglish.models.ProgressWord
 import com.example.zubrilkaenglish.models.Word
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.repositories.retrofit.RetrofitService
 import com.example.zubrilkaenglish.repositories.room.RoomService
-import com.example.zubrilkaenglish.utils.MyApplication
 import com.example.zubrilkaenglish.utils.SIM_FORM_DATE
 import com.example.zubrilkaenglish.utils.StatProgress
 import java.text.SimpleDateFormat
@@ -70,37 +67,6 @@ class Repository {
         }
     }
 
-    /**
-     * сохранит ProgressWord в БД
-     * тем самым добавит новое слово/фразу в изучаемые
-     */
-    suspend fun addWordToTraining(idWord: Int?) {
-        try {
-            val progressWord = ProgressWord(null,idWord!!,0,StatProgress.NEW.value,SimpleDateFormat(SIM_FORM_DATE).format(Date()))
-            roomService.addWordToTraining(progressWord)
-            Toast.makeText(MyApplication.context,"Слово/фраза добавлено(а) в изучаемые.",Toast.LENGTH_LONG).show()
-        }catch (e: Exception){
-            Toast.makeText(MyApplication.context,e.javaClass.name+"\n"+e.message,Toast.LENGTH_LONG).show()
-        }
-    }
-
-    suspend fun getListWordsCards(): List<WordCard>? {
-        return roomService.getListWordsCards()
-    }
-
-    /**
-     * обновит ProgressWord
-     */
-    suspend fun updateProgressWord(progressWord: ProgressWord) {
-        roomService.updateProgressWord(progressWord)
-    }
-
-    /**
-     * найдет ProgressWord по id
-     */
-    suspend fun getProgressWordById(progId: Int?): ProgressWord? {
-        return roomService.getProgressWordById(progId)
-    }
 
     /**
      * достанет из базы все карточки с прогрессом пользователя и рассортирует в мапу
@@ -140,48 +106,6 @@ class Repository {
         return false
     }
 
-    /**
-     * функция достанет Word из БД в виде WordCard вместе с прогрессом пользователя по этой карточке
-     */
-    suspend fun getWordCardById(wordId: Int?): WordCard {
-        return roomService.getWordCardById(wordId)
-    }
-
-    /**
-     * сбросит учебный прогресс по карточке
-     */
-    suspend fun resetProgressWordCardById(idWord: Int?) {
-        val progressWord = roomService.getWordCardById(idWord).progressWord
-        if (progressWord != null) {
-            progressWord.numCorrAnsv = 0
-            progressWord.statProgress = StatProgress.NEW.value
-            progressWord.sleepTime = SimpleDateFormat(SIM_FORM_DATE).format(Date())
-            roomService.updateProgressWord(progressWord)
-            Toast.makeText(MyApplication.context,"Прогресс сброшен",Toast.LENGTH_SHORT).show()
-        }else Toast.makeText(MyApplication.context,"Ошибка",Toast.LENGTH_SHORT).show()
-    }
-
-    /**
-     * установит статус прогресса WordCard как "learned"
-     */
-    suspend fun markWordCardLearned(idWord: Int?) {
-        val progressWord = roomService.getWordCardById(idWord).progressWord
-        if (progressWord != null) {
-            progressWord.statProgress = StatProgress.LEARNED.value
-            progressWord.numCorrAnsv = 0
-            progressWord.sleepTime = SimpleDateFormat(SIM_FORM_DATE).format(Date())
-            roomService.updateProgressWord(progressWord)
-            Toast.makeText(MyApplication.context,"Карточка помечена как \"выученная\"",Toast.LENGTH_SHORT).show()
-        }else Toast.makeText(MyApplication.context,"Ошибка",Toast.LENGTH_SHORT).show()
-    }
-
-    /**
-     * удалит ProgressWord по id Word
-     */
-    suspend fun deleteProgressByWordId(idWord: Int?) {
-        roomService.deleteProgressByWordId(idWord)
-        Toast.makeText(MyApplication.context,"Слово/фраза удалена из ваших карточек",Toast.LENGTH_SHORT).show()
-    }
 
     /**
      * функция вернет список всех WordCard, в том числе и тех, у которых нет(null) ProgressWord

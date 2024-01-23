@@ -64,45 +64,6 @@ class CatalogCardsViewModel : ViewModel() {
     }
 
     /**
-     * добавит карточку в изучаемые
-     */
-    fun addWordToTraining(wordCard: WordCard) {
-        viewModelScope.launch {
-            repository.addWordToTraining(wordCard.word.id)
-        }
-        dataDownload()
-    }
-    /**
-     * установит прогресс по карточке, как выученной
-     */
-    fun markCardLearned(wordCard: WordCard) {
-        viewModelScope.launch {
-            repository.markWordCardLearned(wordCard.word.id)
-        }
-        dataDownload()
-    }
-
-    /**
-     * сбросит имеющийся учебный прогресс по карточке
-     */
-    fun resetProgressCard(wordCard: WordCard) {
-        viewModelScope.launch {
-            repository.resetProgressWordCardById(wordCard.word.id)
-        }
-        dataDownload()
-    }
-
-    /**
-     * удалит карточку из изучаемых
-     */
-    fun deleteCard(wordCard: WordCard) {
-        viewModelScope.launch {
-            repository.deleteProgressByWordId(wordCard.word.id)
-        }
-        dataDownload()
-    }
-
-    /**
      * загрузит\обновит данные из репозитория
      */
     private fun dataDownload(){

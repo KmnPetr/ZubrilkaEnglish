@@ -65,13 +65,18 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
         }
 
         showCountCards()
-
-        EventBus.getDefault().register(this)
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+        println("ЗАРЕГЕСТРИРОВАЛСЯ")
+    }
+
+    override fun onPause() {
+        super.onPause()
         EventBus.getDefault().unregister(this)
+        println("ОТПИСАЛСЯ")
     }
 
     /**

@@ -47,6 +47,8 @@ class CardsRepository private constructor(){
             "increase_progress" -> {
                 event.wordCard = increaseProgressCard(event.wordCard)
                 notifyChangeCard(event)
+                //проверим, не пора ли карточке спать
+                if (checkCardSleep(event.wordCard)) EventBus.getDefault().post(CardEvent("sleep_event", event.wordCard))
             }
             "reset_numCorrAnsv" -> {
                 event.wordCard = resetNumCorrAnsv(event.wordCard)
@@ -220,9 +222,6 @@ class CardsRepository private constructor(){
         //обновим данные в репозитории
         GlobalScope.launch(Dispatchers.Default) {
             wordCard.progressWord?.let { roomService.updateProgressWord(it) }
-
-            //проверим, не пора ли карточке спать
-            suggestCardSleep(wordCard)
         }
         return wordCard
     }
@@ -231,13 +230,8 @@ class CardsRepository private constructor(){
      * в случае если юзер ответил правильно достаточное количество раз на карточку
      * функция предложит ему усыпить карточку
      */
-    private fun suggestCardSleep(wordCard: WordCard) {
-        if (wordCard.progressWord?.numCorrAnsv!! >= 3){
-            EventBus.getDefault().post(CardEvent(
-                "sleep_event",
-                wordCard)
-            )
-        }
+    private fun checkCardSleep(wordCard: WordCard): Boolean {
+        return wordCard.progressWord?.numCorrAnsv!! >= 3
     }
 
     /**
