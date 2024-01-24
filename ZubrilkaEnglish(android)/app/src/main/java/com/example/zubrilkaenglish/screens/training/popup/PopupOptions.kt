@@ -39,15 +39,14 @@ class PopupOptions(
         binding.markLearned.setOnClickListener {
             //попросим репозиторий сделать карточку выученной
             EventBus.getDefault().post(CardEvent("set_as_learned",wordCard))
-            Toast.makeText(MyApplication.context,"click markLearned",Toast.LENGTH_SHORT).show()
             dismiss()
         }
         binding.resetProgress.setOnClickListener {
-            Toast.makeText(MyApplication.context,"click resetProgress",Toast.LENGTH_SHORT).show()
+            EventBus.getDefault().post(CardEvent("reset_progress",wordCard))
             dismiss()
         }
         binding.deleteCard.setOnClickListener {
-            Toast.makeText(MyApplication.context,"click deleteCard",Toast.LENGTH_SHORT).show()
+            EventBus.getDefault().post(CardEvent("delete_card",wordCard))
             dismiss()
         }
     }

@@ -70,13 +70,11 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
     override fun onStart() {
         super.onStart()
         EventBus.getDefault().register(this)
-        println("ЗАРЕГЕСТРИРОВАЛСЯ")
     }
 
     override fun onPause() {
         super.onPause()
         EventBus.getDefault().unregister(this)
-        println("ОТПИСАЛСЯ")
     }
 
     /**

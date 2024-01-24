@@ -2,6 +2,7 @@ package com.example.zubrilkaenglish.repositories
 
 import android.database.sqlite.SQLiteConstraintException
 import com.example.zubrilkaenglish.eventBus.events.CardEvent
+import com.example.zubrilkaenglish.eventBus.events.NotificationEvent
 import com.example.zubrilkaenglish.models.ICard
 import com.example.zubrilkaenglish.models.NewsCard
 import com.example.zubrilkaenglish.models.ProgressWord
@@ -87,6 +88,7 @@ class CardsRepository private constructor(){
         //удалим progressWord из БД
         GlobalScope.launch(Dispatchers.Default) {
             roomService.deleteProgressByWordId(wordCard.word.id)
+            notifyToast("Слово/фраза удалена из ваших карточек")
 //        Toast.makeText(MyApplication.context,"Слово/фраза удалена из ваших карточек",Toast.LENGTH_SHORT).show()//TODO надо будет как нибудь поправить тосты а то они не очень вызываются из репозитория
         }
         //изменим progressWord для view без обращения к БД
@@ -280,5 +282,12 @@ class CardsRepository private constructor(){
                 event.properties //там может передаваться например позиция адаптера или еще чтонибудь, поэтому вернем проперти таким каким оно пришло в репозиторий
             )
         )
+    }
+
+    /**
+     * функция отправит евент с прозбой активити показать тоаст сообщение
+     */
+    private fun notifyToast(message: String){
+        EventBus.getDefault().post(NotificationEvent(message))
     }
 }
