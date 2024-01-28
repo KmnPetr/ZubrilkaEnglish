@@ -1,5 +1,6 @@
 package com.example.zeapp.controllers;
 
+import com.example.zeapp.services.VoiceCache;
 import com.example.zeapp.services.WordsCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +16,12 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/healthcheck")
 public class HealthCheckController {
     private final WordsCache wordsCache;
+    private final VoiceCache voiceCache;
 
     @Autowired
-    public HealthCheckController(WordsCache wordsCache) {
+    public HealthCheckController(WordsCache wordsCache, VoiceCache voiceCache) {
         this.wordsCache = wordsCache;
+        this.voiceCache = voiceCache;
     }
 
     /**
@@ -39,8 +42,9 @@ public class HealthCheckController {
     public Mono<ResponseEntity<String>> startUpHealthCheck(){
         log.info("startup-healthcheck called");
 
-        Integer dictionaryVersion = wordsCache.getDictionaryVersion();
-        if (dictionaryVersion>0){
+        Integer wordsDicVers = wordsCache.getDictionaryVersion();
+        Integer voiceDicVers = voiceCache.getDictionaryVersion();
+        if (wordsDicVers>0&&voiceDicVers>0){
             return Mono.just(
                     ResponseEntity
                             .ok()
