@@ -4,6 +4,7 @@ import com.example.zeapp.models.VoiceFile;
 import com.example.zeapp.repositories.VoiceFilesRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
@@ -15,16 +16,18 @@ import java.nio.file.Path;
 @Component
 @Slf4j
 public class VoiceCache {
-    private final String pathFolder = "/src/main/resources/voice/";
+    private String pathFolder;
     private Integer dicVers = 0;
 
     //переменная replacementProcess(replcProc) указывает, происходит ли на данный момент замена кэша
     private Boolean replcProc = false;
     private final VoiceFilesRepository voiceFilesRepository;
     @Autowired
-    public VoiceCache(VoiceFilesRepository voiceFilesRepository) {
+    public VoiceCache(VoiceFilesRepository voiceFilesRepository,@Value("${voicePathFolder}")String voicePathFolder) {
         this.voiceFilesRepository = voiceFilesRepository;
+        this.pathFolder = voicePathFolder;
 
+        //первоначальное создание папки
         createNewFolder(pathFolder+dicVers);
     }
 
