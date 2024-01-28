@@ -15,7 +15,7 @@ import java.nio.file.Path;
 @Component
 @Slf4j
 public class VoiceCache {
-    private final String pathFolder = "src/main/resources/voice/";
+    private final String pathFolder = "/src/main/resources/voice/";
     private Integer dicVers = 0;
 
     //переменная replacementProcess(replcProc) указывает, происходит ли на данный момент замена кэша
@@ -24,6 +24,8 @@ public class VoiceCache {
     @Autowired
     public VoiceCache(VoiceFilesRepository voiceFilesRepository) {
         this.voiceFilesRepository = voiceFilesRepository;
+
+        createNewFolder(pathFolder+dicVers);
     }
 
 
@@ -54,8 +56,8 @@ public class VoiceCache {
         log.info("начата замена кэша VoiceCache с версии {} до версии {}",dicVers,dBdicVers);
         Long startTime = System.currentTimeMillis();
 
-        String oldPath = pathFolder+"/"+dicVers+"/";
-        String newPath = pathFolder+"/"+dBdicVers+"/";
+        String oldPath = pathFolder+dicVers+"/";
+        String newPath = pathFolder+dBdicVers+"/";
 
         createNewFolder(newPath);
 
@@ -142,7 +144,7 @@ public class VoiceCache {
     /**
      * метод вернет массив байтов файла по переданному ему пути к файлу
      */
-    public byte[] getByteFile(String filePath) {
+    public byte[] getByteFile(String filePath){
         File file = new File(filePath);
         try (FileInputStream fis = new FileInputStream(file)) {
             byte[] byteArray = new byte[(int) file.length()];

@@ -20,8 +20,10 @@ public class VoiceFileService {
 
     public Mono<VoiceFile> getVoiceByName(String name){
         if(!voiceCache.getReplcProc()){
+            log.info("Раздача файлов идет из кэша");
             return voiceCache.getVoiseFile(name);
         }else {
+            log.info("Раздача файлов идет из БД");
             return voiceFilesRepository.findByFileName(name);
         }
     }
