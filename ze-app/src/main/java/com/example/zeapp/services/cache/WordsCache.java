@@ -1,4 +1,4 @@
-package com.example.zeapp.services;
+package com.example.zeapp.services.cache;
 
 import com.example.zeapp.models.Word;
 import lombok.Data;

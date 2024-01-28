@@ -2,6 +2,7 @@ package com.example.zeapp.services;
 
 import com.example.zeapp.models.VoiceFile;
 import com.example.zeapp.repositories.VoiceFilesRepository;
+import com.example.zeapp.services.cache.VoiceCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,10 +21,10 @@ public class VoiceFileService {
 
     public Mono<VoiceFile> getVoiceByName(String name){
         if(!voiceCache.getReplcProc()){
-            log.info("Раздача файлов идет из кэша");
+//            log.info("Раздача файлов идет из кэша");
             return voiceCache.getVoiseFile(name);
         }else {
-            log.info("Раздача файлов идет из БД");
+//            log.info("Раздача файлов идет из БД");
             return voiceFilesRepository.findByFileName(name);
         }
     }

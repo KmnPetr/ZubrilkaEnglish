@@ -2,6 +2,7 @@ package com.example.zeapp.services;
 
 import com.example.zeapp.models.Word;
 import com.example.zeapp.repositories.WordsRepository;
+import com.example.zeapp.services.cache.WordsCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;

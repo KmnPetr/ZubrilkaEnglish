@@ -1,4 +1,4 @@
-package com.example.zeapp.services;
+package com.example.zeapp.services.cache;
 
 import com.example.zeapp.models.VoiceFile;
 import com.example.zeapp.repositories.VoiceFilesRepository;
@@ -72,7 +72,7 @@ public class VoiceCache {
                         result->{
                             result.forEach(it->{
                                 createNewFile(it,newPath);
-                                log.info("Создан файл: {}",it.getFileName());
+//                                log.info("Создан файл: {}",it.getFileName());
                             });
                         },
                         error->{},

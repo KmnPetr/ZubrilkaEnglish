@@ -1,7 +1,7 @@
 package com.example.zeapp.controllers;
 
-import com.example.zeapp.services.VoiceCache;
-import com.example.zeapp.services.WordsCache;
+import com.example.zeapp.services.cache.VoiceCache;
+import com.example.zeapp.services.cache.WordsCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
