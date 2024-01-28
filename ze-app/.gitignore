@@ -32,6 +32,9 @@ build/
 ### VS Code ###
 .vscode/
 
+#########Dinamic obgects########
+src/main/resources/voice/*
+!src/main/resources/voice/0
 
 #########Local settings#########
 src/main/resources/application-local.properties
