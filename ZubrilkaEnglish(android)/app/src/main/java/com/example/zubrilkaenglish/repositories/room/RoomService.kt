@@ -10,18 +10,17 @@ class RoomService{
 
 
     suspend fun insertListWords(listWords:List<Word>) {
+        println("method \"insertListWords\" called")
             dataBase.getWordDAO().insertListWords(listWords)
     }
 
     suspend fun getAllWords(): List<Word> {
+        println("method \"room getAllWords\" called")
         return dataBase.getWordDAO().getAllWords()
     }
 
-    suspend fun getWordById(id: Int): Word {
-        return dataBase.getWordDAO().getWordById(id)
-    }
-
     suspend fun deleteAllWords(){
+        println("method \"deleteAllWords\" called")
         dataBase.getWordDAO().deleteAllWords()
     }
 

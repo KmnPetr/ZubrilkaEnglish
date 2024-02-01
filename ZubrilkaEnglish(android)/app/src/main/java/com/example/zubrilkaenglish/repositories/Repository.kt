@@ -57,10 +57,10 @@ class Repository {
         }else {
 
             if(serverDicVers==roomDicVers){
-                println("Версия словаря на сервере изменилась, загружаем новый список")
+                println("Старая версия актуальна, оставляем...")
                 return false
             }else{
-                println("Старая версия актуальна, оставляем...")
+                println("Версия словаря на сервере изменилась, загружаем новый список")
                 return true
             }
 
