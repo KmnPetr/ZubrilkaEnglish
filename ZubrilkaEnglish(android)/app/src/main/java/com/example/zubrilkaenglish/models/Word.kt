@@ -16,8 +16,8 @@ data class Word(
     val translation:String?,
     @ColumnInfo(name = "description")
     val description:String?,
-    @ColumnInfo(name = "groupWord")
-    val groupWord:String,
+    @ColumnInfo(name = "topic")
+    val topic:String,
     @ColumnInfo(name = "hasVoise")
     val hasVoise: String?,
     @ColumnInfo(name = "hasImage")
@@ -26,6 +26,6 @@ data class Word(
     val sorting_value: Int
 ){
     override fun toString(): String {
-        return "Word $id, $foreignWord, $transcription, $translation, $description, $groupWord, $hasVoise, $hasImage"
+        return "Word $id, $foreignWord, $transcription, $translation, $description, $topic, $hasVoise, $hasImage"
     }
 }

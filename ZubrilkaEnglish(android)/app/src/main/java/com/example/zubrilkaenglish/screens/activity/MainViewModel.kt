@@ -52,10 +52,10 @@ class MainViewModel: ViewModel() {
         mapWords["Все слова"] = listWords as ArrayList<WordCard>
 
         listWords.forEach { wordCard ->
-            if (mapWords[wordCard.word.groupWord] == null) {
-                mapWords[wordCard.word.groupWord] = ArrayList()
+            if (mapWords[wordCard.word.topic] == null) {
+                mapWords[wordCard.word.topic] = ArrayList()
             }
-            mapWords[wordCard.word.groupWord]?.add(wordCard)
+            mapWords[wordCard.word.topic]?.add(wordCard)
         }
 
         return mapWords
