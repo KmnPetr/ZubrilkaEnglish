@@ -30,8 +30,8 @@ public class Word {
     private String hasVoise;
     @Column("has_image")
     private String hasImage;
-    @Column("groupwrd")
-    private String groupWord;
+    @Column("topic")
+    private String topic;
     @Column("sorting_value")
     private Integer sorting_value;
 }
