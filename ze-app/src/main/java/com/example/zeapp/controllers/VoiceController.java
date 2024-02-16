@@ -32,7 +32,7 @@ public class VoiceController {
     /**
      * метод не только вернет файл, но и заставит браузер его скачать
      */
-    @GetMapping("/f/{name}")
+    @GetMapping("/download/{name}")
     public Mono<ResponseEntity<byte[]>> getVoiceAsFileByName(@PathVariable String name){
         return voiceFileService
                 .getVoiceByName(name)
@@ -42,5 +42,37 @@ public class VoiceController {
                             .contentType(MediaType.APPLICATION_OCTET_STREAM)
                             .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+it.getFileName())
                             .body(it.getFileData()));
+    }
+
+    /**
+     * метод вернет файл как массив байтов.
+     * При переходе с браузера начинается загрузка
+     */
+    @GetMapping("/byte/{name}")
+    public Mono<ResponseEntity<byte[]>> getVoiceByte(@PathVariable String name){
+        return voiceFileService
+                .getVoiceByName(name)
+                .map(it->
+                        ResponseEntity
+                                .ok()
+                                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                                .contentLength(it.getFileData().length)
+                                .header("filename", it.getFileName())
+                                .body(it.getFileData()));
+    }
+
+    /**
+     * метод отдает массив байт с пометкой что это текст
+     * Браузер пытается вывести символы
+     */
+    @GetMapping("/byteAsText/{name}")
+    public Mono<ResponseEntity<byte[]>> getVoiceByteAsText(@PathVariable String name){
+        return voiceFileService
+                .getVoiceByName(name)
+                .map(it->
+                        ResponseEntity
+                                .ok()
+                                .header("filename", it.getFileName())
+                                .body(it.getFileData()));
     }
 }
