@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.FragmentMenuBinding
+import com.example.zubrilkaenglish.repositories.retrofit.RetrofitService
 import com.example.zubrilkaenglish.utils.customizeBackground
 
 class MenuFragment : Fragment() {
@@ -37,6 +38,10 @@ class MenuFragment : Fragment() {
         }
         binding.catalogCards.setOnClickListener {
             findNavController().navigate(R.id.action_menuFragment_to_catalogCardsFragment)
+        }
+        binding.voice.setOnClickListener {
+            val retrofitService: RetrofitService = RetrofitService()
+            retrofitService.getVoiceByName()
         }
     }
 }
