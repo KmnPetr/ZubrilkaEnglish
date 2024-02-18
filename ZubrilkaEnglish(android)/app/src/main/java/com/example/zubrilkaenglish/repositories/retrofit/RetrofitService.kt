@@ -1,18 +1,11 @@
 package com.example.zubrilkaenglish.repositories.retrofit
 
-import android.media.AudioFormat
-import android.media.AudioManager
-import android.media.AudioTrack
-import android.media.MediaPlayer
 import android.widget.Toast
+import com.example.zubrilkaenglish.models.Voice
 import com.example.zubrilkaenglish.models.Word
 import com.example.zubrilkaenglish.utils.MyApplication
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import java.io.File
-import java.io.FileDescriptor
-import java.io.FileOutputStream
+import okhttp3.ResponseBody
+import retrofit2.Response
 
 class RetrofitService {
     suspend fun getAllWords(): List<Word>? {
@@ -35,12 +28,23 @@ class RetrofitService {
         }
     }
 
-    suspend fun getVoiceDataByName():ByteArray?{
-        val name = "description.mp3"
-            val response/*: Response<ResponseBody>*/ = RetrofitInstance.voiceApi.getVoiceByName(name)
-            val bytes: ByteArray? = response.body()?.bytes()
+    suspend fun getVoiceDataByName(voiceName: String): Voice? {
 
-            return bytes
+        try {
+            val response: Response<ResponseBody> = RetrofitInstance.voiceApi.getVoiceByName(voiceName)
+            if (response.isSuccessful){
+                val filename: String? = response.headers()["filename"]
+                val byteArray = response.body()?.bytes()
+                if (filename != null && byteArray != null){
+                    return Voice(filename,byteArray)
+                }
+            }
+        }catch (e: Exception){
+            e.printStackTrace()
+//            Toast.makeText(MyApplication.context,"ошибка подключения к серверу",Toast.LENGTH_LONG).show() //TODO ???
+        }
+        //на крайняк выбросит пустое значение
+        return null
     }
 
 }

@@ -36,7 +36,12 @@ class VoiceRepository private constructor() {
 
     private fun playVoice(voice: Voice){
         GlobalScope.launch(Dispatchers.Default) {
-            voice.voiceData = retrofitService.getVoiceDataByName()
+
+            if (voice.voiceData == null){
+                //получим Voice из сети
+                voice.voiceData = retrofitService.getVoiceDataByName(voice.voiceName)?.voiceData
+            }
+
             voiceHandler.play(voice)
         }
     }

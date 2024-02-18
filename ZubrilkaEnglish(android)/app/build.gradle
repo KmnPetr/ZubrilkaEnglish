@@ -82,4 +82,9 @@ dependencies {
 
     //для использования Event Bus от компании Green Robot
     implementation 'org.greenrobot:eventbus:3.2.0'
+
+    //jlayer для декодирования аудиофайлов из mp3 в pcm//
+    //https://mvnrepository.com/artifact/com.googlecode.soundlibs/jlayer
+    implementation 'com.googlecode.soundlibs:jlayer:1.0.1-1'
+
 }
