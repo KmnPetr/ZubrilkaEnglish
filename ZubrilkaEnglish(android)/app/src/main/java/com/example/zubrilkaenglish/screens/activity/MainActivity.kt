@@ -24,6 +24,5 @@ class MainActivity : AppCompatActivity() {
         apiNotification = ApiNotification.instance
 
 //        navController=Navigation.findNavController(this, R.id.nav_host_fragment_activity_main)//TODO ???
-
     }
 }

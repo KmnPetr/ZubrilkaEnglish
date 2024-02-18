@@ -11,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.File
+import java.io.FileDescriptor
 import java.io.FileOutputStream
 
 class RetrofitService {
@@ -34,45 +35,14 @@ class RetrofitService {
         }
     }
 
-    fun getVoiceByName(){
+    suspend fun getVoiceDataByName():ByteArray?{
         val name = "description.mp3"
-        GlobalScope.launch(Dispatchers.Default) {
             val response/*: Response<ResponseBody>*/ = RetrofitInstance.voiceApi.getVoiceByName(name)
-
             val bytes: ByteArray? = response.body()?.bytes()
-            if (bytes != null) {
-                println(bytes.size)
-                println(bytes.decodeToString())
 
-                playMp3ByteArray(bytes)
-            }else{
-                println("bytes.size == null")
-            }
-
-        }
+            return bytes
     }
 
-    fun playMp3ByteArray(mp3ByteArray: ByteArray) {
-        val tempMp3 = File.createTempFile("temp", "mp3") // Создаем временный файл
-        tempMp3.deleteOnExit() // Удаляем временный файл после воспроизведения
-
-        val fos = FileOutputStream(tempMp3)
-        fos.write(mp3ByteArray)
-        fos.close()
-
-        val mediaPlayer = MediaPlayer()
-
-        try {
-            mediaPlayer.setDataSource(tempMp3.path) // Устанавливаем временный файл в качестве источника данных
-            mediaPlayer.prepare()
-            mediaPlayer.start()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-        // Дополнительные операции с mediaPlayer, например, обработка окончания воспроизведения
-        // mediaPlayer.setOnCompletionListener { ... }
-    }
 }
 
 

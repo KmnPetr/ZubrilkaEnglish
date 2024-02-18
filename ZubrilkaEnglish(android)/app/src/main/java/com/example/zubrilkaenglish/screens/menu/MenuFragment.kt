@@ -9,8 +9,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.FragmentMenuBinding
+import com.example.zubrilkaenglish.eventBus.events.CardEvent
+import com.example.zubrilkaenglish.eventBus.events.VoiceEvent
+import com.example.zubrilkaenglish.models.Voice
 import com.example.zubrilkaenglish.repositories.retrofit.RetrofitService
 import com.example.zubrilkaenglish.utils.customizeBackground
+import org.greenrobot.eventbus.EventBus
 
 class MenuFragment : Fragment() {
     private lateinit var viewModel: MenuViewModel
@@ -40,8 +44,8 @@ class MenuFragment : Fragment() {
             findNavController().navigate(R.id.action_menuFragment_to_catalogCardsFragment)
         }
         binding.voice.setOnClickListener {
-            val retrofitService: RetrofitService = RetrofitService()
-            retrofitService.getVoiceByName()
+            //отправим запрос на воспроизведение звука
+            EventBus.getDefault().post(VoiceEvent("playVoice", Voice("description.mp3",null)))
         }
     }
 }
