@@ -5,6 +5,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.zubrilkaenglish.models.ProgressWord
 import com.example.zubrilkaenglish.models.PropModel
+import com.example.zubrilkaenglish.models.Voice
 import com.example.zubrilkaenglish.models.Word
 import com.example.zubrilkaenglish.utils.MyApplication
 
@@ -12,7 +13,8 @@ import com.example.zubrilkaenglish.utils.MyApplication
     entities = [
     Word::class,
     PropModel::class,
-    ProgressWord::class
+    ProgressWord::class,
+    Voice::class
                      ],
     version = 1
 )
@@ -21,13 +23,14 @@ abstract class DataBase:RoomDatabase(){
     abstract fun getWordDAO(): WordDAO
     abstract fun getPropDAO(): PropDAO
     abstract fun getProgressDAO(): ProgressDAO
+    abstract fun getVoiceDAO(): VoiceDAO
 
     companion object{
 
         private var database: DataBase?=null
 
         @Synchronized
-        fun getInstanseDB():DataBase{
+        fun getInstanceDB():DataBase{
             return if(database==null){
                 database= Room.databaseBuilder(
                     MyApplication.context,

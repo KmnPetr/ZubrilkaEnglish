@@ -12,8 +12,8 @@ class VoiceHandler {
 
 
 
-    fun play(voice: Voice) {
-        voice.voiceData?.let { playMp3ByteArray(it) }
+    fun play(voice: Voice?) {
+        voice?.voiceData?.let { playMp3ByteArray(it) }
     }
 
 

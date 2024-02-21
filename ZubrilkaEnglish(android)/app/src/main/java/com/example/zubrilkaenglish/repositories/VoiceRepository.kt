@@ -3,6 +3,7 @@ package com.example.zubrilkaenglish.repositories
 import com.example.zubrilkaenglish.eventBus.events.VoiceEvent
 import com.example.zubrilkaenglish.models.Voice
 import com.example.zubrilkaenglish.repositories.retrofit.RetrofitService
+import com.example.zubrilkaenglish.repositories.room.RoomService
 import com.example.zubrilkaenglish.utils.VoiceHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -18,6 +19,7 @@ class VoiceRepository private constructor() {
         EventBus.getDefault().register(this)
     }
     val retrofitService: RetrofitService = RetrofitService()
+    val roomService: RoomService = RoomService()
     val voiceHandler: VoiceHandler = VoiceHandler()
 
     /**
@@ -28,21 +30,30 @@ class VoiceRepository private constructor() {
     fun subscribeOnVoiceEvent(event: VoiceEvent){
         when(event.typeEvent){
             "playVoice" -> {
-                playVoice(event.voice)
+                GlobalScope.launch(Dispatchers.Default) {
+                    getVoiceFromServices(event.voice.voiceName)?.let { voiceHandler.play(it) }
+
+                }
             }
         }
     }
 
-
-    private fun playVoice(voice: Voice){
-        GlobalScope.launch(Dispatchers.Default) {
-
-            if (voice.voiceData == null){
-                //получим Voice из сети
-                voice.voiceData = retrofitService.getVoiceDataByName(voice.voiceName)?.voiceData
+    /**
+     * функция достанет data для voice из ДБ или если там нет из сети
+     */
+    private suspend fun getVoiceFromServices(name: String):Voice?{
+        println("попытка взять Voice из БД")
+        var voice: Voice? = roomService.getVoiceByName(name)
+        if (voice?.voiceData == null){
+            println("попытка взять Voice из сети")
+            voice = retrofitService.getVoiceDataByName(name)
+            if (voice?.voiceData != null){
+                GlobalScope.launch(Dispatchers.Default) {
+                    println("сохранение voice в БД")
+                    roomService.insertNewVoice(voice)
+                }
             }
-
-            voiceHandler.play(voice)
         }
+        return voice
     }
 }

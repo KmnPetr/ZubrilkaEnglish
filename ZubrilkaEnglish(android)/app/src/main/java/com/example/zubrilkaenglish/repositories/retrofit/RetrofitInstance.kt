@@ -22,7 +22,7 @@ object RetrofitInstance {
     private val voiceRetrofit by lazy{
         Retrofit.Builder()
             .baseUrl(URL)
-            .client(okHttpClient)
+//            .client(okHttpClient)
             .build()
     }
     val wordApi:WordApi by lazy {

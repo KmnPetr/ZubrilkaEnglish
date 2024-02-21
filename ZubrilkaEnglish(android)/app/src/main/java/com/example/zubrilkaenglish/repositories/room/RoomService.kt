@@ -2,13 +2,17 @@ package com.example.zubrilkaenglish.repositories.room
 
 import com.example.zubrilkaenglish.models.Word
 import com.example.zubrilkaenglish.models.ProgressWord
+import com.example.zubrilkaenglish.models.Voice
 import com.example.zubrilkaenglish.models.WordCard
 
 class RoomService{
 
-    private val dataBase = DataBase.getInstanseDB()
+    private val dataBase = DataBase.getInstanceDB()
 
 
+    suspend fun getVoiceByName(name: String): Voice?{
+        return dataBase.getVoiceDAO().getVoiceByName(name)
+    }
     suspend fun insertListWords(listWords:List<Word>) {
         println("method \"insertListWords\" called")
             dataBase.getWordDAO().insertListWords(listWords)
@@ -73,6 +77,12 @@ class RoomService{
      */
     suspend fun getAllWordCards(): List<WordCard> {
         return dataBase.getWordDAO().getAllWordCards()
+    }
+
+    suspend fun insertNewVoice(voice: Voice) {
+        if (voice.voiceData != null){
+            dataBase.getVoiceDAO().insertNewVoice(voice)
+        }
     }
 
 }
