@@ -58,10 +58,15 @@ class CardAdapter(val listener: Listener):RecyclerView.Adapter<RecyclerView.View
         return cardList[position] is WordCard
     }
 
+    fun getCurrentCard(position: Int): ICard {
+        return cardList[position]
+    }
+
     interface Listener{
         fun onClickYesButton(wordCard: WordCard)
         fun onClickNoButton(wordCard: WordCard)
         fun onClickLookButton(wordCard: WordCard)
         fun onClickOptionsButton(wordCard: WordCard)
+        fun playVoice(wordCard: WordCard)
     }
 }

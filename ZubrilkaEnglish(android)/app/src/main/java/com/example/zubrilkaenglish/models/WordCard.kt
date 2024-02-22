@@ -13,6 +13,8 @@ data class WordCard(
     var cardHasChanged:Boolean=false
     @Ignore
     var lookButtonPressed:Boolean=false
+    @Ignore
+    var voiceSounded:Boolean=false
 
     override fun getItemViewType(): Int {
         return ICard.WORD_CARD_TYPE

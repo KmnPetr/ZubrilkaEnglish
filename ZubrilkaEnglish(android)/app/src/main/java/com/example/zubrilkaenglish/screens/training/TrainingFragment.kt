@@ -10,6 +10,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.example.zubrilkaenglish.databinding.FragmentTrainingBinding
 import com.example.zubrilkaenglish.eventBus.events.CardEvent
+import com.example.zubrilkaenglish.eventBus.events.VoiceEvent
+import com.example.zubrilkaenglish.models.ICard
+import com.example.zubrilkaenglish.models.Voice
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.screens.training.popup.PopupDialog
 import com.example.zubrilkaenglish.screens.training.popup.PopupOptions
@@ -65,6 +68,7 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
         }
 
         showCountCards()
+        automaticVoicePlayback()
     }
 
     override fun onStart() {
@@ -96,6 +100,24 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
             }
         }
     }
+
+    /**
+     * воспроизведение голоса при перелистывании новой карточки
+     */
+    private fun automaticVoicePlayback() {
+        binding.viewPager2.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
+            override fun onPageScrollStateChanged(state: Int) {
+                super.onPageScrollStateChanged(state)
+                if (state == 0){
+                    val card: ICard = adapter.getCurrentCard(binding.viewPager2.currentItem)
+                    if (card is WordCard && !card.voiceSounded){
+                        playVoice(card)
+                    }
+                }
+            }
+        })
+    }
+
 
     /**
      * слушатель при нажатии на кнопку "Yes"
@@ -130,6 +152,15 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
      */
     override fun onClickOptionsButton(wordCard: WordCard) {
         PopupOptions(requireActivity(),wordCard).show()
+    }
+
+    /**
+     *  метод инициирует озвучку карточки
+     */
+    override fun playVoice(wordCard: WordCard) {
+        if (wordCard.word.link_voice != null){
+            //отправим запрос на воспроизведение звука
+            EventBus.getDefault().post(VoiceEvent("playVoice", Voice(wordCard.word.link_voice,null)))}
     }
 
 

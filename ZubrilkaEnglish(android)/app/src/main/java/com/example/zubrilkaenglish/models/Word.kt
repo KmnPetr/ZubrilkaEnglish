@@ -18,14 +18,14 @@ data class Word(
     val description:String?,
     @ColumnInfo(name = "topic")
     val topic:String,
-    @ColumnInfo(name = "hasVoise")
-    val hasVoise: String?,
-    @ColumnInfo(name = "hasImage")
-    val hasImage: String?,
+    @ColumnInfo(name = "link_voice")
+    val link_voice: String?,
+    @ColumnInfo(name = "link_image")
+    val link_image: String?,
     @ColumnInfo(name = "sorting_value")
     val sorting_value: Int
 ){
     override fun toString(): String {
-        return "Word $id, $foreignWord, $transcription, $translation, $description, $topic, $hasVoise, $hasImage"
+        return "Word $id, $foreignWord, $transcription, $translation, $description, $topic, $link_voice, $link_image"
     }
 }
