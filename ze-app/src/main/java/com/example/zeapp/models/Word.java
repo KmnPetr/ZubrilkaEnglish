@@ -26,10 +26,10 @@ public class Word {
     private String translation;
     @Column("description")
     private String description;
-    @Column("has_voise")
-    private String hasVoise;
-    @Column("has_image")
-    private String hasImage;
+    @Column("link_voice")
+    private String link_voice;
+    @Column("link_image")
+    private String link_image;
     @Column("topic")
     private String topic;
     @Column("sorting_value")
