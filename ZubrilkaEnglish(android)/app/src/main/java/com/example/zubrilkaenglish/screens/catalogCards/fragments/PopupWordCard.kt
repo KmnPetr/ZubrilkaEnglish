@@ -7,14 +7,12 @@ import android.graphics.drawable.ColorDrawable
 import android.view.View
 import android.view.Window
 import com.example.zubrilkaenglish.databinding.PopupWordcardBinding
-import com.example.zubrilkaenglish.eventBus.events.CardEvent
+import com.example.zubrilkaenglish.events.CardEvent
+import com.example.zubrilkaenglish.events.CrEvEnum
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.screens.catalogCards.CatalogCardsViewModel
-import com.example.zubrilkaenglish.utils.SIM_FORM_DATE
 import com.example.zubrilkaenglish.utils.StatProgress
 import org.greenrobot.eventbus.EventBus
-import java.text.SimpleDateFormat
-import java.util.Date
 
 class PopupWordCard(
     context: Context,
@@ -73,25 +71,25 @@ class PopupWordCard(
         //в CardEvent добавляем позицию адаптера для дальнейшего обновления элемента адаптера а не всего списка адаптера
         if (addToTrain.isEnabled){
             addToTrain.setOnClickListener {
-                EventBus.getDefault().post(CardEvent("add_word_to_training",wordCard, mapOf("positionAdapter" to position)))
+                EventBus.getDefault().post(CardEvent(CrEvEnum.ADD_WORD_TO_TRAINING,wordCard, mapOf("positionAdapter" to position)))
                 dismiss()
             }
         }
         if (markLearned.isEnabled){
             markLearned.setOnClickListener {
-                EventBus.getDefault().post(CardEvent("set_as_learned",wordCard, mapOf("positionAdapter" to position)))
+                EventBus.getDefault().post(CardEvent(CrEvEnum.SET_AS_LEARNED,wordCard, mapOf("positionAdapter" to position)))
                 dismiss()
             }
         }
         if (resetProgress.isEnabled){
             resetProgress.setOnClickListener {
-                EventBus.getDefault().post(CardEvent("reset_progress",wordCard, mapOf("positionAdapter" to position)))
+                EventBus.getDefault().post(CardEvent(CrEvEnum.RESET_PROGRESS,wordCard, mapOf("positionAdapter" to position)))
                 dismiss()
             }
         }
         if (deleteCard.isEnabled){
             deleteCard.setOnClickListener {
-                EventBus.getDefault().post(CardEvent("delete_card",wordCard, mapOf("positionAdapter" to position)))
+                EventBus.getDefault().post(CardEvent(CrEvEnum.DELETE_CARD,wordCard, mapOf("positionAdapter" to position)))
                 dismiss()
             }
         }

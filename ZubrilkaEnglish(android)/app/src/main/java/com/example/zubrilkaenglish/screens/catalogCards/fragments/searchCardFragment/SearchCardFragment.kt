@@ -7,7 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.zubrilkaenglish.databinding.FragmentSearchCardBinding
-import com.example.zubrilkaenglish.eventBus.events.CardEvent
+import com.example.zubrilkaenglish.events.CardEvent
+import com.example.zubrilkaenglish.events.CrEvEnum
 import com.example.zubrilkaenglish.screens.catalogCards.CatalogCardsFragment
 import com.example.zubrilkaenglish.screens.catalogCards.CatalogCardsViewModel
 import com.example.zubrilkaenglish.screens.catalogCards.fragments.FragmentItem
@@ -60,9 +61,11 @@ class SearchCardFragment(
     @Subscribe
     fun event_CardChanged(event: CardEvent){
         when(event.typeEvent){
-            "card_changed" -> {
+            CrEvEnum.CARD_CHANGED -> {
                     adapter.notifyItemChanged(event.properties!!.get("positionAdapter") as Int)
             }
+
+            else -> {}
         }
     }
 

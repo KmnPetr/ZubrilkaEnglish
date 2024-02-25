@@ -9,8 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.example.zubrilkaenglish.databinding.FragmentTrainingBinding
-import com.example.zubrilkaenglish.eventBus.events.CardEvent
-import com.example.zubrilkaenglish.eventBus.events.VoiceEvent
+import com.example.zubrilkaenglish.events.CardEvent
+import com.example.zubrilkaenglish.events.CrEvEnum
+import com.example.zubrilkaenglish.events.VcEvEnum
+import com.example.zubrilkaenglish.events.VoiceEvent
 import com.example.zubrilkaenglish.models.ICard
 import com.example.zubrilkaenglish.models.Voice
 import com.example.zubrilkaenglish.models.WordCard
@@ -88,16 +90,17 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
     @Subscribe
     fun event_CardChanged(event: CardEvent){
         when(event.typeEvent){
-            "card_changed" -> {
+            CrEvEnum.CARD_CHANGED -> {
                 adapter.notifyItemChanged(binding.viewPager2.currentItem)
                 flippingCard()
             }
-            "sleep_event" -> {
+            CrEvEnum.SLEEP_EVENT -> {
                 //отменим перелистывание
                 viewModel.userScrolls = 0
                 //покажем окошко
                 PopupDialog(requireContext(),event.wordCard).show()
             }
+            else -> {}
         }
     }
 
@@ -126,7 +129,7 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
     override fun onClickYesButton(wordCard: WordCard) {
 
         wordCard.cardHasChanged=true
-        EventBus.getDefault().post(CardEvent("increase_progress",wordCard))
+        EventBus.getDefault().post(CardEvent(CrEvEnum.INCREASE_PROGRESS,wordCard))
     }
 
     /**
@@ -136,7 +139,7 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
     override fun onClickNoButton(wordCard: WordCard) {
         wordCard.cardHasChanged=true
         //отправим запрос на сброс значения numCorrAnsv
-        EventBus.getDefault().post(CardEvent("reset_numCorrAnsv", wordCard))
+        EventBus.getDefault().post(CardEvent(CrEvEnum.RESET_numCorrAnsv, wordCard))
     }
 
     /**
@@ -160,7 +163,7 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
     override fun playVoice(wordCard: WordCard) {
         if (wordCard.word.link_voice != null){
             //отправим запрос на воспроизведение звука
-            EventBus.getDefault().post(VoiceEvent("playVoice", Voice(wordCard.word.link_voice,null)))}
+            EventBus.getDefault().post(VoiceEvent(VcEvEnum.PLAY_VOICE, Voice(wordCard.word.link_voice,null)))}
     }
 
 

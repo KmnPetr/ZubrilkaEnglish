@@ -1,6 +1,7 @@
 package com.example.zubrilkaenglish.repositories
 
-import com.example.zubrilkaenglish.eventBus.events.VoiceEvent
+import com.example.zubrilkaenglish.events.VcEvEnum
+import com.example.zubrilkaenglish.events.VoiceEvent
 import com.example.zubrilkaenglish.models.Voice
 import com.example.zubrilkaenglish.repositories.retrofit.RetrofitService
 import com.example.zubrilkaenglish.repositories.room.RoomService
@@ -29,12 +30,13 @@ class VoiceRepository private constructor() {
     @Subscribe
     fun subscribeOnVoiceEvent(event: VoiceEvent){
         when(event.typeEvent){
-            "playVoice" -> {
+            VcEvEnum.PLAY_VOICE -> {
                 GlobalScope.launch(Dispatchers.Default) {
                     getVoiceFromServices(event.voice.voiceName)?.let { voiceHandler.play(it) }
 
                 }
             }
+            else -> {}
         }
     }
 

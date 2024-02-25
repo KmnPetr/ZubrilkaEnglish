@@ -7,7 +7,8 @@ import android.graphics.drawable.ColorDrawable
 import android.view.View
 import android.view.Window
 import com.example.zubrilkaenglish.databinding.PopupDialogSleepCardBinding
-import com.example.zubrilkaenglish.eventBus.events.CardEvent
+import com.example.zubrilkaenglish.events.CardEvent
+import com.example.zubrilkaenglish.events.CrEvEnum
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.utils.StatProgress
 import org.greenrobot.eventbus.EventBus
@@ -55,17 +56,20 @@ class PopupDialog(
 
         binding.btnYes.setOnClickListener {
             //отправим желание пользователя на усыпление карточки
-            EventBus.getDefault().post(CardEvent(
-                "intent_sleep",
+            EventBus.getDefault().post(
+                CardEvent(
+                CrEvEnum.INTENT_SLEEP,
                 wordCard,
                 mapOf("countDay" to binding.slider.value.toInt())
-            ))
+            )
+            )
             dismiss()
         }
         binding.btnCansel.setOnClickListener {
             //просто уведомим view чтобы она перелистнула пейджер
             //по сути изменений нет
-            EventBus.getDefault().post(CardEvent("card_changed", wordCard)
+            EventBus.getDefault().post(
+                CardEvent(CrEvEnum.CARD_CHANGED, wordCard)
             )
             dismiss()
         }

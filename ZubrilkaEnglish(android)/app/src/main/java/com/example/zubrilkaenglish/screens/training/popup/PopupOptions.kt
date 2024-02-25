@@ -5,11 +5,10 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.Window
-import android.widget.Toast
 import com.example.zubrilkaenglish.databinding.PopupOptionsTrainCardBinding
-import com.example.zubrilkaenglish.eventBus.events.CardEvent
+import com.example.zubrilkaenglish.events.CardEvent
+import com.example.zubrilkaenglish.events.CrEvEnum
 import com.example.zubrilkaenglish.models.WordCard
-import com.example.zubrilkaenglish.utils.MyApplication
 import org.greenrobot.eventbus.EventBus
 
 /**
@@ -38,15 +37,15 @@ class PopupOptions(
     private fun setListeners(wordCard: WordCard) {
         binding.markLearned.setOnClickListener {
             //попросим репозиторий сделать карточку выученной
-            EventBus.getDefault().post(CardEvent("set_as_learned",wordCard))
+            EventBus.getDefault().post(CardEvent(CrEvEnum.SET_AS_LEARNED,wordCard))
             dismiss()
         }
         binding.resetProgress.setOnClickListener {
-            EventBus.getDefault().post(CardEvent("reset_progress",wordCard))
+            EventBus.getDefault().post(CardEvent(CrEvEnum.RESET_PROGRESS,wordCard))
             dismiss()
         }
         binding.deleteCard.setOnClickListener {
-            EventBus.getDefault().post(CardEvent("delete_card",wordCard))
+            EventBus.getDefault().post(CardEvent(CrEvEnum.DELETE_CARD,wordCard))
             dismiss()
         }
     }

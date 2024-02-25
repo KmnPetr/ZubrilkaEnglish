@@ -8,7 +8,8 @@ import android.view.ViewGroup
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.zubrilkaenglish.databinding.FragmentCatalogItemBinding
-import com.example.zubrilkaenglish.eventBus.events.CardEvent
+import com.example.zubrilkaenglish.events.CardEvent
+import com.example.zubrilkaenglish.events.CrEvEnum
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.screens.catalogCards.CatalogCardsFragment
 import com.example.zubrilkaenglish.screens.catalogCards.CatalogCardsViewModel
@@ -75,11 +76,13 @@ class CatalogItemFragment(
     @Subscribe
     fun event_CardChanged(event: CardEvent){
         when(event.typeEvent){
-            "card_changed" -> {
+            CrEvEnum.CARD_CHANGED -> {
                 if (recyclerView.adapter is ListCardsAdapter){
                     cardAdapter.notifyItemChanged(event.properties!!.get("positionAdapter") as Int)
                 }
             }
+
+            else -> {}
         }
     }
 

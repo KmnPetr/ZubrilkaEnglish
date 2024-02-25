@@ -1,8 +1,9 @@
 package com.example.zubrilkaenglish.repositories
 
 import android.database.sqlite.SQLiteConstraintException
-import com.example.zubrilkaenglish.eventBus.events.CardEvent
-import com.example.zubrilkaenglish.eventBus.events.NotificationEvent
+import com.example.zubrilkaenglish.events.CardEvent
+import com.example.zubrilkaenglish.events.CrEvEnum
+import com.example.zubrilkaenglish.events.NotificationEvent
 import com.example.zubrilkaenglish.models.ICard
 import com.example.zubrilkaenglish.models.NewsCard
 import com.example.zubrilkaenglish.models.ProgressWord
@@ -41,21 +42,21 @@ class CardsRepository private constructor(){
     @Subscribe
     fun subscribeOnCardEvent(event: CardEvent){
         when(event.typeEvent){
-            "intent_sleep" -> {
+            CrEvEnum.INTENT_SLEEP -> {
                 event.wordCard = setSleepCard(event.wordCard,event.properties!!.get("countDay") as Int)
                 notifyChangeCard(event)
             }
-            "increase_progress" -> {
+            CrEvEnum.INCREASE_PROGRESS -> {
                 event.wordCard = increaseProgressCard(event.wordCard)
                 notifyChangeCard(event)
                 //проверим, не пора ли карточке спать
-                if (checkCardSleep(event.wordCard)) EventBus.getDefault().post(CardEvent("sleep_event", event.wordCard))
+                if (checkCardSleep(event.wordCard)) EventBus.getDefault().post(CardEvent(CrEvEnum.SLEEP_EVENT, event.wordCard))
             }
-            "reset_numCorrAnsv" -> {
+            CrEvEnum.RESET_numCorrAnsv -> {
                 event.wordCard = resetNumCorrAnsv(event.wordCard)
                 notifyChangeCard(event)
             }
-            "set_as_learned" -> {
+            CrEvEnum.SET_AS_LEARNED -> {
                 GlobalScope.launch(Dispatchers.Default) {
                     event.wordCard = setCardAsLearned(event.wordCard)
                     withContext(Dispatchers.Main) {
@@ -63,7 +64,7 @@ class CardsRepository private constructor(){
                     }
                 }
             }
-            "add_word_to_training" -> {
+            CrEvEnum.ADD_WORD_TO_TRAINING -> {
                 GlobalScope.launch(Dispatchers.Default) {
                     event.wordCard = addWordToTraining(event.wordCard)
                     withContext(Dispatchers.Main) {
@@ -71,14 +72,15 @@ class CardsRepository private constructor(){
                     }
                 }
             }
-            "reset_progress" -> {
+            CrEvEnum.RESET_PROGRESS -> {
                 event.wordCard = resetProgressCard(event.wordCard)
                 notifyChangeCard(event)
             }
-            "delete_card" -> {
+            CrEvEnum.DELETE_CARD -> {
                 event.wordCard = deleteProgressCard(event.wordCard)
                 notifyChangeCard(event)
             }
+            else -> {}
         }
     }
     /**
@@ -277,7 +279,7 @@ class CardsRepository private constructor(){
     private fun notifyChangeCard(event: CardEvent){
         EventBus.getDefault().post(
             CardEvent(
-                "card_changed",
+                CrEvEnum.CARD_CHANGED,
                 event.wordCard,
                 event.properties //там может передаваться например позиция адаптера или еще чтонибудь, поэтому вернем проперти таким каким оно пришло в репозиторий
             )

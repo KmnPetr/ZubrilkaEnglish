@@ -1,12 +1,9 @@
 package com.example.zubrilkaenglish.screens
 
-import android.os.Looper
 import android.widget.Toast
-import com.example.zubrilkaenglish.eventBus.events.NotificationEvent
+import com.example.zubrilkaenglish.events.NfEvEnum
+import com.example.zubrilkaenglish.events.NotificationEvent
 import com.example.zubrilkaenglish.utils.MyApplication
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 
@@ -28,9 +25,11 @@ class ApiNotification private constructor() {
     @Subscribe
     fun showToast(event: NotificationEvent){
         when(event.typeEvent){
-            "show_toast" -> {
+            NfEvEnum.SHOW_TOAST -> {
                 Toast.makeText(MyApplication.context,event.message,event.properties?.get("duration") as Int).show()
             }
+
+            else -> {}
         }
     }
 }
