@@ -1,0 +1,64 @@
+package com.example.ze_adminandroid.ui.catalogWords.fragments
+
+import android.graphics.Color
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import com.example.ze_adminandroid.R
+import com.example.ze_adminandroid.databinding.WordViewBinding
+import com.example.ze_adminandroid.models.Word
+
+/**
+ * адаптер занимается показом списка карточек (слов, фраз)
+ */
+class ListCardsAdapter(val fragmentItem: FragmentItem) : RecyclerView.Adapter<ListCardsAdapter.CardHolder>() {
+
+    private var listCards= emptyList<Word>()
+
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardHolder {
+        val view= LayoutInflater.from(parent.context).inflate(R.layout.word_view,parent,false)
+        return CardHolder(view)
+    }
+
+    override fun getItemCount(): Int {
+        return listCards.size
+    }
+
+    override fun onBindViewHolder(holder: CardHolder, position: Int) {
+        holder.bind(listCards[position], fragmentItem,position)
+    }
+
+    fun setList(list:List<Word>){
+        listCards=list
+        notifyDataSetChanged()
+    }
+    class CardHolder(view: View) : RecyclerView.ViewHolder(view){
+        private val binding= WordViewBinding.bind(view)
+        private var idWord: Int? = null
+
+        fun bind(word: Word, fragmentItem: FragmentItem,position: Int) {
+            idWord = word.id
+            binding.foreignWord.text=word.foreignWord
+            binding.translation.text=word.translation
+
+            binding.linearLayout.setCardBackgroundColor(setUpBackground(word))
+
+            binding.root.setOnClickListener {
+                fragmentItem.owner.onClickCard(word,position)
+            }
+        }
+
+        /**
+         * функция настроит цвет и прозрачность элемента карточки
+         */
+        private fun setUpBackground(word: Word): Int {
+            //добавим прозрачности
+            val transp : Int = 50
+            val transpGray = Color.argb(transp, Color.red(Color.GRAY), Color.green(Color.GRAY), Color.blue(Color.GRAY))
+
+                return transpGray
+        }
+    }
+}
