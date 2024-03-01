@@ -79,17 +79,32 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/description" />
 
-    <EditText
-        android:id="@+id/link_voice"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="link_voice"
-        android:gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topic" />
+        app:layout_constraintTop_toBottomOf="@+id/topic"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/link_voice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="link_voice" />
+
+        <ImageButton
+            android:id="@+id/folderButton"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/folder_small" />
+
+    </LinearLayout>
+
 
     <EditText
         android:id="@+id/link_image"
@@ -101,7 +116,7 @@
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/link_voice" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <TextView
         android:id="@+id/sorting_value"
@@ -112,5 +127,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/link_image" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

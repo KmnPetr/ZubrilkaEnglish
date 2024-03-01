@@ -34,6 +34,16 @@ class EditWordFragment : Fragment() {
         editedWord = myBundle["editedWord"] as Word
 
         showWordFields()
+        setLiseners()
+    }
+
+    /**
+     * установит слушатели на кнопки
+     */
+    private fun setLiseners() {
+        binding.folderButton.setOnClickListener{
+            println("yf;fnf ryjgrf")
+        }
     }
 
     /**
