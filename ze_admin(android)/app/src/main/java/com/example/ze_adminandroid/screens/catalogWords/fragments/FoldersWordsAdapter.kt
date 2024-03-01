@@ -1,4 +1,4 @@
-package com.example.ze_adminandroid.ui.catalogWords.fragments
+package com.example.ze_adminandroid.screens.catalogWords.fragments
 
 import android.view.LayoutInflater
 import android.view.View

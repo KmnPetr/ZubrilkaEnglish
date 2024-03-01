@@ -1,4 +1,4 @@
-package com.example.ze_adminandroid.ui.catalogWords.fragments
+package com.example.ze_adminandroid.screens.catalogWords.fragments
 
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -12,7 +12,7 @@ import com.example.ze_adminandroid.models.Word
 /**
  * адаптер занимается показом списка карточек (слов, фраз)
  */
-class ListCardsAdapter(val fragmentItem: FragmentItem) : RecyclerView.Adapter<ListCardsAdapter.CardHolder>() {
+class ListCardsAdapter(val listener: FragmentItem) : RecyclerView.Adapter<ListCardsAdapter.CardHolder>() {
 
     private var listCards= emptyList<Word>()
 
@@ -27,7 +27,7 @@ class ListCardsAdapter(val fragmentItem: FragmentItem) : RecyclerView.Adapter<Li
     }
 
     override fun onBindViewHolder(holder: CardHolder, position: Int) {
-        holder.bind(listCards[position], fragmentItem,position)
+        holder.bind(listCards[position], listener,position)
     }
 
     fun setList(list:List<Word>){
@@ -38,7 +38,7 @@ class ListCardsAdapter(val fragmentItem: FragmentItem) : RecyclerView.Adapter<Li
         private val binding= WordViewBinding.bind(view)
         private var idWord: Int? = null
 
-        fun bind(word: Word, fragmentItem: FragmentItem,position: Int) {
+        fun bind(word: Word, listener: FragmentItem,position: Int) {
             idWord = word.id
             binding.foreignWord.text=word.foreignWord
             binding.translation.text=word.translation
@@ -46,7 +46,8 @@ class ListCardsAdapter(val fragmentItem: FragmentItem) : RecyclerView.Adapter<Li
             binding.linearLayout.setCardBackgroundColor(setUpBackground(word))
 
             binding.root.setOnClickListener {
-                fragmentItem.owner.onClickCard(word,position)
+                listener.onClickWord(word)
+//                listener.owner.onClickCard(word,position)
             }
         }
 
@@ -56,9 +57,7 @@ class ListCardsAdapter(val fragmentItem: FragmentItem) : RecyclerView.Adapter<Li
         private fun setUpBackground(word: Word): Int {
             //добавим прозрачности
             val transp : Int = 50
-            val transpGray = Color.argb(transp, Color.red(Color.GRAY), Color.green(Color.GRAY), Color.blue(Color.GRAY))
-
-                return transpGray
+            return Color.argb(transp, Color.red(Color.GRAY), Color.green(Color.GRAY), Color.blue(Color.GRAY))
         }
     }
 }

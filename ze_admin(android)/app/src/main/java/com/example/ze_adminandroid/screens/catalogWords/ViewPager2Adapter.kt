@@ -1,4 +1,4 @@
-package com.example.ze_adminandroid.ui.catalogWords
+package com.example.ze_adminandroid.screens.catalogWords
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter

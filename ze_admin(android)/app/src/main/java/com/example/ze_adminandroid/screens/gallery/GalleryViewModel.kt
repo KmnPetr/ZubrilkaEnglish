@@ -1,4 +1,4 @@
-package com.example.ze_adminandroid.ui.gallery
+package com.example.ze_adminandroid.screens.gallery
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -1,4 +1,4 @@
-package com.example.ze_adminandroid.ui.catalogWords
+package com.example.ze_adminandroid.screens.catalogWords
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.viewpager2.widget.ViewPager2
 import com.example.ze_adminandroid.databinding.FragmentCatalogWordsBinding
 import com.example.ze_adminandroid.models.Word
-import com.example.ze_adminandroid.ui.catalogWords.fragments.CatalogItemFragment
+import com.example.ze_adminandroid.screens.catalogWords.fragments.CatalogItemFragment
 import com.example.ze_adminandroid.util.SearchObject
 import com.google.android.material.tabs.TabLayout
 

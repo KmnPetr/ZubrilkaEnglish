@@ -1,4 +1,4 @@
-package com.example.ze_adminandroid.ui.catalogWords
+package com.example.ze_adminandroid.screens.catalogWords
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

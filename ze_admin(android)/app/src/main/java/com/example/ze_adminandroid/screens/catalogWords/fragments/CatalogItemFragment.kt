@@ -1,16 +1,20 @@
-package com.example.ze_adminandroid.ui.catalogWords.fragments
+package com.example.ze_adminandroid.screens.catalogWords.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ze_adminandroid.R
 import com.example.ze_adminandroid.databinding.FragmentCatalogItemBinding
 import com.example.ze_adminandroid.models.Word
-import com.example.ze_adminandroid.ui.catalogWords.CatalogWordsFragment
-import com.example.ze_adminandroid.ui.catalogWords.CatalogWordsViewModel
+import com.example.ze_adminandroid.screens.catalogWords.CatalogWordsFragment
+import com.example.ze_adminandroid.screens.catalogWords.CatalogWordsViewModel
+import com.example.ze_adminandroid.util.myBundle
 
 class CatalogItemFragment(
     val viewModel_CW: CatalogWordsViewModel,
@@ -66,6 +70,13 @@ class CatalogItemFragment(
         mapFoldersCards.observe(viewLifecycleOwner){
             it[namesFolders.value?.get(positionFolder)]?.let { it1 -> cardAdapter.setList(it1) }
         }
+    }
+    /**
+     * выполняется при нажатии на элемент слова
+     */
+    override fun onClickWord(word: Word) {
+        myBundle.put("editedWord",word)
+        findNavController().navigate(R.id.action_catalogWordsFragment_to_editWordFragment)
     }
 
     /**
