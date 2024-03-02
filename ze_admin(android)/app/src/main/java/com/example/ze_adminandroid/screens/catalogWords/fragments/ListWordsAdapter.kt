@@ -47,7 +47,6 @@ class ListCardsAdapter(val listener: FragmentItem) : RecyclerView.Adapter<ListCa
 
             binding.root.setOnClickListener {
                 listener.onClickWord(word)
-//                listener.owner.onClickCard(word,position)
             }
         }
 

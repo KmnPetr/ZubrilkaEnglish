@@ -6,9 +6,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import com.example.ze_adminandroid.R
 import com.example.ze_adminandroid.databinding.FragmentEditWordBinding
 import com.example.ze_adminandroid.models.Word
 import com.example.ze_adminandroid.util.myBundle
+import java.io.File
 
 /**
  * в фрагменте редактируется или создается новый Word
@@ -42,7 +45,7 @@ class EditWordFragment : Fragment() {
      */
     private fun setLiseners() {
         binding.folderButton.setOnClickListener{
-            println("yf;fnf ryjgrf")
+            findNavController().navigate(R.id.action_editWordFragment_to_filesFragment)
         }
     }
 
