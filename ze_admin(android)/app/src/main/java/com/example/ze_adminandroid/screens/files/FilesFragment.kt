@@ -7,8 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ze_adminandroid.R
 import com.example.ze_adminandroid.databinding.FragmentFilesBinding
+import com.example.ze_adminandroid.util.VoiceHandler
 import java.io.File
 
 class FilesFragment : Fragment() {
@@ -18,6 +18,7 @@ class FilesFragment : Fragment() {
     private lateinit var adapter: FilesAdapter
     private lateinit var fileManager: FileManager
     lateinit var recyclerView: RecyclerView
+    private val voiceHandler = VoiceHandler()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,12 +31,21 @@ class FilesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(FilesViewModel::class.java)
-        adapter = FilesAdapter()
+        adapter = FilesAdapter(::clickFile,::onClickButtonPlay)
         recyclerView = binding.recyclerView
         recyclerView.adapter = adapter
         fileManager = FileManager()
 
-//        adapter.setList(listOf(fileManager.rootFile))
+        adapter.setList(listOf(fileManager.downloadFolder))
     }
 
+    fun onClickButtonPlay(file: File){
+        println("clickButtonPlay")
+        voiceHandler.play(file)
+    }
+    fun clickFile(file: File){
+        if(file.isDirectory){
+            fileManager.getListFiles(file)?.let { adapter.setList(it.toList()) }
+        }
+    }
 }

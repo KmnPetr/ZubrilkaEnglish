@@ -16,7 +16,7 @@ object RetrofitInstance {
         Retrofit.Builder()
             .baseUrl(URL)
             .addConverterFactory(GsonConverterFactory.create())
-            .client(okHttpClient)
+//            .client(okHttpClient)
             .build()
     }
     //этот инстанс ретрофита принимает просто байты не пытаясь их распарсить в json
