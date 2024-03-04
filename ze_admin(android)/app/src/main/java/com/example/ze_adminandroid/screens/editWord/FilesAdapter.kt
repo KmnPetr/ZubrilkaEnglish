@@ -1,4 +1,4 @@
-package com.example.ze_adminandroid.screens.files
+package com.example.ze_adminandroid.screens.editWord
 
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +13,7 @@ class FilesAdapter(
     private val onClickButtonPlay: (File) -> Unit
 ) : RecyclerView.Adapter<FilesAdapter.FileHolder>() {
 
-    var listFiles= emptyList<File>()
+    private var listFiles= emptyList<File>()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FileHolder {

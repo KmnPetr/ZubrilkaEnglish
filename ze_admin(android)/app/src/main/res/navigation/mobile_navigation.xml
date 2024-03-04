@@ -35,14 +35,5 @@
         android:id="@+id/editWordFragment"
         android:name="com.example.ze_adminandroid.screens.editWord.EditWordFragment"
         android:label="fragment_edit_word"
-        tools:layout="@layout/fragment_edit_word" >
-        <action
-            android:id="@+id/action_editWordFragment_to_filesFragment"
-            app:destination="@id/filesFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/filesFragment"
-        android:name="com.example.ze_adminandroid.screens.files.FilesFragment"
-        android:label="fragment_files"
-        tools:layout="@layout/fragment_files" />
+        tools:layout="@layout/fragment_edit_word" />
 </navigation>

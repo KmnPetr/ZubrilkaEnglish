@@ -49,20 +49,22 @@ class EditWordFragment : Fragment() {
      */
     private fun setLiseners() {
         binding.folderButton.setOnClickListener{
-//            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-//            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-//            startActivity(intent)
-            val permission = Manifest.permission.READ_EXTERNAL_STORAGE
-            val requestCode = 1
+//            getPermission()
+//            findNavController().navigate(R.id.action_editWordFragment_to_filesFragment)
+            val popup = PopUpStorage(requireContext())
+            popup.show()
+        }
+    }
 
-            if (ContextCompat.checkSelfPermission(requireActivity(), permission) != PackageManager.PERMISSION_GRANTED) {
-                println("no permission")
-                ActivityCompat.requestPermissions(requireActivity(), arrayOf(permission), requestCode)
-            }else {
-                println("permission yes")
+    /**
+     * попросит разрешение на доступ к хранилищу
+     */
+    private fun getPermission() {
+        val permission = Manifest.permission.READ_EXTERNAL_STORAGE
+        val requestCode = 1
 
-            findNavController().navigate(R.id.action_editWordFragment_to_filesFragment)
-            }
+        if (ContextCompat.checkSelfPermission(requireActivity(), permission) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(), arrayOf(permission), requestCode)
         }
     }
 

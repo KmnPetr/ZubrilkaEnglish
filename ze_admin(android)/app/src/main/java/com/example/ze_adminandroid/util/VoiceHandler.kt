@@ -12,9 +12,8 @@ class VoiceHandler {
     fun play(/*voice: Voice?*/file: File) {
 
         if (!file.isDirectory&&file.name.endsWith(".mp3")){
-            playMp3ByteArray(file)
+            playMp3File(file)
         }
-
 
         /*voice?.voiceData?.let { playMp3ByteArray(it) }*/
     }
@@ -23,7 +22,7 @@ class VoiceHandler {
 
 
 
-    private fun playMp3ByteArray(/*mp3ByteArray: ByteArray*/file: File) {
+    private fun playMp3File(/*mp3ByteArray: ByteArray*/file: File) {
 
 //        val tempMp3 = File.createTempFile("temp", "mp3") // Создаем временный файл
 //        tempMp3.deleteOnExit() // Удаляем временный файл после воспроизведения
@@ -36,7 +35,7 @@ class VoiceHandler {
 
 
         try {
-            mediaPlayer.setDataSource(file.absolutePath) // Устанавливаем временный файл в качестве источника данных
+            mediaPlayer.setDataSource(file.absolutePath)
             mediaPlayer.prepare()
             mediaPlayer.start()
         } catch (e: Exception) {

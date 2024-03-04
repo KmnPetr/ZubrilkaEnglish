@@ -1,4 +1,4 @@
-package com.example.ze_adminandroid.screens.files
+package com.example.ze_adminandroid.screens.editWord
 
 import android.os.Environment
 import java.io.File
