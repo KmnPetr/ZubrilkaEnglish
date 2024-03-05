@@ -1,18 +1,21 @@
 package com.example.ze_adminandroid.screens.editWord
 
 import android.Manifest
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
-import com.example.ze_adminandroid.R
 import com.example.ze_adminandroid.databinding.FragmentEditWordBinding
 import com.example.ze_adminandroid.models.Word
 import com.example.ze_adminandroid.util.myBundle
@@ -54,6 +57,31 @@ class EditWordFragment : Fragment() {
             val popup = PopUpStorage(requireContext())
             popup.show()
         }
+        binding.internetButton.setOnClickListener {
+            clipText(editedWord.foreignWord)
+            openBrowser()
+        }
+    }
+
+    /**
+     * откроет страницу в браузере
+     */
+    private fun openBrowser() {
+        val url = "https://myefe.ru/anglijskaya-transkriptsiya.html"
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(intent)
+    }
+
+    /**
+     * скопирует текст в буфер обмена
+     */
+    private fun clipText(foreignWord: String?) {
+        val clipboardManager = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("Text", foreignWord)
+        clipboardManager.setPrimaryClip(clip)
+// Выводим уведомление об успешном копировании
+        Toast.makeText(requireActivity(), "Скопировано в буфер обмена: " + foreignWord, Toast.LENGTH_SHORT).show()
+
     }
 
     /**
