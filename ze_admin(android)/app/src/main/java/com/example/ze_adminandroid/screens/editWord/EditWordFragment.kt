@@ -65,6 +65,7 @@ class EditWordFragment : Fragment() {
         }
         binding.saveButton.setOnClickListener {
             val word = Word(
+                null,
                 editedWord.id,
                 binding.foreignWord.text.toString(),
                 binding.transcription.text.toString(),

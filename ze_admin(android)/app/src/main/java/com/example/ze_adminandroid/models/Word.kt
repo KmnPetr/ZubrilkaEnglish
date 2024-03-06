@@ -12,7 +12,7 @@ data class Word(
     // при этом строго запрещено ей менять id приходящее с сервера,
     // и новые созданные Word отправляются на сервер с значением id = null
     @PrimaryKey
-    val localBaseId: Int,
+    val localBaseId: Int?,
 
 
     @ColumnInfo(name = "id")
