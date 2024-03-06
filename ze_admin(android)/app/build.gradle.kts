@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
 }
 
 android {
@@ -74,4 +75,11 @@ dependencies {
     //Lucene Snowball для сравнения слов по корню
     // https://mvnrepository.com/artifact/org.apache.lucene/lucene-snowball
     implementation("org.apache.lucene:lucene-snowball:3.0.3")
+
+
+    //SQLite
+    implementation("androidx.room:room-runtime:2.5.1")
+    annotationProcessor("androidx.room:room-compiler:2.5.1")
+    kapt("androidx.room:room-compiler:2.5.1")
+    implementation("androidx.room:room-ktx:2.5.1")
 }

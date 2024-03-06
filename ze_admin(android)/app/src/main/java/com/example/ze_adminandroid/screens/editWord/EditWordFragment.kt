@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.ze_adminandroid.databinding.FragmentEditWordBinding
 import com.example.ze_adminandroid.models.Word
+import com.example.ze_adminandroid.repositories.WordRepository
 import com.example.ze_adminandroid.util.myBundle
 
 /**
@@ -28,6 +29,7 @@ class EditWordFragment : Fragment() {
     private lateinit var viewModel: EditWordViewModel
     private lateinit var binding: FragmentEditWordBinding
     private lateinit var editedWord: Word
+    private lateinit var wordRepository: WordRepository
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,6 +43,7 @@ class EditWordFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(EditWordViewModel::class.java)
+        wordRepository = WordRepository.instance
         editedWord = myBundle["editedWord"] as Word
 
         showWordFields()
@@ -52,14 +55,27 @@ class EditWordFragment : Fragment() {
      */
     private fun setLiseners() {
         binding.folderButton.setOnClickListener{
-//            getPermission()
-//            findNavController().navigate(R.id.action_editWordFragment_to_filesFragment)
+            getPermission()
             val popup = PopUpStorage(requireContext())
             popup.show()
         }
         binding.internetButton.setOnClickListener {
             clipText(editedWord.foreignWord)
             openBrowser()
+        }
+        binding.saveButton.setOnClickListener {
+            val word = Word(
+                editedWord.id,
+                binding.foreignWord.text.toString(),
+                binding.transcription.text.toString(),
+                binding.translation.text.toString(),
+                binding.description.text.toString(),
+                binding.topic.text.toString(),
+                binding.linkVoice.text.toString(),
+                binding.linkImage.text.toString(),
+                editedWord.sorting_value
+            )
+            wordRepository.saveEditableWord(word)
         }
     }
 
@@ -79,7 +95,7 @@ class EditWordFragment : Fragment() {
         val clipboardManager = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText("Text", foreignWord)
         clipboardManager.setPrimaryClip(clip)
-// Выводим уведомление об успешном копировании
+        // Выводим уведомление об успешном копировании
         Toast.makeText(requireActivity(), "Скопировано в буфер обмена: " + foreignWord, Toast.LENGTH_SHORT).show()
 
     }

@@ -34,4 +34,9 @@ class WordRepository private constructor(){
         }
         return listWords
     }
+
+    fun saveEditableWord(word: Word) {
+
+    }
+
 }
