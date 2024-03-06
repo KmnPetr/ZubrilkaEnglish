@@ -2,6 +2,7 @@ package com.example.ze_adminandroid.repositories
 
 import com.example.ze_adminandroid.models.Word
 import com.example.ze_adminandroid.services.RetrofitService
+import com.example.ze_adminandroid.services.RoomService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -15,6 +16,7 @@ class WordRepository private constructor(){
     }
 
     private val retrofitService = RetrofitService.instance
+    private var roomService: RoomService = RoomService()
     private var listWords: List<Word> = emptyList()
 
     init {
@@ -36,7 +38,10 @@ class WordRepository private constructor(){
     }
 
     fun saveEditableWord(word: Word) {
-
+        GlobalScope.launch(Dispatchers.Default) {
+            roomService.saveEditableWord(word)
+            println("size: "+roomService.getAllEditedWords().size)
+        }
     }
 
 }
