@@ -11,7 +11,6 @@ import java.io.FileOutputStream
 class VoiceHandler {
 
 
-
     fun play(voice: Voice?) {
         voice?.voiceData?.let { playMp3ByteArray(it) }
     }
@@ -40,7 +39,4 @@ class VoiceHandler {
             e.printStackTrace()
         }
     }
-
-
-
 }

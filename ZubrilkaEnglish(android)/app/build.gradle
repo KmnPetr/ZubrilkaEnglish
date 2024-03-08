@@ -61,15 +61,16 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     // https://mvnrepository.com/artifact/com.squareup.retrofit2/converter-scalars
     implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
-
     //okhttp  для перехвата запросов
     implementation 'com.squareup.okhttp3:okhttp:4.11.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.11.0'
+    
     //SQLite
     implementation'androidx.room:room-runtime:2.5.1'
     annotationProcessor'androidx.room:room-compiler:2.5.1'
     kapt'androidx.room:room-compiler:2.5.1'
     implementation'androidx.room:room-ktx:2.5.1'
+
     //для работы ZonedDateTime на версии android ниже 8(старая библиотечка, но есть и новая)
     implementation 'com.jakewharton.threetenabp:threetenabp:1.3.0'
 
@@ -83,7 +84,7 @@ dependencies {
     //для использования Event Bus от компании Green Robot
     implementation 'org.greenrobot:eventbus:3.2.0'
 
-    //jlayer для декодирования аудиофайлов из mp3 в pcm//
+    //jlayer для декодирования аудиофайлов из mp3 в pcm// TODO наверное убрать
     //https://mvnrepository.com/artifact/com.googlecode.soundlibs/jlayer
     implementation 'com.googlecode.soundlibs:jlayer:1.0.1-1'
 
