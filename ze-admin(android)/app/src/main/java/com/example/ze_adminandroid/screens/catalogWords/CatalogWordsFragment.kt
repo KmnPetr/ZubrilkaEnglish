@@ -55,13 +55,13 @@ class CatalogWordsFragment : Fragment() {
                 0,
                 viewModel.mapWordsByTopic,
                 viewModel.namesTopics,
-                this)/*,
-            CatalogItemFragment(//фрагмент для показа слов находящихся в собственности юзера и показа их по степени изученности
+                this),
+            CatalogItemFragment(//фрагмент для показа слов измененных или новых созданных находящихся в БД
                 viewModel,
                 1,
-                viewModel.mapUserCards,
-                viewModel.namesTopicsUserCards,
-                this)*/
+                viewModel.mapEditedWords,
+                viewModel.namesEditedTopics,
+                this)
         )
         adapter.setList(list)
 

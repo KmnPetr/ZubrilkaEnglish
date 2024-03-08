@@ -5,9 +5,12 @@ import com.example.ze_adminandroid.services.RetrofitService
 import com.example.ze_adminandroid.services.RoomService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class WordRepository private constructor(){
+
 
     companion object{
         val instance: WordRepository by lazy { WordRepository() }
@@ -15,31 +18,28 @@ class WordRepository private constructor(){
 
     private val retrofitService = RetrofitService.instance
     private var roomService: RoomService = RoomService()
-    private var listWords: List<Word> = emptyList()
+    private val listWords: MutableStateFlow<List<Word>> = MutableStateFlow(arrayListOf())
 
     init {
         GlobalScope.launch(Dispatchers.Default) {
             val list: List<Word>? = retrofitService.getAllWordsFromNetwork()
             if (list != null) {
                 println("ПОЛУЧЕН СПИСОК С СЕТИ. Размер: "+list.size)
-                listWords = list
+                listWords.value = list
             }
         }
     }
 
 
-    fun getAllWords(): List<Word> {
-        while (listWords.isEmpty()){
-            Thread.sleep(100)
-        }
+    fun getAllWords(): Flow<List<Word>> {
         return listWords
     }
 
     fun saveEditableWord(word: Word) {
         GlobalScope.launch(Dispatchers.Default) {
             roomService.saveEditableWord(word)
-            println("size: "+ (roomService.getAllEditedWords().size))
         }
     }
 
+    fun getFlowAllEditedWords():Flow<List<Word>> = roomService.getFlowAllEditedWords()
 }

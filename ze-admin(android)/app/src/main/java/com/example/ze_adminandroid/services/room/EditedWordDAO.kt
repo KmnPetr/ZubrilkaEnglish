@@ -5,11 +5,12 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.ze_adminandroid.models.Word
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface EditedWordDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun saveEditableWord(word: Word):Unit
+    suspend fun saveEditableWord(word: Word)
     @Query("SELECT*FROM editable_words")
-    suspend fun getAllEditedWords(): List<Word>
+    fun getAllEditedWords(): Flow<List<Word>>
 }

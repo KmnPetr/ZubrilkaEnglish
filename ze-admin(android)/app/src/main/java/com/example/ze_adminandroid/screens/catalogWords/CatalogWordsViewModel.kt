@@ -17,24 +17,45 @@ class CatalogWordsViewModel : ViewModel() {
     val mapWordsByTopic: MutableLiveData<Map<String, List<Word>>> = MutableLiveData()
     val namesTopics: MutableLiveData<List<String>> = MutableLiveData()
 
+    //список измененных и новых созданных слов из БД
+    val mapEditedWords: MutableLiveData<Map<String, List<Word>>> = MutableLiveData()
+    val namesEditedTopics: MutableLiveData<List<String>> = MutableLiveData()
+
 
     init {
-        dataDownload()
+//        dataDownload()
+
+
+        //список слов словаря из сети подгружает Flow из репозитория
+        viewModelScope.launch {
+            wordRepository.getAllWords().collect { word ->
+                mapWordsByTopic.value = sortWordsByTopic(word)
+                namesTopics.value = fillNamesTopics(mapWordsByTopic.value as MutableMap<String, ArrayList<Word>>)
+            }
+        }
+
+        //список измененных слов подгружает Flow при любом изменении в БД
+        viewModelScope.launch {
+            wordRepository.getFlowAllEditedWords().collect { word ->
+                mapEditedWords.value = sortWordsByTopic(word)
+                namesEditedTopics.value = fillNamesTopics(mapEditedWords.value as MutableMap<String, ArrayList<Word>>)
+            }
+        }
     }
 
     /**
      * загрузит\обновит данные из репозитория
      */
-    private fun dataDownload(){
-        viewModelScope.launch {
-            val listAllWords = wordRepository.getAllWords()
-            mapWordsByTopic.value = sortWordsByTopic(listAllWords)
-            namesTopics.value = fillNamesTopics(mapWordsByTopic.value as MutableMap<String, ArrayList<Word>>)
-
-//            mapUserCards.value = repository.getMapMyCards()
-//            namesTopicsUserCards.value = mapUserCards.value?.keys?.toList()
-        }
-    }
+//    private fun dataDownload(){
+//        viewModelScope.launch {
+//            val listAllWords = wordRepository.getAllWords()
+//            mapWordsByTopic.value = sortWordsByTopic(listAllWords)
+//            namesTopics.value = fillNamesTopics(mapWordsByTopic.value as MutableMap<String, ArrayList<Word>>)
+//
+////            mapUserCards.value = repository.getMapMyCards()
+////            namesTopicsUserCards.value = mapUserCards.value?.keys?.toList()
+//        }
+//    }
 
     /**
      * функция отсортирует массив элементов Word по темам/группам

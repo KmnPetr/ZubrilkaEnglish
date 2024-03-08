@@ -17,8 +17,9 @@ class SearchObject private constructor(){
     companion object{
         val instance: SearchObject by lazy {
             SearchObject().apply { CoroutineScope(Dispatchers.Default).launch {
-                //TODO класс может давать сбои, если нужные данные не подгрузились из сети, особенно при первом запуске приложения
-                listAllWordCard = WordRepository.instance.getAllWords()
+                WordRepository.instance.getAllWords().collect{list->
+                    listAllWordCard = list
+                }
             }
             }
         }

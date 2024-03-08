@@ -2,6 +2,7 @@ package com.example.ze_adminandroid.services
 
 import com.example.ze_adminandroid.models.Word
 import com.example.ze_adminandroid.services.room.DataBase
+import kotlinx.coroutines.flow.Flow
 
 class RoomService {
 
@@ -10,7 +11,7 @@ class RoomService {
         dataBase.getEditedWordDAO().saveEditableWord(word)
     }
 
-    suspend fun getAllEditedWords(): List<Word> {
+    fun getFlowAllEditedWords(): Flow<List<Word>> {
         return dataBase.getEditedWordDAO().getAllEditedWords()
     }
 
