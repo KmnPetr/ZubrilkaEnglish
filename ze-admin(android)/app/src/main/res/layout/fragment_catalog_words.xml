@@ -72,12 +72,12 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Слова по темам" />
+            android:text="Dictionary" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Мои слова" />
+            android:text="Edited Words" />
 
     </com.google.android.material.tabs.TabLayout>
 

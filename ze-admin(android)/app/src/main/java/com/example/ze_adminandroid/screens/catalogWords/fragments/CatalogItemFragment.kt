@@ -70,6 +70,7 @@ class CatalogItemFragment(
             it[namesFolders.value?.get(positionFolder)]?.let { it1 -> cardAdapter.setList(it1) }
         }
     }
+
     /**
      * выполняется при нажатии на элемент слова
      */

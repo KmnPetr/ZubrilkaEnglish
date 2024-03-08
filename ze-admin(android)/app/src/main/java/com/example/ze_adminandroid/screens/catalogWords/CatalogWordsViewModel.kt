@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ze_adminandroid.models.Word
 import com.example.ze_adminandroid.repositories.WordRepository
+import com.example.ze_adminandroid.utils.SearchObject
 import kotlinx.coroutines.launch
 
 class CatalogWordsViewModel : ViewModel() {
@@ -13,6 +14,9 @@ class CatalogWordsViewModel : ViewModel() {
 
     //в списке находится информация, изменялся ли в показываемом на данный момент фрагменте список папок на список слов содержащихся в папках
     val isRecyclerChanged: MutableLiveData<ArrayList<Boolean>> = MutableLiveData()
+    var lastPositionTablayout: Int = 0 //указ.последний используемый фрагмент для возврата на него после удаления поискового фрагмента
+    val listSearchWords: MutableLiveData<List<Word>> = MutableLiveData()
+    var searchCreated: Boolean = false //указывает, создан ли ранее фрагмент поиска слова
 
     val mapWordsByTopic: MutableLiveData<Map<String, List<Word>>> = MutableLiveData()
     val namesTopics: MutableLiveData<List<String>> = MutableLiveData()
@@ -43,19 +47,6 @@ class CatalogWordsViewModel : ViewModel() {
         }
     }
 
-    /**
-     * загрузит\обновит данные из репозитория
-     */
-//    private fun dataDownload(){
-//        viewModelScope.launch {
-//            val listAllWords = wordRepository.getAllWords()
-//            mapWordsByTopic.value = sortWordsByTopic(listAllWords)
-//            namesTopics.value = fillNamesTopics(mapWordsByTopic.value as MutableMap<String, ArrayList<Word>>)
-//
-////            mapUserCards.value = repository.getMapMyCards()
-////            namesTopicsUserCards.value = mapUserCards.value?.keys?.toList()
-//        }
-//    }
 
     /**
      * функция отсортирует массив элементов Word по темам/группам
@@ -80,5 +71,14 @@ class CatalogWordsViewModel : ViewModel() {
      */
     private fun fillNamesTopics(mapWords: Map<String, List<Word>>): List<String> {
         return mapWords.keys.toList()
+    }
+
+
+
+    /**
+     * будет изменять список при вводе в поисковую строку нового слова
+     */
+    fun changeListSearchWord(word: String){
+        listSearchWords.value = SearchObject.instance.search(word)
     }
 }

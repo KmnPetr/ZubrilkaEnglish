@@ -2,14 +2,20 @@ package com.example.ze_adminandroid.screens.catalogWords
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.ze_adminandroid.databinding.FragmentCatalogWordsBinding
 import com.example.ze_adminandroid.models.Word
 import com.example.ze_adminandroid.screens.catalogWords.fragments.CatalogItemFragment
+import com.example.ze_adminandroid.screens.catalogWords.fragments.FragmentItem
+import com.example.ze_adminandroid.screens.catalogWords.fragments.SearchWordFragment
 import com.example.ze_adminandroid.utils.SearchObject
 import com.google.android.material.tabs.TabLayout
 
@@ -43,6 +49,10 @@ class CatalogWordsFragment : Fragment() {
 
 
         setListFragment()
+        tabLayoutListener()
+        viewPager2Listener()
+        searchListener()
+        overrideClickBack()
     }
 
     /**
@@ -68,6 +78,101 @@ class CatalogWordsFragment : Fragment() {
         viewModel.isRecyclerChanged.value = arrayListOf(false,false,false)//сразу 3 элемента добавлю, чтобы избежать проблем с третьим фрагментом для поиска слов
     }
 
+    /**
+     * прослушивает нажатия на tabLayout
+     */
+    private fun tabLayoutListener() {
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                viewPager2.currentItem = tab.position
+                if (tab.position!=2) viewModel.lastPositionTablayout = tab.position
+            }
+            override fun onTabUnselected(tab: TabLayout.Tab) {/*Выполняется, когда выбор снят с вкладки*/ }
+            override fun onTabReselected(tab: TabLayout.Tab) {/*Выполняется, когда выбирается уже выбранная вкладка*/ }
+        })
+    }
+
+    /**
+     * прослушивает смену страниц viewPager2
+     */
+    private fun viewPager2Listener() {
+        viewPager2.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback()
+        {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                tabLayout.getTabAt(position)?.select()
+                if (position!=2) viewModel.lastPositionTablayout = position
+            }
+        })
+    }
+
+
+    /**
+     * переопределяет поведение системой кнопки "Back"
+     * в случае если открыта какаято папка, сначала закроет и следующим нажатием закроет фрагмент
+     */
+    private fun overrideClickBack() {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val position = viewPager2.currentItem
+
+                if (viewModel.isRecyclerChanged.value?.get(position)==true){
+                    viewModel.isRecyclerChanged.value?.set(position, false)
+                    val fragment = adapter.getFragment(position)
+                    if (fragment is FragmentItem){
+                        fragment.rollBackRecycler()
+                    }
+                }else{
+                    findNavController().popBackStack()
+                }
+            }
+        })
+    }
+
+
+
+    /**
+     * прослушивает ввод текста в поисковик(editText)
+     */
+    private fun searchListener() {
+        binding.searchEditText.addTextChangedListener(object : TextWatcher {
+            // Выполняется перед изменением текста в EditText
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            // Выполняется во время изменения текста в EditText
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val updatedText = s.toString() // Получить новый текст из CharSequence
+                if(updatedText.trim().isNotEmpty()){
+                    //передаем данные с поисковой строки в viewModel
+                    viewModel.changeListSearchWord(updatedText.trim())
+                    //создаем фрагмент по поиску слов
+                    if (!viewModel.searchCreated){
+                        viewModel.searchCreated = true
+                        viewModel.lastPositionTablayout = tabLayout.selectedTabPosition
+
+                        val tabLayout: TabLayout = binding.tabLayout
+                        val tab = tabLayout.newTab()
+                        tab.text = "Поиск"
+                        tabLayout.addTab(tab)
+                        adapter.addSearchFragment(SearchWordFragment(viewModel,this@CatalogWordsFragment))
+                        tabLayout.getTabAt(tabLayout.tabCount - 1)?.select()
+                    }
+                }else{
+                    //удаляем фрагмент по поиску слов
+                    if (viewModel.searchCreated){
+                        viewModel.searchCreated = false
+
+                        tabLayout.getTabAt(viewModel.lastPositionTablayout)?.select()
+                        adapter.removeSearchFragment()
+                        tabLayout.removeTabAt(tabLayout.tabCount - 1)
+                    }
+                }
+            }
+
+            // Выполняется после изменения текста в EditText
+            override fun afterTextChanged(s: Editable?) {}
+        })
+    }
     /**
      * показывает popup окошко при нажатии на слово
      */
