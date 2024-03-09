@@ -1,4 +1,4 @@
-package com.example.ze_adminandroid.screens.editWord
+package com.example.ze_adminandroid.screens.editWord.popupStorage
 
 import android.view.LayoutInflater
 import android.view.View

@@ -19,6 +19,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.ze_adminandroid.databinding.FragmentEditWordBinding
 import com.example.ze_adminandroid.models.Word
 import com.example.ze_adminandroid.repositories.WordRepository
+import com.example.ze_adminandroid.screens.editWord.popupStorage.PopUpStorage
+import com.example.ze_adminandroid.screens.editWord.popupTopics.PopUpTopics
 import com.example.ze_adminandroid.utils.myBundle
 
 /**
@@ -48,6 +50,7 @@ class EditWordFragment : Fragment() {
 
         showWordFields()
         setLiseners()
+
     }
 
     /**
@@ -62,6 +65,9 @@ class EditWordFragment : Fragment() {
         binding.internetButton.setOnClickListener {
             clipText(editedWord.foreignWord)
             openBrowser()
+        }
+        binding.selectTopicButton.setOnClickListener {
+            PopUpTopics(requireContext(),viewModel.namesTopics,::setTopic).show()
         }
         binding.saveButton.setOnClickListener {
             val word = Word(
@@ -126,6 +132,13 @@ class EditWordFragment : Fragment() {
         binding.linkVoice.setText(editedWord.link_voice)
         binding.linkImage.setText(editedWord.link_image)
         binding.sortingValue.setText("sortingValue = " + editedWord.sorting_value)
+    }
+
+    /**
+     * установит значение в поле топик
+     */
+    private fun setTopic(topicName: String){
+        binding.topic.setText(topicName)
     }
 
 }
