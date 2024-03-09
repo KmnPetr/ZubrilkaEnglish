@@ -11,11 +11,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Id = "
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <EditText
@@ -91,6 +89,7 @@
             android:id="@+id/selectTopicButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="#769CBA"
             android:text="select topic"/>
     </LinearLayout>
 
@@ -118,6 +117,12 @@
                 android:ems="10"
                 android:gravity="center"
                 android:hint="link_voice" />
+            <Button
+                android:id="@+id/copyLinkVoiceButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="copy"
+                android:backgroundTint="#769CBA"/>
 
         </LinearLayout>
 
@@ -140,6 +145,30 @@
                 android:scaleType="centerCrop"
                 android:layout_marginLeft="5dp"
                 android:src="@drawable/folder_small" />
+
+            <TextView
+                android:id="@+id/fileSize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="sizeFile = "/>
+
+            <!--распорочка чтобы префикс к краю отодвинуть))-->
+            <View
+                android:layout_width="0dp"
+                android:layout_height="5dp"
+                android:layout_weight="1"
+                android:layout_gravity="center"/>
+
+            <EditText
+                android:id="@+id/prefix"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="prefix"
+                android:text="(n)"
+                android:textSize="14sp"
+                android:layout_gravity="center"/>
+
 
         </LinearLayout>
     </LinearLayout>

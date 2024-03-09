@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ze_adminandroid.R
-import com.example.ze_adminandroid.databinding.WordViewBinding
+import com.example.ze_adminandroid.databinding.ViewWordBinding
 import com.example.ze_adminandroid.models.Word
 
 /**
@@ -18,7 +18,7 @@ class ListCardsAdapter(val listener: FragmentItem) : RecyclerView.Adapter<ListCa
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardHolder {
-        val view= LayoutInflater.from(parent.context).inflate(R.layout.word_view,parent,false)
+        val view= LayoutInflater.from(parent.context).inflate(R.layout.view_word,parent,false)
         return CardHolder(view)
     }
 
@@ -35,7 +35,7 @@ class ListCardsAdapter(val listener: FragmentItem) : RecyclerView.Adapter<ListCa
         notifyDataSetChanged()
     }
     class CardHolder(view: View) : RecyclerView.ViewHolder(view){
-        private val binding= WordViewBinding.bind(view)
+        private val binding= ViewWordBinding.bind(view)
         private var idWord: Int? = null
 
         fun bind(word: Word, listener: FragmentItem,position: Int) {

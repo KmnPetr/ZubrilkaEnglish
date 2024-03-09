@@ -15,13 +15,17 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import com.example.ze_adminandroid.databinding.FragmentEditWordBinding
+import com.example.ze_adminandroid.models.Voice
 import com.example.ze_adminandroid.models.Word
+import com.example.ze_adminandroid.repositories.VoiceRepository
 import com.example.ze_adminandroid.repositories.WordRepository
 import com.example.ze_adminandroid.screens.editWord.popupStorage.PopUpStorage
 import com.example.ze_adminandroid.screens.editWord.popupTopics.PopUpTopics
 import com.example.ze_adminandroid.utils.myBundle
+import org.greenrobot.eventbus.EventBus
 
 /**
  * в фрагменте редактируется или создается новый Word
@@ -32,6 +36,9 @@ class EditWordFragment : Fragment() {
     private lateinit var binding: FragmentEditWordBinding
     private lateinit var editedWord: Word
     private lateinit var wordRepository: WordRepository
+    private lateinit var voiceRepository: VoiceRepository
+    // новый Voice
+    var createdVoice: MutableLiveData<Voice> = MutableLiveData()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,11 +53,23 @@ class EditWordFragment : Fragment() {
 
         viewModel = ViewModelProvider(this).get(EditWordViewModel::class.java)
         wordRepository = WordRepository.instance
+        voiceRepository = VoiceRepository.instance
         editedWord = myBundle["editedWord"] as Word
 
         showWordFields()
         setLiseners()
+        onChangeVoice()
+    }
 
+    /**
+     * производит разные изменения при перевыборе Voice
+     */
+    private fun onChangeVoice() {
+        createdVoice.observe(viewLifecycleOwner){
+            if (it?.voiceData != null){
+                binding.fileSize.setText("fileSize = " + it.voiceData?.size)
+            }
+        }
     }
 
     /**
@@ -59,7 +78,7 @@ class EditWordFragment : Fragment() {
     private fun setLiseners() {
         binding.folderButton.setOnClickListener{
             getPermission()
-            val popup = PopUpStorage(requireContext())
+            val popup = PopUpStorage(requireContext(),::createVoice)
             popup.show()
         }
         binding.internetButton.setOnClickListener {
@@ -69,21 +88,78 @@ class EditWordFragment : Fragment() {
         binding.selectTopicButton.setOnClickListener {
             PopUpTopics(requireContext(),viewModel.namesTopics,::setTopic).show()
         }
-        binding.saveButton.setOnClickListener {
-            val word = Word(
-                0,
-                editedWord.id,
-                binding.foreignWord.text.toString(),
-                binding.transcription.text.toString(),
-                binding.translation.text.toString(),
-                binding.description.text.toString(),
-                binding.topic.text.toString(),
-                binding.linkVoice.text.toString(),
-                binding.linkImage.text.toString(),
-                editedWord.sorting_value
-            )
-            wordRepository.saveEditableWord(word)
+        binding.copyLinkVoiceButton.setOnClickListener {
+            setLinkVoice()
         }
+        binding.saveButton.setOnClickListener {
+            if(isWordReady()){
+                saveWord()
+                saveVoice()
+            }
+        }
+    }
+
+    /**
+     * проверит перед сохранением все поля на наличие ошибок и прочего
+     */
+    private fun isWordReady(): Boolean {
+        return if (binding.foreignWord.text.toString().isEmpty()){
+            Toast.makeText(requireContext(),"foreignWord is empty!",Toast.LENGTH_SHORT).show()
+            false
+        }else if(binding.translation.text.toString().isEmpty()){
+            Toast.makeText(requireContext(),"translation is empty!",Toast.LENGTH_SHORT).show()
+            false
+        }else if(binding.linkVoice.text.toString().isEmpty()){
+            Toast.makeText(requireContext(),"linkVoice is empty!",Toast.LENGTH_SHORT).show()
+            false
+        }else if(createdVoice.value?.voiceData !=null){
+            Toast.makeText(requireContext(),"voiceData is empty!",Toast.LENGTH_SHORT).show()
+            false
+        } else true
+    }
+
+    /**
+     * установит значение в поле linkVoice
+     */
+    private fun setLinkVoice() {
+        val str:String = binding.foreignWord.text.toString()
+        val prefix:String = binding.prefix.text.toString()
+
+        binding.linkVoice.setText(str+prefix+".mp3")
+    }
+
+    /**
+     * сохранит новый Voice в БД
+     */
+    private fun saveVoice() {
+        if (createdVoice.value!=null&& createdVoice.value!!.voiceData!=null){
+            val voice = Voice(binding.linkVoice.text.toString(),
+                createdVoice.value?.voiceData
+            )
+            voiceRepository.saveNewVoice(voice)
+            println("сохранено Voice")
+            println("name: "+ voice.voiceName)
+            println("data size: "+ (voice.voiceData?.size ?: "null"))
+        }
+    }
+
+    /**
+     * сохранит измененное слово в БД
+     */
+    private fun saveWord() {
+        val word = Word(
+            editedWord.localBaseId,
+            editedWord.id,
+            binding.foreignWord.text.toString(),
+            binding.transcription.text.toString(),
+            binding.translation.text.toString(),
+            binding.description.text.toString(),
+            binding.topic.text.toString(),
+            binding.linkVoice.text.toString(),
+            binding.linkImage.text.toString(),
+            editedWord.sorting_value
+        )
+        wordRepository.saveEditableWord(word)
     }
 
     /**
@@ -139,6 +215,13 @@ class EditWordFragment : Fragment() {
      */
     private fun setTopic(topicName: String){
         binding.topic.setText(topicName)
+    }
+
+    /**
+     * инициализирует переменную createdVoice
+     */
+    private fun createVoice(createdVoice: Voice){
+        this.createdVoice.value = createdVoice
     }
 
 }

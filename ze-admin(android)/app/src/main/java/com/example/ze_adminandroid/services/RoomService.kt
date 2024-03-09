@@ -1,5 +1,6 @@
 package com.example.ze_adminandroid.services
 
+import com.example.ze_adminandroid.models.Voice
 import com.example.ze_adminandroid.models.Word
 import com.example.ze_adminandroid.services.room.DataBase
 import kotlinx.coroutines.flow.Flow
@@ -15,4 +16,7 @@ class RoomService {
         return dataBase.getEditedWordDAO().getAllEditedWords()
     }
 
+    suspend fun saveNewVoice(voice: Voice) {
+        dataBase.getCreatedVoiceDAO().saveVoice(voice)
+    }
 }

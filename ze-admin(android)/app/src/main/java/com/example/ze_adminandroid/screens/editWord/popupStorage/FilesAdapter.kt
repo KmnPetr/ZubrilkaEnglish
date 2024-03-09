@@ -5,26 +5,27 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ze_adminandroid.R
-import com.example.ze_adminandroid.databinding.FileViewBinding
+import com.example.ze_adminandroid.databinding.ViewFileBinding
 import java.io.File
 
 class FilesAdapter(
     private val onClickFile: (File) -> Unit,
-    private val onClickButtonPlay: (File) -> Unit
+    private val onClickButtonPlay: (File) -> Unit,
+    private val onClickButtonGetVoice: (File) -> Unit,
 ) : RecyclerView.Adapter<FilesAdapter.FileHolder>() {
 
     private var listFiles= emptyList<File>()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FileHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.file_view,parent,false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.view_file,parent,false)
         return FileHolder(view)
     }
 
     override fun getItemCount(): Int = listFiles.size
 
     override fun onBindViewHolder(holder: FileHolder, position: Int) {
-        holder.bind(listFiles[position], onClickFile, onClickButtonPlay)
+        holder.bind(listFiles[position], onClickFile, onClickButtonPlay,onClickButtonGetVoice)
     }
 
     fun setList(list: List<File>){
@@ -35,11 +36,12 @@ class FilesAdapter(
 
 
     class FileHolder(view: View): RecyclerView.ViewHolder(view){
-        private val binding: FileViewBinding = FileViewBinding.bind(view)
+        private val binding: ViewFileBinding = ViewFileBinding.bind(view)
         fun bind(
             file: File,
             onClickFile: (File) -> Unit,
-            onClickButtonPlay: (File) -> Unit
+            onClickButtonPlay: (File) -> Unit,
+            onClickButtonGetVoice: (File) -> Unit
         ) {
             binding.filePath.setText(file.name)
 
@@ -49,6 +51,19 @@ class FilesAdapter(
 
             setVisibleImage(file)
             settingButtonPlay(file,onClickButtonPlay)
+            settingButtonGetVoice(file,onClickButtonGetVoice)
+        }
+        private fun settingButtonGetVoice(file: File, onClickButtonGetVoice: (File) -> Unit) {
+            if (file.name.endsWith(".mp3")){
+                binding.buttonGetVoice.isEnabled = true
+                binding.buttonGetVoice.visibility = View.VISIBLE
+                binding.buttonGetVoice.setOnClickListener {
+                    onClickButtonGetVoice(file)
+                }
+            }else{
+                binding.buttonGetVoice.isEnabled = false
+                binding.buttonGetVoice.visibility = View.GONE
+            }
         }
         private fun settingButtonPlay(file: File, onClickButtonPlay: (File) -> Unit) {
             if (file.name.endsWith(".mp3")){

@@ -4,13 +4,18 @@ import android.app.Dialog
 import android.content.Context
 import android.view.Window
 import com.example.ze_adminandroid.databinding.PopUpStorageBinding
+import com.example.ze_adminandroid.models.Voice
 import com.example.ze_adminandroid.utils.VoiceHandler
 import java.io.File
+import kotlin.reflect.KMutableProperty0
 
 /**
  * класс покажет попап окошко с папками и файлами начиная от папки download
  */
-class PopUpStorage(context: Context): Dialog(context) {
+class PopUpStorage(
+    context: Context,
+    private val createdVoice: (Voice) -> Unit
+): Dialog(context) {
     val binding: PopUpStorageBinding
     val adapter: FilesAdapter
     val fileManager: FileManager
@@ -18,18 +23,17 @@ class PopUpStorage(context: Context): Dialog(context) {
 
     init {
         binding = PopUpStorageBinding.inflate(layoutInflater)
-        adapter = FilesAdapter(::onClickFile,::onClickButtonPlay)
+        adapter = FilesAdapter(::onClickFile,::onClickButtonPlay,::onClickButtonGetVoice)
         fileManager = FileManager()
         voiceHandler = VoiceHandler()
 
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setCancelable(true)
         setContentView(binding.root)
-//        window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         val displayMetrics = context.resources.displayMetrics
-        binding.root.layoutParams.width = (displayMetrics.widthPixels*0.66).toInt()
-        binding.root.layoutParams.height = (displayMetrics.heightPixels * 0.66).toInt()
+        binding.root.layoutParams.width = (displayMetrics.widthPixels * 0.8).toInt()
+        binding.root.layoutParams.height = (displayMetrics.heightPixels * 0.8).toInt()
 
         binding.recyclerView.adapter = adapter
 
@@ -42,5 +46,11 @@ class PopUpStorage(context: Context): Dialog(context) {
     }
     private fun onClickButtonPlay(file: File){
         voiceHandler.play(file)
+    }
+
+    private fun onClickButtonGetVoice(file: File){
+        val voice = Voice(fileManager.getFileName(file),fileManager.getByteArray(file))
+        createdVoice(voice)
+        this.dismiss()
     }
 }
