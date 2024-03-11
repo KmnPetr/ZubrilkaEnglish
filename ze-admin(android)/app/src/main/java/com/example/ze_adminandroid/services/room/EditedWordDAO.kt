@@ -13,4 +13,5 @@ interface EditedWordDAO {
     suspend fun saveEditableWord(word: Word)
     @Query("SELECT*FROM editable_words")
     fun getAllEditedWords(): Flow<List<Word>>
+
 }

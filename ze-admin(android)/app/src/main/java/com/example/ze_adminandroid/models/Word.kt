@@ -2,6 +2,7 @@ package com.example.ze_adminandroid.models
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
 
@@ -34,4 +35,8 @@ data class Word(
     val link_image: String?,
     @ColumnInfo(name = "sorting_value")
     val sorting_value: Int
-)
+){
+    //поле указывает, что у данного слова voice был проверен
+    @Ignore
+    var verified: Boolean = false
+}

@@ -37,7 +37,7 @@ class EditWordFragment : Fragment() {
     private lateinit var editedWord: Word
     private lateinit var wordRepository: WordRepository
     private lateinit var voiceRepository: VoiceRepository
-    // новый Voice
+    // новый Voiceопределяем здесь чтобы после выхода из фрагмента очищался
     var createdVoice: MutableLiveData<Voice> = MutableLiveData()
 
     override fun onCreateView(
@@ -112,7 +112,7 @@ class EditWordFragment : Fragment() {
         }else if(binding.linkVoice.text.toString().isEmpty()){
             Toast.makeText(requireContext(),"linkVoice is empty!",Toast.LENGTH_SHORT).show()
             false
-        }else if(createdVoice.value?.voiceData !=null){
+        }else if(createdVoice.value?.voiceData ==null){
             Toast.makeText(requireContext(),"voiceData is empty!",Toast.LENGTH_SHORT).show()
             false
         } else true

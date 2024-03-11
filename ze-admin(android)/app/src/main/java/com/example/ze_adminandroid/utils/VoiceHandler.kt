@@ -1,7 +1,9 @@
 package com.example.ze_adminandroid.utils
 
 import android.media.MediaPlayer
+import com.example.ze_adminandroid.models.Voice
 import java.io.File
+import java.io.FileOutputStream
 
 /**
  * класс занимается воспроизведением аудио
@@ -9,33 +11,45 @@ import java.io.File
 class VoiceHandler {
 
 
-    fun play(/*voice: Voice?*/file: File) {
-
+    fun play(file: File) {
         if (!file.isDirectory&&file.name.endsWith(".mp3")){
             playMp3File(file)
         }
+    }
 
-        /*voice?.voiceData?.let { playMp3ByteArray(it) }*/
+    fun play(voice: Voice?) {
+        voice?.voiceData?.let { playMp3ByteArray(it) }
     }
 
 
 
 
+    private fun playMp3File(file: File) {
+        val mediaPlayer = MediaPlayer()
 
-    private fun playMp3File(/*mp3ByteArray: ByteArray*/file: File) {
+        try {
+            mediaPlayer.setDataSource(file.absolutePath)
+            mediaPlayer.prepare()
+            mediaPlayer.start()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
 
-//        val tempMp3 = File.createTempFile("temp", "mp3") // Создаем временный файл
-//        tempMp3.deleteOnExit() // Удаляем временный файл после воспроизведения
+    fun playMp3ByteArray(mp3ByteArray: ByteArray) {
 
-//        val fos = FileOutputStream(tempMp3)
-//        fos.write(mp3ByteArray)
-//        fos.close()
+        val tempMp3 = File.createTempFile("temp", "mp3") // Создаем временный файл
+        tempMp3.deleteOnExit() // Удаляем временный файл после воспроизведения
+
+        val fos = FileOutputStream(tempMp3)
+        fos.write(mp3ByteArray)
+        fos.close()
 
         val mediaPlayer = MediaPlayer()
 
 
         try {
-            mediaPlayer.setDataSource(file.absolutePath)
+            mediaPlayer.setDataSource(tempMp3.path) // Устанавливаем временный файл в качестве источника данных
             mediaPlayer.prepare()
             mediaPlayer.start()
         } catch (e: Exception) {

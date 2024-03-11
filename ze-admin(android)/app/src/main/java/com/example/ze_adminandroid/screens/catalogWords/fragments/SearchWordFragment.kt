@@ -9,6 +9,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ze_adminandroid.R
 import com.example.ze_adminandroid.databinding.FragmentSearchWordBinding
+import com.example.ze_adminandroid.events.VcEvEnum
+import com.example.ze_adminandroid.events.VoiceEvent
+import com.example.ze_adminandroid.models.Voice
 import com.example.ze_adminandroid.models.Word
 import com.example.ze_adminandroid.screens.catalogWords.CatalogWordsFragment
 import com.example.ze_adminandroid.screens.catalogWords.CatalogWordsViewModel
@@ -87,6 +90,17 @@ class SearchWordFragment(
     //излишний для данного фрагмента метод
     override fun rollBackRecycler() {
         TODO("Not yet implemented")
+    }
+
+    /**
+     * вызывается при нажатии на кнопку проигрывания голоса озвучки
+     */
+    override fun onClickButtonPlay(word: Word) {
+        if (word.link_voice != null){
+            //отправим запрос на воспроизведение звука
+            EventBus.getDefault().post(VoiceEvent(VcEvEnum.PLAY_VOICE, Voice(word.link_voice,null)))
+        }
+
     }
 
 }

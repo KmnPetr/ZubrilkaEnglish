@@ -27,7 +27,7 @@ class ListCardsAdapter(val listener: FragmentItem) : RecyclerView.Adapter<ListCa
     }
 
     override fun onBindViewHolder(holder: CardHolder, position: Int) {
-        holder.bind(listCards[position], listener,position)
+        holder.bind(listCards[position], listener,position,::notifyItemChanged)
     }
 
     fun setList(list:List<Word>){
@@ -38,17 +38,29 @@ class ListCardsAdapter(val listener: FragmentItem) : RecyclerView.Adapter<ListCa
         private val binding= ViewWordBinding.bind(view)
         private var idWord: Int? = null
 
-        fun bind(word: Word, listener: FragmentItem,position: Int) {
+        fun bind(word: Word, listener: FragmentItem, position: Int, notifyItemChanged:(Int) -> Unit) {
             idWord = word.id
             binding.foreignWord.text=word.foreignWord
             binding.translation.text=word.translation
 
-            binding.linearLayout.setCardBackgroundColor(setUpBackground(word))
+            if (!word.verified) binding.linearLayout.setCardBackgroundColor(setUpBackground(word))
+            else binding.linearLayout.setCardBackgroundColor(Color.parseColor("#CCFFCC"))
 
             binding.root.setOnClickListener {
                 listener.onClickWord(word)
             }
+
+            //настройка кнопки
+            if (word.link_voice!=null && !word.link_voice.equals("")){
+                binding.buttonPlay.visibility = View.VISIBLE
+                binding.buttonPlay.setOnClickListener {
+                    listener.onClickButtonPlay(word)
+                    word.verified = true
+                    notifyItemChanged(position)
+                }
+            }else binding.buttonPlay.visibility = View.GONE
         }
+
 
         /**
          * функция настроит цвет и прозрачность элемента карточки

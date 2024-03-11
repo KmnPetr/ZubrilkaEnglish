@@ -18,10 +18,10 @@
         tools:layout="@layout/fragment_gallery" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.ze_adminandroid.screens.slideshow.SlideshowFragment"
+        android:id="@+id/nav_server"
+        android:name="com.example.ze_adminandroid.screens.serverConnect.ServerConnectFragment"
         android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        tools:layout="@layout/fragment_server_connect" />
     <fragment
         android:id="@+id/catalogWordsFragment"
         android:name="com.example.ze_adminandroid.screens.catalogWords.CatalogWordsFragment"

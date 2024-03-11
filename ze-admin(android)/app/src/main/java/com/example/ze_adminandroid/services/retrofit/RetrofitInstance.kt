@@ -32,7 +32,7 @@ object RetrofitInstance {
 //    val propApi:PropApi by lazy{
 //        jsonRetrofit.create(PropApi::class.java)
 //    }
-//    val voiceApi:VoiceApi by lazy{
-//        voiceRetrofit.create(VoiceApi::class.java)
-//    }
+    val voiceApi:VoiceApi by lazy{
+        voiceRetrofit.create(VoiceApi::class.java)
+    }
 }

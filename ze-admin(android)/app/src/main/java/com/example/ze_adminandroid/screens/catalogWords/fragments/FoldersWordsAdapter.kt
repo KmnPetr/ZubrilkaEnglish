@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ze_adminandroid.R
-import com.example.ze_adminandroid.databinding.FolderViewBinding
+import com.example.ze_adminandroid.databinding.ViewFolderBinding
 
 class FoldersCardsAdapter(private val listener: FragmentItem): RecyclerView.Adapter<FoldersCardsAdapter.TopicCardHolder>() {
 
@@ -13,7 +13,7 @@ class FoldersCardsAdapter(private val listener: FragmentItem): RecyclerView.Adap
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TopicCardHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.folder_view,parent,false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.view_folder,parent,false)
         return TopicCardHolder(view)
     }
 
@@ -31,7 +31,7 @@ class FoldersCardsAdapter(private val listener: FragmentItem): RecyclerView.Adap
     }
 
     class TopicCardHolder(view: View): RecyclerView.ViewHolder(view){
-        private val binding = FolderViewBinding.bind(view)
+        private val binding = ViewFolderBinding.bind(view)
 
         fun bind(nameFolder: String, position: Int, listener: FragmentItem){
             binding.nameFolder.text = nameFolder

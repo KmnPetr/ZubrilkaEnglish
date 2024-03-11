@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @RestController
 @RequestMapping("/healthcheck")
-public class HealthCheckController {
+public class  HealthCheckController {
     private final WordsCache wordsCache;
     private final VoiceCache voiceCache;
 
