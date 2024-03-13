@@ -1,5 +1,6 @@
 package com.example.ze_adminandroid.services
 
+import androidx.room.Query
 import com.example.ze_adminandroid.models.PropModel
 import com.example.ze_adminandroid.models.Voice
 import com.example.ze_adminandroid.models.Word
@@ -42,5 +43,12 @@ class RoomService {
 
     suspend fun getVoiceByName(name: String): Voice?{
         return dataBase.getCreatedVoiceDAO().getVoiceByName(name)
+    }
+
+    /**
+     * вернет все Words с полем isReady = fulse
+     */
+    suspend fun getNotReadyWords():List<Word>?{
+        return dataBase.getEditedWordDAO().getNotReadyWords(false)
     }
 }

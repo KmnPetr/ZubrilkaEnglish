@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.ze_adminandroid.databinding.FragmentEditWordBinding
 import com.example.ze_adminandroid.models.Voice
 import com.example.ze_adminandroid.models.Word
@@ -25,6 +26,10 @@ import com.example.ze_adminandroid.repositories.WordRepository
 import com.example.ze_adminandroid.screens.editWord.popupStorage.PopUpStorage
 import com.example.ze_adminandroid.screens.editWord.popupTopics.PopUpTopics
 import com.example.ze_adminandroid.utils.myBundle
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 
 /**
@@ -83,6 +88,7 @@ class EditWordFragment : Fragment() {
         }
         binding.internetButton.setOnClickListener {
             clipText(editedWord.foreignWord)
+            temporarySavingWord() //временно сохраним недоделанное слово в БД
             openBrowser()
         }
         binding.selectTopicButton.setOnClickListener {
@@ -95,8 +101,36 @@ class EditWordFragment : Fragment() {
             if(isWordReady()){
                 saveWord()
                 saveVoice()
+                Toast.makeText(requireContext(),"successfully!!",Toast.LENGTH_SHORT).show()
+                GlobalScope.launch(Dispatchers.Default) {
+                    delay(1500) // ожидание
+                    launch(Dispatchers.Main) {
+                        findNavController().popBackStack()
+                    }
+                }
             }
         }
+    }
+
+    /**
+     * временно сохраним недоделанное слово в БД
+     */
+    private fun temporarySavingWord() {
+        val word = Word(
+            editedWord.localBaseId,
+            editedWord.id,
+            binding.foreignWord.text.toString(),
+            binding.transcription.text.toString(),
+            binding.translation.text.toString(),
+            binding.description.text.toString(),
+            binding.topic.text.toString(),
+            binding.linkVoice.text.toString(),
+            binding.linkImage.text.toString(),
+            editedWord.sorting_value,
+            System.currentTimeMillis(),
+            false //важно, оно не доделано
+        )
+        wordRepository.saveEditableWord(word)
     }
 
     /**
@@ -157,7 +191,9 @@ class EditWordFragment : Fragment() {
             binding.topic.text.toString(),
             binding.linkVoice.text.toString(),
             binding.linkImage.text.toString(),
-            editedWord.sorting_value
+            editedWord.sorting_value,
+            null,
+            true
         )
         wordRepository.saveEditableWord(word)
     }

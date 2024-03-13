@@ -13,4 +13,9 @@ interface PropDAO {
     suspend fun getLastHost(): PropModel?
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNewLastHost(prop: PropModel)
+
+//    @Insert(onConflict = OnConflictStrategy.REPLACE)
+//    suspend fun insertNewPropModel(prop: PropModel)
+//    @Query("SELECT*FROM prop_table WHERE prop_table.`key` = :key")
+//    suspend fun getPropByKey(key: String):PropModel?
 }

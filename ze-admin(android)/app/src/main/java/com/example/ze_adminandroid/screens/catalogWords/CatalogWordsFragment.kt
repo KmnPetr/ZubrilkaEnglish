@@ -11,12 +11,14 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
+import com.example.ze_adminandroid.R
 import com.example.ze_adminandroid.databinding.FragmentCatalogWordsBinding
 import com.example.ze_adminandroid.models.Word
 import com.example.ze_adminandroid.screens.catalogWords.fragments.CatalogItemFragment
 import com.example.ze_adminandroid.screens.catalogWords.fragments.FragmentItem
 import com.example.ze_adminandroid.screens.catalogWords.fragments.SearchWordFragment
 import com.example.ze_adminandroid.utils.SearchObject
+import com.example.ze_adminandroid.utils.myBundle
 import com.google.android.material.tabs.TabLayout
 
 class CatalogWordsFragment : Fragment() {
@@ -53,6 +55,21 @@ class CatalogWordsFragment : Fragment() {
         viewPager2Listener()
         searchListener()
         overrideClickBack()
+        checkNotReadyWord()
+    }
+
+    /**
+     * если в БД имелось незавершеное недавно слово
+     * перенаправит на фрагмент для завершения его редактирования
+     */
+    private fun checkNotReadyWord() {
+        viewModel.notReadyWord.observe(viewLifecycleOwner){
+            if (it!=null){
+                myBundle.put("editedWord",it)
+                viewModel.notReadyWord.value = null
+                findNavController().navigate(R.id.action_catalogWordsFragment_to_editWordFragment)
+            }
+        }
     }
 
     /**

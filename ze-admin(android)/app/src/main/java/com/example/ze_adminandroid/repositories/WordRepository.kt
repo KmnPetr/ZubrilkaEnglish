@@ -8,6 +8,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class WordRepository private constructor(){
 
@@ -19,6 +20,7 @@ class WordRepository private constructor(){
     private val retrofitService = RetrofitService.instance
     private var roomService: RoomService = RoomService()
     private val listWords: MutableStateFlow<List<Word>> = MutableStateFlow(arrayListOf())
+    val notReadyWord: MutableStateFlow<Word?> = MutableStateFlow(null)
 
     init {
         GlobalScope.launch(Dispatchers.Default) {
@@ -26,6 +28,24 @@ class WordRepository private constructor(){
             if (list != null) {
                 println("ПОЛУЧЕН СПИСОК С СЕТИ. Размер: "+list.size)
                 listWords.value = list
+            }
+        }
+        checkNotReadyWord()
+    }
+
+    /**
+     * выдаст из БД незавершеное слово, которое не было закончено в течении минуты назад
+     * т.к. при переходе по ссылке в браузере для поиска озвучки, приложение сбрасывает накопленный прогресс редактирования по слову
+     * поэтому требуется его соохранение в БД в неготовом виде
+     */
+    private fun checkNotReadyWord() {
+        GlobalScope.launch(Dispatchers.Default) {
+            roomService.getNotReadyWords()?.forEach {
+                if (it.time_last_update!=null && it.time_last_update!! > (System.currentTimeMillis()-60000)){
+                    withContext(Dispatchers.Main){
+                        notReadyWord.value = it
+                    }
+                }
             }
         }
     }

@@ -34,9 +34,17 @@ data class Word(
     @ColumnInfo(name = "link_image")
     val link_image: String?,
     @ColumnInfo(name = "sorting_value")
-    val sorting_value: Int
+    val sorting_value: Int,
+    //служебное поле только для этого приложения,
+    // укажет время, когда было произведено временное сохранение Entity
+    @ColumnInfo(name = "time_last_update")
+    var time_last_update: Long?,
+    //служебное поле только для этого приложения,
+    // укажет, готово ли слово, и заполнены ли все необходимые поля перед отправкой
+    @ColumnInfo(name = "is_ready")
+    var is_ready: Boolean
 ){
-    //поле указывает, что у данного слова voice был проверен
+    //поле указывает, что у данного слова поле voice был проверен перед отправкой
     @Ignore
     var verified: Boolean = false
 }

@@ -4,7 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ze_adminandroid.models.Voice
+import com.example.ze_adminandroid.models.Word
 import com.example.ze_adminandroid.repositories.WordRepository
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class EditWordViewModel : ViewModel() {
@@ -15,6 +17,7 @@ class EditWordViewModel : ViewModel() {
     init {
         fillNames()
     }
+
 
     private fun fillNames() {
         //слова из базы данных

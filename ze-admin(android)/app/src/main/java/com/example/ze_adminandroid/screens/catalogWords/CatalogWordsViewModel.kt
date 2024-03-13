@@ -25,6 +25,9 @@ class CatalogWordsViewModel : ViewModel() {
     val mapEditedWords: MutableLiveData<Map<String, List<Word>>> = MutableLiveData()
     val namesEditedTopics: MutableLiveData<List<String>> = MutableLiveData()
 
+    //неготовое с прошлой сессии приложения Word
+    val notReadyWord: MutableLiveData<Word?> = MutableLiveData(null)
+
 
     init {
 //        dataDownload()
@@ -43,6 +46,20 @@ class CatalogWordsViewModel : ViewModel() {
             wordRepository.getFlowAllEditedWords().collect { word ->
                 mapEditedWords.value = sortWordsByTopic(word)
                 namesEditedTopics.value = fillNamesTopics(mapEditedWords.value as MutableMap<String, ArrayList<Word>>)
+            }
+        }
+
+        checkNotReadyWord()
+    }
+
+    /**
+     * если в БД имелось незавершеное недавно слово
+     * перенаправит на фрагмент для завершения его редактирования
+     */
+    private fun checkNotReadyWord() {
+        viewModelScope.launch {
+            wordRepository.notReadyWord.collect{
+                if (it!=null) notReadyWord.value = it
             }
         }
     }
