@@ -17,6 +17,7 @@ class ServerConnectViewModel : ViewModel() {
     val editedHost: MutableLiveData<String> = MutableLiveData()
     //значение из БД
     val lastHost: MutableLiveData<String> = MutableLiveData()
+    val ping: MutableLiveData<Long> = MutableLiveData()
 
     init {
         var host: String

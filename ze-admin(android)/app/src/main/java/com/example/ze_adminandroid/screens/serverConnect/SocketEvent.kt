@@ -1,0 +1,12 @@
+package com.example.ze_adminandroid.screens.serverConnect
+
+import com.google.gson.Gson
+
+class SocketEvent(
+    val type: String,
+    val ping: Long?
+) {
+    fun toJson():String{
+        return Gson().toJson(this)
+    }
+}
