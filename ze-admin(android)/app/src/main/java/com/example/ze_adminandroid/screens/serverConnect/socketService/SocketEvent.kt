@@ -1,4 +1,4 @@
-package com.example.ze_adminandroid.screens.serverConnect
+package com.example.ze_adminandroid.screens.serverConnect.socketService
 
 import com.google.gson.Gson
 

@@ -61,5 +61,8 @@ class WordRepository private constructor(){
         }
     }
 
+    /**
+     * выдаст Flow для списка всех обьектов Word в БД
+     */
     fun getFlowAllEditedWords():Flow<List<Word>> = roomService.getFlowAllEditedWords()
 }

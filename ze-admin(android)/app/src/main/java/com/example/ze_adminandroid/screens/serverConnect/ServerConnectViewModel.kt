@@ -2,41 +2,56 @@ package com.example.ze_adminandroid.screens.serverConnect
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.ze_adminandroid.services.RoomService
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import androidx.lifecycle.viewModelScope
+import com.example.ze_adminandroid.models.Word
+import com.example.ze_adminandroid.repositories.VoiceRepository
+import com.example.ze_adminandroid.repositories.WordRepository
+import com.example.ze_adminandroid.screens.serverConnect.socketService.NetworkHolder
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class ServerConnectViewModel : ViewModel() {
-    val roomService = RoomService()
+    private val wordRepository = WordRepository.instance
+    private val voiceRepository = VoiceRepository.instance
+    private val networkHolder = NetworkHolder.instance
 
     //в строке хост, в значении если true значит хост прочекивается
-    val host: MutableLiveData<Pair<String,Boolean>> = MutableLiveData()
+    val host: MutableLiveData<Pair<String,Boolean>?> = MutableLiveData()
     //в строке значение из изменяемого EditText
     val editedHost: MutableLiveData<String> = MutableLiveData()
-    //значение из БД
-    val lastHost: MutableLiveData<String> = MutableLiveData()
-    val ping: MutableLiveData<Long> = MutableLiveData()
+    val ping: MutableLiveData<Int> = MutableLiveData()
+
+    val listEditedWords: MutableLiveData<List<Word>> = MutableLiveData()
+    val countVoices: MutableLiveData<Int> = MutableLiveData()
 
     init {
-        var host: String
-        GlobalScope.launch {
-            host = roomService.getLastHost().toString()
-
-            withContext(Dispatchers.Main) {
-                if (host!=null&&!host.equals("null")){
-                    lastHost.value = host
-                }
+        //список измененных слов подгружает Flow при любом изменении в БД
+        viewModelScope.launch {
+            wordRepository.getFlowAllEditedWords().collect { listWords ->
+                listEditedWords.postValue(listWords)
             }
         }
 
-    }
 
-    /**
-     * установит новое значение в таблице prop_table по ключу last-host
-     */
-    fun setNewLastHost(host: String){
-        roomService.insertNewLastHost(host)
+        //вернет количество сущностей  Voice из БД
+        viewModelScope.launch{
+            voiceRepository.getCountVoices().collect{count ->
+                countVoices.postValue(count)
+            }
+        }
+
+
+        //вернет значение host из NetworkHolder
+        viewModelScope.launch{
+            networkHolder.host.collect{
+                host.postValue(it)
+            }
+        }
+
+        //вернет значение ping из NetworkHolder
+        viewModelScope.launch{
+            networkHolder.ping.collect(){
+                ping.postValue(it)
+            }
+        }
     }
 }

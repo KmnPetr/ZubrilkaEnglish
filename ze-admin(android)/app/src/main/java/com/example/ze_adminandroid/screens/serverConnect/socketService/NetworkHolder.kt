@@ -1,35 +1,55 @@
-package com.example.ze_adminandroid.screens.serverConnect
+package com.example.ze_adminandroid.screens.serverConnect.socketService
 
-import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
+import okhttp3.WebSocket
 
 class NetworkHolder private constructor(){
     companion object{
         val instance: NetworkHolder by lazy { NetworkHolder() }
     }
 
+    val host: MutableStateFlow<Pair<String,Boolean>?> = MutableStateFlow(null)
+    val ping: MutableStateFlow<Int?> = MutableStateFlow(null)
+
+
+    /**
+     * установит сокет соединение
+     */
+    private fun socketConnect(host:String) {
+        val client: OkHttpClient = OkHttpClient()
+        val request: Request = Request.Builder().url("ws://192.168.9.182:33333/event-emitter").build()
+        val listener: MyWebSocketListener = MyWebSocketListener(ping)
+        val ws: WebSocket = client.newWebSocket(request, listener)
+
+
+        // Trigger shutdown of the dispatcher's executor so this process can
+        // exit cleanly.
+//        client.dispatcher().executorService().shutdown();
+    }
+
     /**
      * проверит имеет ли ip адрес код 200 на http:<host>:8080/healthcheck
      */
-    fun checkConnect(host: String, hostResult: MutableLiveData<Pair<String, Boolean>>) {
+    fun checkConnect(host: String) {
 
         if (host.equals("")) return
 
         var boolValue: Boolean
 
         GlobalScope.launch {
-            val client = OkHttpClient()
-            val request = Request.Builder()
+            try {
+                val client = OkHttpClient()
+                val request = Request.Builder()
                 .url("http://"+host+":33333/healthcheck")
                 .build()
 
-            try {
                 val response: Response = client.newCall(request).execute()
                 val statusCode = response.code
                 println("status: "+statusCode)
@@ -43,13 +63,16 @@ class NetworkHolder private constructor(){
                 }
                 response.close()
             } catch (e: Exception) {
-                e.printStackTrace()
+                println(e.message)
                 boolValue = false
             }
 
             withContext(Dispatchers.Main) {
                 if (boolValue){
-                    hostResult.value = Pair(host,true)
+                    //оповестим viewModel об удачной проверке хоста
+                    //а также запустим сокет
+                    this@NetworkHolder.host.value = Pair(host,true)
+                    socketConnect(host)
                 }
             }
         }

@@ -7,26 +7,47 @@
     tools:context=".screens.serverConnect.ServerConnectFragment">
 
     <TextView
+        android:id="@+id/textView234"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="ping: "
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
         android:id="@+id/ping"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="There is no connection"
         android:textColor="#FF9800"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView234"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/editHost"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:hint="host"
-        android:text="192.168.218.182"
+        android:text=""
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ping" />
+
+    <Button
+        android:id="@+id/buttonCheckHost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Check"
+        android:backgroundTint="#A1B1A1"
+        app:layout_constraintBottom_toBottomOf="@+id/editHost"
+        app:layout_constraintStart_toEndOf="@+id/editHost"
+        app:layout_constraintTop_toTopOf="@+id/editHost" />
 
     <TextView
         android:id="@+id/textHost"
@@ -37,6 +58,30 @@
         android:text="textHost"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editHost" />
+
+    <TextView
+        android:id="@+id/countEditedWords"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="countEditedWords"
+        android:textColor="#8BC34A"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textHost" />
+    <TextView
+        android:id="@+id/countVoices"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="countVoices"
+        android:textColor="#8BC34A"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/countEditedWords" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

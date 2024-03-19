@@ -10,9 +10,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.ze_adminandroid.databinding.FragmentServerConnectBinding
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.WebSocket
+import com.example.ze_adminandroid.screens.serverConnect.socketService.MessageProtocol
+import com.example.ze_adminandroid.screens.serverConnect.socketService.NetworkHolder
+import com.example.ze_adminandroid.services.RoomService
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ServerConnectFragment : Fragment() {
 
@@ -34,12 +38,49 @@ class ServerConnectFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(ServerConnectViewModel::class.java)
         networkHolder = NetworkHolder.instance
 
-//        networkHolder.checkConnect("192.168.218.182", viewModel.isHostAvailable)
+        getLastHost()
         settingHost()
         viewModelLissen()
+        setOnClicks()
 
 
-        socketConnect("it.first")
+
+        println("/////////////////////////////////////////////////////////////////////////////////////////")
+        MessageProtocol()
+    }
+
+    //получит старый удачный хост из БД
+    private fun getLastHost() {
+        GlobalScope.launch {
+            val roomService = RoomService()
+            var host: String
+            host = roomService.getLastHost().toString()
+
+            withContext(Dispatchers.Main) {
+                if (host!=null&&!host.equals("null")){
+                    binding.editHost.setText(host)
+                }
+            }
+        }
+    }
+    /**
+     * установит новое значение в таблице prop_table по ключу last-host
+     * TODO прямое обращение к руму из фрагмента
+     */
+    fun setNewLastHost(host: String){
+        val roomService = RoomService()
+        roomService.insertNewLastHost(host)
+    }
+    /**
+     * установит слушатели на различные кнопки
+     * TODO прямое обращение к руму из фрагмента
+     */
+    private fun setOnClicks() {
+        //кнопка проверки хоста
+        binding.buttonCheckHost.setOnClickListener {
+            networkHolder.checkConnect(binding.editHost.text.toString())
+        }
+
     }
 
     /**
@@ -56,6 +97,14 @@ class ServerConnectFragment : Fragment() {
                 binding.ping.setTextColor(Color.parseColor("#FF9800"))
             }
         }
+        //выведет количество слов на экран
+        viewModel.listEditedWords.observe(viewLifecycleOwner){
+            binding.countEditedWords.setText("countEditedWords: "+it.size)
+        }
+        //выведет количество Voice на экран
+        viewModel.countVoices.observe(viewLifecycleOwner){
+            binding.countVoices.setText("countVoices: "+it)
+        }
     }
 
     /**
@@ -68,32 +117,19 @@ class ServerConnectFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable?) {
-                networkHolder.checkConnect(s.toString(),viewModel.host)
+                networkHolder.checkConnect(s.toString())
             }
         })
 
         viewModel.host.observe(viewLifecycleOwner){
-            if (it.second){
-                binding.textHost.setText(it.first)
-                binding.textHost.setTextColor(Color.GREEN)
-                viewModel.setNewLastHost(it.first)
-
+            if (it != null) {
+                if (it.second){
+                    binding.textHost.setText(it.first)
+                    binding.textHost.setTextColor(Color.GREEN)
+                    setNewLastHost(it.first)
+                }
             }
         }
     }
 
-    /**
-     * установит сокет соединение
-     */
-    private fun socketConnect(host:String) {
-        val client: OkHttpClient = OkHttpClient()
-        val request: Request = Request.Builder().url(/*"ws://192.168.218.182:7000"*/"ws://192.168.3.182:33333/event-emitter").build()
-        val listener: MyWebSocketListener = MyWebSocketListener(viewModel)
-        val ws: WebSocket = client.newWebSocket(request, listener)
-
-
-        // Trigger shutdown of the dispatcher's executor so this process can
-        // exit cleanly.
-//        client.dispatcher().executorService().shutdown();
-    }
 }

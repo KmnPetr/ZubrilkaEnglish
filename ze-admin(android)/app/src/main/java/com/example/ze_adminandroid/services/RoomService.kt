@@ -51,4 +51,9 @@ class RoomService {
     suspend fun getNotReadyWords():List<Word>?{
         return dataBase.getEditedWordDAO().getNotReadyWords(false)
     }
+
+    //вернет количество сущностей  Voice из БД
+    fun getCountVoices(): Flow<Int> {
+        return dataBase.getCreatedVoiceDAO().getCount()
+    }
 }

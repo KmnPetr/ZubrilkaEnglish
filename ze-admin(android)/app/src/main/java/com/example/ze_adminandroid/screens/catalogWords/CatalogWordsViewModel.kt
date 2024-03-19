@@ -43,8 +43,8 @@ class CatalogWordsViewModel : ViewModel() {
 
         //список измененных слов подгружает Flow при любом изменении в БД
         viewModelScope.launch {
-            wordRepository.getFlowAllEditedWords().collect { word ->
-                mapEditedWords.value = sortWordsByTopic(word)
+            wordRepository.getFlowAllEditedWords().collect { words ->
+                mapEditedWords.value = sortWordsByTopic(words)
                 namesEditedTopics.value = fillNamesTopics(mapEditedWords.value as MutableMap<String, ArrayList<Word>>)
             }
         }

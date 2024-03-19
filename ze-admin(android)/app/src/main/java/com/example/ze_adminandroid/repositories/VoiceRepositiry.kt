@@ -8,6 +8,7 @@ import com.example.ze_adminandroid.services.RoomService
 import com.example.ze_adminandroid.utils.VoiceHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -67,5 +68,11 @@ class VoiceRepository private constructor(){
             }
         }
         return voice
+    }
+
+
+    //вернет количество сущностей  Voice из БД
+    fun getCountVoices(): Flow<Int> {
+        return roomService.getCountVoices()
     }
 }
