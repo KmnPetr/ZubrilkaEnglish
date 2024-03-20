@@ -44,9 +44,10 @@ class ServerConnectFragment : Fragment() {
         setOnClicks()
 
 
-
+        println("")
         println("/////////////////////////////////////////////////////////////////////////////////////////")
         MessageProtocol()
+        println("")
     }
 
     //получит старый удачный хост из БД
