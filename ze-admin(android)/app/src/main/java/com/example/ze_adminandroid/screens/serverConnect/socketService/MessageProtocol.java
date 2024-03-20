@@ -4,10 +4,8 @@ import com.google.gson.Gson;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * класс занимается сборкой/расборкой сообщения обьекта передаваемого по webSocket
@@ -15,31 +13,51 @@ import java.util.Random;
  * headers - json строка, Map() содержащая различные проперти в любом количестве
  * оставшиеся байты - body с любым количеством байт
  */
+
 public class MessageProtocol {
-    public MessageProtocol(){
-        long sizeHeaders;
-        Map<String,String> headers = new HashMap<>();
-        headers.put("type","ping");
-        headers.put("some field", "value some field");
+    private byte[] message;
+    private TypeEnum type;
+    private Map<String,String> headers;
+    private byte[] body;
+    public MessageProtocol(byte[] message){
+        this.message = message;
+        this.headers = getHeaders(message);
+        this.type = TypeEnum.fromString(headers.get("type"));
+        this.body = getBody(message);
+    }
+    public MessageProtocol(TypeEnum type,Map<String,String> headers, byte[] body){
+        this.type = type;
+        this.headers = headers;
+        this.body = body;
 
-        byte[] body = new byte[300];
-        for (byte b : body) {
-            b = (byte) new Random().nextInt(256);
+        if (headers == null){
+            this.headers = new HashMap<>();
         }
-
-        byte[] message = buildMessage(headers,body);
-
-        String str = new String(message, StandardCharsets.UTF_8);
-        System.out.println(str);
-
-        Map<String,String> finalHeaders = getHeaders(message);
-        System.out.println("//////////////////////////");
-        System.out.println(finalHeaders.get("type"));
-        System.out.println(finalHeaders.get("some field"));
-        System.out.println("//////////////////////////");
-
+        this.headers.put("type", type.getValue());
     }
 
+
+
+    public byte[] getMessage() {return message;}
+    public TypeEnum getType() {return type;}
+    public Map<String, String> getHeaders() {return headers;}
+    public byte[] getBody() {return body;}
+
+    /**
+     * вычленит body из message
+     */
+    private byte[] getBody(byte[] message) {
+        int headSize = byteToInt(message) + 4;
+        int sizeOfBody = message.length - headSize;
+        byte[] body = null;
+        if(sizeOfBody>0){
+            body = new byte[sizeOfBody];
+            for (int i = headSize; i < message.length; i++) {
+                body[i] = message[headSize+i];
+            }
+        }
+        return body;
+    }
     /**
      * вычленит из переданного message заголовки
      */
@@ -120,7 +138,7 @@ public class MessageProtocol {
     }
 
     /**
-     * переведет первые 8 байт массива в long
+     * переведет первые 4 байтa массива в int
      */
     private int byteToInt(byte[] bytes){
         int l = 0;
@@ -128,5 +146,26 @@ public class MessageProtocol {
             l = (l << 8) + (bytes[i] & 0xFF);
         }
         return l;
+    }
+}
+enum TypeEnum {
+    PING("ping");
+
+    private String value;
+
+    private TypeEnum(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
+    public static TypeEnum fromString(String type) {
+        for (TypeEnum typeEnum : TypeEnum.values()) {
+            if (typeEnum.value.equals(type)) {
+                return typeEnum;
+            }
+        }
+        throw new IllegalArgumentException("the enam is not defined for the value \""+type+"\"");
     }
 }
