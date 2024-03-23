@@ -34,6 +34,8 @@ public class MessageProtocol {
             this.headers = new HashMap<>();
         }
         this.headers.put("type", type.getValue());
+
+        this.message = buildMessage(this.headers,body);
     }
 
 
@@ -52,7 +54,7 @@ public class MessageProtocol {
         byte[] body = null;
         if(sizeOfBody>0){
             body = new byte[sizeOfBody];
-            for (int i = headSize; i < message.length; i++) {
+            for (int i = 0; i < sizeOfBody; i++) {
                 body[i] = message[headSize+i];
             }
         }
@@ -149,7 +151,10 @@ public class MessageProtocol {
     }
 }
 enum TypeEnum {
-    PING("ping");
+    PING("ping"),
+    VOICE("voice"),
+    SUCCESSFUL_VOICE_SAVING("successful voice saving"),
+    VOICE_ERROR("voice error");
 
     private String value;
 

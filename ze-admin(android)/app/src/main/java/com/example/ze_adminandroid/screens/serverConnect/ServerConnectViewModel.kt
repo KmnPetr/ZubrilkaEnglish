@@ -18,7 +18,7 @@ class ServerConnectViewModel : ViewModel() {
     val host: MutableLiveData<Pair<String,Boolean>?> = MutableLiveData()
     //в строке значение из изменяемого EditText
     val editedHost: MutableLiveData<String> = MutableLiveData()
-    val ping: MutableLiveData<Int> = MutableLiveData()
+    val ping: MutableLiveData<Long> = MutableLiveData()
 
     val listEditedWords: MutableLiveData<List<Word>> = MutableLiveData()
     val countVoices: MutableLiveData<Int> = MutableLiveData()
@@ -34,9 +34,12 @@ class ServerConnectViewModel : ViewModel() {
 
         //вернет количество сущностей  Voice из БД
         viewModelScope.launch{
-            voiceRepository.getCountVoices().collect{count ->
-                countVoices.postValue(count)
+            voiceRepository.countVoices.collect{
+                countVoices.postValue(it)
             }
+//            voiceRepository.getCountVoices().collect{count ->
+//                countVoices.postValue(count)
+//            }
         }
 
 

@@ -9,6 +9,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.WebSocket
+import okio.ByteString
 
 class NetworkHolder private constructor(){
     companion object{
@@ -16,17 +17,19 @@ class NetworkHolder private constructor(){
     }
 
     val host: MutableStateFlow<Pair<String,Boolean>?> = MutableStateFlow(null)
-    val ping: MutableStateFlow<Int?> = MutableStateFlow(null)
+    val ping: MutableStateFlow<Long?> = MutableStateFlow(null)
+    var webSocket: WebSocket? = null
 
 
     /**
      * установит сокет соединение
      */
     private fun socketConnect(host:String) {
-        val client: OkHttpClient = OkHttpClient()
-        val request: Request = Request.Builder().url("ws://192.168.9.182:33333/event-emitter").build()
-        val listener: MyWebSocketListener = MyWebSocketListener(ping)
-        val ws: WebSocket = client.newWebSocket(request, listener)
+        val client = OkHttpClient()
+        val request: Request = Request.Builder().url("ws://"+host+":33333/event-emitter").build()
+        val listener = MyWebSocketListener()
+        webSocket?.close(1000,"reason") //в случае если оно было открыто ранее
+        webSocket = client.newWebSocket(request, listener)
 
 
         // Trigger shutdown of the dispatcher's executor so this process can
@@ -76,5 +79,12 @@ class NetworkHolder private constructor(){
                 }
             }
         }
+    }
+
+    /**
+     * отошлет по сокету сообщение
+     */
+    fun sendSocketMessage(message: ByteString) {
+        webSocket?.send(message)
     }
 }

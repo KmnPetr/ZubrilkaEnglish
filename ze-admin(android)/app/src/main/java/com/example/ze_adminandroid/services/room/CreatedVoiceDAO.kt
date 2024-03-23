@@ -18,4 +18,8 @@ interface CreatedVoiceDAO {
     //вернет количество сущностей
     @Query("SELECT COUNT(*) FROM voice_table")
     fun getCount(): Flow<Int>
+
+    //выдаст первое имеющееся voice
+    @Query("SELECT * FROM voice_table LIMIT 1")
+    suspend fun getFirstVoice(): Voice?
 }

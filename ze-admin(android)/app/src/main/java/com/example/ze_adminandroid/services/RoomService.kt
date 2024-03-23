@@ -56,4 +56,11 @@ class RoomService {
     fun getCountVoices(): Flow<Int> {
         return dataBase.getCreatedVoiceDAO().getCount()
     }
+
+    /**
+     * выдаст первое имеющееся voice из БД
+     */
+    suspend fun getFirstVoice(): Voice? {
+        return dataBase.getCreatedVoiceDAO().getFirstVoice()
+    }
 }

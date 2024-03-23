@@ -10,19 +10,24 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.ze_adminandroid.databinding.FragmentServerConnectBinding
-import com.example.ze_adminandroid.screens.serverConnect.socketService.MessageProtocol
+import com.example.ze_adminandroid.events.SctEvEnum
+import com.example.ze_adminandroid.events.SocketEvent
 import com.example.ze_adminandroid.screens.serverConnect.socketService.NetworkHolder
+import com.example.ze_adminandroid.screens.serverConnect.socketService.SendDataManager
 import com.example.ze_adminandroid.services.RoomService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 
 class ServerConnectFragment : Fragment() {
 
     private lateinit var viewModel: ServerConnectViewModel
     private lateinit var binding: FragmentServerConnectBinding
     private lateinit var networkHolder: NetworkHolder
+    private var sendDataManager = SendDataManager.instanse
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,11 +48,33 @@ class ServerConnectFragment : Fragment() {
         viewModelLissen()
         setOnClicks()
 
+    }
 
-        println("")
-        println("/////////////////////////////////////////////////////////////////////////////////////////")
-        MessageProtocol()
-        println("")
+    override fun onResume() {
+        super.onResume()
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        EventBus.getDefault().unregister(this)
+    }
+
+    /**
+     * метод используется библиотечкой green robot
+     * при публикации кем-то событий
+     */
+    @Subscribe
+    fun event_CardChanged(event: SocketEvent){
+        when(event.typeEvent){
+            SctEvEnum.VOICE_ERROR -> {
+                val oldText = binding.socketMessages.text.toString()
+                binding.socketMessages.setTextColor(Color.RED)
+                binding.socketMessages.setText(oldText+"\n"+event.properties?.get("message").toString())
+            }
+
+            else -> {}
+        }
     }
 
     //получит старый удачный хост из БД
@@ -81,7 +108,10 @@ class ServerConnectFragment : Fragment() {
         binding.buttonCheckHost.setOnClickListener {
             networkHolder.checkConnect(binding.editHost.text.toString())
         }
-
+        //кнопка начала отсылки voices
+        binding.sendVoicesButton.setOnClickListener {
+            sendDataManager.sendNextVoice()
+        }
     }
 
     /**

@@ -3,12 +3,14 @@ package com.example.ze_adminandroid.repositories
 import com.example.ze_adminandroid.events.VcEvEnum
 import com.example.ze_adminandroid.events.VoiceEvent
 import com.example.ze_adminandroid.models.Voice
+import com.example.ze_adminandroid.models.Word
 import com.example.ze_adminandroid.services.RetrofitService
 import com.example.ze_adminandroid.services.RoomService
 import com.example.ze_adminandroid.utils.VoiceHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -18,11 +20,20 @@ class VoiceRepository private constructor(){
     companion object{
         val instance: VoiceRepository by lazy { VoiceRepository() }
     }
+    val voiceHandler: VoiceHandler = VoiceHandler()
+    //вернет количество сущностей  Voice из БД
+    val countVoices: MutableStateFlow<Int?> = MutableStateFlow(null)
     init {
         EventBus.getDefault().register(this)
+
+        GlobalScope.launch {
+            getCountVoices().collect{count ->
+                countVoices.value = count
+            }
+        }
     }
 
-    val voiceHandler: VoiceHandler = VoiceHandler()
+
 
     /**
      * метод используется библиотечкой EventBus
@@ -71,8 +82,14 @@ class VoiceRepository private constructor(){
     }
 
 
-    //вернет количество сущностей  Voice из БД
-    fun getCountVoices(): Flow<Int> {
+    private fun getCountVoices(): Flow<Int> {
         return roomService.getCountVoices()
+    }
+
+    /**
+     * выдаст первое имеющееся voice из БД
+     */
+    suspend fun getFirstVoice(): Voice? {
+        return roomService.getFirstVoice()
     }
 }
