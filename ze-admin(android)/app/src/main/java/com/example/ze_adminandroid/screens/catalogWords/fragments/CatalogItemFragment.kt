@@ -17,6 +17,8 @@ import com.example.ze_adminandroid.models.Word
 import com.example.ze_adminandroid.screens.catalogWords.CatalogWordsFragment
 import com.example.ze_adminandroid.screens.catalogWords.CatalogWordsViewModel
 import com.example.ze_adminandroid.utils.myBundle
+import com.example.zubrilkaenglish.events.WordEvent
+import com.example.zubrilkaenglish.events.WrEvEnum
 import org.greenrobot.eventbus.EventBus
 
 class CatalogItemFragment(
@@ -101,8 +103,10 @@ class CatalogItemFragment(
         if (word.link_voice != null){
             //отправим запрос на воспроизведение звука
             EventBus.getDefault().post(VoiceEvent(VcEvEnum.PLAY_VOICE, Voice(word.link_voice,null)))
+            word.voiceVerified = true
+            cardAdapter.notifyDataSetChanged()
+            EventBus.getDefault().post(WordEvent(WrEvEnum.SET_VOICE_VERIFIED,word))
         }
-
     }
 
 }

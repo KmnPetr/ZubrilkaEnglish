@@ -24,4 +24,6 @@ interface EditedWordDAO {
     suspend fun getFirstWord(): Word?
     @Query("DELETE FROM editable_words WHERE editable_words.localBaseId = :localBaseId")
     suspend fun deleteWord(localBaseId: Int?)
+    @Query("UPDATE editable_words SET voiceVerified = :voiceVerified WHERE localBaseId = :localBaseId")
+    suspend fun setVoiceVerified(localBaseId: Int, voiceVerified: Boolean)
 }

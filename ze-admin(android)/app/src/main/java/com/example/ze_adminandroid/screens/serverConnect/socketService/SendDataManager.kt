@@ -1,11 +1,13 @@
 package com.example.ze_adminandroid.screens.serverConnect.socketService
 
+import android.util.Log
 import com.example.ze_adminandroid.events.SctEvEnum
 import com.example.ze_adminandroid.events.SocketEvent
 import com.example.ze_adminandroid.models.Voice
 import com.example.ze_adminandroid.models.Word
 import com.example.ze_adminandroid.repositories.VoiceRepository
 import com.example.ze_adminandroid.repositories.WordRepository
+import com.example.ze_adminandroid.utils.TEG
 import com.google.gson.Gson
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -148,16 +150,22 @@ class SendDataManager private constructor(){
             GlobalScope.launch{
                 if (wordRepository.countWords.value!=null && wordRepository.countWords.value!! >0){
                     val word:Word? = wordRepository.getFirstWord()
+                    if (word != null) {
+                        if (word.voiceVerified&&word.is_ready){
+                            val mp = MessageProtocol(
+                                TypeEnum.WORD,
+                                //положим id местной базы данных, чтобы в ответ получить его для поиска id на удаление
+                                mutableMapOf(Pair("localMobileId",word.localBaseId.toString())),
+                                Gson().toJson(word).toByteArray(StandardCharsets.UTF_8)
+                            )
 
-                    if (word!=null){
-                        val mp = MessageProtocol(
-                            TypeEnum.WORD,
-                            //положим id местной базы данных, чтобы в ответ получить его для поиска id на удаление
-                            mutableMapOf(Pair("localMobileId",word.localBaseId.toString())),
-                            Gson().toJson(word).toByteArray(StandardCharsets.UTF_8)
-                        )
+                            networkHolder.sendSocketMessage(mp.message.toByteString())
+                        }else{
+                            val exeption = "Слово \""+word.foreignWord+"\" не готово к отправке."
+                            Log.d(TEG,exeption)
+                            EventBus.getDefault().post(SocketEvent(SctEvEnum.VOICE_ERROR, mapOf(Pair("message",exeption))))
+                        }
 
-                        networkHolder.sendSocketMessage(mp.message.toByteString())
                     }
                 }
             }

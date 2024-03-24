@@ -42,9 +42,9 @@ data class Word(
     //служебное поле только для этого приложения,
     // укажет, готово ли слово, и заполнены ли все необходимые поля перед отправкой
     @ColumnInfo(name = "is_ready")
-    var is_ready: Boolean
+    var is_ready: Boolean,
+    //поле указывает, что у данного слова voice был проверен перед отправкой
+    @ColumnInfo(name = "voiceVerified")
+    var voiceVerified: Boolean = false
 ){
-    //поле указывает, что у данного слова поле voice был проверен перед отправкой
-    @Ignore
-    var verified: Boolean = false
 }

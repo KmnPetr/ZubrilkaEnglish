@@ -43,7 +43,7 @@ class ListCardsAdapter(val listener: FragmentItem) : RecyclerView.Adapter<ListCa
             binding.foreignWord.text=word.foreignWord
             binding.translation.text=word.translation
 
-            if (!word.verified) binding.linearLayout.setCardBackgroundColor(setUpBackground(word))
+            if (!word.voiceVerified) binding.linearLayout.setCardBackgroundColor(setUpBackground(word))
             else binding.linearLayout.setCardBackgroundColor(Color.parseColor("#CCFFCC"))
 
             binding.root.setOnClickListener {
@@ -55,7 +55,6 @@ class ListCardsAdapter(val listener: FragmentItem) : RecyclerView.Adapter<ListCa
                 binding.buttonPlay.visibility = View.VISIBLE
                 binding.buttonPlay.setOnClickListener {
                     listener.onClickButtonPlay(word)
-                    word.verified = true
                     notifyItemChanged(position)
                 }
             }else binding.buttonPlay.visibility = View.GONE
