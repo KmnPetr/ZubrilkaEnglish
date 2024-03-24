@@ -154,7 +154,9 @@ enum TypeEnum {
     PING("ping"),
     VOICE("voice"),
     SUCCESSFUL_VOICE_SAVING("successful voice saving"),
-    VOICE_ERROR("voice error");
+    VOICE_ERROR("voice error"),
+    WORD("word"),
+    SUCCESSFUL_WORD_SAVING("successful word saving");
 
     private String value;
 
@@ -171,6 +173,6 @@ enum TypeEnum {
                 return typeEnum;
             }
         }
-        throw new IllegalArgumentException("the enam is not defined for the value \""+type+"\"");
+        throw new IllegalArgumentException("the enum is not defined for the value \""+type+"\"");
     }
 }

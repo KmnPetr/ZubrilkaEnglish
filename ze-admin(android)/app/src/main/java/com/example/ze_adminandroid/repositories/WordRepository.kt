@@ -21,6 +21,8 @@ class WordRepository private constructor(){
     private var roomService: RoomService = RoomService()
     private val listWords: MutableStateFlow<List<Word>> = MutableStateFlow(arrayListOf())
     val notReadyWord: MutableStateFlow<Word?> = MutableStateFlow(null)
+    //вернет количество сущностей  Word из БД
+    val countWords: MutableStateFlow<Int?> = MutableStateFlow(null)
 
     init {
         GlobalScope.launch(Dispatchers.Default) {
@@ -31,6 +33,12 @@ class WordRepository private constructor(){
             }
         }
         checkNotReadyWord()
+
+        GlobalScope.launch {
+            roomService.getEditedWordDAO().getCount().collect{count ->
+                countWords.value = count
+            }
+        }
     }
 
     /**
@@ -65,4 +73,8 @@ class WordRepository private constructor(){
      * выдаст Flow для списка всех обьектов Word в БД
      */
     fun getFlowAllEditedWords():Flow<List<Word>> = roomService.getFlowAllEditedWords()
+    suspend fun getFirstWord(): Word? = roomService.getEditedWordDAO().getFirstWord()
+    suspend fun deleteWord(localBaseId: Int?) {
+        roomService.getEditedWordDAO().deleteWord(localBaseId)
+    }
 }

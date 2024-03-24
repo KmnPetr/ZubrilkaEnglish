@@ -92,4 +92,11 @@ class VoiceRepository private constructor(){
     suspend fun getFirstVoice(): Voice? {
         return roomService.getFirstVoice()
     }
+
+    /**
+     * удалит Voice из БД
+     */
+    suspend fun deleteVoice(filename: String?) {
+        roomService.deleteVoice(filename)
+    }
 }

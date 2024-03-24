@@ -22,4 +22,6 @@ interface CreatedVoiceDAO {
     //выдаст первое имеющееся voice
     @Query("SELECT * FROM voice_table LIMIT 1")
     suspend fun getFirstVoice(): Voice?
+    @Query("DELETE FROM voice_table WHERE voice_table.name = :name")
+    suspend fun deleteVoice(name: String?)
 }

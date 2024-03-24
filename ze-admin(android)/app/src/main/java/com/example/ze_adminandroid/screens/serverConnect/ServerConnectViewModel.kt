@@ -22,6 +22,7 @@ class ServerConnectViewModel : ViewModel() {
 
     val listEditedWords: MutableLiveData<List<Word>> = MutableLiveData()
     val countVoices: MutableLiveData<Int> = MutableLiveData()
+    val countWords: MutableLiveData<Int> = MutableLiveData()
 
     init {
         //список измененных слов подгружает Flow при любом изменении в БД
@@ -32,14 +33,17 @@ class ServerConnectViewModel : ViewModel() {
         }
 
 
-        //вернет количество сущностей  Voice из БД
+        //вернет количество сущностей  Voice  из БД
         viewModelScope.launch{
             voiceRepository.countVoices.collect{
                 countVoices.postValue(it)
             }
-//            voiceRepository.getCountVoices().collect{count ->
-//                countVoices.postValue(count)
-//            }
+        }
+        //вернет количество сущностей  Word  из БД
+        viewModelScope.launch{
+            wordRepository.countWords.collect{
+                countWords.postValue(it)
+            }
         }
 
 

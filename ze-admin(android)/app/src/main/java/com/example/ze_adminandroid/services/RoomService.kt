@@ -1,10 +1,10 @@
 package com.example.ze_adminandroid.services
 
-import androidx.room.Query
 import com.example.ze_adminandroid.models.PropModel
 import com.example.ze_adminandroid.models.Voice
 import com.example.ze_adminandroid.models.Word
 import com.example.ze_adminandroid.services.room.DataBase
+import com.example.ze_adminandroid.services.room.EditedWordDAO
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -12,6 +12,13 @@ import kotlinx.coroutines.launch
 class RoomService {
 
     private val dataBase = DataBase.getInstanceDB()
+
+    /**
+     * даст доступ к методам EditedWordDAO
+     */
+    fun getEditedWordDAO(): EditedWordDAO {
+        return dataBase.getEditedWordDAO()
+    }
     suspend fun saveEditableWord(word: Word) {
         dataBase.getEditedWordDAO().saveEditableWord(word)
     }
@@ -62,5 +69,12 @@ class RoomService {
      */
     suspend fun getFirstVoice(): Voice? {
         return dataBase.getCreatedVoiceDAO().getFirstVoice()
+    }
+
+    /**
+     * удалит Voice из БД
+     */
+    suspend fun deleteVoice(filename: String?) {
+        dataBase.getCreatedVoiceDAO().deleteVoice(filename)
     }
 }

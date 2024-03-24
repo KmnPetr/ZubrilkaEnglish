@@ -47,7 +47,6 @@ class ServerConnectFragment : Fragment() {
         settingHost()
         viewModelLissen()
         setOnClicks()
-
     }
 
     override fun onResume() {
@@ -112,6 +111,10 @@ class ServerConnectFragment : Fragment() {
         binding.sendVoicesButton.setOnClickListener {
             sendDataManager.sendNextVoice()
         }
+        //кнопка начала отсылки words
+        binding.sendWordsButton.setOnClickListener {
+            sendDataManager.sendNextEditedWord()
+        }
     }
 
     /**
@@ -129,8 +132,11 @@ class ServerConnectFragment : Fragment() {
             }
         }
         //выведет количество слов на экран
-        viewModel.listEditedWords.observe(viewLifecycleOwner){
-            binding.countEditedWords.setText("countEditedWords: "+it.size)
+//        viewModel.listEditedWords.observe(viewLifecycleOwner){
+//            binding.countEditedWords.setText("countEditedWords: "+it.size)
+//        }
+        viewModel.countWords.observe(viewLifecycleOwner){
+            binding.countEditedWords.setText("countEditedWords: "+it)
         }
         //выведет количество Voice на экран
         viewModel.countVoices.observe(viewLifecycleOwner){
