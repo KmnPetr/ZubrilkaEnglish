@@ -7,7 +7,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -64,7 +66,12 @@ class EditWordFragment : Fragment() {
         showWordFields()
         setLiseners()
         onChangeVoice()
+
+
+
+
     }
+
 
     /**
      * производит разные изменения при перевыборе Voice
@@ -128,7 +135,7 @@ class EditWordFragment : Fragment() {
             binding.linkImage.text.toString(),
             editedWord.sorting_value,
             System.currentTimeMillis(),
-            false //важно, оно не доделано
+            false //word, не доделано
         )
         wordRepository.saveEditableWord(word)
     }
@@ -205,6 +212,7 @@ class EditWordFragment : Fragment() {
         val url = "https://myefe.ru/anglijskaya-transkriptsiya.html"
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(intent)
+        temporarySavingWord()
     }
 
     /**
@@ -259,5 +267,4 @@ class EditWordFragment : Fragment() {
     private fun createVoice(createdVoice: Voice){
         this.createdVoice.value = createdVoice
     }
-
 }

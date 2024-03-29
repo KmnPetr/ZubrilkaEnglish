@@ -109,4 +109,14 @@ class CatalogItemFragment(
         }
     }
 
+    /**
+     * удалить word из базы данных
+     */
+    override fun onClickButtonDelete(word: Word) {
+        EventBus.getDefault().post(WordEvent(WrEvEnum.DELETE_FROM_DATABASE,word))
+        if (word.link_voice!=null&&!word.link_voice.equals("")){
+            EventBus.getDefault().post(VoiceEvent(VcEvEnum.DELETE_FROM_DATABASE,Voice(word.link_voice,null)))
+        }
+    }
+
 }

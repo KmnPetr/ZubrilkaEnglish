@@ -11,5 +11,6 @@ class VoiceEvent(
 
 enum class VcEvEnum{
     //намерение воспроизвести озвучку карточки
-    PLAY_VOICE
+    PLAY_VOICE,
+    DELETE_FROM_DATABASE
 }

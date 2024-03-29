@@ -27,7 +27,7 @@ class ListCardsAdapter(val listener: FragmentItem) : RecyclerView.Adapter<ListCa
     }
 
     override fun onBindViewHolder(holder: CardHolder, position: Int) {
-        holder.bind(listCards[position], listener,position,::notifyItemChanged)
+        holder.bind(listCards[position], listener,position,/*::notifyItemChanged,*/this)
     }
 
     fun setList(list:List<Word>){
@@ -38,7 +38,13 @@ class ListCardsAdapter(val listener: FragmentItem) : RecyclerView.Adapter<ListCa
         private val binding= ViewWordBinding.bind(view)
         private var idWord: Int? = null
 
-        fun bind(word: Word, listener: FragmentItem, position: Int, notifyItemChanged:(Int) -> Unit) {
+        fun bind(
+            word: Word,
+            listener: FragmentItem,
+            position: Int,
+//            notifyItemChanged: (Int) -> Unit,
+            adapter: ListCardsAdapter
+        ) {
             idWord = word.id
             binding.foreignWord.text=word.foreignWord
             binding.translation.text=word.translation
@@ -50,14 +56,25 @@ class ListCardsAdapter(val listener: FragmentItem) : RecyclerView.Adapter<ListCa
                 listener.onClickWord(word)
             }
 
-            //настройка кнопки
+            //настройка кнопки Play
             if (word.link_voice!=null && !word.link_voice.equals("")){
                 binding.buttonPlay.visibility = View.VISIBLE
                 binding.buttonPlay.setOnClickListener {
                     listener.onClickButtonPlay(word)
-                    notifyItemChanged(position)
+//                    notifyItemChanged(position)
+                    adapter.notifyItemChanged(position)
                 }
             }else binding.buttonPlay.visibility = View.GONE
+
+            //
+            //настройка кнопки Delete
+            if (word.localBaseId!=0){
+                binding.buttonDelete.visibility = View.VISIBLE
+                binding.buttonDelete.setOnClickListener {
+                    listener.onClickButtonDelete(word)
+                    adapter.notifyDataSetChanged()
+                }
+            }else binding.buttonDelete.visibility = View.GONE
         }
 
 

@@ -13,5 +13,6 @@ class WordEvent(
 ): iEvent<WrEvEnum>
 
 enum class WrEvEnum{
-    SET_VOICE_VERIFIED
+    SET_VOICE_VERIFIED,
+    DELETE_FROM_DATABASE
 }

@@ -16,6 +16,8 @@ import com.example.ze_adminandroid.models.Word
 import com.example.ze_adminandroid.screens.catalogWords.CatalogWordsFragment
 import com.example.ze_adminandroid.screens.catalogWords.CatalogWordsViewModel
 import com.example.ze_adminandroid.utils.myBundle
+import com.example.zubrilkaenglish.events.WordEvent
+import com.example.zubrilkaenglish.events.WrEvEnum
 import org.greenrobot.eventbus.EventBus
 
 class SearchWordFragment(
@@ -101,6 +103,12 @@ class SearchWordFragment(
             EventBus.getDefault().post(VoiceEvent(VcEvEnum.PLAY_VOICE, Voice(word.link_voice,null)))
         }
 
+    }
+    /**
+     * удалить word из базы данных
+     */
+    override fun onClickButtonDelete(word: Word) {
+        EventBus.getDefault().post(WordEvent(WrEvEnum.DELETE_FROM_DATABASE,word))
     }
 
 }

@@ -3,7 +3,6 @@ package com.example.ze_adminandroid.repositories
 import com.example.ze_adminandroid.events.VcEvEnum
 import com.example.ze_adminandroid.events.VoiceEvent
 import com.example.ze_adminandroid.models.Voice
-import com.example.ze_adminandroid.models.Word
 import com.example.ze_adminandroid.services.RetrofitService
 import com.example.ze_adminandroid.services.RoomService
 import com.example.ze_adminandroid.utils.VoiceHandler
@@ -46,6 +45,11 @@ class VoiceRepository private constructor(){
                 GlobalScope.launch(Dispatchers.Default) {
                     getVoiceFromServices(event.voice.voiceName)?.let { voiceHandler.play(it) }
 
+                }
+            }
+            VcEvEnum.DELETE_FROM_DATABASE -> {
+                GlobalScope.launch {
+                    deleteVoice(event.voice.voiceName)
                 }
             }
             else -> {}

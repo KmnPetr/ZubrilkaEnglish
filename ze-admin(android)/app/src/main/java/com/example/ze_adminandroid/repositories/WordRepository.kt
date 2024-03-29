@@ -60,6 +60,11 @@ class WordRepository private constructor(){
                     roomService.getEditedWordDAO().setVoiceVerified(event.word.localBaseId,event.word.voiceVerified)
                 }
             }
+            WrEvEnum.DELETE_FROM_DATABASE -> {
+                GlobalScope.launch{
+                    deleteWord(event.word.localBaseId)
+                }
+            }
             else -> {}
         }
     }
