@@ -63,6 +63,7 @@ class CatalogWordsFragment : Fragment() {
      * перенаправит на фрагмент для завершения его редактирования
      */
     private fun checkNotReadyWord() {
+//        println("FFFFFFFFFFFFF: checkNotReadyWord()")
         viewModel.notReadyWord.observe(viewLifecycleOwner){
             if (it!=null){
                 myBundle.put("editedWord",it)

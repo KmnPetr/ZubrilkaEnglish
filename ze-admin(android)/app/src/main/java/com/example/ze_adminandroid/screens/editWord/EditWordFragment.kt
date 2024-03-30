@@ -65,6 +65,7 @@ class EditWordFragment : Fragment() {
 
     /**
      * производит разные изменения при перевыборе Voice
+     * измеряет размер файла  voice
      */
     private fun onChangeVoice() {
         createdVoice.observe(viewLifecycleOwner){
@@ -87,7 +88,7 @@ class EditWordFragment : Fragment() {
         }
         binding.internetButton.setOnClickListener {
             clipText(editedWord.foreignWord)
-            temporarySavingWord() //временно сохраним недоделанное слово в БД
+//            temporarySavingWord() //временно сохраним недоделанное слово в БД  пока уберем пока не особо нужно
             openBrowser()
         }
         binding.selectTopicButton.setOnClickListener {

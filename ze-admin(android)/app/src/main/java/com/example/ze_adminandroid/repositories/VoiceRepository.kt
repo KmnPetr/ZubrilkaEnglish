@@ -75,12 +75,6 @@ class VoiceRepository private constructor(){
         if (voice?.voiceData == null){
             println("попытка взять Voice из сети")
             voice = retrofitService.getVoiceDataByName(name)
-            if (voice?.voiceData != null){
-                GlobalScope.launch(Dispatchers.Default) {
-                    println("сохранение voice в БД")
-                    roomService.saveNewVoice(voice)
-                }
-            }
         }
         return voice
     }
