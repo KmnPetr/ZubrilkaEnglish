@@ -1,21 +1,15 @@
 package com.example.ze_adminandroid.screens.editWord
 
-import android.Manifest
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
@@ -25,6 +19,7 @@ import com.example.ze_adminandroid.models.Voice
 import com.example.ze_adminandroid.models.Word
 import com.example.ze_adminandroid.repositories.VoiceRepository
 import com.example.ze_adminandroid.repositories.WordRepository
+import com.example.ze_adminandroid.screens.editWord.popupStorage.FileManager
 import com.example.ze_adminandroid.screens.editWord.popupStorage.PopUpStorage
 import com.example.ze_adminandroid.screens.editWord.popupTopics.PopUpTopics
 import com.example.ze_adminandroid.utils.myBundle
@@ -32,7 +27,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.greenrobot.eventbus.EventBus
 
 /**
  * в фрагменте редактируется или создается новый Word
@@ -44,7 +38,7 @@ class EditWordFragment : Fragment() {
     private lateinit var editedWord: Word
     private lateinit var wordRepository: WordRepository
     private lateinit var voiceRepository: VoiceRepository
-    // новый Voiceопределяем здесь чтобы после выхода из фрагмента очищался
+    // новый Voice определяем здесь чтобы после выхода из фрагмента очищался
     var createdVoice: MutableLiveData<Voice> = MutableLiveData()
 
     override fun onCreateView(
@@ -66,10 +60,6 @@ class EditWordFragment : Fragment() {
         showWordFields()
         setLiseners()
         onChangeVoice()
-
-
-
-
     }
 
 
@@ -89,7 +79,9 @@ class EditWordFragment : Fragment() {
      */
     private fun setLiseners() {
         binding.folderButton.setOnClickListener{
-            getPermission()
+
+            FileManager.instanse.getPermission(requireActivity())
+
             val popup = PopUpStorage(requireContext(),::createVoice)
             popup.show()
         }
@@ -110,11 +102,13 @@ class EditWordFragment : Fragment() {
                 saveVoice()
                 Toast.makeText(requireContext(),"successfully!!",Toast.LENGTH_SHORT).show()
                 GlobalScope.launch(Dispatchers.Default) {
-                    delay(1500) // ожидание
+                    delay(1000) // ожидание
                     launch(Dispatchers.Main) {
                         findNavController().popBackStack()
                     }
                 }
+                //удалим использованный файл
+                FileManager.instanse.deleteUsedFile()
             }
         }
     }
@@ -212,7 +206,7 @@ class EditWordFragment : Fragment() {
         val url = "https://myefe.ru/anglijskaya-transkriptsiya.html"
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(intent)
-        temporarySavingWord()
+//        temporarySavingWord()
     }
 
     /**
@@ -227,17 +221,6 @@ class EditWordFragment : Fragment() {
 
     }
 
-    /**
-     * попросит разрешение на доступ к хранилищу
-     */
-    private fun getPermission() {
-        val permission = Manifest.permission.READ_EXTERNAL_STORAGE
-        val requestCode = 1
-
-        if (ContextCompat.checkSelfPermission(requireActivity(), permission) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(requireActivity(), arrayOf(permission), requestCode)
-        }
-    }
 
     /**
      * заполнит поля фрагмента

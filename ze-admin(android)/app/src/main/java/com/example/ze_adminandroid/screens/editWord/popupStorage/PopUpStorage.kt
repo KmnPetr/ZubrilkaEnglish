@@ -5,16 +5,16 @@ import android.content.Context
 import android.view.Window
 import com.example.ze_adminandroid.databinding.PopUpStorageBinding
 import com.example.ze_adminandroid.models.Voice
+import com.example.ze_adminandroid.screens.editWord.EditWordViewModel
 import com.example.ze_adminandroid.utils.VoiceHandler
 import java.io.File
-import kotlin.reflect.KMutableProperty0
 
 /**
  * класс покажет попап окошко с папками и файлами начиная от папки download
  */
 class PopUpStorage(
     context: Context,
-    private val createdVoice: (Voice) -> Unit
+    private val createVoice: (Voice) -> Unit
 ): Dialog(context) {
     val binding: PopUpStorageBinding
     val adapter: FilesAdapter
@@ -24,7 +24,7 @@ class PopUpStorage(
     init {
         binding = PopUpStorageBinding.inflate(layoutInflater)
         adapter = FilesAdapter(::onClickFile,::onClickButtonPlay,::onClickButtonGetVoice)
-        fileManager = FileManager()
+        fileManager = FileManager.instanse
         voiceHandler = VoiceHandler()
 
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -37,7 +37,7 @@ class PopUpStorage(
 
         binding.recyclerView.adapter = adapter
 
-        adapter.setList(listOf(fileManager.downloadFolder))
+        adapter.setList(fileManager.listDownloadedFiles())
     }
     private fun onClickFile(file: File){
         if(file.isDirectory){
@@ -48,9 +48,15 @@ class PopUpStorage(
         voiceHandler.play(file)
     }
 
+    /**
+     * возьмет содержимое файла и сделает из него voice
+     * а также внесет файл в поле fileManager.usedFile для дальнейшего его удаления
+     */
     private fun onClickButtonGetVoice(file: File){
+
         val voice = Voice(fileManager.getFileName(file),fileManager.getByteArray(file))
-        createdVoice(voice)
+        createVoice(voice)
+        fileManager.usedFile = file
         this.dismiss()
     }
 }
