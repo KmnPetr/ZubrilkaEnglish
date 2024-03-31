@@ -23,10 +23,10 @@ class RoomService{
         return dataBase.getWordDAO().getAllWords()
     }
 
-    suspend fun deleteAllWords(){
-        println("method \"deleteAllWords\" called")
-        dataBase.getWordDAO().deleteAllWords()
-    }
+//    suspend fun deleteAllWords(){
+//        println("method \"deleteAllWords\" called")
+//        dataBase.getWordDAO().deleteAllWords()
+//    }
 
     suspend fun getDictionaryVersion(): String? {
             return dataBase.getPropDAO().getDictionaryVersion()?.value

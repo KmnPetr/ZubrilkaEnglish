@@ -33,7 +33,7 @@ class PopUpStorage(
 
         val displayMetrics = context.resources.displayMetrics
         binding.root.layoutParams.width = (displayMetrics.widthPixels * 0.8).toInt()
-        binding.root.layoutParams.height = (displayMetrics.heightPixels * 0.8).toInt()
+//        binding.root.layoutParams.height = (displayMetrics.heightPixels * 0.8).toInt()
 
         binding.recyclerView.adapter = adapter
 

@@ -23,6 +23,11 @@ fun customizeBackground(background: ImageView, resources: Resources) {
     val desiredWidth = originalBitmap.height*attitude
     val desiredHeight = originalBitmap.height
 
-    val croppedBitmap: Bitmap = Bitmap.createBitmap(originalBitmap, originalBitmap.width-desiredWidth.toInt(), 0, desiredWidth.toInt(), desiredHeight)
-    background.setImageBitmap(croppedBitmap)
+    try {
+        val croppedBitmap: Bitmap = Bitmap.createBitmap(originalBitmap, originalBitmap.width-desiredWidth.toInt(), 0, desiredWidth.toInt(), desiredHeight)
+        background.setImageBitmap(croppedBitmap)
+    }catch (e: Exception){//здесь выпадает ошибка если экран горизонтально повернут, картинка маловата чтобы ее обрезать
+        e.printStackTrace()
+        background.setImageBitmap(originalBitmap) //просто поставим картинку не во весь экран
+    }
 }

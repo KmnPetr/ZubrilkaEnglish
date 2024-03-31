@@ -18,6 +18,7 @@
         >
         <activity
             android:name=".screens.activity.MainActivity"
+            android:screenOrientation="locked"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

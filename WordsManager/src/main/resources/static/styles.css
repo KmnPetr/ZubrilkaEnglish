@@ -1,0 +1,11 @@
+table {
+    border: 1px solid black;  /* Граница таблицы по кругу */
+    border-collapse: collapse;  /* Объединение границ ячеек */
+}
+
+td {
+    border-bottom: 1px solid black;  /* Граница каждой ячейки */
+    border-top: 1px solid black;  /* Граница каждой ячейки */
+    border-right: 1px solid black;
+    padding: 5px;  /* Внутренний отступ ячеек для визуального разделения */
+}

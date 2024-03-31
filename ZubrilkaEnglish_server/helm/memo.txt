@@ -1,4 +1,0 @@
-helm upgrade --install dev . --set image.tag=1.0.54 --debug --atomic --timeout 300s
-
-
-helm uninstall dev

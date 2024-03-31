@@ -30,12 +30,10 @@ class CatalogWordsViewModel : ViewModel() {
 
 
     init {
-//        dataDownload()
-
 
         //список слов словаря из сети подгружает Flow из репозитория
         viewModelScope.launch {
-            wordRepository.getAllWords().collect { word ->
+            wordRepository.filteredListAllWords/*.getAllWords()*/.collect { word ->
                 mapWordsByTopic.value = sortWordsByTopic(word)
                 namesTopics.value = fillNamesTopics(mapWordsByTopic.value as MutableMap<String, ArrayList<Word>>)
             }
@@ -51,6 +49,7 @@ class CatalogWordsViewModel : ViewModel() {
 
         checkNotReadyWord()
     }
+
 
     /**
      * если в БД имелось незавершеное недавно слово

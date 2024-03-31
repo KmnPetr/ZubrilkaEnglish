@@ -24,8 +24,8 @@ class Repository {
             val list=retrofitService.getAllWords()
             if (list != null) {
                 println("получили список с инета. Его размер = "+list.size)
-                roomService.deleteAllWords()
-                println("удалили старый список из БД")
+//                roomService.deleteAllWords()
+//                println("удалили старый список из БД")
                 roomService.insertListWords(list)
                 println("положили список в БД")
 

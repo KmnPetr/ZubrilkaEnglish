@@ -2,19 +2,20 @@ package com.example.zubrilkaenglish.repositories.room
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.zubrilkaenglish.models.Word
 import com.example.zubrilkaenglish.models.WordCard
 
 @Dao
 interface WordDAO {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertWord(wordWord: Word)
     @Query("SELECT*FROM all_word_table")
     suspend fun getAllWords(): List<Word>
-    @Query("DELETE FROM all_word_table")
-    suspend fun deleteAllWords()
-    @Insert
+//    @Query("DELETE FROM all_word_table")
+//    suspend fun deleteAllWords()
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertListWords(listWords: List<Word>)
     @Query("SELECT * FROM all_word_table WHERE id = :id LIMIT 1")
     suspend fun getWordById(id: Int): Word
