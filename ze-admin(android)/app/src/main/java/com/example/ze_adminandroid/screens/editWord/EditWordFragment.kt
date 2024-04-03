@@ -22,6 +22,7 @@ import com.example.ze_adminandroid.repositories.WordRepository
 import com.example.ze_adminandroid.screens.editWord.popupStorage.FileManager
 import com.example.ze_adminandroid.screens.editWord.popupStorage.PopUpStorage
 import com.example.ze_adminandroid.screens.editWord.popupTopics.PopUpTopics
+import com.example.ze_adminandroid.utils.MYEFE_SWITCH
 import com.example.ze_adminandroid.utils.myBundle
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -60,7 +61,11 @@ class EditWordFragment : Fragment() {
         showWordFields()
         setLiseners()
         onChangeVoice()
+
+        //запустим сценарий
+        setRoboticScenario()
     }
+
 
 
     /**
@@ -207,6 +212,7 @@ class EditWordFragment : Fragment() {
         val url = "https://myefe.ru/anglijskaya-transkriptsiya.html"
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(intent)
+
 //        temporarySavingWord()
     }
 
@@ -250,5 +256,29 @@ class EditWordFragment : Fragment() {
      */
     private fun createVoice(createdVoice: Voice){
         this.createdVoice.value = createdVoice
+    }
+
+    /**
+     * вернет binding этого фрагмента,
+     * в основном нужен для сценарного робота
+     */
+    fun getBinding(): FragmentEditWordBinding {
+        return binding
+    }
+
+    override fun onResume() {
+        super.onResume()
+        println("FFFFFFFFFF: onResume")
+        //оповестим RoboticScenario о возвращении активити к жизни
+        RoboticScenario.instance.onFragmentResume()
+    }
+
+    /**
+     * запустит автоматизированный сценарий
+     */
+    private fun setRoboticScenario() {
+        if (MYEFE_SWITCH){
+            RoboticScenario.instance.myefeWebsiteGetVoice(this,::createVoice)
+        }
     }
 }

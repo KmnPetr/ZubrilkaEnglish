@@ -53,9 +53,9 @@ class PopUpStorage(
      * а также внесет файл в поле fileManager.usedFile для дальнейшего его удаления
      */
     private fun onClickButtonGetVoice(file: File){
-
         val voice = Voice(fileManager.getFileName(file),fileManager.getByteArray(file))
         createVoice(voice)
+        //необходимо для дальнейшего удаления файла
         fileManager.usedFile = file
         this.dismiss()
     }

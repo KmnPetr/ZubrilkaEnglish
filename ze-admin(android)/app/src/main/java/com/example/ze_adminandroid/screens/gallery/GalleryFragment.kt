@@ -8,14 +8,10 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.ze_adminandroid.databinding.FragmentGalleryBinding
+import com.example.ze_adminandroid.utils.MYEFE_SWITCH
 
 class GalleryFragment : Fragment() {
-
-    private var _binding: FragmentGalleryBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentGalleryBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,18 +21,22 @@ class GalleryFragment : Fragment() {
         val galleryViewModel =
             ViewModelProvider(this).get(GalleryViewModel::class.java)
 
-        _binding = FragmentGalleryBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        binding = FragmentGalleryBinding.inflate(inflater, container, false)
 
         val textView: TextView = binding.textGallery
         galleryViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
-        return root
+        return binding.root
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        //регулировка включенности роботизированного сценария на сайт myefe
+        binding.myefeSwitch.isChecked = MYEFE_SWITCH
+        binding.myefeSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+            MYEFE_SWITCH = isChecked
+        }
     }
 }
