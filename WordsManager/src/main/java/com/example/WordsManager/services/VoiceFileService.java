@@ -52,6 +52,7 @@ public class VoiceFileService {
         List<VoiceFile> voiceFiles = collectListEntity(finalListNames);//получили список обьектов VoiceFile с заполненными полями fileName и fileData
         voiceFilesRepository
                 .saveAll(voiceFiles)
+                .log()
                 .blockLast();//сохранили все новые voice в БД
     }
 
