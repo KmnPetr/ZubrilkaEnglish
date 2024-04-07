@@ -197,21 +197,32 @@
         app:layout_constraintTop_toBottomOf="@+id/link_image" />
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sorting_value" >
+        app:layout_constraintTop_toBottomOf="@+id/sorting_value">
 
         <Button
             android:id="@+id/saveButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="#8BC34A"
-            android:text="SAVE"/>
+            android:text="SAVE" />
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/buttonWebView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="WebView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -78,7 +78,7 @@ class WordRepository private constructor(){
      * для прослушивания запросов от различных view
      */
     @Subscribe
-    fun subscribeOnVoiceEvent(event: WordEvent){
+    fun subscribeOnWordEvent(event: WordEvent){
         when(event.typeEvent){
             WrEvEnum.SET_VOICE_VERIFIED -> {
                 GlobalScope.launch{

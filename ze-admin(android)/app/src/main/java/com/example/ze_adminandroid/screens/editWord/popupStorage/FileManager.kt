@@ -8,6 +8,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import java.io.File
 import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.IOException
 
 class FileManager private constructor(){
     companion object{
@@ -76,5 +78,22 @@ class FileManager private constructor(){
     fun deleteUsedFile(){
         usedFile?.delete()
         usedFile = null
+    }
+
+    /**
+     * сохранит новый файл в папке download
+     */
+    fun saveNewFile(fileName: String?, bytes: ByteArray?) {
+
+        println(downloadFolder.absolutePath)
+
+        val file = File(downloadFolder.absolutePath+"/"+fileName)
+        try{
+            val fos = FileOutputStream(file)
+            fos.write(bytes)
+            fos.close()
+        } catch (e: IOException) {
+            throw RuntimeException(e);
+        }
     }
 }

@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.ze_adminandroid.R
 import com.example.ze_adminandroid.databinding.FragmentEditWordBinding
 import com.example.ze_adminandroid.models.Voice
 import com.example.ze_adminandroid.models.Word
@@ -108,7 +109,7 @@ class EditWordFragment : Fragment() {
                 saveVoice()
                 Toast.makeText(requireContext(),"successfully!!",Toast.LENGTH_SHORT).show()
                 GlobalScope.launch(Dispatchers.Default) {
-                    delay(1000) // ожидание
+                    delay(500) // ожидание
                     launch(Dispatchers.Main) {
                         findNavController().popBackStack()
                     }
@@ -116,6 +117,10 @@ class EditWordFragment : Fragment() {
                 //удалим использованный файл
                 FileManager.instanse.deleteUsedFile()
             }
+        }
+        binding.buttonWebView.setOnClickListener {
+            clipText(editedWord.foreignWord)
+            findNavController().navigate(R.id.action_editWordFragment_to_webViewFragment)
         }
     }
 
@@ -178,9 +183,6 @@ class EditWordFragment : Fragment() {
                 createdVoice.value?.voiceData
             )
             voiceRepository.saveNewVoice(voice)
-            println("сохранено Voice")
-            println("name: "+ voice.voiceName)
-            println("data size: "+ (voice.voiceData?.size ?: "null"))
         }
     }
 
@@ -268,7 +270,6 @@ class EditWordFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        println("FFFFFFFFFF: onResume")
         //оповестим RoboticScenario о возвращении активити к жизни
         RoboticScenario.instance.onFragmentResume()
     }

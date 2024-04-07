@@ -6,4 +6,4 @@ var myBundle = mutableMapOf<String,Any>()
 val TEG = "ZE-app(android)"
 
 //используется для активациии автоматизированного сценария
-var MYEFE_SWITCH: Boolean = true
+var MYEFE_SWITCH: Boolean = false

@@ -12,7 +12,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.io.File
-import java.lang.Exception
 
 
 /**
@@ -25,30 +24,38 @@ class RoboticScenario private constructor(){
     companion object{
         val instance: RoboticScenario by lazy { RoboticScenario() }
     }
+
     private val fileManager = FileManager.instanse
     private var listActions: MutableList<() -> Unit> = mutableListOf()
-    //переменная для отслеживания возвращения фрагмента к жизни
+    //переменная для отслеживания возвращения фрагмента EditWord к жизни
     private var isFragmentOnResume:Boolean = false
+    //укажет что сценарий уже запущен потомучто навконтроллер при возвращении назад по стеку запускает его второй раз
+    private var isRun = false
 
     /**
      * функция запустит последовательность действий для получения voice с вэбсайта myefe
      */
     fun myefeWebsiteGetVoice(fragment: EditWordFragment, createVoice: (Voice) -> Unit) {
-        listActions.clear()
+        if (!isRun){
+            isRun = true
+            listActions.clear()
 
-        //запуск кнопки перехода в браузер
-        listActions.add{clickImageButton(fragment.getBinding().internetButton)}
-        //подождем когда фрагмент вернется в активное состояниее
-        listActions.add { waitFragmentOnResume() }
-        //достанем файл voice из репозитория
-        listActions.add { getFileMp3(fragment,createVoice) }
-        //дадим название нового файла voice
-        listActions.add { clickButton(fragment.getBinding().copyLinkVoiceButton) }
-        //пожалуй сохраним файл
-        listActions.add { clickButton(fragment.getBinding().saveButton) }
+            //запуск кнопки перехода в браузер
+//        listActions.add{clickImageButton(fragment.getBinding().internetButton)}
+            //запуск кнопки перехода в webView
+            listActions.add{clickButton(fragment.getBinding().buttonWebView)}
+            //подождем когда фрагмент вернется в активное состояниее
+            listActions.add { waitFragmentOnResume() }
+            //достанем файл voice из репозитория
+            listActions.add { getFileMp3(fragment,createVoice) }
+            //дадим название нового файла voice
+            listActions.add { clickButton(fragment.getBinding().copyLinkVoiceButton) }
+            //пожалуй сохраним файл
+            listActions.add { clickButton(fragment.getBinding().saveButton) }
 
-        GlobalScope.launch {
-            runActions()
+            GlobalScope.launch {
+                runActions()
+            }
         }
     }
 
@@ -84,7 +91,6 @@ class RoboticScenario private constructor(){
             fileManager.listDownloadedFiles().forEach {
                 if (it.name.endsWith(".mp3")) {
                     countFiles++
-                    println("Найден файл: "+it.name)
                     if (countFiles==1){
                         file = it
                     } else {
@@ -111,7 +117,6 @@ class RoboticScenario private constructor(){
      * подождет пока вызовется метод onResume у фрагмента
      */
     private fun waitFragmentOnResume() {
-        println("FFFFFFFFFF: waitFragmentOnResume")
         val job = GlobalScope.launch {
             //вот они такие костыли
             delay(1500)
@@ -120,7 +125,6 @@ class RoboticScenario private constructor(){
             }
         }
         runBlocking { job.join()
-            println("isFragmentOnResume is now true!")
         }
     }
 
@@ -131,14 +135,14 @@ class RoboticScenario private constructor(){
      * запустит выполнение действий из листа
      */
     private fun runActions(){
-            listActions.forEach { it.invoke() }
+        listActions.forEach { it.invoke() }
+        isRun = false
     }
 
     /**
      * даст сигнал к продолжению сценария после возвращения актитвити в активное состояние
      */
     fun onFragmentResume() {
-        println("FFFFFFFFFF: onFragmentResume")
         isFragmentOnResume = true
         GlobalScope.launch {
             delay(1000)
