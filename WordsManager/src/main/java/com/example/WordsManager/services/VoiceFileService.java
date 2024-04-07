@@ -131,8 +131,6 @@ public class VoiceFileService {
      * сохранит файл в локальной папке проекта
      */
     public boolean saveVoiceInLocalFolder(VoiceFile voiceFile) {
-
-
         for (String filename : getListFiles(pathFolder)) {
             if (filename.equals(voiceFile.getFileName())){
                 //выкенем исключение если voice с таким именем уже был добавлен ранее

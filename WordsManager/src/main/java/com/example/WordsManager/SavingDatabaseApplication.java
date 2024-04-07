@@ -2,6 +2,7 @@ package com.example.WordsManager;
 
 import com.example.WordsManager.models.PropModel;
 import com.example.WordsManager.repositories.WordsRepository;
+import com.example.WordsManager.services.BackupWordService;
 import com.example.WordsManager.services.PropService;
 import com.example.WordsManager.services.VoiceFileService;
 import com.example.WordsManager.services.WordsService;
@@ -22,11 +23,13 @@ public class SavingDatabaseApplication {
     private final VoiceFileService voiceFileService;
     private final WordsService wordsService;
     private final PropService propService;
+    private final BackupWordService backupWordService;
     @Autowired
-    public SavingDatabaseApplication(VoiceFileService voiceFileService, WordsService wordsService, PropService propService) {
+    public SavingDatabaseApplication(VoiceFileService voiceFileService, WordsService wordsService, PropService propService, BackupWordService backupWordService) {
         this.voiceFileService = voiceFileService;
         this.wordsService = wordsService;
         this.propService = propService;
+        this.backupWordService = backupWordService;
     }
 
 
@@ -42,6 +45,9 @@ public class SavingDatabaseApplication {
         thisClass.increaseDictionaryVersion();
         //пересчитает все слова
 //        countAllWords(context);
+
+        //забэкапим новое состояние словаря
+        thisClass.backupWordService.saveWords();
     }
 
     /**

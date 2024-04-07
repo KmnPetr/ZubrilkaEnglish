@@ -33,7 +33,7 @@ public class BackupWordService {
     @Async
     public void saveWords() {
 
-        String filePath = "C:/Users/Petr/git/ZE/WordsManager/src/main/resources/backup/";
+        String filePath = "src/main/resources/backup/";
 
         // Форматирование текущей даты и времени
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_(HH-mm-ss)");
