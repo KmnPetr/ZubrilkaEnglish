@@ -21,7 +21,7 @@ import java.util.Map;
 @Slf4j
 public class ReceivedDataManager {
 
-    private final EmitterProcessor<String> emitterProcessor = EmitterProcessor.create();
+    private final EmitterProcessor<byte[]> emitterProcessor = EmitterProcessor.create();
     private final VoiceFileService voiceFileService;
     private final SerializedWordStore serializedWordStore;
 
@@ -31,7 +31,7 @@ public class ReceivedDataManager {
         this.serializedWordStore = serializedWordStore;
     }
 
-    public EmitterProcessor<String> getEmitterProcessor() {
+    public EmitterProcessor<byte[]> getEmitterProcessor() {
         return emitterProcessor;
     }
 
@@ -118,6 +118,7 @@ public class ReceivedDataManager {
             //отправим ошибку, возникшую при сохранении файла
             Map<String,String> headers = new HashMap<>();
             headers.put("message",e.getMessage());
+            headers.put("strToCopy",filename);
 
             MessageProtocol error = new MessageProtocol(
                     TypeEnum.VOICE_ERROR,
@@ -132,6 +133,6 @@ public class ReceivedDataManager {
      * отправит сообщение в EmitterProcessor
      */
     private void sendMessage(MessageProtocol replyMessage){
-        getEmitterProcessor().onNext(new String(replyMessage.getMessage(),StandardCharsets.UTF_8));
+        getEmitterProcessor().onNext(replyMessage.getMessage());
     }
 }

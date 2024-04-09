@@ -3,14 +3,13 @@ package com.example.WordsManager.websocket;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.buffer.DataBuffer;
-import org.springframework.core.io.buffer.DataBufferUtils;
+import org.springframework.core.io.buffer.DefaultDataBufferFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.socket.WebSocketHandler;
+import org.springframework.web.reactive.socket.WebSocketMessage;
 import org.springframework.web.reactive.socket.WebSocketSession;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.nio.ByteBuffer;
 
 @Component
 @Slf4j
@@ -41,8 +40,14 @@ public class ReactiveWebSocketHandler implements WebSocketHandler {
                 })
                 .then();
 
-        Flux<String> source = receivedDataManager.getEmitterProcessor().asFlux();
-        Mono<Void> output = session.send(source.map(session::textMessage));
+        Flux<byte[]> source = receivedDataManager.getEmitterProcessor().asFlux();
+
+        Mono<Void> output = session.send(source.map(bytes ->
+            new WebSocketMessage(
+                    WebSocketMessage.Type.BINARY,
+                    new DefaultDataBufferFactory().wrap(bytes)
+            )
+            ));
 
         return Mono.zip(input, output).then(); //закроет сессию если потоки или один поток (так я и не понял) завершатся
     }
