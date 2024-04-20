@@ -35,7 +35,7 @@ public class ReactiveWebSocketHandler implements WebSocketHandler {
                     //отправляем на дальнейшую обработку
                     receivedDataManager.processMessage(bytes);
                 })
-                .doOnError(e->{
+                .doOnError(e-> {
                     e.printStackTrace();
                 })
                 .then();
