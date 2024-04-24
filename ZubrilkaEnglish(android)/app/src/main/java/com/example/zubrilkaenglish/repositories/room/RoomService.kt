@@ -9,6 +9,11 @@ class RoomService{
 
     private val dataBase = DataBase.getInstanceDB()
 
+    /**
+     * вернет MemoDAO с его методами
+     */
+    fun getMemoDAO() = dataBase.getMemoDAO()
+
 
     suspend fun getVoiceByName(name: String): Voice?{
         return dataBase.getVoiceDAO().getVoiceByName(name)

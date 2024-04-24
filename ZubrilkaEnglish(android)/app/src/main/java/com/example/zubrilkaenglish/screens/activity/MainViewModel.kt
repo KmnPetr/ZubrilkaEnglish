@@ -15,7 +15,6 @@ import kotlinx.coroutines.launch
 class MainViewModel: ViewModel() {
 
     private val repository = Repository()
-    //инициализируем синглетоны в первый раз они регестрируются в EventBus
     private val cardsRepository = CardsRepository.instance
     private val voiceRepository = VoiceRepository.instance
 

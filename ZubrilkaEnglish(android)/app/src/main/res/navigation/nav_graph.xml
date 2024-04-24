@@ -14,14 +14,11 @@
             android:id="@+id/action_menuFragment_to_trainingFragment"
             app:destination="@id/trainingFragment" />
         <action
-            android:id="@+id/action_menuFragment_to_directoryWordsFragment"
-            app:destination="@id/directoryWordsFragment" />
-        <action
-            android:id="@+id/action_menuFragment_to_myCardsFragment"
-            app:destination="@id/myCardsFragment" />
-        <action
             android:id="@+id/action_menuFragment_to_catalogCardsFragment"
             app:destination="@id/catalogCardsFragment" />
+        <action
+            android:id="@+id/action_menuFragment_to_memoFragment"
+            app:destination="@id/memoFragment" />
     </fragment>
     <fragment
         android:id="@+id/trainingFragment"
@@ -29,51 +26,13 @@
         android:label="fragment_training"
         tools:layout="@layout/fragment_training" />
     <fragment
-        android:id="@+id/directoryWordsFragment"
-        android:name="com.example.zubrilkaenglish.screens.directoryWords.DirectoryWordsFragment"
-        android:label="fragment_directory_words"
-        tools:layout="@layout/fragment_directory_words" >
-        <action
-            android:id="@+id/action_directoryWordsFragment_to_listWordsFragment"
-            app:destination="@id/listWordsFragment" />
-        <action
-            android:id="@+id/action_directoryWordsFragment_to_wordDetailsFragment"
-            app:destination="@id/wordDetailsFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/listWordsFragment"
-        android:name="com.example.zubrilkaenglish.screens.directoryWords.listlWords.ListWordsFragment"
-        android:label="fragment_list_words"
-        tools:layout="@layout/fragment_list_words" >
-        <action
-            android:id="@+id/action_listWordsFragment_to_wordDetailsFragment"
-            app:destination="@id/wordDetailsFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/wordDetailsFragment"
-        android:name="com.example.zubrilkaenglish.screens.wordDetails.WordDetailsFragment"
-        android:label="fragment_word_details"
-        tools:layout="@layout/fragment_word_details" />
-    <fragment
-        android:id="@+id/myCardsFragment"
-        android:name="com.example.zubrilkaenglish.screens.myCards.MyCardsFragment"
-        android:label="fragment_my_cards"
-        tools:layout="@layout/fragment_my_cards" >
-        <action
-            android:id="@+id/action_myCardsFragment_to_listCardsFragment"
-            app:destination="@id/listCardsFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/listCardsFragment"
-        android:name="com.example.zubrilkaenglish.screens.myCards.listCards.ListCardsFragment"
-        android:label="ListCardsFragment" >
-        <action
-            android:id="@+id/action_listCardsFragment_to_wordDetailsFragment"
-            app:destination="@id/wordDetailsFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/catalogCardsFragment"
         android:name="com.example.zubrilkaenglish.screens.catalogCards.CatalogCardsFragment"
         android:label="fragment_catalog_cards"
         tools:layout="@layout/fragment_catalog_cards" />
+    <fragment
+        android:id="@+id/memoFragment"
+        android:name="com.example.zubrilkaenglish.screens.memo.MemoFragment"
+        android:label="fragment_memo"
+        tools:layout="@layout/fragment_memo" />
 </navigation>

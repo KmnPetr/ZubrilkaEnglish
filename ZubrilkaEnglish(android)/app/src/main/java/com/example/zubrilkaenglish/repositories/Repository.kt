@@ -18,8 +18,6 @@ class Repository {
      */
     suspend fun getAllWords():List<Word>{
 
-//TODO непонятная ошибка при обновлении даты на сервере и перезагрузке данных с сервера, скорее всего изза нарушения порядка айдишников
-
         if(checkDictionaryVersionOnServer()){
             val list=retrofitService.getAllWords()
             if (list != null) {

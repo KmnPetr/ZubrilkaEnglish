@@ -7,16 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.zubrilkaenglish.R
-import com.example.zubrilkaenglish.databinding.NewsCardBinding
-import com.example.zubrilkaenglish.databinding.WordCardBinding
+import com.example.zubrilkaenglish.databinding.ViewNewsCardBinding
+import com.example.zubrilkaenglish.databinding.ViewWordCardBinding
 import com.example.zubrilkaenglish.models.ICard
 import com.example.zubrilkaenglish.models.NewsCard
 import com.example.zubrilkaenglish.models.WordCard
 
 class ViewHolderFactory {
-
     class WordCardHolder(item: View): RecyclerView.ViewHolder(item){
-        val binding= WordCardBinding.bind(item)
+        val binding= ViewWordCardBinding.bind(item)
 
         fun bind(wordCard: WordCard, listener: CardAdapter.Listener){
             binding.numCorrAnsv.text = "("+wordCard.progressWord?.numCorrAnsv.toString()+")"
@@ -68,7 +67,7 @@ class ViewHolderFactory {
         }
     }
     class NewsCardHolder(item: View): RecyclerView.ViewHolder(item){
-        val binding= NewsCardBinding.bind(item)
+        val binding= ViewNewsCardBinding.bind(item)
 
         fun bind(newsCard: NewsCard, listener: CardAdapter.Listener/*listener в будущем пригодится*/){
             binding.textNewsCard.text=newsCard.news
@@ -79,11 +78,11 @@ class ViewHolderFactory {
         fun create(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             when(viewType){
                 ICard.WORD_CARD_TYPE ->{
-                    val view= LayoutInflater.from(parent.context).inflate(R.layout.word_card,parent,false)
+                    val view= LayoutInflater.from(parent.context).inflate(R.layout.view_word_card,parent,false)
                     return WordCardHolder(view)
                 }
                 ICard.NEWS_CARD_TYPE ->{
-                    val view= LayoutInflater.from(parent.context).inflate(R.layout.news_card,parent,false)
+                    val view= LayoutInflater.from(parent.context).inflate(R.layout.view_news_card,parent,false)
                     return NewsCardHolder(view)
                 }
                 else->{
