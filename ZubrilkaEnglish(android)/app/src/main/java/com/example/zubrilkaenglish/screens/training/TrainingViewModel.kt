@@ -22,6 +22,9 @@ class TrainingViewModel : ViewModel() {
     // при значении 0 планируемое перелистывание будет отменено
     var userScrolls: Int = 0
 
+    //чтобы не показывать рекламу несколько раз
+    var yandexAdWasShown = false
+
 
     /**
      * запросит у репозитория список карточек для изучения

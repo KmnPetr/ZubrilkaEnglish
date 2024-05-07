@@ -1,7 +1,7 @@
 package com.example.zubrilkaenglish.utils
 
 import com.example.zubrilkaenglish.models.WordCard
-import com.example.zubrilkaenglish.repositories.Repository
+import com.example.zubrilkaenglish.repositories.CardsRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,7 +18,7 @@ class SearchObject private constructor(){
         val instance: SearchObject by lazy {
             SearchObject().apply { CoroutineScope(Dispatchers.Default).launch {
                 //TODO класс может давать сбои, если нужные данные не подгрузились из сети, особенно при первом запуске приложения
-                listAllWordCard = Repository().getAllWordCards()
+                listAllWordCard = CardsRepository.instance.getAllWordCards()
             }
             }
         }

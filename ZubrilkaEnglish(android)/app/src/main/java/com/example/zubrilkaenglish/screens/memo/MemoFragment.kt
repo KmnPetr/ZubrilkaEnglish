@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.FragmentMemoBinding
 import com.example.zubrilkaenglish.repositories.memoService.MemoReceiver
+import com.example.zubrilkaenglish.utils.buttonAnimationClick
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -56,25 +57,10 @@ class MemoFragment : Fragment() {
     /**
      * установит слушатели
      */
-    @SuppressLint("ScheduleExactAlarm")
     private fun setListeners() {
         binding.buttonAddMemo.setOnClickListener {
-            animationClick(it)
+            buttonAnimationClick(it)
             PopupCreateMemo(requireActivity()).show()
-        }
-    }
-    /**
-     * меняет временно фон при нажатии
-     */
-    private fun animationClick(view: View?) {
-        view?.let {
-            it.backgroundTintList = ContextCompat.getColorStateList(it.context, R.color.myGray)
-            GlobalScope.launch {
-                delay(100)
-                withContext(Dispatchers.Main){
-                    it.backgroundTintList = ContextCompat.getColorStateList(it.context, R.color.white)
-                }
-            }
         }
     }
 }

@@ -20,9 +20,10 @@ class ViewHolderFactory {
         fun bind(wordCard: WordCard, listener: CardAdapter.Listener){
             binding.numCorrAnsv.text = "("+wordCard.progressWord?.numCorrAnsv.toString()+")"
             binding.statusCard.text = "status: "+ wordCard.progressWord?.statProgress
-            binding.foreignWord.text = wordCard.word.foreignWord
-            binding.transcription.text = wordCard.word.transcription
-            binding.translation.text = wordCard.word.translation
+
+            binding.foreignWord.text = "\t"+wordCard.word.foreignWord
+            binding.transcription.text = "\t"+wordCard.word.transcription
+            binding.translation.text = "\t"+wordCard.word.translation
 
             //блок if else решает проблему переиспользуемости холдеров
             if (wordCard.cardHasChanged){

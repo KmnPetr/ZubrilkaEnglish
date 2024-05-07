@@ -13,6 +13,7 @@ import com.example.zubrilkaenglish.events.CrEvEnum
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.screens.catalogCards.CatalogCardsFragment
 import com.example.zubrilkaenglish.screens.catalogCards.CatalogCardsViewModel
+import com.example.zubrilkaenglish.utils.buttonAnimationClick
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 
@@ -57,7 +58,10 @@ class CatalogItemFragment(
 
         binding.rollBack.visibility = View.GONE
         binding.rollBack.isEnabled = false
-        binding.rollBack.setOnClickListener { rollBackRecycler() }
+        binding.rollBack.setOnClickListener {
+            buttonAnimationClick(it)
+            rollBackRecycler()
+        }
     }
 
     override fun onResume() {

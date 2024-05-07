@@ -13,6 +13,7 @@ import com.example.zubrilkaenglish.repositories.CardsRepository
 import com.example.zubrilkaenglish.repositories.MemoRepository
 import com.example.zubrilkaenglish.repositories.VoiceRepository
 import com.example.zubrilkaenglish.screens.ApiNotification
+import com.example.zubrilkaenglish.services.ads.YandexAds
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -26,10 +27,14 @@ class MainActivity : AppCompatActivity() {
     private val voiceRepository = VoiceRepository.instance
     private val memoRepository = MemoRepository.instance
 
+    private val yandexAds = YandexAds.instanse
+
     private lateinit var binding:ActivityMainBinding
     private lateinit var mainViewModel: MainViewModel
     private lateinit var apiNotification: ApiNotification
     private lateinit var navController: NavController
+
+
 //    lateinit var navController: NavController//TODO ???
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,11 +47,13 @@ class MainActivity : AppCompatActivity() {
 
         apiNotification = ApiNotification.instance
 
+        //первоначальная инициализация и подгрузка рекламы
+        yandexAds.initYandexAds(this)
+
         // Получаем NavHostFragment и NavController
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
         navController = navHostFragment.navController
 //        navController=Navigation.findNavController(this, R.id.nav_host_fragment_activity_main)//TODO ???
-
 
 
         // Создание ActionBarDrawerToggle для управления выдвижной шторкой
@@ -71,6 +78,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_server -> {
                     println("Вызван пункт меню: R.id.nav_server")
                     binding.drawerLayout.closeDrawer(GravityCompat.START)
+
                     false
                 }
                 R.id.nav_settings -> {
@@ -95,11 +103,17 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
     override fun onBackPressed() {
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        yandexAds.destroyYandexAds()
     }
 }

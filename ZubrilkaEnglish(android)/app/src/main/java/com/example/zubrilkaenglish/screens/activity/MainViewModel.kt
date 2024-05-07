@@ -1,12 +1,8 @@
 package com.example.zubrilkaenglish.screens.activity
 
-import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.zubrilkaenglish.repositories.Repository
-import com.example.zubrilkaenglish.models.Word
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.repositories.CardsRepository
 import com.example.zubrilkaenglish.repositories.VoiceRepository
@@ -14,7 +10,6 @@ import kotlinx.coroutines.launch
 
 class MainViewModel: ViewModel() {
 
-    private val repository = Repository()
     private val cardsRepository = CardsRepository.instance
     private val voiceRepository = VoiceRepository.instance
 
@@ -32,9 +27,9 @@ class MainViewModel: ViewModel() {
     private fun getListWordsFromRepository() {
         viewModelScope.launch {
             //этот вызов нельзя убирать, данные с сервера не подгрузятся
-            repository.getAllWords()
+            cardsRepository.getAllWordsFromServerOrDB()
 
-            listAllWords.value = repository.getAllWordCards()
+            listAllWords.value = cardsRepository.getAllWordCards()
 
             //заполняем mapWordsByTopic
             mapWordsByTopic.value = listAllWords.value?.let { sortWordsByTopic(it) }

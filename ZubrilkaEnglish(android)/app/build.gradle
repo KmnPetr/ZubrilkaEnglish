@@ -88,4 +88,6 @@ dependencies {
     //https://mvnrepository.com/artifact/com.googlecode.soundlibs/jlayer
     implementation 'com.googlecode.soundlibs:jlayer:1.0.1-1'
 
+    //яндекс реклама
+    implementation 'com.yandex.android:mobileads:7.0.1'
 }

@@ -4,13 +4,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.zubrilkaenglish.models.WordCard
-import com.example.zubrilkaenglish.repositories.Repository
+import com.example.zubrilkaenglish.repositories.CardsRepository
 import com.example.zubrilkaenglish.utils.SearchObject
 import kotlinx.coroutines.launch
 
 class CatalogCardsViewModel : ViewModel() {
 
-    private val repository = Repository()
+    private val cardsRepository = CardsRepository.instance
 
     var searchCreated: Boolean = false //указывает, создан ли ранее фрагмент поиска слова
     var lastPositionTablayout: Int = 0 //указ.последний используемый фрагмент для возврата на него после удаления поискового фрагмента
@@ -68,11 +68,11 @@ class CatalogCardsViewModel : ViewModel() {
      */
     private fun dataDownload(){
         viewModelScope.launch {
-            val listAllCards = repository.getAllWordCards()
+            val listAllCards = cardsRepository.getAllWordCards()
             mapWordsByTopic.value = sortWordsByTopic(listAllCards)
             namesTopics.value = fillNamesTopics(mapWordsByTopic.value as MutableMap<String, ArrayList<WordCard>>)
 
-            mapUserCards.value = repository.getMapMyCards()
+            mapUserCards.value = cardsRepository.getMapMyCards()
             namesTopicsUserCards.value = mapUserCards.value?.keys?.toList()
         }
     }

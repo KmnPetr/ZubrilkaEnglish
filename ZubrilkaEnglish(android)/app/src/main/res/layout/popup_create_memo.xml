@@ -4,7 +4,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@android:color/white"
-    app:cardCornerRadius="15dp"
+    app:cardCornerRadius="@dimen/popupCornerRadius"
     android:layout_marginHorizontal="2dp">
 
 

@@ -18,6 +18,7 @@ import com.example.zubrilkaenglish.models.Voice
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.screens.training.popup.PopupDialog
 import com.example.zubrilkaenglish.screens.training.popup.PopupOptions
+import com.example.zubrilkaenglish.services.ads.YandexAds
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -166,6 +167,15 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
             EventBus.getDefault().post(VoiceEvent(VcEvEnum.PLAY_VOICE, Voice(wordCard.word.link_voice,null)))}
     }
 
+    /**
+     * покажет межстраничную рекламу
+     */
+    override fun showYandexAds() {
+        if (!viewModel.yandexAdWasShown){
+            viewModel.yandexAdWasShown = true
+            YandexAds.instanse.showAd(requireActivity())
+        }
+    }
 
     /**
      * перелистывание фрагмента на следующий

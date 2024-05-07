@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_menuFragment_to_memoFragment"
             app:destination="@id/memoFragment" />
+        <action
+            android:id="@+id/action_menuFragment_to_paymentsFragment"
+            app:destination="@id/paymentsFragment" />
     </fragment>
     <fragment
         android:id="@+id/trainingFragment"
@@ -35,4 +38,9 @@
         android:name="com.example.zubrilkaenglish.screens.memo.MemoFragment"
         android:label="fragment_memo"
         tools:layout="@layout/fragment_memo" />
+    <fragment
+        android:id="@+id/paymentsFragment"
+        android:name="com.example.zubrilkaenglish.screens.payments.PaymentsFragment"
+        android:label="fragment_payments"
+        tools:layout="@layout/fragment_payments" />
 </navigation>

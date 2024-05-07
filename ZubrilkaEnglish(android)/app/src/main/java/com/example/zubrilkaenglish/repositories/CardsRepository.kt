@@ -1,14 +1,18 @@
 package com.example.zubrilkaenglish.repositories
 
 import android.database.sqlite.SQLiteConstraintException
+import android.util.Log
 import com.example.zubrilkaenglish.events.CardEvent
 import com.example.zubrilkaenglish.events.CrEvEnum
 import com.example.zubrilkaenglish.events.NotificationEvent
 import com.example.zubrilkaenglish.models.ICard
 import com.example.zubrilkaenglish.models.NewsCard
 import com.example.zubrilkaenglish.models.ProgressWord
+import com.example.zubrilkaenglish.models.Word
 import com.example.zubrilkaenglish.models.WordCard
+import com.example.zubrilkaenglish.repositories.retrofit.RetrofitService
 import com.example.zubrilkaenglish.repositories.room.RoomService
+import com.example.zubrilkaenglish.utils.LOG
 import com.example.zubrilkaenglish.utils.SIM_FORM_DATE
 import com.example.zubrilkaenglish.utils.StatProgress
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +34,7 @@ class CardsRepository private constructor(){
         val instance: CardsRepository by lazy { CardsRepository() }
     }
     private val roomService = RoomService()
+    private val retrofitService= RetrofitService()
 
     init {
         EventBus.getDefault().register(this)
@@ -199,22 +204,6 @@ class CardsRepository private constructor(){
     }
 
     /**
-     * функция вернет false, если входящая в параметры дата еще не наступила
-     */
-    private fun compareDate(sleepTime: String?): Boolean{
-        try {
-            if (sleepTime==null){
-                return true
-            }else if(SimpleDateFormat(SIM_FORM_DATE).parse(sleepTime).before(Date())){
-                return true
-            }
-        } catch (e: Exception) {
-            return false
-        }
-        return false
-    }
-
-    /**
      * обрабатывает запрос на увеличение прогресса по карточке
      * сохраняет новое значение в БД
      * уведомляет eventBus об изменении карточки
@@ -291,5 +280,101 @@ class CardsRepository private constructor(){
      */
     private fun notifyToast(message: String){
         EventBus.getDefault().post(NotificationEvent(message))
+    }
+
+    /**
+     * функция получит список Words из сети и положит его в БД из БД вернет новые данные
+     */
+    suspend fun getAllWordsFromServerOrDB():List<Word>{
+        if(checkDictionaryVersionOnServer()){
+            val list=retrofitService.getAllWords()
+            if (list != null) {
+                Log.d(LOG,"получили список с инета. Его размер: ${list.size}")
+                roomService.insertListWords(list)
+
+                Log.d(LOG,"положили список в БД")
+
+                val newDictionaryVersion=retrofitService.getDictionaryVersion()
+                roomService.insertNewDictionaryVersion(newDictionaryVersion)
+
+            }else{
+                Log.d(LOG,"список с сервера был null")
+            }
+        }
+        return roomService.getAllWords()
+    }
+
+    /**
+     * если на сервере имеется более свежая версия списков данных, метод вернет true или если в базе нет сведений о дате последней версии вернет true
+     */
+    private suspend fun checkDictionaryVersionOnServer():Boolean{
+        val serverDicVers: String? =retrofitService.getDictionaryVersion()
+        Log.d(LOG,"Dictionary version from server: $serverDicVers")
+        val roomDicVers:String?=roomService.getDictionaryVersion()
+        Log.d(LOG,"Dictionary version from room: $roomDicVers")
+
+        if (serverDicVers==null){
+            Log.d(LOG,"server Dictionary Version is null")
+            return false
+        }else if(roomDicVers==null){
+            Log.d(LOG,"room Dictionary Version is null")
+            return true
+        }else {
+
+            if(serverDicVers==roomDicVers){
+                Log.d(LOG,"Старая версия актуальна, оставляем...")
+                return false
+            }else{
+                Log.d(LOG,"Версия словаря на сервере изменилась, загружаем новый список")
+                return true
+            }
+
+        }
+    }
+
+    /**
+     * функция вернет список всех WordCard, в том числе и тех, у которых нет(null) ProgressWord
+     * Запрос будет произведен к БД без попытки подключения к сети
+     */
+    suspend fun getAllWordCards(): List<WordCard> {
+        return roomService.getAllWordCards()
+    }
+
+    /**
+     * достанет из базы все карточки с прогрессом пользователя и рассортирует в мапу
+     */
+    suspend fun getMapMyCards(): Map<String, List<WordCard>> {
+        val listWordsCards = roomService.getListWordsCards()
+        val mapMyCards = mutableMapOf<String,ArrayList<WordCard>>()
+
+        mapMyCards["активные"] = ArrayList()
+        mapMyCards["спящие"] = ArrayList()
+        mapMyCards["выученные"] = ArrayList()
+        listWordsCards?.forEach {
+            if (it.progressWord?.statProgress!=StatProgress.LEARNED.value&&compareDate(it.progressWord?.sleepTime)){
+                mapMyCards["активные"]?.add(it)
+            }else if (it.progressWord?.statProgress!=StatProgress.LEARNED.value&&!compareDate(it.progressWord?.sleepTime)){
+                mapMyCards["спящие"]?.add(it)
+            }else if(it.progressWord?.statProgress==StatProgress.LEARNED.value){
+                mapMyCards["выученные"]?.add(it)
+            }
+        }
+        return mapMyCards
+    }
+
+    /**
+     * функция вернет false, если входящая в параметры дата еще не наступила
+     */
+    private fun compareDate(sleepTime: String?): Boolean{
+        try {
+            if (sleepTime==null){
+                return true
+            }else if(SimpleDateFormat(SIM_FORM_DATE).parse(sleepTime).before(Date())){
+                return true
+            }
+        } catch (e: Exception) {
+            return false
+        }
+        return false
     }
 }
