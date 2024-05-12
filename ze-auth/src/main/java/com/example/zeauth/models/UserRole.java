@@ -1,0 +1,6 @@
+package com.example.zeauth.models;
+
+public enum UserRole {
+    ROLE_USER,
+    ROLE_ADMIN;
+}
