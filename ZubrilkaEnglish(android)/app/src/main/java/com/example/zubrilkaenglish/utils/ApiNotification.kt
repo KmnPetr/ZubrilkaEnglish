@@ -1,9 +1,8 @@
-package com.example.zubrilkaenglish.screens
+package com.example.zubrilkaenglish.utils
 
 import android.widget.Toast
 import com.example.zubrilkaenglish.events.NfEvEnum
 import com.example.zubrilkaenglish.events.NotificationEvent
-import com.example.zubrilkaenglish.utils.MyApplication
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 

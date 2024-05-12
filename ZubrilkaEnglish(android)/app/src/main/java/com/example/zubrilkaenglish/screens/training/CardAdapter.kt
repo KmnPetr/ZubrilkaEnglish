@@ -8,6 +8,11 @@ import com.example.zubrilkaenglish.models.NewsCard
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.services.ads.YandexAds
 import com.example.zubrilkaenglish.utils.LOG
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class CardAdapter(val listener: Listener):RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
@@ -65,19 +70,11 @@ class CardAdapter(val listener: Listener):RecyclerView.Adapter<RecyclerView.View
         return cardList[position]
     }
 
-    override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
-        super.onViewAttachedToWindow(holder)
-        val position = holder.getAdapterPosition();
-        if (position == (cardList.size-1)) listener.showYandexAds()
-        Log.d(LOG, "Page position: " + position);
-    }
 
     interface Listener{
         fun onClickYesButton(wordCard: WordCard)
         fun onClickNoButton(wordCard: WordCard)
         fun onClickLookButton(wordCard: WordCard)
         fun onClickOptionsButton(wordCard: WordCard)
-        fun playVoice(wordCard: WordCard)
-        fun showYandexAds()
     }
 }

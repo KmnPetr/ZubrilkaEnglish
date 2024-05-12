@@ -1,4 +1,4 @@
-package com.example.zubrilkaenglish.screens.activity
+package com.example.zubrilkaenglish.screens
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

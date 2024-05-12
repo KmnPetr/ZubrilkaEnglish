@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_menuFragment_to_paymentsFragment"
             app:destination="@id/paymentsFragment" />
+        <action
+            android:id="@+id/action_menuFragment_to_profileRegistrationFragment"
+            app:destination="@id/profileRegistrationFragment" />
     </fragment>
     <fragment
         android:id="@+id/trainingFragment"
@@ -43,4 +46,18 @@
         android:name="com.example.zubrilkaenglish.screens.payments.PaymentsFragment"
         android:label="fragment_payments"
         tools:layout="@layout/fragment_payments" />
+    <fragment
+        android:id="@+id/profileEnterFragment"
+        android:name="com.example.zubrilkaenglish.screens.profile.fragments.ProfileEnterFragment"
+        android:label="fragment_profile_enter"
+        tools:layout="@layout/fragment_profile_enter" />
+    <fragment
+        android:id="@+id/profileRegistrationFragment"
+        android:name="com.example.zubrilkaenglish.screens.profile.fragments.ProfileRegistrationFragment"
+        android:label="fragment_profile_registration"
+        tools:layout="@layout/fragment_profile_registration" >
+        <action
+            android:id="@+id/action_profileRegistrationFragment_to_profileEnterFragment"
+            app:destination="@id/profileEnterFragment" />
+    </fragment>
 </navigation>

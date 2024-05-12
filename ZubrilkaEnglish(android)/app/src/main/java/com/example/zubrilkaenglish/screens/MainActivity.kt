@@ -1,4 +1,4 @@
-package com.example.zubrilkaenglish.screens.activity
+package com.example.zubrilkaenglish.screens
 
 import android.os.Bundle
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -12,8 +12,8 @@ import com.example.zubrilkaenglish.databinding.ActivityMainBinding
 import com.example.zubrilkaenglish.repositories.CardsRepository
 import com.example.zubrilkaenglish.repositories.MemoRepository
 import com.example.zubrilkaenglish.repositories.VoiceRepository
-import com.example.zubrilkaenglish.screens.ApiNotification
 import com.example.zubrilkaenglish.services.ads.YandexAds
+import com.example.zubrilkaenglish.utils.ApiNotification
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -70,9 +70,17 @@ class MainActivity : AppCompatActivity() {
         // Установка слушателя для элементов меню в NavigationView
         binding.navView.setNavigationItemSelectedListener {menuItem ->
             when (menuItem.itemId) {
-                R.id.nav_home -> {
-                    println("Вызван пункт меню: R.id.nav_home")
+                R.id.profile -> {
+                    println("Вызван пункт меню: R.id.profile")
                     binding.drawerLayout.closeDrawer(GravityCompat.START)
+                    GlobalScope.launch {
+                        delay(150)
+                        withContext(Dispatchers.Main){
+                            try {
+                                navController.navigate(R.id.action_menuFragment_to_profileRegistrationFragment)
+                            }catch (ignore: Exception){}
+                        }
+                    }
                     false
                 }
                 R.id.nav_server -> {

@@ -5,7 +5,7 @@ import com.example.zubrilkaenglish.events.VoiceEvent
 import com.example.zubrilkaenglish.models.Voice
 import com.example.zubrilkaenglish.repositories.retrofit.RetrofitService
 import com.example.zubrilkaenglish.repositories.room.RoomService
-import com.example.zubrilkaenglish.utils.VoiceHandler
+import com.example.zubrilkaenglish.services.VoiceHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -21,7 +21,7 @@ class VoiceRepository private constructor() {
     }
     val retrofitService: RetrofitService = RetrofitService()
     val roomService: RoomService = RoomService()
-    val voiceHandler: VoiceHandler = VoiceHandler()
+    val voiceHandler: VoiceHandler = VoiceHandler.instanse
 
     /**
      * метод используется библиотечкой EventBus

@@ -1,6 +1,7 @@
 package com.example.zubrilkaenglish.screens.training
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,9 +20,12 @@ import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.screens.training.popup.PopupDialog
 import com.example.zubrilkaenglish.screens.training.popup.PopupOptions
 import com.example.zubrilkaenglish.services.ads.YandexAds
+import com.example.zubrilkaenglish.utils.LOG
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 
@@ -71,7 +75,7 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
         }
 
         showCountCards()
-        automaticVoicePlayback()
+        registerOnPageChangeCallback()
     }
 
     override fun onStart() {
@@ -103,23 +107,6 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
             }
             else -> {}
         }
-    }
-
-    /**
-     * воспроизведение голоса при перелистывании новой карточки
-     */
-    private fun automaticVoicePlayback() {
-        binding.viewPager2.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
-            override fun onPageScrollStateChanged(state: Int) {
-                super.onPageScrollStateChanged(state)
-                if (state == 0){
-                    val card: ICard = adapter.getCurrentCard(binding.viewPager2.currentItem)
-                    if (card is WordCard && !card.voiceSounded){
-                        playVoice(card)
-                    }
-                }
-            }
-        })
     }
 
 
@@ -161,7 +148,7 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
     /**
      *  метод инициирует озвучку карточки
      */
-    override fun playVoice(wordCard: WordCard) {
+    fun playVoice(wordCard: WordCard) {
         if (wordCard.word.link_voice != null){
             //отправим запрос на воспроизведение звука
             EventBus.getDefault().post(VoiceEvent(VcEvEnum.PLAY_VOICE, Voice(wordCard.word.link_voice,null)))}
@@ -170,7 +157,7 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
     /**
      * покажет межстраничную рекламу
      */
-    override fun showYandexAds() {
+    fun showYandexAds() {
         if (!viewModel.yandexAdWasShown){
             viewModel.yandexAdWasShown = true
             YandexAds.instanse.showAd(requireActivity())
@@ -207,6 +194,56 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
                     countCards.text = "( ${binding.viewPager2.currentItem + 1} / ${viewModel.countWordCards} )"
                 } else if (state == 0&&!adapter.isWordCard(viewPager2.currentItem)){
                     countCards.text = ""
+                }
+            }
+        })
+    }
+
+    /**
+     * будет следить за изменением страницы и вызывать различные функции
+     */
+    fun registerOnPageChangeCallback(){
+
+        val viewPager2 = binding.viewPager2
+
+        countCards.text = "( ${binding.viewPager2.currentItem + 1} / ${viewModel.countWordCards} )"
+
+        viewPager2.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback(){
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+
+                Log.d(LOG, "Page position: " + position)
+
+                //вызываем voice на первой странице
+                if (position == 0 && adapter.isWordCard(position)){
+                    GlobalScope.launch {
+                        delay(500)
+                        withContext(Dispatchers.Main){
+                            playVoice(adapter.getCurrentCard(position) as WordCard)
+                        }
+                    }
+                }
+            }
+            override fun onPageScrollStateChanged(state: Int) {
+                super.onPageScrollStateChanged(state)
+
+                val position = viewPager2.currentItem
+                Log.d(LOG, "Page position: " + position)
+
+                //вызываем voice если это учебная карточка
+                if (state == 0 && adapter.isWordCard(position) && position != 0){
+                    playVoice(adapter.getCurrentCard(position) as WordCard)
+                }
+
+                //покажем рекламу если это последняя карточка
+                if (state == 0 && position == ((viewPager2.adapter?.itemCount ?: 0) - 1)){
+
+                    GlobalScope.launch {
+                        delay(500) //небольшая задержка чтоб прогрузилось все и не сразу выпригивала реклама
+                        withContext(Dispatchers.Main){
+                            showYandexAds()
+                        }
+                    }
                 }
             }
         })

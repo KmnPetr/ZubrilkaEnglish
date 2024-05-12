@@ -1,7 +1,6 @@
-package com.example.zubrilkaenglish.repositories.memoService
+package com.example.zubrilkaenglish.services.memoService
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -18,7 +17,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.models.Memo
-import com.example.zubrilkaenglish.screens.activity.MainActivity
+import com.example.zubrilkaenglish.screens.MainActivity
 
 class MemoNotificationManager private constructor(){
     companion object{
@@ -51,13 +50,6 @@ class MemoNotificationManager private constructor(){
         // Вычитаем один день
         calendar.add(Calendar.DAY_OF_MONTH, 0)
 
-        // Проверка, если выбранное время уже прошло, то ставим alarm на следующий день
-//        if (calendar.timeInMillis <= System.currentTimeMillis()) {
-//            calendar.add(Calendar.DAY_OF_MONTH, 1)
-//            println("     timeInMillis: ${calendar.timeInMillis}")
-//            println("currentTimeMillis: ${System.currentTimeMillis()}")
-//        }
-
         // Установка alarm на каждый день в выбранное время
         alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,
@@ -84,13 +76,16 @@ class MemoNotificationManager private constructor(){
 
         val bitmap: Bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.book_icon)
 
+        val bigTextStyle = NotificationCompat.BigTextStyle()
+            .bigText(memo.note) // Устанавливаем раскрывающийся текст
+
         val builder = NotificationCompat.Builder(context,CHANNEL_ID)
             .setSmallIcon(R.drawable.book_svg)
-            .setContentTitle("Повторите слова")
             .setContentText(memo.note)
             .setLargeIcon(bitmap)
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setStyle(bigTextStyle)
 
         with(NotificationManagerCompat.from(context)){
             if (ActivityCompat.checkSelfPermission(
@@ -139,4 +134,5 @@ class MemoNotificationManager private constructor(){
         alarmManager.cancel(pendingIntent)
         pendingIntent.cancel()
     }
+
 }

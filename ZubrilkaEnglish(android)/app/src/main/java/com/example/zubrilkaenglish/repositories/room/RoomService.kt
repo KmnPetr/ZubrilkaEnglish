@@ -13,6 +13,10 @@ class RoomService{
      * вернет MemoDAO с его методами
      */
     fun getMemoDAO() = dataBase.getMemoDAO()
+    /**
+     * вернет PropDAO с его методами
+     */
+    fun getPropDAO() = dataBase.getPropDAO()
 
 
     suspend fun getVoiceByName(name: String): Voice?{
@@ -89,5 +93,6 @@ class RoomService{
             dataBase.getVoiceDAO().insertNewVoice(voice)
         }
     }
+
 
 }

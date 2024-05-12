@@ -1,6 +1,7 @@
 package com.example.zubrilkaenglish.repositories.retrofit
 
 import android.widget.Toast
+import com.example.zubrilkaenglish.models.Profile
 import com.example.zubrilkaenglish.models.Voice
 import com.example.zubrilkaenglish.models.Word
 import com.example.zubrilkaenglish.utils.MyApplication
@@ -47,4 +48,8 @@ class RetrofitService {
         return null
     }
 
+    /**
+     * выдаст все методы profileApi
+     */
+    fun getProfileApi() = RetrofitInstance.profileApi
 }

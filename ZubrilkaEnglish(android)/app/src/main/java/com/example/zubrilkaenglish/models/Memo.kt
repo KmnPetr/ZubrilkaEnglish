@@ -17,8 +17,8 @@ class Memo(
     @ColumnInfo(name = "note")
     val note:String = "",
     @ColumnInfo(name = "daysOfWeek")
-    val daysOfWeek: List<DayOfWeek> = listOf()
-    ){}
+    val daysOfWeek: List<DayOfWeek>
+    )
 
 enum class DayOfWeek(val ruStr: String,val weekDay: Int?) {
     DAILY("Ежедневно", null),

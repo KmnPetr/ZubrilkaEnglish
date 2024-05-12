@@ -2,9 +2,11 @@ package com.example.zubrilkaenglish.repositories
 
 import com.example.zubrilkaenglish.events.MemoEvent
 import com.example.zubrilkaenglish.events.MmEvEnum
+import com.example.zubrilkaenglish.models.DayOfWeek
 import com.example.zubrilkaenglish.models.Memo
-import com.example.zubrilkaenglish.repositories.memoService.MemoNotificationManager
+import com.example.zubrilkaenglish.services.memoService.MemoNotificationManager
 import com.example.zubrilkaenglish.repositories.room.RoomService
+import com.example.zubrilkaenglish.utils.DEFAULT_MEMO
 import com.example.zubrilkaenglish.utils.MyApplication
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -18,9 +20,13 @@ class MemoRepository private constructor() {
         val instance: MemoRepository by lazy { MemoRepository() }
     }
     private val roomService:RoomService = RoomService()
+    private val propRepository = PropRepository.instance
     private val memoNotificationManager = MemoNotificationManager.instance
+
     init {
         EventBus.getDefault().register(this)
+        createNewMemo(DEFAULT_MEMO)
+        propRepository.updateUsersLastEnter()
     }
 
     /**
@@ -46,6 +52,9 @@ class MemoRepository private constructor() {
      */
     private fun createNewMemo(memo: Memo) {
         GlobalScope.launch {
+            if (memo.id == DEFAULT_MEMO.id && propRepository.isDefaultMemoWasDeleted()){
+                return@launch
+            }
             val memoId:Long = roomService.getMemoDAO().insertNewMemo(memo)
             val savedMemo = roomService.getMemoDAO().getMemoById(memoId)
             withContext(Dispatchers.Main){
@@ -64,6 +73,7 @@ class MemoRepository private constructor() {
         GlobalScope.launch {
             roomService.getMemoDAO().deleteMemo(memo)
             memoNotificationManager.cancelAlarm(MyApplication.context,memo.id.toInt())
+            if (memo.id == DEFAULT_MEMO.id) propRepository.defaultMemoSetDeleted()
         }
     }
 
