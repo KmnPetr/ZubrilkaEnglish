@@ -3,6 +3,8 @@ package com.example.zeauth.models;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
+import java.sql.Timestamp;
+
 /**
  * обьект дляпередачи данных пользователя по сети
  */
@@ -21,4 +23,7 @@ public class ProfileDTO {
         @NotBlank(message = "Name is blank.")
         @Size(max = 100, message = "The name is too long.")
     private String name;
+    private String accessToken;
+    private String refreshToken;
+    private Timestamp created_at;
 }

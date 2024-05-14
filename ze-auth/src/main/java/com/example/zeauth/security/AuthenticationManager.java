@@ -1,6 +1,5 @@
 package com.example.zeauth.security;
 
-import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
@@ -29,23 +29,18 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
     public Mono<Authentication> authenticate(Authentication authentication) {
 
         String authToken = authentication.getCredentials().toString();
-        String userName;
-        try {
-            userName = jwtUtil.extractUsername(authToken);
-        } catch (Exception e){
-            userName = null;
-            log.info(String.valueOf(e));
-        }
+        Map<String, String> claims = jwtUtil.getClaimsFromToken2(authToken);
+        String email = claims.get("email");
 
-        if (userName!=null && jwtUtil.validateToken(authToken)){
-            Claims claims = jwtUtil.getClaimsFromToken(authToken);
-            List<String> role = claims.get("role",List.class);
+
+        if (email!=null && jwtUtil.validateToken2(authToken)){
+            List<String> role = List.of(claims.get("role"));
             List<SimpleGrantedAuthority> authorities = role.stream()
                     .map(SimpleGrantedAuthority::new)
                     .collect(Collectors.toList());
 
             UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(
-                    userName,
+                    email,
                     null,
                     authorities
             );

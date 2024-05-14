@@ -1,5 +1,6 @@
 package com.example.zeauth.controllers;
 
+import com.example.zeauth.controllers.validation.UnauthorizedException;
 import com.example.zeauth.models.Person;
 import com.example.zeauth.models.ProfileDTO;
 import com.example.zeauth.security.JwtUtil;
@@ -10,14 +11,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-
-import java.util.Objects;
 
 @Slf4j
 @RestController
@@ -27,27 +27,20 @@ public class AuthenticationController {
     private final PersonService personService;
     private final JwtUtil jwtUtil;
     private static final ResponseEntity<Object> UNAUTHORIZED = ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AuthenticationController(PersonService personService, JwtUtil jwtUtil) {
+    public AuthenticationController(PersonService personService, JwtUtil jwtUtil, PasswordEncoder passwordEncoder) {
         this.personService = personService;
         this.jwtUtil = jwtUtil;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/login")
-    public Mono<ResponseEntity> login(ServerWebExchange swe){
-        return swe.getFormData().flatMap(credentials ->
-                personService.findByUsername(credentials.getFirst("username"))
-                        .cast(Person.class)
-                        .map(person ->
-                                Objects.equals(
-                                        credentials.getFirst("password"),
-                                        person.getPassword()
-                                )
-                                        ? ResponseEntity.ok(jwtUtil.generateToken(person))
-                                        : UNAUTHORIZED
-                        )
-                        .defaultIfEmpty(UNAUTHORIZED)
+    public Mono<ProfileDTO> login(ServerWebExchange swe){
+        return swe.getFormData().flatMap(credentials ->{
+            return personService.login(credentials.getFirst("username"),credentials.getFirst("password"));
+                }
                 );
     }
 
