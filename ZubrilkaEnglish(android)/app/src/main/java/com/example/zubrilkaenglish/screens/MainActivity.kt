@@ -11,6 +11,7 @@ import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.ActivityMainBinding
 import com.example.zubrilkaenglish.repositories.CardsRepository
 import com.example.zubrilkaenglish.repositories.MemoRepository
+import com.example.zubrilkaenglish.repositories.ProfileRepository
 import com.example.zubrilkaenglish.repositories.VoiceRepository
 import com.example.zubrilkaenglish.services.ads.YandexAds
 import com.example.zubrilkaenglish.utils.ApiNotification
@@ -26,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     private val cardsRepository = CardsRepository.instance
     private val voiceRepository = VoiceRepository.instance
     private val memoRepository = MemoRepository.instance
+    private val profileRepository = ProfileRepository.instance
 
     private val yandexAds = YandexAds.instanse
 
@@ -77,7 +79,7 @@ class MainActivity : AppCompatActivity() {
                         delay(150)
                         withContext(Dispatchers.Main){
                             try {
-                                navController.navigate(R.id.action_menuFragment_to_profileRegistrationFragment)
+                                navController.navigate(R.id.action_menuFragment_to_profileInfoFragment)
                             }catch (ignore: Exception){}
                         }
                     }

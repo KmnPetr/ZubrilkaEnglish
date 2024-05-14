@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.zubrilkaenglish.databinding.FragmentProfileEnterBinding
+import com.example.zubrilkaenglish.models.Profile
+import com.example.zubrilkaenglish.repositories.ProfileRepository
 import com.example.zubrilkaenglish.screens.profile.ProfileViewModel
 
 class ProfileEnterFragment : Fragment() {
@@ -35,9 +37,38 @@ class ProfileEnterFragment : Fragment() {
      * регистрация слушателей на различные кнопки и ссылки
      */
     private fun setListeners() {
-        binding.registrationLink.setOnClickListener {
-            enterLinkClick(it)
+        binding.registrationLink.setOnClickListener { enterLinkClick(it) }
+        binding.buttonEnter.setOnClickListener { loginRequest() }
+        viewModel.listValidationErrors.observe(viewLifecycleOwner){ showErrors(it) }
+        viewModel.profile.observe(viewLifecycleOwner){profileExists(it)}
+    }
+    /**
+     * переведет на другой фрагмент с информацией о профиле если он найдется в БД
+     */
+    private fun profileExists(profile: Profile?) {
+        if (profile!=null){
+            findNavController().popBackStack()
         }
+    }
+
+    /**
+     * покажет ошибки при заполнении полей
+     */
+    private fun showErrors(it: List<String>?) {
+        if (it != null){
+            binding.errorField.visibility = View.VISIBLE
+        } else binding.errorField.visibility = View.GONE
+
+        binding.errorText.text=""
+        it?.forEach {
+            binding.errorText.append(it+"\n")
+        }
+    }
+    /**
+     * запрос на аутентификацию
+     */
+    private fun loginRequest() {
+        ProfileRepository.instance.loginRequest(binding.username.text.toString(),binding.password.text.toString())
     }
 
     /**

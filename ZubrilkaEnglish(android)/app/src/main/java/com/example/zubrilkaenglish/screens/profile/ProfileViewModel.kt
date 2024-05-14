@@ -1,14 +1,18 @@
 package com.example.zubrilkaenglish.screens.profile
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.zubrilkaenglish.models.Profile
 import com.example.zubrilkaenglish.repositories.ProfileRepository
+import com.example.zubrilkaenglish.utils.LOG
 import kotlinx.coroutines.launch
 
 class ProfileViewModel : ViewModel() {
     private val profileRepository = ProfileRepository.instance
 
+    val profile: MutableLiveData<Profile?> = MutableLiveData()
     val listValidationErrors: MutableLiveData<List<String>?> = MutableLiveData()
 
     var regName: String = ""
@@ -22,6 +26,12 @@ class ProfileViewModel : ViewModel() {
         viewModelScope.launch {
             profileRepository.validationErrors.collect {
                 listValidationErrors.postValue(it)
+            }
+        }
+        viewModelScope.launch{
+            profileRepository.profile.collect{
+                Log.d(LOG,"Profile was changed: ViewModel: "+it?.toString())
+                this@ProfileViewModel.profile.postValue(it)
             }
         }
     }

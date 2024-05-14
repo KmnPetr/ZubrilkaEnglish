@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,7 @@ import com.example.zubrilkaenglish.databinding.FragmentProfileRegistrationBindin
 import com.example.zubrilkaenglish.models.Profile
 import com.example.zubrilkaenglish.repositories.ProfileRepository
 import com.example.zubrilkaenglish.screens.profile.ProfileViewModel
+import com.example.zubrilkaenglish.utils.LOG
 
 /**
  * в этом фрагменте будет происходить регистрация пользователя
@@ -48,6 +50,7 @@ class ProfileRegistrationFragment : Fragment() {
      * регистрация слушателей на различные кнопки и ссылки
      */
     private fun setListeners() {
+        viewModel.profile.observe(viewLifecycleOwner){profileExists(it)}
         binding.enterLink.setOnClickListener { enterLinkClick(it) }
         binding.buttonCreateProfile.setOnClickListener { requestCreateProfile() }
         viewModel.listValidationErrors.observe(viewLifecycleOwner){ showErrors(it) }
@@ -57,6 +60,15 @@ class ProfileRegistrationFragment : Fragment() {
         binding.repeatPassword.addTextChangedListener(setupRepeatPassword())
         viewModel.regPassword.observe(viewLifecycleOwner){comparePassword()}
         viewModel.regSecondPassword.observe(viewLifecycleOwner){comparePassword()}
+    }
+
+    /**
+     * переведет на другой фрагмент с информацией о профиле если он найдется в БД
+     */
+    private fun profileExists(profile: Profile?) {
+        if (profile!=null){
+            findNavController().popBackStack()
+        }
     }
 
     //передаст значение Password с формы в view model
@@ -131,7 +143,10 @@ class ProfileRegistrationFragment : Fragment() {
         val newProfile = Profile(
             viewModel.regEmail,
             viewModel.regPassword.value!!,
-            viewModel.regName
+            viewModel.regName,
+            null,
+            null,
+            null
         )
         ProfileRepository.instance.registrationRequest(newProfile)
     }

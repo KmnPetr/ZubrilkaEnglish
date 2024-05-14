@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.zubrilkaenglish.models.PropModel
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PropDAO {
@@ -15,7 +16,12 @@ interface PropDAO {
     @Query("INSERT INTO prop_table ('key', value) VALUES ('dictionary_version', :newDictionaryVersion)")
     suspend fun insertNewDictionaryVersion(newDictionaryVersion: String?)
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertNewProp(newLastEnter: PropModel)
+    suspend fun insertNewProp(propModel: PropModel)
     @Query("SELECT*FROM prop_table WHERE prop_table.`key`= :key")
     suspend fun getPropByKey(key: String): PropModel?
+
+    @Query("SELECT*FROM prop_table WHERE prop_table.`key`= 'profile'")
+    fun getProfile(): Flow<PropModel?>
+    @Query("DELETE FROM prop_table WHERE prop_table.`key`= :key")
+    suspend fun deletePropByKey(key: String)
 }
