@@ -11,22 +11,57 @@
         android:orientation="vertical"
         android:layout_gravity="center"
         android:gravity="center">
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
+
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Name"
-            android:textStyle="bold"
-            android:textSize="20sp"/>
-        <TextView
-            android:id="@+id/email"
-            android:layout_width="wrap_content"
+            android:padding="10dp">
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Name"
+                android:textStyle="bold"
+                android:textSize="20sp"/>
+            <TextView
+                android:id="@+id/change_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="20dp"
+                android:layout_centerVertical="true"
+                android:text="Изменить имя"
+                android:textSize="10sp"
+                android:textColor="#42A5F5"
+                android:textStyle="italic"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Email"
-            android:textStyle="italic"
-            android:textSize="20sp"/>
+            android:padding="10dp">
+            <TextView
+                android:id="@+id/email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Email"
+                android:textStyle="italic"
+                android:textSize="20sp"/>
+            <TextView
+                android:id="@+id/change_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="20dp"
+                android:layout_centerVertical="true"
+                android:text="Изменить email"
+                android:textSize="10sp"
+                android:textColor="#42A5F5"
+                android:textStyle="italic"/>
+
+        </RelativeLayout>
         <TextView
             android:id="@+id/dateOfCreation"
             android:layout_width="wrap_content"

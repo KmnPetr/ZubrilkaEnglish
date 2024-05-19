@@ -16,10 +16,11 @@ import retrofit2.Response
 /**
  * занимается аутентификацией пользователя
  */
-class ProfileRepository private constructor(){
-    companion object{
+class ProfileRepository private constructor() {
+    companion object {
         val instance: ProfileRepository by lazy { ProfileRepository() }
     }
+
     private val retrofitService = RetrofitService()
     val roomService = RoomService()
     val validationErrors: MutableStateFlow<List<String>?> = MutableStateFlow(null)
@@ -27,11 +28,76 @@ class ProfileRepository private constructor(){
 
     init {
         GlobalScope.launch {
-            roomService.getPropDAO().getProfile().collect{
-                Log.d(LOG,"Profile was changed: ProfileRepository: "+it?.value)
+            roomService.getPropDAO().getProfile().collect {
+                Log.d(LOG, "Profile was changed: ProfileRepository: " + it?.value)
                 if (it != null) {
                     profile.value = Profile.toProfileObject(it.value)
                 } else profile.value = null
+            }
+        }
+    }
+
+    /**
+     * выполнит вызов к серверу вместе с обработкой ситуации когда истечет срок действия accesToken, refreshToken
+     * в параметры принимается лямбда, в которую вбивается запрос к серверу, который требует токен-менеджмента
+     */
+    suspend fun <T> authRequest(request: suspend (jwtToken: String) -> Response<T?>): Response<T?> {
+        val response: Response<T?> = request("Bearer " + profile.value?.accessToken.toString())
+        if (response.isSuccessful) {//получил 200 с первого раза
+            return response
+        } else if (response.code() == 401) {//accessToken протух
+            val refreshTokenResponce: Response<PropModel?> = retrofitService.getProfileApi()
+                .refreshAccessToken("Bearer " + profile.value?.refreshToken.toString())
+            if (refreshTokenResponce.isSuccessful) {//получил refreshToken
+                val newAccessToken = refreshTokenResponce.body()?.value
+                Log.d(LOG, "Получен newAccessToken: $newAccessToken")
+
+                val profile: Profile? = profile.value
+                if (profile !== null) {
+                    profile.accessToken = newAccessToken
+                    updateProfile(profile)//сохранили в БД профиль с новым accessToken
+                }
+
+                return request("Bearer " + newAccessToken)//повторили пользовательский запрос
+            } else if (refreshTokenResponce.code() == 401) {//refreshToken протух
+                Log.d(LOG, "Походу refreshToken протух или еще чтото")
+                logOut()
+                return Response.error(401, okhttp3.ResponseBody.create(null, "Unauthorized"))
+            }
+            return Response.error(refreshTokenResponce.code(), okhttp3.ResponseBody.create(null, refreshTokenResponce.message()))
+        } else {
+            Log.d(LOG, "Something else: ${response.message()}")
+            return response
+        }
+    }
+    /**
+     * отправит запрос на поля профиля (имя или email)
+     */
+    fun changeProfileField(typeField:String,newValueField: String) {
+        validationErrors.value = null
+        GlobalScope.launch {
+
+            try {
+                val profile: Profile? = profile.value
+                if (profile!=null){
+                    val response: Response<Profile?> = authRequest { jwtToken ->
+                        retrofitService.getProfileApi().changeName(
+                            profile.id,
+                            jwtToken,
+                            PropModel(typeField,newValueField))
+                    }
+
+                    if (response.isSuccessful) {
+                        // Обработка успешного ответа
+                        onReceiveProfile(response.body())
+                    } else {
+                        onReceiveErrors(response.errorBody()?.string())
+                    }
+                }
+
+            } catch (e: Exception){
+                Log.d(LOG,"Ops...  "+ e.message)
+                e.printStackTrace()
             }
         }
     }
@@ -99,7 +165,7 @@ class ProfileRepository private constructor(){
     //при получении положительного ответа с профилем в теле
     private suspend fun onReceiveProfile(profile: Profile?) {
         if (profile != null) {
-            roomService.getPropDAO().insertNewProp(PropModel("profile",profile.toJson()))
+            updateProfile(profile)
         }
         Log.d(LOG,"Response is successsful. Profile: "+ profile.toString())
     }
@@ -119,6 +185,10 @@ class ProfileRepository private constructor(){
             roomService.getPropDAO().deletePropByKey("profile")
         }
     }
+    private suspend fun updateProfile(profile: Profile){
+        roomService.getPropDAO().insertNewProp(PropModel("profile",profile.toJson()))
+    }
+
 
 
     /**
@@ -138,8 +208,9 @@ class ProfileRepository private constructor(){
                     "The name is too long." -> "The name is too long."
                     "The email is too long." -> "The email is too long."
                     "This email is already in use." -> "Профиль с таким email уже существует."
-                    "Invalid password." -> "Неправильный пароль."
-                    "User not found." -> "Профиль с таким email не существует."
+                    "Invalid login or password." -> "Неправильный логин или пароль."
+                    "Field value is blank." -> "Поле не должно быть пустым."
+                    "This Email is already used."  -> "Email уже занят."
                     else -> "Unknown error."
                 })
             }

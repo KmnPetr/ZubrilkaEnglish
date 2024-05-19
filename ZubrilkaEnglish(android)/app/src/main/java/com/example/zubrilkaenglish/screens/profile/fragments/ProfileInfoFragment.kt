@@ -42,10 +42,10 @@ class ProfileInfoFragment : Fragment() {
      * функции слушателей на кнопки и другое
      */
     private fun setListeners() {
-        viewModel.profile.observe(viewLifecycleOwner){
-            Log.d(LOG,"Profile was changed: Fragment: "+it?.toString())
-            profileChange(it)}
+        viewModel.profile.observe(viewLifecycleOwner){profileChange(it)}
         binding.logOut.setOnClickListener { logOut() }
+        binding.changeName.setOnClickListener { PopupChangeProfileField("name",requireContext()).show() }
+        binding.changeEmail.setOnClickListener { PopupChangeProfileField("email",requireContext()).show() }
     }
 
     /**
