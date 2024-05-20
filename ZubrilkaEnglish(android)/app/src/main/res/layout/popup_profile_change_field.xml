@@ -83,11 +83,23 @@
                 android:textColor="#FF0000"/>
         </LinearLayout>
 
-    <com.example.zubrilkaenglish.utils.MyView
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        app:cornerRadius="16dp"
-        app:borderWidth="4dp"/>
+    <com.example.zubrilkaenglish.utils.ui.CustButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        app:backgroundColor="#81C100"
+        app:cornerRadius="7dp"
+        app:borderWidth="2dp"
+        app:borderColor="#33691E"
+        app:textColor="@color/white"
+        app:textSize="20sp"
+        app:text="Custom Text"
+        app:textStyle="bold_italic"
+        app:fontFamily="sans-serif"/>
+
+        <com.example.zubrilkaenglish.utils.ui.CircleView
+            android:layout_width="100dp"
+            android:layout_height="100dp"/>
 
     </LinearLayout>
 
