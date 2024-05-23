@@ -28,12 +28,15 @@ class CatalogWordsViewModel : ViewModel() {
     //неготовое с прошлой сессии приложения Word
     val notReadyWord: MutableLiveData<Word?> = MutableLiveData(null)
 
+    //укажет последнюю папку в которую выл пыполнен вход
+    var lastWordFolder:MutableLiveData<String?> = MutableLiveData()
+    var lastEditedWordFolder:MutableLiveData<String?> = MutableLiveData()
 
     init {
 
         //список слов словаря из сети подгружает Flow из репозитория
         viewModelScope.launch {
-            wordRepository.filteredListAllWords/*.getAllWords()*/.collect { word ->
+            wordRepository.filteredListAllWords.collect { word ->
                 mapWordsByTopic.value = sortWordsByTopic(word)
                 namesTopics.value = fillNamesTopics(mapWordsByTopic.value as MutableMap<String, ArrayList<Word>>)
             }

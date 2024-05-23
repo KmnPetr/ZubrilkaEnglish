@@ -1,18 +1,23 @@
 package com.example.ze_adminandroid.screens.serverConnect.socketService
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import com.example.ze_adminandroid.events.SctEvEnum
 import com.example.ze_adminandroid.events.SocketEvent
 import com.example.ze_adminandroid.models.Voice
 import com.example.ze_adminandroid.models.Word
 import com.example.ze_adminandroid.repositories.VoiceRepository
 import com.example.ze_adminandroid.repositories.WordRepository
+import com.example.ze_adminandroid.utils.MY_CONTEXT
+import com.example.ze_adminandroid.utils.MyApplication
 import com.example.ze_adminandroid.utils.TEG
 import com.google.gson.Gson
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import okio.ByteString.Companion.toByteString
 import org.greenrobot.eventbus.EventBus
 import java.nio.charset.StandardCharsets
@@ -38,6 +43,7 @@ class SendDataManager private constructor(){
                 deleteVoice(mp)
             }
             TypeEnum.VOICE_ERROR->{
+                copyStr(mp)
                 printError(mp)
             }
             TypeEnum.SUCCESSFUL_WORD_SAVING-> {
@@ -46,6 +52,15 @@ class SendDataManager private constructor(){
 
             else -> {}
         }
+    }
+
+    /**
+     * скопирует текст в буфер обмена
+     */
+    private fun copyStr(mp: MessageProtocol) {
+        val clipboardManager = MY_CONTEXT?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("Text", mp.headers["strToCopy"])
+        clipboardManager.setPrimaryClip(clip)
     }
 
     /**

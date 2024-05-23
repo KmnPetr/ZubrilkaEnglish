@@ -11,4 +11,5 @@ interface FragmentItem {
     fun rollBackRecycler()
     fun onClickButtonPlay(word: Word)
     fun onClickButtonDelete(word: Word)
+    fun setListAdapter()
 }

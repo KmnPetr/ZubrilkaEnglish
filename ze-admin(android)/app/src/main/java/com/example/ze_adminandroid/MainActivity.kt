@@ -14,19 +14,25 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.ze_adminandroid.databinding.ActivityMainBinding
 import com.example.ze_adminandroid.repositories.VoiceRepository
 import com.example.ze_adminandroid.repositories.WordRepository
+import com.example.ze_adminandroid.utils.MY_CONTEXT
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
-    //первоначальная инициализация для первого запроса к серверу
-    private val wordRepository: WordRepository = WordRepository.instance
-    //первоначальная инициализация для подписки репозитория на события EventBus
-    private val voiceRepository: VoiceRepository = VoiceRepository.instance
+    private lateinit var wordRepository: WordRepository
+    private lateinit var voiceRepository: VoiceRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        MY_CONTEXT = this
+
+        //первоначальная инициализация для первого запроса к серверу
+        wordRepository = WordRepository.instance
+        //первоначальная инициализация для подписки репозитория на события EventBus
+        voiceRepository = VoiceRepository.instance
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -44,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_server
+                R.id.nav_home, R.id.nav_settings, R.id.nav_server
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -60,5 +66,10 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        MY_CONTEXT = this
     }
 }

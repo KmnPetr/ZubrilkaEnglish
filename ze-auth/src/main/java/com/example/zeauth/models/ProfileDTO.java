@@ -12,6 +12,7 @@ import java.sql.Timestamp;
 @ToString
 @AllArgsConstructor
 public class ProfileDTO {
+    private Long id;
         @NotBlank(message = "Email is blank.")
         @Email(message = "Email is invalid.")
         @Size(max = 100, message = "The email is too long.")

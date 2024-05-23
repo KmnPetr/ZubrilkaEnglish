@@ -76,7 +76,6 @@ public class MessageProtocol {
             headersB[i] = message[i+4];
         }
 
-        System.out.println(new String(headersB, StandardCharsets.UTF_8));
         Map<String,String> headers = stringJsonToMap(new String(headersB, StandardCharsets.UTF_8));
 
         return headers;

@@ -41,9 +41,9 @@ class RoboticScenario private constructor(){
             listActions.clear()
 
             //запуск кнопки перехода в браузер
-//        listActions.add{clickImageButton(fragment.getBinding().internetButton)}
+        listActions.add{clickImageButton(fragment.getBinding().internetButton)}
             //запуск кнопки перехода в webView
-            listActions.add{clickButton(fragment.getBinding().buttonWebView)}
+//            listActions.add{clickButton(fragment.getBinding().buttonWebView)}
             //подождем когда фрагмент вернется в активное состояниее
             listActions.add { waitFragmentOnResume() }
             //достанем файл voice из репозитория

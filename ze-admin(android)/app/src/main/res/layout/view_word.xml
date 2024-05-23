@@ -42,7 +42,7 @@
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_gravity="center"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="30dp"
             android:background="@android:color/transparent"
             android:scaleType="centerCrop"
             app:srcCompat="@android:drawable/ic_menu_delete" />

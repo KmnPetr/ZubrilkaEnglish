@@ -55,11 +55,19 @@ public class WordsService {
     }
 
     /**
-     * метод возвращает флакс на запрос списка всех Words из DB
+     * метод возвращает флакс на запрос списка всех Words из кэша
      */
     public Flux<Word> getAllWords(){
         return Flux
                 .fromIterable(wordsCache.getListAllWords());
+    }
+
+    /**
+     * метод возвращает флакс на запрос списка всех Words из БД
+     */
+    public Flux<Word> getAllWordsFromDB(){
+        return Flux
+                .fromIterable(wordsRepository.findAll().toIterable());
     }
 
     /**

@@ -7,24 +7,24 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.ze_adminandroid.databinding.FragmentGalleryBinding
+import com.example.ze_adminandroid.databinding.FragmentSettingsBinding
 import com.example.ze_adminandroid.utils.MYEFE_SWITCH
 
-class GalleryFragment : Fragment() {
-    private lateinit var binding: FragmentGalleryBinding
+class SettingsFragment : Fragment() {
+    private lateinit var binding: FragmentSettingsBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val galleryViewModel =
-            ViewModelProvider(this).get(GalleryViewModel::class.java)
+        val settingsViewModel =
+            ViewModelProvider(this).get(SettingsViewModel::class.java)
 
-        binding = FragmentGalleryBinding.inflate(inflater, container, false)
+        binding = FragmentSettingsBinding.inflate(inflater, container, false)
 
         val textView: TextView = binding.textGallery
-        galleryViewModel.text.observe(viewLifecycleOwner) {
+        settingsViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
         return binding.root

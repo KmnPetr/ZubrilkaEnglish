@@ -5,6 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.zeauth.models.Person;
@@ -27,13 +28,8 @@ public class JwtUtil {
     @Value("${jwt_expiration_refresh}")
     private String timeExpirationRefresh;
 
-//    public String extractUsername(String authToken) {
-//            return getClaimsFromToken(authToken)
-//                    .getSubject();
-//    }
 
-
-    public boolean validateToken2(String token) {
+    public boolean validateToken(String token) throws TokenExpiredException {
         try {
             JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secret))
 //                    .withIssuer("ZubrilkaEnglish")
@@ -43,25 +39,12 @@ public class JwtUtil {
 
             return true;
         } catch (JWTVerificationException exception) {
-            // Token is not valid
+            // Token is not valid or expired
             return false;
         }
     }
-    private String generateToken2(Person person, String expirationTime){
-        Date creationDate = new Date();
-        Date expirationDate = Date.from(ZonedDateTime.now().plusMinutes(Long.parseLong(expirationTime)).toInstant());
 
-        return JWT.create()
-//                .withSubject("User details")
-//                .withIssuer("ZubrilkaEnglish")
-                .withClaim("email",person.getEmail())
-                .withClaim("role", person.getRole().toString())
-                .withIssuedAt(creationDate)
-                .withExpiresAt(expirationDate)
-                .sign(Algorithm.HMAC256(secret));
-    }
-
-    public Map<String, String> getClaimsFromToken2(String token) {
+    public Map<String, String> getClaimsFromToken(String token) {
         Map<String, String> claimsMap = new HashMap<>();
         try {
             DecodedJWT decodedJWT = JWT.decode(token);
@@ -77,50 +60,26 @@ public class JwtUtil {
         }
         return claimsMap;
     }
+    private String generateToken(Person person, String expirationTime){
+        Date creationDate = new Date();
+        Date expirationDate = Date.from(ZonedDateTime.now().plusMinutes(Long.parseLong(expirationTime)).toInstant());
+
+        return JWT.create()
+//                .withSubject("User details")
+//                .withIssuer("ZubrilkaEnglish")
+                .withClaim("email",person.getEmail())
+                .withClaim("role", person.getRole().toString())
+                .withIssuedAt(creationDate)
+                .withExpiresAt(expirationDate)
+                .sign(Algorithm.HMAC256(secret));
+    }
 
 
-//    public boolean validateToken(String authToken) {
-//        return getClaimsFromToken(authToken)
-//                .getExpiration()
-//                .before(new Date());
-//    }
-
-
-
-//    public Claims getClaimsFromToken(String authToken) {
-//        String key = Base64.getEncoder().encodeToString(secret.getBytes());
-//        return Jwts
-//                .parserBuilder()
-//                .setSigningKey(key)
-//                .build()
-//                .parseClaimsJwt(authToken)
-//                .getBody();
-//    }
 
     public String generateAccessToken(Person person) {
-        return generateToken2(person,timeExpirationAccess);
+        return generateToken(person,timeExpirationAccess);
     }
     public String generateRefreshToken(Person person) {
-        return generateToken2(person,timeExpirationRefresh);
+        return generateToken(person,timeExpirationRefresh);
     }
-
-
-//    private String generateToken(Person person, String expirationTime){
-//
-//        long expirationSeconds = Long.parseLong(expirationTime);
-//        Date creationDate = new Date();
-//        Date expirationDate = new Date(creationDate.getTime() + expirationSeconds * 1000);
-//
-//        HashMap<String,Object> claims = new HashMap<>();
-//        claims.put("role", List.of(person.getRole()));
-//
-//        return Jwts.builder()
-//                .setClaims(claims)
-//                .setSubject(person.getUsername())
-//                .setIssuedAt(creationDate)
-//                .setExpiration(expirationDate)
-//                .signWith(Keys.hmacShaKeyFor(secret.getBytes()))
-//                .compact();
-//
-//    }
 }

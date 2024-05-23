@@ -59,7 +59,7 @@ public class BackupWordService {
         rows.add("VALUES");
         rows.add("");
 
-        List<Word> words = wordsService.getAllWords().toStream().toList();
+        List<Word> words = wordsService.getAllWordsFromDB().toStream().toList();
         List<Word> sortedWords = words.stream().sorted(Comparator.comparingInt(Word::getId)).toList();
 
         for (int i = 0; i < sortedWords.size(); i++) {

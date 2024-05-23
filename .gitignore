@@ -1,1 +1,4 @@
 .idea/
+
+
+WordsManager/src/main/resources/application-local.properties

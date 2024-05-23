@@ -165,7 +165,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="prefix"
-                android:text="(n)"
+                android:text="(r)"
                 android:textSize="14sp"
                 android:layout_gravity="center"/>
 

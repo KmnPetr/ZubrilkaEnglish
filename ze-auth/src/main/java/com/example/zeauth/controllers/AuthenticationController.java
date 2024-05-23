@@ -1,8 +1,8 @@
 package com.example.zeauth.controllers;
 
-import com.example.zeauth.controllers.validation.UnauthorizedException;
 import com.example.zeauth.models.Person;
 import com.example.zeauth.models.ProfileDTO;
+import com.example.zeauth.models.PropModel;
 import com.example.zeauth.security.JwtUtil;
 import com.example.zeauth.services.PersonService;
 import jakarta.validation.Valid;
@@ -12,12 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+
+import java.security.Principal;
 
 @Slf4j
 @RestController
@@ -34,6 +33,25 @@ public class AuthenticationController {
         this.personService = personService;
         this.jwtUtil = jwtUtil;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    /**
+     * выдаст новый accessToken
+     * запрос должен быть произведен при помощи refreshToken обычным способом аутентификации
+     */
+    @GetMapping("/getAccessToken")
+    public Mono<PropModel> getNewAccessToken(Mono<Principal> principal){
+        return principal
+                .flatMap(principal1 ->
+                        personService
+                                .findByUsername(principal1.getName())
+                                .map(person->
+                                        new PropModel(
+                                                "accessToken",
+                                                jwtUtil.generateAccessToken((Person) person)
+                                        )
+
+        ));
     }
 
     @PostMapping("/login")

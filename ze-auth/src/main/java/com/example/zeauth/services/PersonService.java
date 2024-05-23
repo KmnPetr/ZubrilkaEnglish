@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.sql.Timestamp;
+import java.util.regex.Pattern;
 
 @Service
 @Slf4j
@@ -71,15 +72,16 @@ public class PersonService implements ReactiveUserDetailsService {
                             if (passwordEncoder.matches(password,person.getPassword())){
                                 return Mono.just(convertToProfileDTO(person));
                             }else {
-                                return Mono.error(new UnauthorizedException("Invalid password."));
+                                return Mono.error(new UnauthorizedException("Invalid login or password."));
                             }
                         }
                 )
-                .switchIfEmpty(Mono.error(new UnauthorizedException("User not found.")));
+                .switchIfEmpty(Mono.error(new UnauthorizedException("Invalid login or password.")));
     }
     //конвертирует Person в ProfileDTO
     private ProfileDTO convertToProfileDTO(Person person){
         return new ProfileDTO(
+                (long)person.getId(),
                 person.getEmail(),
                 null,
                 person.getShort_name(),
@@ -87,5 +89,48 @@ public class PersonService implements ReactiveUserDetailsService {
                 jwtUtil.generateRefreshToken(person),
                 person.getCreated_at()
         );
+    }
+
+    /**
+     * метод обновляет информацию по некоторым полям пользователя например email, name или другое
+     * он принимает PropModel  json
+     * в поле fieldName - название поля для замены
+     * в поле newValue - новое желаемое значение
+     */
+    public Mono<ProfileDTO> changeFieldOfUsersProfile(long id, String fieldName, String newValue) {
+        if (newValue.isEmpty()) return Mono.error(new ValidationException("Field value is blank."));
+
+        switch (fieldName) {
+            case "name" -> {
+                return personRepository.updateUserName(id, newValue).map(this::convertToProfileDTO);
+            }
+            case "email" -> {
+                if (isEmailValid(newValue)){
+                    return personRepository.existsByEmail(newValue)
+                            .flatMap(result->{
+                                if (!result){
+                                    return personRepository.updateUserEmail(id, newValue).map(this::convertToProfileDTO);
+                                } else {
+                                    return Mono.error(new ValidationException("This Email is already used."));
+                                }
+                            });
+                } else {
+                    return Mono.error(new ValidationException("Email is invalid."));
+                }
+
+            }
+            default -> {
+                return Mono.error(new ValidationException("Fields name \"" + fieldName + "\" is invalid."));
+            }
+        }
+    }
+
+    /**
+     * проверит строку email на валидность
+     * @param email
+     * @return
+     */
+    private boolean isEmailValid(String email){
+        return Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$").matcher(email).matches();
     }
 }

@@ -5,7 +5,9 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebChromeClient
@@ -50,90 +52,65 @@ class WebViewFragment : Fragment() {
         setWebView()
 
         setListeners()
-        waitSerchValue()
+//        robot()
+    }
+
+
+    /**
+     * по положению одного view поймет открылась ли клавиатура
+     */
+    private fun keyBoardIsActive(): Boolean {
+        val position = binding.buttonDownload1.bottom
+        println("Позиция buttonDownload1 = $position")
+        if (position > 1200) return false
+        else return true
+    }
+
+    @SuppressLint("RestrictedApi")
+    private fun simulatePasteFromClipboard() {
+        println("// Отправляем событие KEYCODE_PASTE")
+
+        requireActivity().dispatchKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_PASTE))
+        GlobalScope.launch {
+            delay(100)
+            withContext(Dispatchers.Main){
+                requireActivity().dispatchKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_PASTE))
+            }
+        }
     }
 
     /**
-     * подождет появления текста в поле поиска на странице
+     * кликнет по экрану
      */
-    private fun waitSerchValue() {
+    private fun clickScreen(x:Int,y:Int) {// Заданные координаты, куда нужно сделать клик
+
+        println("Делаем клик: ($x, $y)")
+        val view = binding.webView
+
+        // Создаем и отправляем событие нажатия
+        view.dispatchTouchEvent(
+            MotionEvent.obtain(
+                System.currentTimeMillis(),
+                System.currentTimeMillis(),
+                MotionEvent.ACTION_DOWN,
+                x.toFloat(),
+                y.toFloat(),
+                0
+            )
+        )
         GlobalScope.launch {
-            val clipboardManager = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            val str: String? = clipboardManager.primaryClip?.getItemAt(0)?.text?.toString()
+            delay(100)
 
-            var stage = 0
-            while (stage<7){
-            delay(300)
-                withContext(Dispatchers.Main){
-                    when(stage){
-                        0 -> {
-                            //подождет появления текста в поле поиска на странице
-                            webView.evaluateJavascript("""
-                                (function() {
-                                    var inputElement = document.getElementById('mlsw7-main-search-input');
-                                    if (inputElement.value==='"""+str+"""') {
-                                        console.log('совпало значение');
-                                        console.log(inputElement.value);
-                                        return true;
-                                    } else {
-                                        console.log(inputElement.value);
-                                        console.log('Продолжаем ожидание.');
-                                        return false;
-                                    }
-                                })();
-                                """) { value ->
-                                println("Result: "+value)
-                                if (value=="true") stage = 1
-                            }
-                        }
-                        1 -> {
-                            //нажмем на кнопку поиска на странице
-                            webView.evaluateJavascript("""
-                                (function() {
-                                    var buttonElement = document.querySelector('.ui.basic.icon.primary.button.mlsw7-search-action');
-                                    if (buttonElement) {
-                                        buttonElement.removeAttribute('disabled');
-                                        buttonElement.click();
-                                        //window.scrollBy(0, 500);
-                                        return true;
-                                    } else {
-                                        console.log(inputElement.value);
-                                        return false;
-                                    }
-                                })();
-                                """) { value ->
-                                println("Result: "+value)
-                                if (value=="true") stage = 2
-                            }
-                        }
-                        in 2..10 -> {
-                            webView.evaluateJavascript("""
-                                (function() {
-                                    var mainPanel = document.querySelector('.ml-main-panel');
-
-                                    // Проверяем, найден ли элемент
-                                    if (mainPanel) {
-                                        // Получаем координаты элемента относительно видимой части окна просмотра
-                                        var rect = mainPanel.getBoundingClientRect();
-    
-                                        // Вычисляем необходимое количество пикселей для прокрутки
-                                        var scrollAmount = rect.top - 200; // Пролистываем так, чтобы оставалось 200 пикселей до верха
-    
-                                        // Прокручиваем страницу на полученное количество пикселей
-                                        window.scrollBy(0, scrollAmount);
-                                        return true;
-                                } else {
-                                    console.log('Элемент не найден');
-                                    return false;
-                                }
-                                })();
-                                """) { value ->
-                                println("Result: "+value)
-                                if (value=="true") stage++
-                            }
-                        }
-                    }
-                }
+            withContext(Dispatchers.Main){
+                // Создаем и отправляем событие отпускания
+                view.dispatchTouchEvent(MotionEvent.obtain(
+                    System.currentTimeMillis(),
+                    System.currentTimeMillis(),
+                    MotionEvent.ACTION_UP,
+                    x.toFloat(),
+                    y.toFloat(),
+                    0
+                ))
             }
         }
     }
@@ -187,7 +164,7 @@ class WebViewFragment : Fragment() {
         }
 
         // Открываем страницу по URL
-        webView.loadUrl("https://myefe.ru/anglijskaya-transkriptsiya.html")
+        webView.loadUrl( /*"https://zvukogram.com/speech/tts-english/"*/"https://myefe.ru/anglijskaya-transkriptsiya.html")
 
         // Обработка нажатий на элементы страницы
         webView.setOnTouchListener { v, event ->
@@ -247,4 +224,153 @@ class WebViewFragment : Fragment() {
         }
     }
 
+
 }
+
+//    private fun robot() {
+//        GlobalScope.launch {
+//            val clipboardManager = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+//            val str: String? = clipboardManager.primaryClip?.getItemAt(0)?.text?.toString()
+//
+//            var waitKeyBoard = 0
+//            var delayT = 0
+//            var isBlock = false
+//            var stage = 0
+//
+//            while (stage<39){
+//            delay(10)
+//                if (delayT!=0){
+//                    println("Ждем: $delayT мксек")
+//                    delay(delayT.toLong())
+//                    delayT = 0
+//                }
+//                if (!isBlock){
+//                    withContext(Dispatchers.Main){
+//                        when(stage){
+//                            0 -> {
+//                                isBlock = true
+//                                //подождет появления инпут поля
+//                                webView.evaluateJavascript("""
+//                                (function() {
+//                                    var inputElement = document.getElementById('mlsw7-main-search-input');
+//                                    if (inputElement) {
+//                                        console.log('Найден inputElement.');
+//                                        return true;
+//                                    } else {
+//                                        console.log('Продолжаем ожидание.');
+//                                        return false;
+//                                    }
+//                                })();
+//                                """) { value ->
+//                                    println("Result: "+value)
+//                                    if (value=="true"){
+//                                        stage=1
+//                                    }
+//                                    isBlock = false
+//                                }
+//
+//                            }
+//                            1 -> {
+//                                clickScreen(350,862)
+////                                delayT = 1000
+//                                stage=2
+//                                delayT = 200
+//                            }
+//                            2 -> {
+//                                simulatePasteFromClipboard()
+//                                stage=3
+//                                delayT = 200
+//                            }
+//                            3 -> {
+//                                isBlock = true
+//                                //подождет появления текста в поле поиска на странице
+//                                webView.evaluateJavascript("""
+//                                (function() {
+//                                    var inputElement = document.getElementById('mlsw7-main-search-input');
+//                                    if (inputElement.value==='"""+str+"""') {
+//                                        console.log('совпало значение');
+//                                        console.log(inputElement.value);
+//                                        return true;
+//                                    } else {
+//                                        console.log(inputElement.value);
+//                                        console.log('Продолжаем ожидание.');
+//                                        return false;
+//                                    }
+//                                })();
+//                                """) { value ->
+//                                    println("Result: "+value)
+//                                    if (value=="true"){
+//                                        stage = 4
+//                                    }else{
+//                                        if (keyBoardIsActive()){
+//                                            stage = 2
+//                                        } else {
+//                                            if (waitKeyBoard<5){ //даем 5 попыток ожидания чтобы клавиатура открылась
+//                                                stage = 2
+//                                                waitKeyBoard++
+//                                                delayT = 100
+//                                            } else {
+//                                                stage = 1
+//                                                waitKeyBoard = 0
+//                                            }
+//                                        }
+//                                    }
+//                                    isBlock = false
+//                                }
+//                            }
+//                            4 -> {
+//                                isBlock = true
+//                                //нажмем на кнопку поиска на странице
+//                                webView.evaluateJavascript("""
+//                                (function() {
+//                                    var buttonElement = document.querySelector('.ui.basic.icon.primary.button.mlsw7-search-action');
+//                                    if (buttonElement) {
+//                                        buttonElement.removeAttribute('disabled');
+//                                        buttonElement.click();
+//                                        console.log('Жмем кнопку поиска.');
+//                                        return true;
+//                                    } else {
+//                                        console.log('Не найдена кнопка поиска.');
+//                                        return false;
+//                                    }
+//                                })();
+//                                """) { value ->
+//                                    if (value=="true") stage = 5
+//                                    isBlock = false
+//                                }
+//                            }
+//                            in 5..40 -> {
+//                                webView.evaluateJavascript("""
+//                                (function() {
+//                                    var mainPanel = document.querySelector('.ml-main-panel');
+//
+//                                    // Проверяем, найден ли элемент
+//                                    if (mainPanel) {
+//                                        // Получаем координаты элемента относительно видимой части окна просмотра
+//                                        var rect = mainPanel.getBoundingClientRect();
+//
+//                                        // Вычисляем необходимое количество пикселей для прокрутки
+//                                        var scrollAmount = rect.top - 350; // Пролистываем так, чтобы оставалось 350 пикселей до верха
+//
+//                                        // Прокручиваем страницу на полученное количество пикселей
+//                                        window.scrollBy(0, scrollAmount);
+//                                    console.log('Выравниваем mainPanel.');
+//                                        return true;
+//                                } else {
+//                                    console.log('Элемент mainPanel не найден.');
+//                                    return false;
+//                                }
+//                                })();
+//                                """) { value ->
+//                                    if (value=="true") stage++
+//                                    delayT = 300
+//                                }
+//                            }
+//
+//                            else -> {}
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }

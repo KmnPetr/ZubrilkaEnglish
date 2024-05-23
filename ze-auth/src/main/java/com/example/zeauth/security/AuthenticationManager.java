@@ -29,11 +29,10 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
     public Mono<Authentication> authenticate(Authentication authentication) {
 
         String authToken = authentication.getCredentials().toString();
-        Map<String, String> claims = jwtUtil.getClaimsFromToken2(authToken);
+        Map<String, String> claims = jwtUtil.getClaimsFromToken(authToken);
         String email = claims.get("email");
 
-
-        if (email!=null && jwtUtil.validateToken2(authToken)){
+        if (email!=null && jwtUtil.validateToken(authToken)){
             List<String> role = List.of(claims.get("role"));
             List<SimpleGrantedAuthority> authorities = role.stream()
                     .map(SimpleGrantedAuthority::new)

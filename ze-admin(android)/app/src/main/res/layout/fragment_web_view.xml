@@ -16,7 +16,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
     </WebView>
+
+<!--    <View-->
+<!--        android:id="@+id/viewTargetRed"-->
+<!--        android:layout_width="10dp"-->
+<!--        android:layout_height="10dp"-->
+<!--        android:layout_marginTop="350dp"-->
+<!--        android:background="#E53935"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
 
     <Button
         android:id="@+id/buttonDownload2"

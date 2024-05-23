@@ -41,13 +41,15 @@ public class SecurityConfig {
                     auth.pathMatchers(
                             "/",
                             "/auth/login",
+                            "/auth/registration",
                             "/healthcheck",
-                            "/test-auth/guest",
-                            "/auth/registration"
+                            "/test-auth/guest"
                     ).permitAll();
 
                     auth.pathMatchers(
-                            "/test-auth/user"
+                            "/auth/getAccessToken",
+                            "/test-auth/user",
+                            "/profile/**"
                     ).hasAnyRole("USER","ADMIN");
 
                     auth.pathMatchers(

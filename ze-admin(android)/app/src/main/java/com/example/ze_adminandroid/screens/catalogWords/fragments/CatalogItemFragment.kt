@@ -26,6 +26,7 @@ class CatalogItemFragment(
     val positionInPager: Int,
     val mapFoldersCards: MutableLiveData<Map<String, List<Word>>>,
     val namesFolders: MutableLiveData<List<String>>,
+    val lastFolder: MutableLiveData<String?>,
     override val owner: CatalogWordsFragment
 ) : Fragment(), FragmentItem {
     private lateinit var binding: FragmentCatalogItemBinding
@@ -49,16 +50,38 @@ class CatalogItemFragment(
         cardAdapter = ListCardsAdapter(this)
 
         recyclerView = binding.recyclerView
-        recyclerView.adapter = folderAdapter
 
-        namesFolders.observe(viewLifecycleOwner){list->
-            val modifiedList = list.map { it+"   (слов: "+ (mapFoldersCards.value?.get(it)?.size ?: "null") + ")"}
-            folderAdapter.setList(modifiedList)
-        }
-
-        binding.rollBack.visibility = View.GONE
-        binding.rollBack.isEnabled = false
         binding.rollBack.setOnClickListener { rollBackRecycler() }
+
+        setListAdapter()
+    }
+
+    /**
+     * установит нужный список папок или слов в зависимости от lastFolder
+     */
+    override fun setListAdapter() {
+        if (lastFolder.value == null){
+            recyclerView.adapter = folderAdapter
+
+            namesFolders.observe(viewLifecycleOwner){list->
+                val modifiedList = list.map { it+"   (слов: "+ (mapFoldersCards.value?.get(it)?.size ?: "null") + ")"}
+                folderAdapter.setList(modifiedList)
+            }
+
+            binding.rollBack.visibility = View.GONE
+            binding.rollBack.isEnabled = false
+        } else {
+            recyclerView.adapter = cardAdapter
+
+            binding.rollBack.visibility = View.VISIBLE
+            binding.rollBack.isEnabled = true
+
+            viewModel_CW.isRecyclerChanged.value?.set(positionInPager,true)
+
+            mapFoldersCards.observe(viewLifecycleOwner){
+                it[lastFolder.value]?.let { it1 -> cardAdapter.setList(it1) }
+            }
+        }
     }
 
     /**
@@ -75,6 +98,8 @@ class CatalogItemFragment(
         mapFoldersCards.observe(viewLifecycleOwner){
             it[namesFolders.value?.get(positionFolder)]?.let { it1 -> cardAdapter.setList(it1) }
         }
+
+        lastFolder.value = namesFolders.value?.get(positionFolder)
     }
 
     /**
@@ -91,9 +116,16 @@ class CatalogItemFragment(
     override fun rollBackRecycler() {
         viewModel_CW.isRecyclerChanged.value?.set(positionInPager,false)
         recyclerView.adapter = folderAdapter
+        
+        namesFolders.observe(viewLifecycleOwner){list->
+            val modifiedList = list.map { it+"   (слов: "+ (mapFoldersCards.value?.get(it)?.size ?: "null") + ")"}
+            folderAdapter.setList(modifiedList)
+        }
 
         binding.rollBack.visibility = View.GONE
         binding.rollBack.isEnabled = false
+
+        lastFolder.value = null
     }
 
     /**
@@ -118,5 +150,6 @@ class CatalogItemFragment(
             EventBus.getDefault().post(VoiceEvent(VcEvEnum.DELETE_FROM_DATABASE,Voice(word.link_voice,null)))
         }
     }
+
 
 }

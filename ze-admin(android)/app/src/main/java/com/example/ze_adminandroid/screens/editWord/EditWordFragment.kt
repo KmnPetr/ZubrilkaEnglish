@@ -169,9 +169,13 @@ class EditWordFragment : Fragment() {
      */
     private fun setLinkVoice() {
         val str:String = binding.foreignWord.text.toString()
+        val str2:String = str.replace(" ", "_")
+
         val prefix:String = binding.prefix.text.toString()
 
-        binding.linkVoice.setText(str+prefix+".mp3")
+
+
+        binding.linkVoice.setText(str2+prefix+".mp3")
     }
 
     /**
@@ -211,7 +215,8 @@ class EditWordFragment : Fragment() {
      * откроет страницу в браузере
      */
     private fun openBrowser() {
-        val url = "https://myefe.ru/anglijskaya-transkriptsiya.html"
+//        val url = "https://myefe.ru/anglijskaya-transkriptsiya.html"
+        val url = "https://zvukogram.com/speech/tts-english/"
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(intent)
 

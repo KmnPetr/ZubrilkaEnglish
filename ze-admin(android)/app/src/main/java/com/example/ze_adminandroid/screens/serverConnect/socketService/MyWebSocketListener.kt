@@ -10,6 +10,7 @@ import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import okio.ByteString
 import okio.ByteString.Companion.toByteString
+import org.apache.lucene.analysis.CharArraySet
 
 class MyWebSocketListener : WebSocketListener() {
     val sendDataManager = SendDataManager.instanse
@@ -24,7 +25,7 @@ class MyWebSocketListener : WebSocketListener() {
     override fun onMessage(webSocket: WebSocket, text: String) {
         super.onMessage(webSocket, text)
 
-        val mp = MessageProtocol(text.toByteArray())
+        val mp = MessageProtocol(text.toByteArray(Charsets.UTF_8))
 
         sendDataManager.route(mp)
 
@@ -32,7 +33,10 @@ class MyWebSocketListener : WebSocketListener() {
 
     override fun onMessage(webSocket: WebSocket, bytes: ByteString) {
         super.onMessage(webSocket, bytes)
-        println("Receiving: " + bytes.hex())
+
+        val mp = MessageProtocol(bytes.toByteArray())
+
+        sendDataManager.route(mp)
     }
     override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
         super.onClosing(webSocket, code, reason)

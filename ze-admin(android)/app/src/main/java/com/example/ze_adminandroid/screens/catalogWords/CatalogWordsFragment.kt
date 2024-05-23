@@ -1,5 +1,10 @@
 package com.example.ze_adminandroid.screens.catalogWords
 
+import android.animation.ArgbEvaluator
+import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
+import android.content.res.ColorStateList
+import android.graphics.Color
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.text.Editable
@@ -9,6 +14,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.ze_adminandroid.R
@@ -17,9 +24,15 @@ import com.example.ze_adminandroid.models.Word
 import com.example.ze_adminandroid.screens.catalogWords.fragments.CatalogItemFragment
 import com.example.ze_adminandroid.screens.catalogWords.fragments.FragmentItem
 import com.example.ze_adminandroid.screens.catalogWords.fragments.SearchWordFragment
+import com.example.ze_adminandroid.utils.MYEFE_SWITCH
 import com.example.ze_adminandroid.utils.SearchObject
 import com.example.ze_adminandroid.utils.myBundle
 import com.google.android.material.tabs.TabLayout
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class CatalogWordsFragment : Fragment() {
 
@@ -50,6 +63,7 @@ class CatalogWordsFragment : Fragment() {
         SearchObject.instance //требует заранее прогрузки для скачивания данных с БД
 
 
+        buttonListeners()
         setListFragment()
         tabLayoutListener()
         viewPager2Listener()
@@ -59,11 +73,38 @@ class CatalogWordsFragment : Fragment() {
     }
 
     /**
+     * слушатели кнопок
+     */
+    private fun buttonListeners() {
+        binding.createNewWord.setOnClickListener {
+            animationClick(it)
+            MYEFE_SWITCH = false
+            val word = Word(0,null,null,null,null,null,"",null,null,0,null,false,false)
+            myBundle.put("editedWord",word)
+            findNavController().navigate(R.id.action_catalogWordsFragment_to_editWordFragment)
+        }
+    }
+
+    /**
+     * меняет временно фон при нажатии
+     */
+    private fun animationClick(view: View?) {
+        view?.let {
+            it.backgroundTintList = ContextCompat.getColorStateList(it.context,R.color.myGray)
+            GlobalScope.launch {
+                delay(100)
+                withContext(Dispatchers.Main){
+                    it.backgroundTintList = ContextCompat.getColorStateList(it.context,android.R.color.white)
+                }
+            }
+        }
+    }
+
+    /**
      * если в БД имелось незавершеное недавно слово
      * перенаправит на фрагмент для завершения его редактирования
      */
     private fun checkNotReadyWord() {
-//        println("FFFFFFFFFFFFF: checkNotReadyWord()")
         viewModel.notReadyWord.observe(viewLifecycleOwner){
             if (it!=null){
                 myBundle.put("editedWord",it)
@@ -83,12 +124,14 @@ class CatalogWordsFragment : Fragment() {
                 0,
                 viewModel.mapWordsByTopic,
                 viewModel.namesTopics,
+                viewModel.lastWordFolder,
                 this),
             CatalogItemFragment(//фрагмент для показа слов измененных или новых созданных находящихся в БД
                 viewModel,
                 1,
                 viewModel.mapEditedWords,
                 viewModel.namesEditedTopics,
+                viewModel.lastEditedWordFolder,
                 this)
         )
         adapter.setList(list)

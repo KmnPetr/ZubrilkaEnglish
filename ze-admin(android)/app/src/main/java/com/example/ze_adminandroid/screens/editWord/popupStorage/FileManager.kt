@@ -57,12 +57,6 @@ class FileManager private constructor(){
      * попросит разрешение на доступ к хранилищу
      */
     fun getPermission(activity: FragmentActivity) {
-//        val permissionRead = Manifest.permission.READ_EXTERNAL_STORAGE
-//        val requestCode = 1
-//
-//        if (ContextCompat.checkSelfPermission(activity, permissionRead) != PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.requestPermissions(activity, arrayOf(permissionRead), requestCode)
-//        }
 
         val permissionWrite = Manifest.permission.WRITE_EXTERNAL_STORAGE
         val requestCode = 1

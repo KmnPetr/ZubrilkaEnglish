@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.ze_adminandroid.databinding.FragmentServerConnectBinding
 import com.example.ze_adminandroid.events.SctEvEnum
 import com.example.ze_adminandroid.events.SocketEvent
+import com.example.ze_adminandroid.repositories.VoiceRepository
 import com.example.ze_adminandroid.screens.serverConnect.socketService.NetworkHolder
 import com.example.ze_adminandroid.screens.serverConnect.socketService.SendDataManager
 import com.example.ze_adminandroid.services.RoomService
@@ -114,6 +115,14 @@ class ServerConnectFragment : Fragment() {
         //кнопка начала отсылки words
         binding.sendWordsButton.setOnClickListener {
             sendDataManager.sendNextEditedWord()
+        }
+        //удалит voice из БД
+        binding.buttonDelete.setOnClickListener {
+            val filename = binding.nameFileForDelete.text.toString()
+            binding.nameFileForDelete.setText("")
+            GlobalScope.launch {
+                VoiceRepository.instance.deleteVoice(filename)
+            }
         }
     }
 

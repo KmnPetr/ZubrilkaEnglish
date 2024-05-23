@@ -46,6 +46,7 @@ public class SavingDatabaseApplication {
         //пересчитает все слова
 //        countAllWords(context);
 
+
         //забэкапим новое состояние словаря
         thisClass.backupWordService.saveWords();
     }

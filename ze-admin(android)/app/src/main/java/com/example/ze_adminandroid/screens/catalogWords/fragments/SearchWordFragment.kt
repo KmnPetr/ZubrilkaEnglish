@@ -44,6 +44,9 @@ class SearchWordFragment(
         recyclerView = binding.recyclerView
         recyclerView.adapter = adapter
 
+        setListAdapter()
+    }
+    override fun setListAdapter() {
         viewModel_CC.listSearchWords.observe(viewLifecycleOwner){
             adapter.setList(it)
         }
@@ -110,5 +113,6 @@ class SearchWordFragment(
     override fun onClickButtonDelete(word: Word) {
         EventBus.getDefault().post(WordEvent(WrEvEnum.DELETE_FROM_DATABASE,word))
     }
+
 
 }
