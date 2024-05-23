@@ -86,41 +86,61 @@
             android:orientation="horizontal"
             android:layout_margin="5dp">
 
-            <ImageView
+            <com.example.zubrilkaenglish.utils.ui.CustImageButton
                 android:id="@+id/optionsButton"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_margin="5dp"
-                app:srcCompat="@drawable/three_dots" />
+                android:layout_margin="3dp"
+                android:padding="0dp"
+                app:backgroundColor="#99FFFFFF"
+                app:cornerRadius="10dp"
+                app:borderWidth="1dp"
+                app:borderColor="@color/myGray"
+                app:drawable="@drawable/three_dots"
+                app:imageSize="40dp" />
+
             <!--распорочка-->
             <View
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_weight="1"/>
-            <ImageButton
+
+            <com.example.zubrilkaenglish.utils.ui.CustImageButton
                 android:id="@+id/lookButton"
                 android:layout_width="60dp"
                 android:layout_height="50dp"
-                android:layout_margin="5dp"
-                android:background="#00FFFFFF"
-                android:scaleType="centerCrop"
-                android:src="@drawable/eye_small"/>
-            <ImageButton
+                android:layout_margin="3dp"
+                android:padding="0dp"
+                app:backgroundColor="#99FFFFFF"
+                app:cornerRadius="10dp"
+                app:borderWidth="1dp"
+                app:borderColor="@color/myGray"
+                app:drawable="@drawable/eye_small"
+                app:imageSize="45dp" />
+            <com.example.zubrilkaenglish.utils.ui.CustImageButton
                 android:id="@+id/noButton"
-                android:layout_width="50dp"
+                android:layout_width="60dp"
                 android:layout_height="50dp"
-                android:layout_margin="5dp"
-                android:background="#00FFFFFF"
-                android:scaleType="centerCrop"
-                android:src="@drawable/red_cross_button_small"/>
-            <ImageButton
+                android:layout_margin="3dp"
+                android:padding="0dp"
+                app:backgroundColor="#99FFFFFF"
+                app:cornerRadius="10dp"
+                app:borderWidth="1dp"
+                app:borderColor="@color/myGray"
+                app:drawable="@drawable/red_cross_button_small"
+                app:imageSize="40dp" />
+            <com.example.zubrilkaenglish.utils.ui.CustImageButton
                 android:id="@+id/yesButton"
-                android:layout_width="50dp"
+                android:layout_width="60dp"
                 android:layout_height="50dp"
-                android:layout_margin="5dp"
-                android:background="#00FFFFFF"
-                android:scaleType="centerCrop"
-                android:src="@drawable/check_mark3_small"/>
+                android:layout_margin="3dp"
+                android:padding="0dp"
+                app:backgroundColor="#99FFFFFF"
+                app:cornerRadius="10dp"
+                app:borderWidth="1dp"
+                app:borderColor="@color/myGray"
+                app:drawable="@drawable/check_mark3_small"
+                app:imageSize="40dp" />
         </LinearLayout>
 
         </LinearLayout>

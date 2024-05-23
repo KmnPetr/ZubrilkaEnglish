@@ -29,23 +29,23 @@ class ViewHolderFactory {
             if (wordCard.cardHasChanged){
                 binding.translation.visibility=View.VISIBLE
                 binding.yesButton.isEnabled=false
-                binding.yesButton.setColorFilter(ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) }))
+//                binding.yesButton.setColorFilter(ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) }))
                 binding.noButton.isEnabled=false
-                binding.noButton.setColorFilter(ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) }))
+//                binding.noButton.setColorFilter(ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) }))
                 binding.lookButton.isEnabled=false
-                binding.lookButton.setColorFilter(ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) }))
+//                binding.lookButton.setColorFilter(ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) }))
             }else{
                 binding.translation.visibility=View.INVISIBLE
                 binding.yesButton.isEnabled=true
-                binding.yesButton.colorFilter = null
+//                binding.yesButton.colorFilter = null
                 binding.noButton.isEnabled=true
-                binding.noButton.colorFilter = null
+//                binding.noButton.colorFilter = null
                 binding.lookButton.isEnabled=true
-                binding.lookButton.colorFilter = null
+//                binding.lookButton.colorFilter = null
                 if (wordCard.lookButtonPressed/*проверка нажатости кнопки look*/){
                     binding.translation.visibility=View.VISIBLE
                     binding.lookButton.isEnabled=false
-                    binding.lookButton.setColorFilter(ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) }))
+//                    binding.lookButton.setColorFilter(ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) }))
                 }
 
                 println("ОТРАБОТАЛ МЕТОД BIND КАРТОЧКИ: "+ wordCard.word.foreignWord)

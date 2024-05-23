@@ -15,5 +15,8 @@
             <enum name="bold_italic" value="3"/>
         </attr>
         <attr name="fontFamily" format="string" />
+        <attr name="drawable" format="reference"/>
+        <attr name="imageSize" format="dimension"/>
+        <attr name="indentationBetweenEl" format="dimension"/>
     </declare-styleable>
 </resources>

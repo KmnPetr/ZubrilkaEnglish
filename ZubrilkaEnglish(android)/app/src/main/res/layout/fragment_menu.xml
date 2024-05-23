@@ -15,46 +15,101 @@
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="parent" />
 
-    <Button
+    <com.example.zubrilkaenglish.utils.ui.CustImgTxtButton
         android:id="@+id/buttonGo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="#4D4527A0"
-        android:drawableLeft="@drawable/book_with_light_bulb_small"
-        android:gravity="center_vertical|start"
-        android:text="Учить"
-        android:textSize="24sp"
-        android:textStyle="italic"
+        android:layout_marginTop="32dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        app:backgroundColor="#80510ACC"
+        app:cornerRadius="15dp"
+        app:borderWidth="1dp"
+        app:borderColor="#33691E"
+        app:textColor="@color/white"
+        app:textSize="24sp"
+        app:text="Учить"
+        app:drawable = "@drawable/book_with_light_bulb_small"
+        app:imageSize="50dp"
+        app:textStyle="italic"
+        app:fontFamily="sans-serif"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.40" />
+        app:layout_constraintVertical_bias="0.40"/>
 
-
-    <Button
+    <com.example.zubrilkaenglish.utils.ui.CustImgTxtButton
         android:id="@+id/catalogCards"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:backgroundTint="#4DB55757"
-        android:drawableLeft="@drawable/stack_of_books_small"
-        android:text="Каталог Слов"
-        android:textStyle="italic"
-        android:textSize="20dp"
+        android:layout_marginTop="32dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        app:backgroundColor="#80B51717"
+        app:borderColor="#33691E"
+        app:borderWidth="1dp"
+        app:cornerRadius="15dp"
+        app:drawable="@drawable/stack_of_books_small"
+        app:fontFamily="sans-serif"
+        app:imageSize="50dp"
+        app:text="Каталог Слов"
+        app:textColor="@color/white"
+        app:textSize="20sp"
+        app:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonGo" />
+<!--    <Button-->
+<!--        android:id="@+id/buttonGo"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:backgroundTint="#4D4527A0"-->
+<!--        android:drawableLeft="@drawable/book_with_light_bulb_small"-->
+<!--        android:gravity="center_vertical|start"-->
+<!--        android:text="Учить"-->
+<!--        android:textSize="24sp"-->
+<!--        android:textStyle="italic"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.40" />-->
 
-    <Button
+
+<!--    <Button-->
+<!--        android:id="@+id/catalogCards"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="24dp"-->
+<!--        android:backgroundTint="#4DB55757"-->
+<!--        android:drawableLeft="@drawable/stack_of_books_small"-->
+<!--        android:text="Каталог Слов"-->
+<!--        android:textStyle="italic"-->
+<!--        android:textSize="20dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/buttonGo" />-->
+
+    <com.example.zubrilkaenglish.utils.ui.CustButton
         android:id="@+id/buttonPayFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Pay Fragment"
+        android:padding="16dp"
+        app:backgroundColor="#80510ACC"
+        app:cornerRadius="7dp"
+        app:borderWidth="1dp"
+        app:borderColor="#33691E"
+        app:textColor="@color/white"
+        app:textSize="14sp"
+        app:text="Pay Fragment"
+        app:textStyle="bold_italic"
+        app:fontFamily="sans-serif"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/catalogCards" />
+        app:layout_constraintTop_toBottomOf="@+id/catalogCards"/>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

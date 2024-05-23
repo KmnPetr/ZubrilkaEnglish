@@ -16,22 +16,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
-    <androidx.cardview.widget.CardView
+    <com.example.zubrilkaenglish.utils.ui.CustImageButton
         android:id="@+id/rollBack"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="40dp"
         android:layout_marginBottom="40dp"
-        app:cardCornerRadius="10dp"
         android:padding="0dp"
+        app:backgroundColor="#99FFFFFF"
+        app:cornerRadius="10dp"
+        app:borderWidth="1dp"
+        app:borderColor="#33691E"
+        app:drawable="@android:drawable/ic_menu_revert"
+        app:imageSize="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#80FFFFFF"
-            android:src="@android:drawable/ic_menu_revert"/>
-    </androidx.cardview.widget.CardView>
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

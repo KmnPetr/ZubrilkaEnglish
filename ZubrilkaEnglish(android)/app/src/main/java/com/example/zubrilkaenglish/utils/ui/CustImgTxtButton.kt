@@ -3,7 +3,10 @@ package com.example.zubrilkaenglish.utils.ui
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -14,9 +17,10 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import com.example.zubrilkaenglish.R
+import kotlin.math.max
 import kotlin.math.min
 
-open class CustButton @JvmOverloads constructor(
+class CustImgTxtButton @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
@@ -32,7 +36,7 @@ open class CustButton @JvmOverloads constructor(
     private var text: String
     private var textStyle: Int
     private var fontFamily: String?
-    // Переменные для измерения текста
+    // Переменная для измерения текста
     private val textBounds = Rect()
 
     private var reduction: Float = 1f
@@ -40,6 +44,11 @@ open class CustButton @JvmOverloads constructor(
 
     private var customClickListener: OnClickListener? = null
     private var animator: ValueAnimator? = null
+
+    var drawable: Int = R.drawable.book_with_light_bulb_small
+    private var bitmap: Bitmap? = null
+    var imageSize: Int = 80 //предполагается что картинка квадратная
+    var indentationBetweenEl: Int = 20
 
     private var paintBorder:Paint
     private var paintBackground:Paint
@@ -60,10 +69,14 @@ open class CustButton @JvmOverloads constructor(
                     text = getString(R.styleable.CustomView_text) ?: "BUTTON"
                     textStyle = getInt(R.styleable.CustomView_textStyle, Typeface.NORMAL)
                     fontFamily = getString(R.styleable.CustomView_fontFamily)
+                    drawable = getResourceId(R.styleable.CustomView_drawable, R.drawable.book_with_light_bulb_small)
+                    imageSize = getDimensionPixelSize(R.styleable.CustomView_imageSize, 80)
+                    indentationBetweenEl = getDimensionPixelSize(R.styleable.CustomView_indentationBetweenEl, 20)
 
                 } finally {
                     recycle()
                 }
+
                 // Создаем объект Paint для настройки стиля рисования
                 paintBorder = Paint().apply {
                     color = borderColor // Устанавливаем цвет
@@ -78,7 +91,7 @@ open class CustButton @JvmOverloads constructor(
                 }
                 paintText = Paint().apply {
                     color = textColor
-                    textSize = this@CustButton.textSize
+                    textSize = this@CustImgTxtButton.textSize
                     textAlign = Paint.Align.CENTER
                     isAntiAlias = true
                     typeface = Typeface.create(fontFamily, textStyle)
@@ -90,6 +103,49 @@ open class CustButton @JvmOverloads constructor(
         super.setOnClickListener {
             startAnimation()
         }
+
+        if (drawable!=0) bitmap = BitmapFactory.decodeResource(resources, drawable)
+    }
+
+    @SuppressLint("DrawAllocation")
+    override fun onDraw(canvas: Canvas?) {
+        super.onDraw(canvas)
+        if (canvas == null) return
+
+        //значения зазора между фигурой и краем канваса
+        val widthGap = (width-(width-borderWidth)*reduction)/2
+        val heightGap = (height-(height-borderWidth)*reduction)/2
+
+        drawBackground(canvas,widthGap,heightGap)
+        drawBorder(canvas,widthGap,heightGap)
+
+        //вычислим общую длину двух элементов картинки и текста
+        val imageSizeEnd:Int = (imageSize*reduction).toInt()
+        val textSiseEnd:Int = (textBounds.width()*reduction).toInt()
+        val fullSize = imageSizeEnd+indentationBetweenEl+textSiseEnd
+        val imageOffset = fullSize/2 - imageSizeEnd/2
+        val textOffset = fullSize/2 - textSiseEnd/2
+
+        drawImage(canvas,imageOffset,imageSizeEnd)
+        drawText(canvas,textOffset)
+
+    }
+
+    private fun drawImage(canvas: Canvas, imageOffset: Int, imageSizeEnd: Int) {
+        val destRect = Rect(
+            (width/2-imageSizeEnd/2)-imageOffset,
+            (height/2-imageSizeEnd/2),
+            (width/2-imageSizeEnd/2)+imageSizeEnd-imageOffset,
+            (height/2-imageSizeEnd/2)+imageSizeEnd)
+        if (bitmap!=null) canvas.drawBitmap(bitmap!!, null, destRect, null)
+    }
+    private fun drawText(canvas: Canvas, textOffset: Int) {
+        paintText.textSize = this@CustImgTxtButton.textSize*reduction
+        // Compute the position to draw the text
+        val xPos = width / 2f+textOffset
+        val yPos = (height / 2f - (paintText.descent() + paintText.ascent()) / 2)
+
+        canvas.drawText(text, xPos, yPos, paintText)
     }
 
     override fun setOnClickListener(listener: OnClickListener?) {
@@ -109,7 +165,7 @@ open class CustButton @JvmOverloads constructor(
                 addListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
                         super.onAnimationEnd(animation)
-                        customClickListener?.onClick(this@CustButton)
+                        customClickListener?.onClick(this@CustImgTxtButton)
                     }
                 })
                 start()
@@ -118,49 +174,30 @@ open class CustButton @JvmOverloads constructor(
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val widthMode = MeasureSpec.getMode(widthMeasureSpec)
-        val heightMode = MeasureSpec.getMode(heightMeasureSpec)
+        val widthMode: Int = MeasureSpec.getMode(widthMeasureSpec)
+        val heightMode: Int = MeasureSpec.getMode(heightMeasureSpec)
 
-        val desiredWidth = textBounds.width() + paddingLeft + paddingRight
-        val desiredHeight = textBounds.height() + paddingTop + paddingBottom
 
-        val measuredWidth = when (widthMode) {
-            MeasureSpec.EXACTLY -> MeasureSpec.getSize(widthMeasureSpec)
-            MeasureSpec.AT_MOST -> min(desiredWidth, MeasureSpec.getSize(widthMeasureSpec))
+        val desiredWidth: Int = textBounds.width() + paddingLeft + paddingRight + imageSize
+        val desiredImageHeight: Int = imageSize + paddingTop + paddingBottom
+        val desiredTextHeight: Int = textBounds.height() + paddingTop + paddingBottom
+
+        val measuredWidth: Int = when (widthMode) {
+            MeasureSpec.EXACTLY -> MeasureSpec.getSize(widthMeasureSpec)//точное задание размера из xml
+            MeasureSpec.AT_MOST -> min(desiredWidth, MeasureSpec.getSize(widthMeasureSpec))//при wrap_content
             else -> desiredWidth
         }
 
-        val measuredHeight = when (heightMode) {
-            MeasureSpec.EXACTLY -> MeasureSpec.getSize(heightMeasureSpec)
-            MeasureSpec.AT_MOST -> min(desiredHeight, MeasureSpec.getSize(heightMeasureSpec))
-            else -> desiredHeight
+        val measuredHeight: Int = when (heightMode) {
+            MeasureSpec.EXACTLY -> MeasureSpec.getSize(heightMeasureSpec)//точное задание размера из xml
+            MeasureSpec.AT_MOST -> min(max(desiredImageHeight,desiredTextHeight), MeasureSpec.getSize(heightMeasureSpec))//при wrap_content
+            else -> max(desiredImageHeight,desiredTextHeight)
         }
 
         setMeasuredDimension(measuredWidth, measuredHeight)
     }
-    override fun onDraw(canvas: Canvas?) {
-        super.onDraw(canvas)
-        if (canvas == null) return
-
-        //значения зазора между фигурой и краем канваса
-        val widthGap = (width-(width-borderWidth)*reduction)/2
-        val heightGap = (height-(height-borderWidth)*reduction)/2
-
-        drawBackground(canvas,widthGap,heightGap)
-        drawBorder(canvas,widthGap,heightGap)
-        drawText(canvas)
-    }
-    private fun drawText(canvas: Canvas) {
-
-        // Compute the position to draw the text
-        val xPos = width / 2f
-        val yPos = (height / 2f - (paintText.descent() + paintText.ascent()) / 2)
-
-        canvas.drawText(text, xPos, yPos, paintText)
-    }
 
     private fun drawBackground(canvas: Canvas, widthGap: Float, heightGap: Float) {
-
         // Задаем размеры и координаты прямоугольника
         val left = 0f+widthGap
         val top = 0f+heightGap
@@ -174,7 +211,6 @@ open class CustButton @JvmOverloads constructor(
     }
 
     private fun drawBorder(canvas: Canvas, widthGap: Float, heightGap: Float) {
-
         // Задаем размеры и координаты прямоугольника
         val left = 0f+widthGap
         val top = 0f+heightGap
