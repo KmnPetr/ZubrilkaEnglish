@@ -38,7 +38,7 @@ services:
         condition: service_healthy
 
 volumes:
-  ze_db:
+  ze_db_postgres:
 
 networks:
   ze_network:
