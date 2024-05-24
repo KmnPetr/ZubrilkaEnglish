@@ -74,8 +74,8 @@ jobs:
 
     - name: Copy file to remote server
       env:
-        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-        REMOTE_USER: ${{ secrets.REMOTE_USER }}
-        REMOTE_PASSWORD: ${{ secrets.REMOTE_PASSWORD }}
+        REMOTE_HOST: ${{ secrets.SERVER_IP }}
+        REMOTE_USER: ${{ secrets.SERVER_USERNAME }}
+        REMOTE_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
       run: |
-        sshpass -p "$REMOTE_PASSWORD" scp -o StrictHostKeyChecking=no path/to/local/file $REMOTE_USER@$REMOTE_HOST:/path/to/remote/directory/
+        sshpass -p "$SERVER_PASSWORD" scp -o StrictHostKeyChecking=no ze-app/docker-compose.yaml $SERVER_USERNAME@$SERVER_IP:/ze/
