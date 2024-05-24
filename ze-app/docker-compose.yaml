@@ -20,22 +20,22 @@ services:
       timeout: 5s
       retries: 10
 
-#  ze_app:
-#    container_name: ze_app
-#    image: kmnpetr/ze-app:1.1.9
-#    restart: always
-#    ports:
-#      - "28700:28700"
-#    environment:
-#      spring.r2dbc.url: "r2dbc:postgresql://ze_db_postgres:5432/postgres"
-#      spring.r2dbc.password: "testPassword"
-#      spring.r2dbc.username: "postgres"
-#      jwt_secret: "testSecret"
-#    networks:
-#      - ze_network
-#    depends_on:
-#      ze_db_postgres:
-#        condition: service_healthy
+  ze_app:
+    container_name: ze_app
+    image: kmnpetr/ze-app:1.1.9
+    restart: always
+    ports:
+      - "28700:28700"
+    environment:
+      spring.r2dbc.url: "r2dbc:postgresql://ze_db_postgres:5432/postgres"
+      spring.r2dbc.password: "testPassword"
+      spring.r2dbc.username: "postgres"
+      jwt_secret: "testSecret"
+    networks:
+      - ze_network
+    depends_on:
+      ze_db_postgres:
+        condition: service_healthy
 
 volumes:
   ze_db_postgres:
