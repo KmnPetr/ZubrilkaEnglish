@@ -70,7 +70,16 @@ jobs:
 #        ImageName="ze-app:${TAG_IMAGE}"
 #        docker build -t kmnpetr/$ImageName ./ze-app
 #        docker push kmnpetr/$ImageName
-        
+
+
+    - name: Make Directory "ze"
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SERVER_IP }}
+        username: ${{ secrets.SERVER_USERNAME }}
+        password: ${{ secrets.SERVER_PASSWORD }}
+        script: |
+          mkdir -p /ze/
 
     - name: Copy file to remote server
       env:
