@@ -4,7 +4,7 @@ services:
   ze_db_postgres:
     image: postgres:14.3-alpine
     restart: always
-    container_name: db
+    container_name: ze_db_postgres
     ports:
       - "5432:5432"
     environment:
@@ -34,7 +34,7 @@ services:
     networks:
       - ze_network
     depends_on:
-      db_postgres:
+      ze_db_postgres:
         condition: service_healthy
 
 volumes:
