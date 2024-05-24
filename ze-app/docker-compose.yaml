@@ -27,7 +27,7 @@ services:
     ports:
       - "28700:28700"
     environment:
-      spring.r2dbc.url: "r2dbc:postgresql://db_postgres:5432/postgres"
+      spring.r2dbc.url: "r2dbc:postgresql://ze_db_postgres:5432/postgres"
       spring.r2dbc.password: "testPassword"
       spring.r2dbc.username: "postgres"
       jwt_secret: "simpleSecret"
