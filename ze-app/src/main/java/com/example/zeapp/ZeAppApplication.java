@@ -13,15 +13,6 @@ public class ZeAppApplication {
 
 
 	public static void main(String[] args) {
-
-
-		System.out.println("Environment Variables:");
-		for (String envName : System.getenv().keySet()) {
-			System.out.println(envName + ": " + System.getenv(envName));
-		}
-
-
-
 			SpringApplication.run(ZeAppApplication.class, args);
 		}
 }
