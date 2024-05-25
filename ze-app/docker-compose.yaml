@@ -8,8 +8,8 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_PASSWORD=testPassword
-      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${BD_PASSWORD}
+      - POSTGRES_USER=${BD_USER}
     volumes:
       - ze-db-postgres:/var/lib/postgresql/data/
     networks:
@@ -28,9 +28,9 @@ services:
       - "28700:28700"
     environment:
       spring.r2dbc.url: "r2dbc:postgresql://ze-db-postgres:5432/postgres"
-      spring.r2dbc.password: "testPassword"
-      spring.r2dbc.username: "postgres"
-      jwt_secret: "testSecret"
+      spring.r2dbc.password: ${BD_PASSWORD}
+      spring.r2dbc.username: ${BD_USER}
+      jwt_secret: ${JWT_SECRET}
     networks:
       - ze_network
     depends_on:

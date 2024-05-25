@@ -8,6 +8,10 @@ on:
     branches:
       - deploy-release-back
 
+env:
+  BD_PASSWORD: ${{secrets.BD_PASSWORD}}
+  BD_USER: ${{secrets.BD_USER}}
+  JWT_SECRET: ${{secrets.JWT_SECRET}}
 
 jobs:
   build:
@@ -105,7 +109,6 @@ jobs:
         host: ${{ secrets.SERVER_IP }}
         username: ${{ secrets.SERVER_USERNAME }}
         password: ${{ secrets.SERVER_PASSWORD }}
-        envs: TAG_IMAGE
+        envs: TAG_IMAG, BD_PASSWORD, BD_USER, JWT_SECRET
         script: |
-          echo "TAG_IMAGE: ${TAG_IMAGE}"
           docker compose -f /ze/docker-compose.yaml up -d
