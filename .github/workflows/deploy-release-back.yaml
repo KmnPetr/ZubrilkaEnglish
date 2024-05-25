@@ -30,6 +30,10 @@ jobs:
 
     - name: Сhanging the application version
       run: |
+        #заранее запулим это нужно если пайплайн повторно запускается на одной машине
+        git pull origin deploy-release-back
+        
+        #изменим версию приложения
         File="./ze-app/pom.xml"
 
         sudo apt-get install -y xmlstarlet
@@ -43,13 +47,15 @@ jobs:
 
         xmlstarlet ed -L -N p=http://maven.apache.org/POM/4.0.0 -u "/p:project/p:version" -v $NewVersion $File
 
+        #запомним версию она пригодится позже
+        echo "TAG_IMAGE=${NewVersion}" >> $GITHUB_ENV
+        
+        #закомитим запулим
         git add .
         git commit -m "[skip ci] Workwlow modification: App-version = $NewVersion"
         #для работы коммита требуется настроить name и email для гита(смотреть шаг Setup git config)
         #а также дать разрешение на запись через веб страницу github (репозиторий>>Settings>>Actions>>General>>Workflow permissions)
         git push origin deploy-release-back
-
-        echo "TAG_IMAGE=${NewVersion}" >> $GITHUB_ENV
 
 
     - name: Set up Java
