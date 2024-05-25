@@ -43,7 +43,7 @@ jobs:
         git commit -m "[skip ci] Workwlow modification: App-version = $NewVersion"
         #для работы коммита требуется настроить name и email для гита(смотреть шаг Setup git config)
         #а также дать разрешение на запись через веб страницу github (репозиторий>>Settings>>Actions>>General>>Workflow permissions)
-        git push origin main
+        git push origin deploy-release-back
 
         echo "TAG_IMAGE=${NewVersion}" >> $GITHUB_ENV
 
