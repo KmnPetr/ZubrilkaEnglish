@@ -43,6 +43,7 @@ jobs:
 
         xmlstarlet ed -L -N p=http://maven.apache.org/POM/4.0.0 -u "/p:project/p:version" -v $NewVersion $File
 
+        git pull origin deploy-release-back
         git add .
         git commit -m "[skip ci] Workwlow modification: App-version = $NewVersion"
         #для работы коммита требуется настроить name и email для гита(смотреть шаг Setup git config)
