@@ -105,7 +105,6 @@ jobs:
         host: ${{ secrets.SERVER_IP }}
         username: ${{ secrets.SERVER_USERNAME }}
         password: ${{ secrets.SERVER_PASSWORD }}
-        env:
-          TAG_IMAGE: ${{ env.TAG_IMAGE }}
+        envs: TAG_IMAGE
         script: |
           docker compose up -d
