@@ -108,5 +108,4 @@ jobs:
         envs: TAG_IMAGE
         script: |
           echo "TAG_IMAGE: ${TAG_IMAGE}"
-#          export TAG_IMAGE=${TAG_IMAGE}
           docker compose -f /ze/docker-compose.yaml up -d
