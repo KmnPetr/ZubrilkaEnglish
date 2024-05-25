@@ -1,17 +1,17 @@
 version: '3.8'
 
 services:
-  zedbpostgres:
+  ze-db-postgres:
     image: postgres:14.3-alpine
     restart: always
-    container_name: zedbpostgres
+    container_name: ze-db-postgres
     ports:
       - "5432:5432"
     environment:
       - POSTGRES_PASSWORD=testPassword
       - POSTGRES_USER=postgres
     volumes:
-      - zedbpostgres:/var/lib/postgresql/data/
+      - ze-db-postgres:/var/lib/postgresql/data/
     networks:
       - ze_network
     healthcheck:
@@ -22,23 +22,23 @@ services:
 
   ze_app:
     container_name: ze_app
-    image: kmnpetr/ze-app:1.1.9
+    image: kmnpetr/ze-app:latest
     restart: always
     ports:
       - "28700:28700"
     environment:
-      spring.r2dbc.url: "r2dbc:postgresql://zedbpostgres:5432/postgres"
+      spring.r2dbc.url: "r2dbc:postgresql://ze-db-postgres:5432/postgres"
       spring.r2dbc.password: "testPassword"
       spring.r2dbc.username: "postgres"
       jwt_secret: "testSecret"
     networks:
       - ze_network
     depends_on:
-      zedbpostgres:
+      ze-db-postgres:
         condition: service_healthy
 
 volumes:
-  zedbpostgres:
+  ze-db-postgres:
 
 networks:
   ze_network:
