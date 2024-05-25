@@ -17,4 +17,6 @@ public class PropModel {
     @Id
     private String key;
     private String value;
+
+
 }
