@@ -81,6 +81,15 @@ jobs:
         script: |
           mkdir -p /ze/
 
+    - name: Docker Compose Down
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SERVER_IP }}
+        username: ${{ secrets.SERVER_USERNAME }}
+        password: ${{ secrets.SERVER_PASSWORD }}
+        script: |
+          docker compose down || true
+
     - name: Copy file to remote server
       env:
         SERVER_IP: ${{ secrets.SERVER_IP }}
@@ -88,3 +97,13 @@ jobs:
         SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
       run: |
         sshpass -p "$SERVER_PASSWORD" scp -o StrictHostKeyChecking=no ze-app/docker-compose.yaml $SERVER_USERNAME@$SERVER_IP:/ze/docker-compose.yaml
+        
+
+    - name: Docker Compose Up
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SERVER_IP }}
+        username: ${{ secrets.SERVER_USERNAME }}
+        password: ${{ secrets.SERVER_PASSWORD }}
+        script: |
+          docker compose up -d || true
