@@ -58,7 +58,8 @@ jobs:
         git push origin deploy-release-back
 
         # Внесем изменения в основную ветку
-        git checkout main  
+        git fetch origin main
+        git checkout main
         git pull origin main
         git merge deploy-release-back
         git push origin main
