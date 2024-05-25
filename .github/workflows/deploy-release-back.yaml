@@ -108,4 +108,4 @@ jobs:
         envs: TAG_IMAGE
         script: |
           echo "TAG_IMAGE: ${TAG_IMAGE}"
-          TAG_IMAGE=$(echo $TAG_IMAGE) docker compose up -d
+          TAG_IMAGE=${TAG_IMAGE} docker compose up -d
