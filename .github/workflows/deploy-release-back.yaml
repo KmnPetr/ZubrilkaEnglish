@@ -88,7 +88,7 @@ jobs:
         username: ${{ secrets.SERVER_USERNAME }}
         password: ${{ secrets.SERVER_PASSWORD }}
         script: |
-          docker compose down || true
+          docker compose -f /ze/docker-compose.yaml down || true
 
     - name: Copy file to remote server
       env:
@@ -108,5 +108,5 @@ jobs:
         envs: TAG_IMAGE
         script: |
           echo "TAG_IMAGE: ${TAG_IMAGE}"
-          export TAG_IMAGE=${TAG_IMAGE}
+#          export TAG_IMAGE=${TAG_IMAGE}
           docker compose -f /ze/docker-compose.yaml up -d
