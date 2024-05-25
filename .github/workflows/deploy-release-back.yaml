@@ -111,4 +111,8 @@ jobs:
         password: ${{ secrets.SERVER_PASSWORD }}
         envs: TAG_IMAGE, BD_PASSWORD, BD_USER, JWT_SECRET
         script: |
+          echo "TAG_IMAGE: ${TAG_IMAGE}"
+          echo "BD_PASSWORD: ${BD_PASSWORD}"
+          echo "BD_USER: ${BD_USER}"
+          echo "JWT_SECRET: ${JWT_SECRET}"
           docker compose -f /ze/docker-compose.yaml up -d

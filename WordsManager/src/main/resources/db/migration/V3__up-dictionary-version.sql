@@ -1,1 +1,0 @@
-UPDATE properties SET value = 2 WHERE key = 'dictionary_version';
