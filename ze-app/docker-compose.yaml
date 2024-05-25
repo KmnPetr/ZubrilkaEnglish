@@ -20,8 +20,8 @@ services:
       timeout: 5s
       retries: 10
 
-  ze_app:
-    container_name: ze_app
+  ze-app:
+    container_name: ze-app
     image: kmnpetr/ze-app:${TAG_IMAGE}
     restart: always
     ports:
