@@ -27,10 +27,13 @@ services:
     ports:
       - "28700:28700"
     environment:
-      spring.r2dbc.url: "r2dbc:postgresql://ze-db-postgres:5432/postgres"
+      spring.r2dbc.url: "r2dbc:postgresql://ze-db-postgres:5432/${BD_USER}"
       spring.r2dbc.password: ${BD_PASSWORD}
       spring.r2dbc.username: ${BD_USER}
       jwt_secret: ${JWT_SECRET}
+      spring.flyway.url: "jdbc:postgresql://ze-db-postgres:5432/${BD_USER}"
+      spring.flyway.password: ${BD_PASSWORD}
+      spring.flyway.user: ${BD_USER}
     networks:
       - ze_network
     depends_on:
