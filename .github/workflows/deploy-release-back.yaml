@@ -107,4 +107,5 @@ jobs:
         password: ${{ secrets.SERVER_PASSWORD }}
         envs: TAG_IMAGE
         script: |
+          echo "TAG_IMAGE: ${TAG_IMAGE}"
           docker compose up -d
