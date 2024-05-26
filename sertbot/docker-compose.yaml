@@ -2,7 +2,10 @@ version: '3.8'
 
 services:
   certbot:
-    build: .
+    build:
+      context: .
+      args:
+        DOMAIN_NAME: ${DOMAIN_NAME}
     environment:
       DOMAIN_NAME: ${DOMAIN_NAME}
     ports:
