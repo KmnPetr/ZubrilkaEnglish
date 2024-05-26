@@ -32,6 +32,7 @@ jobs:
           script: |
             mkdir -p /sertbot
             mkdir -p /sertbot/lib
+            mkdir -p /sertbot/my-script
             
 
       - name: Docker Compose Down
@@ -50,6 +51,7 @@ jobs:
           SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
         run: |
           sshpass -p "$SERVER_PASSWORD" scp -o StrictHostKeyChecking=no sertbot/docker-compose.yaml $SERVER_USERNAME@$SERVER_IP:/sertbot/docker-compose.yaml
+          sshpass -p "$SERVER_PASSWORD" scp -o StrictHostKeyChecking=no sertbot/my-script/certbot_update.sh $SERVER_USERNAME@$SERVER_IP:/sertbot/my-script/certbot_update.sh
 
 
       - name: Docker Compose Up

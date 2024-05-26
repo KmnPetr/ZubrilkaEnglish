@@ -5,14 +5,10 @@ services:
     image: certbot/certbot
     environment:
       DOMAIN_NAME: ${DOMAIN_NAME}
-    command: >
-      /bin/sh -c "
-      certonly --standalone --preferred-challenges http --agree-tos --email kmn.petrichenko@yandex.ru -d ${DOMAIN_NAME} &&
-      echo '0 0 * * 0 certbot renew --standalone --preferred-challenges http --agree-tos --email kmn.petrichenko@yandex.ru -d ${DOMAIN_NAME}' > /etc/crontabs/root &&
-      crond -f
-      "
+    command: /bin/sh -c "chmod +x /sertbot/my-script/certbot_update.sh && /sertbot/my-script/certbot_update.sh"
     ports:
       - "80:80"
     volumes:
-      - "/sertbot:/etc/letsencrypt"
-      - "/sertbot/lib:/var/lib/letsencrypt"
+      - "/sertbot:/etc/letsencrypt" #ключи сертификаты и прочие конфиги бота. скрипты по пути ......
+      - "/sertbot/lib:/var/lib/letsencrypt" # просто пустая наверное
+      - "/sertbot/my-script:/sertbot/my-script" # Передача скрипта в контейнер
