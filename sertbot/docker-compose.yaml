@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  certbot:
+    image: certbot/certbot
+    environment:
+      - DOMAIN_NAME=${DOMAIN_NAME}
+    command: >
+      /bin/sh -c "
+      certonly --standalone --preferred-challenges http --agree-tos --email kmn.petrichenko@yandex.ru -d ${DOMAIN_NAME} &&
+      echo '0 0 * * 0 certbot renew --standalone --preferred-challenges http --agree-tos --email kmn.petrichenko@yandex.ru -d ${DOMAIN_NAME}' > /etc/crontabs/root &&
+      crond -f
+      "
+    ports:
+      - "80:80"
+    volumes:
+      - "/sertbot:/etc/letsencrypt"
+      - "/sertbot/lib:/var/lib/letsencrypt"
