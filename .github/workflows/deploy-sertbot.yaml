@@ -61,5 +61,4 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           envs: DOMAIN_NAME
           script: |
-            echo "DOMAIN_NAME: ${DOMAIN_NAME}"
             docker compose -f /sertbot/docker-compose.yaml up -d
