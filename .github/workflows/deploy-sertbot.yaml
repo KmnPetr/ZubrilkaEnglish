@@ -7,7 +7,8 @@ on: workflow_dispatch
 #    branches:
 #      - deploy-release-back
 
-#env:
+env:
+  DOMAIN_NAME: ${{secrets.DOMAIN_NAME}}
 #  BD_PASSWORD: ${{secrets.BD_PASSWORD}}
 #  BD_USER: ${{secrets.BD_USER}}
 #  JWT_SECRET: ${{secrets.JWT_SECRET}}
