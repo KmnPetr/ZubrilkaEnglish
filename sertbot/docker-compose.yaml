@@ -4,7 +4,7 @@ services:
   certbot:
     image: certbot/certbot
     environment:
-      - DOMAIN_NAME=${DOMAIN_NAME}
+      DOMAIN_NAME: ${DOMAIN_NAME}
     command: >
       /bin/sh -c "
       certonly --standalone --preferred-challenges http --agree-tos --email kmn.petrichenko@yandex.ru -d ${DOMAIN_NAME} &&
