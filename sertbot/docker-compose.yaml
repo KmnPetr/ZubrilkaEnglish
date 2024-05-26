@@ -4,10 +4,10 @@ services:
   certbot:
     build:
       context: .
-      args:
-        DOMAIN_NAME: ${DOMAIN_NAME}
-    environment:
-      DOMAIN_NAME: ${DOMAIN_NAME}
+#      args:
+#        DOMAIN_NAME: ${DOMAIN_NAME}
+#    environment:
+#      DOMAIN_NAME: ${DOMAIN_NAME}
     ports:
       - "80:80"
     volumes:

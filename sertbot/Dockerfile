@@ -1,6 +1,6 @@
 FROM certbot/certbot
 
-ARG DOMAIN_NAME
+#ARG DOMAIN_NAME
 
 EXPOSE 80
 

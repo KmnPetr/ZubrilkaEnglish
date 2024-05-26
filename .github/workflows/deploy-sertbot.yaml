@@ -1,14 +1,14 @@
 #задеплоит на сервер бэк часть простым способом через docker-compose
 name: Deploy_SertBot
-on: workflow_dispatch
+#on: workflow_dispatch
 
-#on:
-#  push:
-#    branches:
-#      - deploy-release-back
+on:
+  push:
+    branches:
+      - main
 
-env:
-  DOMAIN_NAME: 608686.cloud4box.ru
+#env:
+#  DOMAIN_NAME: 608686.cloud4box.ru
 #  BD_PASSWORD: ${{secrets.BD_PASSWORD}}
 #  BD_USER: ${{secrets.BD_USER}}
 #  JWT_SECRET: ${{secrets.JWT_SECRET}}
@@ -59,6 +59,6 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
-          envs: DOMAIN_NAME
+#          envs: DOMAIN_NAME
           script: |
             docker compose -f /sertbot/docker-compose.yaml up -d
