@@ -3,6 +3,7 @@ FROM certbot/certbot
 #ARG DOMAIN_NAME
 
 EXPOSE 80
+EXPOSE 443
 
 # Копирование скрипта в контейнер
 COPY script.sh /usr/local/bin/script.sh

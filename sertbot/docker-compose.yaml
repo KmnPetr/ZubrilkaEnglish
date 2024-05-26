@@ -11,6 +11,7 @@ services:
 #    command: /bin/sh -c "chmod +x /script.sh && /script.sh"
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - "/sertbot:/etc/letsencrypt" #ключи сертификаты и прочие конфиги бота. скрипты по пути ......
       - "/sertbot/lib:/var/lib/letsencrypt" # просто пустая наверное
