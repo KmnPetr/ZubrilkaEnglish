@@ -43,7 +43,7 @@ jobs:
           script: |
             docker compose -f /sertbot/docker-compose.yaml down || true
 
-      - name: Copy file to remote server
+      - name: Copy files to remote server
         env:
           SERVER_IP: ${{ secrets.SERVER_IP }}
           SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
@@ -51,6 +51,7 @@ jobs:
         run: |
           sshpass -p "$SERVER_PASSWORD" scp -o StrictHostKeyChecking=no sertbot/docker-compose.yaml $SERVER_USERNAME@$SERVER_IP:/sertbot/docker-compose.yaml
           sshpass -p "$SERVER_PASSWORD" scp -o StrictHostKeyChecking=no sertbot/Dockerfile $SERVER_USERNAME@$SERVER_IP:/sertbot/Dockerfile
+          sshpass -p "$SERVER_PASSWORD" scp -o StrictHostKeyChecking=no sertbot/script.sh $SERVER_USERNAME@$SERVER_IP:/sertbot/script.sh
 
 
       - name: Docker Compose Up
