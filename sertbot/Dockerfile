@@ -5,4 +5,10 @@ FROM certbot/certbot
 EXPOSE 80
 
 # Копирование скрипта в контейнер
-COPY script.sh /script.sh
+COPY script.sh /usr/local/bin/script.sh
+
+# Делаем скрипт исполняемым
+RUN chmod +x /usr/local/bin/script.sh
+
+# Выполнение скрипта
+CMD ["/usr/local/bin/script.sh"]
