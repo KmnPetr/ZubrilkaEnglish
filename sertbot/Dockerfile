@@ -4,6 +4,7 @@ ARG DOMAIN_NAME
 
 EXPOSE 80
 
+RUN echo "$DOMAIN_NAME"
 # Получить и установить сертификат в первый раз
 RUN certbot certonly --standalone --preferred-challenges http --agree-tos --email kmn.petrichenko@yandex.ru -d $DOMAIN_NAME
 # Добавить задание в cron для еженедельного обновления сертификата
