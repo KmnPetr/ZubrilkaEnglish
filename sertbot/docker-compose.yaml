@@ -8,7 +8,7 @@ services:
 #        DOMAIN_NAME: ${DOMAIN_NAME}
 #    environment:
 #      DOMAIN_NAME: ${DOMAIN_NAME}
-    entrypoint: /usr/local/bin/script.sh
+    entrypoint: while true; do echo "Контейнер активен $(date)" sleep 60 done
 #    command:
 #      - certbot certonly
 #        --email kmn.petrichenko@yandex.ru -d 608686777.cloud4box.ru
