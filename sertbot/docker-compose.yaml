@@ -2,12 +2,13 @@ version: '3.8'
 
 services:
   certbot:
+    container_name: certbot
     build: .
 #      args:
 #        DOMAIN_NAME: ${DOMAIN_NAME}
 #    environment:
 #      DOMAIN_NAME: ${DOMAIN_NAME}
-    command: /usr/local/bin/script.sh
+#    command: /usr/local/bin/script.sh
 #    command:
 #      - certbot certonly
 #        --email kmn.petrichenko@yandex.ru -d 608686777.cloud4box.ru
