@@ -8,8 +8,8 @@ services:
 #    environment:
 #      DOMAIN_NAME: ${DOMAIN_NAME}
 #    command: /bin/sh -c "chmod +x /script.sh && /script.sh"
-    command:
-      - certbot certonly
+#    command:
+#      - certbot certonly
 #        --email kmn.petrichenko@yandex.ru -d 608686777.cloud4box.ru
     ports:
       - "80:80"

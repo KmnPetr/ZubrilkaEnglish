@@ -1,4 +1,4 @@
-FROM certbot/certbot
+FROM certbot/certbot:nightly
 
 #ARG DOMAIN_NAME
 
