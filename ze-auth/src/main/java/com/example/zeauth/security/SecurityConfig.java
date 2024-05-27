@@ -33,6 +33,7 @@ public class SecurityConfig {
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity httpSecurity){
         return httpSecurity
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
+                .
 //                .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .authenticationManager(authenticationManager)
                 .securityContextRepository(securityContextRepository)
