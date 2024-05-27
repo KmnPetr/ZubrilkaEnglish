@@ -32,6 +32,7 @@ jobs:
           script: |
             mkdir -p /sertbot
             mkdir -p /sertbot/lib
+            mkdir -p /sertbot/log
             
 
       - name: Docker Compose Down

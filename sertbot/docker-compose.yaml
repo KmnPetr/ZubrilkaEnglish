@@ -17,3 +17,4 @@ services:
     volumes:
       - "/sertbot:/etc/letsencrypt" #ключи сертификаты и прочие конфиги бота. скрипты по пути ......
       - "/sertbot/lib:/var/lib/letsencrypt" # просто пустая наверное
+      - "/sertbot/log:to /var/log"
