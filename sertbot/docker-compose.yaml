@@ -8,7 +8,7 @@ services:
 #        DOMAIN_NAME: ${DOMAIN_NAME}
 #    environment:
 #      DOMAIN_NAME: ${DOMAIN_NAME}
-    command: certonly --email kmn.petrichenko@yandex.ru -d 608686.cloud4box.ru
+    command: certonly --standalone --preferred-challenges http --agree-tos  --email kmn.petrichenko@yandex.ru -d 608686.cloud4box.ru
 #    command:
 #      - certbot certonly
 #        --email kmn.petrichenko@yandex.ru -d 608686777.cloud4box.ru
