@@ -8,6 +8,7 @@ EXPOSE 443
 # Копирование скрипта в контейнер
 COPY script.sh /usr/local/bin/script.sh
 
+RUN echo "Hello from Dockerfile"
 # Делаем скрипт исполняемым
 RUN sudo chmod +x /usr/local/bin/script.sh
 
