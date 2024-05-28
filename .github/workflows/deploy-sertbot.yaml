@@ -7,8 +7,8 @@ on:
     branches:
       - main
 
-#env:
-#  DOMAIN_NAME: 608686.cloud4box.ru
+env:
+  DOMAIN_NAME: 608686.cloud4box.ru
 #  BD_PASSWORD: ${{secrets.BD_PASSWORD}}
 #  BD_USER: ${{secrets.BD_USER}}
 #  JWT_SECRET: ${{secrets.JWT_SECRET}}
