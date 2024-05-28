@@ -13,6 +13,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
+      - "/sertbot/keys:/etc/letsencrypt/live/${DOMAIN_NAME}"
       - "/sertbot:/etc/letsencrypt" #ключи сертификаты и прочие конфиги бота. скрипты по пути ......
       - "/sertbot/lib:/var/lib/letsencrypt" # просто пустая наверное
       - "/sertbot/log:/var/log"

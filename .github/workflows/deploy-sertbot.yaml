@@ -29,6 +29,7 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
             mkdir -p /sertbot
+            mkdir -p /sertbot/keys
             mkdir -p /sertbot/lib
             mkdir -p /sertbot/log
             
