@@ -3,10 +3,13 @@ version: '3.8'
 services:
   certbot:
     container_name: certbot
-    build: .
-    environment:
-      DOMAIN_NAME: ${DOMAIN_NAME}
-#    certbot renew --dry-run   для перезаписи тестовая симуляция
+    build:
+      context: .
+      args:
+        DOMAIN_NAME: ${DOMAIN_NAME}
+#    environment:
+#      DOMAIN_NAME: ${DOMAIN_NAME}
+#    certbot renew --dry-run   для перезаписи пробная симуляция
     ports:
       - "80:80"
       - "443:443"
