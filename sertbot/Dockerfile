@@ -9,7 +9,7 @@ EXPOSE 443
 COPY script.sh /usr/local/bin/script.sh
 
 # Делаем скрипт исполняемым
-RUN chmod +x /usr/local/bin/script.sh
+RUN sudo chmod +x /usr/local/bin/script.sh
 
 # Выполнение скрипта
 CMD ["/usr/local/bin/script.sh"]
