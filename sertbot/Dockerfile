@@ -9,4 +9,4 @@ RUN echo "Hello from Dockerfile"
 
 RUN chmod +x /usr/local/bin/script.sh
 
-CMD ["/usr/local/bin/script.sh"]
+ENTRYPOINT ["/usr/local/bin/script.sh"]
