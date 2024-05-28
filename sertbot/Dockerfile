@@ -4,9 +4,10 @@ EXPOSE 80
 EXPOSE 443
 
 ARG DOMAIN_NAME
-COPY script.sh /usr/local/bin/script.sh
 
-RUN echo "Hello from Dockerfile"
+ENV DOMAIN_NAME=${DOMAIN_NAME}
+
+COPY script.sh /usr/local/bin/script.sh
 
 RUN chmod +x /usr/local/bin/script.sh
 

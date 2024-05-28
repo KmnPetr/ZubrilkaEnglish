@@ -1,6 +1,7 @@
 #!/bin/sh
 
 echo "script.sh started!!!"
+echo "DOMAIN_NAME: $DOMAIN_NAME"
 # Получить и установить сертификат
 certbot certonly --standalone --preferred-challenges http --agree-tos --email kmn.petrichenko@yandex.ru -d $DOMAIN_NAME --non-interactive
 
