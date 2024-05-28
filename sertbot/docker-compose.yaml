@@ -4,8 +4,9 @@ services:
   certbot:
     container_name: certbot
     build: .
-#    command: certonly --standalone --preferred-challenges http --agree-tos  --email kmn.petrichenko@yandex.ru -d 608686.cloud4box.ru
-#    certbot renew --dry-run   для перезаписи
+    environment:
+      DOMAIN_NAME: ${DOMAIN_NAME}
+#    certbot renew --dry-run   для перезаписи тестовая симуляция
     ports:
       - "80:80"
       - "443:443"
