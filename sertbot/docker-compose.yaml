@@ -7,6 +7,7 @@ services:
       context: .
       args:
         DOMAIN_NAME: ${DOMAIN_NAME}
+        MY_EMAIL: ${MY_EMAIL}
 #    certbot renew --dry-run   для перезаписи пробная симуляция
     ports:
       - "80:80"
