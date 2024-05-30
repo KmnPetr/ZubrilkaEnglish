@@ -7,6 +7,7 @@ on:
   push:
     branches:
       - deploy-release-back
+      - main
 
 env:
   BD_PASSWORD: ${{secrets.BD_PASSWORD}}
