@@ -6,8 +6,7 @@ name: Deploy_Release_Back
 on:
   push:
     branches:
-      - main
-#      - deploy-release-back
+      - deploy-release-back
 
 
 env:
