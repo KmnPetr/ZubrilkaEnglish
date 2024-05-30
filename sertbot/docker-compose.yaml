@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  certbot:
+    container_name: certbot
+    build:
+      context: .
+      args:
+        DOMAIN_NAME: ${DOMAIN_NAME}
+        MY_EMAIL: ${MY_EMAIL}
+#    certbot renew --dry-run   для перезаписи пробная симуляция
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/sertbot:/etc/letsencrypt" #ключи сертификаты и прочие конфиги бота. скрипты по пути ......
+      - "/sertbot/lib:/var/lib/letsencrypt" # просто пустая наверное
+      - "/sertbot/log:/var/log"
