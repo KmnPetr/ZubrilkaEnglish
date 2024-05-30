@@ -1,8 +1,8 @@
 FROM openjdk:17
 
-VOLUME /app
+RUN mkdir -p /keys/
+
 VOLUME /keys
-WORKDIR /keys
 
 EXPOSE 28700
 
@@ -10,7 +10,6 @@ ARG JAR_FILE=target/*.jar
 
 COPY ${JAR_FILE} app.jar
 
-RUN mkdir -p /keys/
 
 #новое
 CMD ["java", "-jar", "/app.jar"]
