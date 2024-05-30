@@ -8,6 +8,7 @@ on:
     branches:
       - deploy-release-back
 
+
 env:
   BD_PASSWORD: ${{secrets.BD_PASSWORD}}
   BD_USER: ${{secrets.BD_USER}}
