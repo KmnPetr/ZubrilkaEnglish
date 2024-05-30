@@ -1,0 +1,4 @@
+Перезапуск докера на другие зеркала
+ - создаем /etc/docker/daemon.json
+ - вставляем {"registry-mirrors": ["https://mirror.gcr.io", "https://daocloud.io", "https://c.163.com/", "https://huecker.io/", "https://registry.docker-cn.com"]}
+ - перезапуск systemctl restart docker
