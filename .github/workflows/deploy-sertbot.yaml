@@ -61,4 +61,4 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           envs: DOMAIN_NAME, MY_EMAIL
           script: |
-            docker compose -f /sertbot/docker-compose.yaml up --build -d
+            docker compose -f /sertbot/docker-compose.yaml -p ze up --build -d
