@@ -37,6 +37,8 @@ services:
       spring.flyway.user: ${BD_USER}
     networks:
       - ze_network
+    volumes:
+      - "/sertbot/live/608686.cloud4box.ru:/keys"
     depends_on:
       ze-db-postgres:
         condition: service_healthy

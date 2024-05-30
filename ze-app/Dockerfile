@@ -8,5 +8,7 @@ ARG JAR_FILE=target/*.jar
 
 COPY ${JAR_FILE} app.jar
 
+RUN mkdir -p /keys/
+
 #новое
 CMD ["java", "-jar", "/app.jar"]
