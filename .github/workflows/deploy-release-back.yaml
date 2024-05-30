@@ -117,4 +117,4 @@ jobs:
         password: ${{ secrets.SERVER_PASSWORD }}
         envs: TAG_IMAGE, BD_PASSWORD, BD_USER, JWT_SECRET
         script: |
-          docker compose -f /ze/docker-compose.yaml up -d
+          docker compose -f /ze/docker-compose.yaml up --build -d
