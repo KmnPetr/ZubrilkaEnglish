@@ -1,8 +1,10 @@
 FROM openjdk:17
 
-RUN mkdir -p /keys/
 
 VOLUME /keys
+WORKDIR /
+
+RUN mkdir -p /keys/
 
 EXPOSE 28700
 
