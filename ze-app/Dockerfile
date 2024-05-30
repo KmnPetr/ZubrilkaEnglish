@@ -2,6 +2,7 @@ FROM openjdk:17
 
 VOLUME /app
 VOLUME /keys
+WORKDIR /keys
 
 EXPOSE 28700
 
