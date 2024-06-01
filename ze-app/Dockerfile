@@ -6,6 +6,7 @@ WORKDIR /
 RUN mkdir -p /keys/
 
 EXPOSE 28700
+EXPOSE 8443
 
 ARG JAR_FILE=target/*.jar
 
