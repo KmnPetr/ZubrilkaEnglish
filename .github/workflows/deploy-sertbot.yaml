@@ -52,6 +52,7 @@ jobs:
           sshpass -p "$SERVER_PASSWORD" scp -o StrictHostKeyChecking=no sertbot/Dockerfile $SERVER_USERNAME@$SERVER_IP:/sertbot/Dockerfile
           sshpass -p "$SERVER_PASSWORD" scp -o StrictHostKeyChecking=no sertbot/script.sh $SERVER_USERNAME@$SERVER_IP:/sertbot/script.sh
           sshpass -p "$SERVER_PASSWORD" scp -o StrictHostKeyChecking=no sertbot/renew.sh $SERVER_USERNAME@$SERVER_IP:/sertbot/renew.sh
+          sshpass -p "$SERVER_PASSWORD" scp -o StrictHostKeyChecking=no sertbot/createNewKeyStore.sh $SERVER_USERNAME@$SERVER_IP:/sertbot/createNewKeyStore.sh
 
 
       - name: Docker Compose Up
