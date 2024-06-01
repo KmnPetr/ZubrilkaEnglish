@@ -1,0 +1,9 @@
+keytool -importcert -alias tomcat -file cert.pem -keystore keystore.jks
+keytool -importcert -alias tomcat -file chain.pem -keystore keystore.jks
+keytool -importkey -alias tomcat -file privkey.pem -keystore keystore.jks
+
+
+
+
+keytool -importcert -trustcacerts -alias root -file chain.pem -keystore keystore.jks -storepass changeit
+keytool -importcert -alias tomcat -file cert.pem -keystore keystore.jks -storepass changeit
