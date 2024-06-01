@@ -13,10 +13,10 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - certbot:/etc/letsencrypt #ключи сертификаты и прочие конфиги бота. скрипты по пути ......
+      - certbot_keys:/etc/letsencrypt #ключи сертификаты и прочие конфиги бота. скрипты по пути ......
 #      - "/sertbot:/etc/letsencrypt" #ключи сертификаты и прочие конфиги бота. скрипты по пути ......
       - "/sertbot/lib:/var/lib/letsencrypt" # просто пустая наверное
       - "/sertbot/log:/var/log"
 
 volumes:
-  certbot:
+  certbot_keys:
