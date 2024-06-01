@@ -38,14 +38,14 @@ services:
     networks:
       - ze_network
     volumes:
-      - certbot:/keys
+      - certbot_keys:/keys
     depends_on:
       ze-db-postgres:
         condition: service_healthy
 
 volumes:
   ze-db-postgres:
-  certbot:
+  certbot_keys:
 
 networks:
   ze_network:

@@ -1,6 +1,7 @@
 #!/bin/sh
 
 echo "script.sh started!!!"
+
 # Получить и установить сертификат
 certbot certonly --standalone --preferred-challenges http --agree-tos --email $MY_EMAIL -d $DOMAIN_NAME --non-interactive
 
