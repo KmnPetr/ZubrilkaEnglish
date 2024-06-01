@@ -1,1 +1,0 @@
-openssl pkcs12 -export -in fullchain.pem -inkey privkey.pem -out keystore.p12 -name tomcat -CAfile fullchain.pem -caname root -passout pass:password
