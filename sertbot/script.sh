@@ -8,6 +8,7 @@ echo "script.sh started!!!"
 certbot certonly --standalone --preferred-challenges http --agree-tos --email $MY_EMAIL -d $DOMAIN_NAME --non-interactive
 
 /usr/local/bin/createNewKeyStore.sh
+
 # Добавить задание в cron для еженедельного обновления сертификата
 echo "0 0 * * 0 /usr/local/bin/renew.sh" | crontab -
 
