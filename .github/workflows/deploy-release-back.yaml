@@ -13,6 +13,7 @@ env:
   BD_PASSWORD: ${{secrets.BD_PASSWORD}}
   BD_USER: ${{secrets.BD_USER}}
   JWT_SECRET: ${{secrets.JWT_SECRET}}
+  CONTEXT_RELOAD_KEY: ${{secrets.CONTEXT_RELOAD_KEY}}
 
 jobs:
   build:
@@ -116,6 +117,6 @@ jobs:
         host: ${{ secrets.SERVER_IP }}
         username: ${{ secrets.SERVER_USERNAME }}
         password: ${{ secrets.SERVER_PASSWORD }}
-        envs: TAG_IMAGE, BD_PASSWORD, BD_USER, JWT_SECRET
+        envs: TAG_IMAGE, BD_PASSWORD, BD_USER, JWT_SECRET ,CONTEXT_RELOAD_KEY
         script: |
           docker compose -f /ze/docker-compose.yaml up --build -d

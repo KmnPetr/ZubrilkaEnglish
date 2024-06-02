@@ -36,7 +36,6 @@ services:
       spring.flyway.url: "jdbc:postgresql://ze-db-postgres:5432/${BD_USER}"
       spring.flyway.password: ${BD_PASSWORD}
       spring.flyway.user: ${BD_USER}
-      DOMAIN_NAME: ${DOMAIN_NAME}
       CONTEXT_RELOAD_KEY: ${CONTEXT_RELOAD_KEY}
     networks:
       - ze_network
