@@ -1,26 +1,13 @@
 package com.example.zeapp;
 
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.embedded.netty.NettyReactiveWebServerFactory;
 import org.springframework.boot.web.server.Ssl;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLContext;
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.security.*;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.util.Base64;
 
 
 @Component
@@ -39,12 +26,15 @@ public class GatewayServerCustomizer implements
     @Value("${server.port}")
     private int port;
 
+    private Ssl ssl;
 
-    @SneakyThrows
+
+
+//    @SneakyThrows
     @Override
     public void customize(NettyReactiveWebServerFactory factory) {
 
-        Ssl ssl = new Ssl();
+        ssl = new Ssl();
         ssl.setEnabled(true);
         ssl.setKeyStore(keyStore);
         ssl.setKeyStorePassword(keyStorePassword);
@@ -52,5 +42,13 @@ public class GatewayServerCustomizer implements
 
         factory.setSsl(ssl);
         factory.setPort(port);
+    }
+
+
+    private Integer i = 0;
+    @Scheduled(fixedDelay = 2000)
+    private void upgradeCache(){
+        log.info("Работает ssl шедулер: i = "+i);
+        if (i == 50) ssl = null;
     }
 }

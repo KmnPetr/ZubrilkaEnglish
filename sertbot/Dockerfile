@@ -11,8 +11,10 @@ ENV MY_EMAIL=${MY_EMAIL}
 
 COPY script.sh /usr/local/bin/script.sh
 COPY renew.sh /usr/local/bin/renew.sh
+COPY createNewKeyStore.sh /usr/local/bin/createNewKeyStore.sh
 
 RUN chmod +x /usr/local/bin/script.sh
 RUN chmod +x /usr/local/bin/renew.sh
+RUN chmod +x /usr/local/bin/createNewKeyStore.sh
 
 ENTRYPOINT ["/usr/local/bin/script.sh"]

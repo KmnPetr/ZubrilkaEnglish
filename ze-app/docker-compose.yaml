@@ -26,7 +26,7 @@ services:
     image: kmnpetr/ze-app:${TAG_IMAGE}
     restart: always
     ports:
-      - "28700:28700"
+#      - "28700:28700"
       - "8443:8443"
     environment:
       spring.r2dbc.url: "r2dbc:postgresql://ze-db-postgres:5432/${BD_USER}"
