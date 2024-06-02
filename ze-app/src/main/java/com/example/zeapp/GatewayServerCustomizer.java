@@ -50,5 +50,6 @@ public class GatewayServerCustomizer implements
     private void upgradeCache(){
         log.info("Работает ssl шедулер: i = "+i);
         if (i == 50) ssl = null;
+        i++;
     }
 }
