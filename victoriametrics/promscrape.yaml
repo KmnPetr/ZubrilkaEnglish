@@ -1,0 +1,5 @@
+scrape_configs:
+  - job_name: "ze-app"
+    static_configs:
+      - targets: ["ze-app:8443"]
+    metrics_path: "/ze-app/actuator/prometheus"

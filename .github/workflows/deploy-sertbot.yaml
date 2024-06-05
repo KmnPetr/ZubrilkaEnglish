@@ -10,6 +10,7 @@ on: workflow_dispatch
 env:
   DOMAIN_NAME: ${{secrets.DOMAIN_NAME}}
   MY_EMAIL: ${{secrets.MY_EMAIL}}
+  CONTEXT_RELOAD_KEY: ${{secrets.CONTEXT_RELOAD_KEY}}
 
 jobs:
   build:
@@ -61,6 +62,6 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
-          envs: DOMAIN_NAME, MY_EMAIL
+          envs: DOMAIN_NAME, MY_EMAIL,CONTEXT_RELOAD_KEY
           script: |
             docker compose -f /sertbot/docker-compose.yaml -p ze up --build -d
