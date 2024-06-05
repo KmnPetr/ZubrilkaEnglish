@@ -1,18 +1,10 @@
 package com.example.zubrilkaenglish.screens.training
 
-import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.zubrilkaenglish.models.ICard
 import com.example.zubrilkaenglish.models.NewsCard
 import com.example.zubrilkaenglish.models.WordCard
-import com.example.zubrilkaenglish.services.ads.YandexAds
-import com.example.zubrilkaenglish.utils.LOG
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class CardAdapter(val listener: Listener):RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
@@ -47,7 +39,7 @@ class CardAdapter(val listener: Listener):RecyclerView.Adapter<RecyclerView.View
      */
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is ViewHolderFactory.WordCardHolder){
-            holder.bind((cardList[position] as WordCard),listener)
+            holder.bind((cardList[position] as WordCard),listener,position)
         }
         else if (holder is ViewHolderFactory.NewsCardHolder){
             holder.bind((cardList[position] as NewsCard),listener)
@@ -72,8 +64,8 @@ class CardAdapter(val listener: Listener):RecyclerView.Adapter<RecyclerView.View
 
 
     interface Listener{
-        fun onClickYesButton(wordCard: WordCard)
-        fun onClickNoButton(wordCard: WordCard)
+        fun onClickYesButton(wordCard: WordCard, position: Int)
+        fun onClickNoButton(wordCard: WordCard, position: Int)
         fun onClickLookButton(wordCard: WordCard)
         fun onClickOptionsButton(wordCard: WordCard)
     }

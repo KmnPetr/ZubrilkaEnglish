@@ -15,6 +15,8 @@ data class WordCard(
     var lookButtonPressed:Boolean=false
     @Ignore
     var voiceSounded:Boolean=false
+    @Ignore
+    var sleepEvent:Boolean=false //указывает на то что было предложено усыпить карточку
 
     override fun getItemViewType(): Int {
         return ICard.WORD_CARD_TYPE

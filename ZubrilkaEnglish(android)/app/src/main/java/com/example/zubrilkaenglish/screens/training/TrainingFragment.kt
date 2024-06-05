@@ -8,16 +8,17 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.CompositePageTransformer
+import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.example.zubrilkaenglish.databinding.FragmentTrainingBinding
 import com.example.zubrilkaenglish.events.CardEvent
 import com.example.zubrilkaenglish.events.CrEvEnum
 import com.example.zubrilkaenglish.events.VcEvEnum
 import com.example.zubrilkaenglish.events.VoiceEvent
-import com.example.zubrilkaenglish.models.ICard
 import com.example.zubrilkaenglish.models.Voice
 import com.example.zubrilkaenglish.models.WordCard
-import com.example.zubrilkaenglish.screens.training.popup.PopupDialog
 import com.example.zubrilkaenglish.screens.training.popup.PopupOptions
 import com.example.zubrilkaenglish.services.ads.YandexAds
 import com.example.zubrilkaenglish.utils.LOG
@@ -28,6 +29,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
+import kotlin.math.abs
 
 /**
  * фрагмент отвечает за отображение основного экрана с процессом изучения карточек
@@ -56,6 +58,21 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
 
 
         binding.viewPager2.adapter=adapter
+        binding.viewPager2.offscreenPageLimit =3
+        binding.viewPager2.clipToPadding = false
+        binding.viewPager2.clipChildren = false
+        binding.viewPager2.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+
+        val transformer = CompositePageTransformer()
+//        transformer.addTransformer(MarginPageTransformer(40))
+        transformer.addTransformer{page,position->
+            val r = 1 - abs(position)
+            page.scaleY = 0.85f + r * 0.14f
+        }
+
+        binding.viewPager2.setPageTransformer(transformer)
+
+
 
         binding.viewPager2.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
             override fun onPageScrollStateChanged(state: Int) {
@@ -96,14 +113,16 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
     fun event_CardChanged(event: CardEvent){
         when(event.typeEvent){
             CrEvEnum.CARD_CHANGED -> {
-                adapter.notifyItemChanged(binding.viewPager2.currentItem)
+                adapter.notifyItemChanged(event.properties?.get("positionAdapter") as Int)
+
                 flippingCard()
             }
             CrEvEnum.SLEEP_EVENT -> {
                 //отменим перелистывание
                 viewModel.userScrolls = 0
-                //покажем окошко
-                PopupDialog(requireContext(),event.wordCard).show()
+                //покажем окошко с предложением усыпить карточку
+                event.wordCard.sleepEvent = true
+                adapter.notifyItemChanged(event.properties?.get("positionAdapter") as Int)
             }
             else -> {}
         }
@@ -114,20 +133,19 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
      * слушатель при нажатии на кнопку "Yes"
      * если пользователь подтверждает, что знает карточку
      */
-    override fun onClickYesButton(wordCard: WordCard) {
-
+    override fun onClickYesButton(wordCard: WordCard, position: Int) {
         wordCard.cardHasChanged=true
-        EventBus.getDefault().post(CardEvent(CrEvEnum.INCREASE_PROGRESS,wordCard))
+        EventBus.getDefault().post(CardEvent(CrEvEnum.INCREASE_PROGRESS,wordCard, mapOf("positionAdapter" to position)))
     }
 
     /**
      * слушатель при нажатии на кнопку "No"
      * если пользователь не узнает карточку
      */
-    override fun onClickNoButton(wordCard: WordCard) {
+    override fun onClickNoButton(wordCard: WordCard, position: Int) {
         wordCard.cardHasChanged=true
         //отправим запрос на сброс значения numCorrAnsv
-        EventBus.getDefault().post(CardEvent(CrEvEnum.RESET_numCorrAnsv, wordCard))
+        EventBus.getDefault().post(CardEvent(CrEvEnum.RESET_numCorrAnsv, wordCard, mapOf("positionAdapter" to position)))
     }
 
     /**

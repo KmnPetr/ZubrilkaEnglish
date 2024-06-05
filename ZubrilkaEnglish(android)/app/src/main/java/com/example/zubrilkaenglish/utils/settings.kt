@@ -3,7 +3,7 @@ package com.example.zubrilkaenglish.utils
 import com.example.zubrilkaenglish.models.DayOfWeek
 import com.example.zubrilkaenglish.models.Memo
 
-const val URL:String="http://608686.cloud4box.ru:28700"
+const val URL:String="https://zubrilka-english.com:8443"
 const val LOCAL_URL:String="http://192.168.40.182:28800"
 
 //используемый формат для записи времени засыпания и пробуждения карточек

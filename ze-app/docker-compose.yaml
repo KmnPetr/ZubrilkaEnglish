@@ -45,9 +45,24 @@ services:
       ze-db-postgres:
         condition: service_healthy
 
+  victoriametrics:
+    container_name: victoriametrics
+    build:
+      context: ./victoriametrics
+    restart: always
+    ports:
+      - "8428:8428"
+    environment:
+      value: value
+    networks:
+      - ze_network
+    volumes:
+      - victoriametrics:/victoria-metrics-data
+
 volumes:
   ze-db-postgres:
   certbot_keys:
+  victoriametrics:
 
 networks:
   ze_network:

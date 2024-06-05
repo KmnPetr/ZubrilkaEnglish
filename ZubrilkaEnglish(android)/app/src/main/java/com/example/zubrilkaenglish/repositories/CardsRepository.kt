@@ -55,7 +55,7 @@ class CardsRepository private constructor(){
                 event.wordCard = increaseProgressCard(event.wordCard)
                 notifyChangeCard(event)
                 //проверим, не пора ли карточке спать
-                if (checkCardSleep(event.wordCard)) EventBus.getDefault().post(CardEvent(CrEvEnum.SLEEP_EVENT, event.wordCard))
+                if (checkCardSleep(event.wordCard)) EventBus.getDefault().post(CardEvent(CrEvEnum.SLEEP_EVENT, event.wordCard, event.properties))
             }
             CrEvEnum.RESET_numCorrAnsv -> {
                 event.wordCard = resetNumCorrAnsv(event.wordCard)
