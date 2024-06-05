@@ -92,6 +92,7 @@ jobs:
         password: ${{ secrets.SERVER_PASSWORD }}
         script: |
           mkdir -p /ze/
+          mkdir -p /victoriametrics/
 
     - name: Docker Compose Down
       uses: appleboy/ssh-action@master
@@ -102,13 +103,17 @@ jobs:
         script: |
           docker compose -f /ze/docker-compose.yaml down || true
 
-    - name: Copy file to remote server
+    - name: Copy files to remote server
       env:
         SERVER_IP: ${{ secrets.SERVER_IP }}
         SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
         SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
       run: |
         sshpass -p "$SERVER_PASSWORD" scp -o StrictHostKeyChecking=no ze-app/docker-compose.yaml $SERVER_USERNAME@$SERVER_IP:/ze/docker-compose.yaml
+        
+        #файлы для сборщика метрик
+        sshpass -p "$SERVER_PASSWORD" scp -o StrictHostKeyChecking=no victoriametrics/Dockerfile $SERVER_USERNAME@$SERVER_IP:/victoriametrics/Dockerfile
+        sshpass -p "$SERVER_PASSWORD" scp -o StrictHostKeyChecking=no victoriametrics/promscrape.yaml $SERVER_USERNAME@$SERVER_IP:/victoriametrics/promscrape.yaml
         
 
     - name: Docker Compose Up

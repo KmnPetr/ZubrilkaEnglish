@@ -6,57 +6,55 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Embedded
 import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.ViewNewsCardBinding
 import com.example.zubrilkaenglish.databinding.ViewWordCardBinding
+import com.example.zubrilkaenglish.events.CardEvent
+import com.example.zubrilkaenglish.events.CrEvEnum
 import com.example.zubrilkaenglish.models.ICard
 import com.example.zubrilkaenglish.models.NewsCard
 import com.example.zubrilkaenglish.models.WordCard
+import com.example.zubrilkaenglish.utils.StatProgress
+import org.greenrobot.eventbus.EventBus
 
 class ViewHolderFactory {
     class WordCardHolder(item: View): RecyclerView.ViewHolder(item){
         val binding= ViewWordCardBinding.bind(item)
 
-        fun bind(wordCard: WordCard, listener: CardAdapter.Listener){
+        fun bind(wordCard: WordCard, listener: CardAdapter.Listener,position:Int){
             binding.numCorrAnsv.text = "("+wordCard.progressWord?.numCorrAnsv.toString()+")"
             binding.statusCard.text = "status: "+ wordCard.progressWord?.statProgress
 
-            binding.foreignWord.text = "\t"+wordCard.word.foreignWord
-            binding.transcription.text = "\t"+wordCard.word.transcription
-            binding.translation.text = "\t"+wordCard.word.translation
+            binding.foreignWord.text = wordCard.word.foreignWord
+            binding.transcription.text = wordCard.word.transcription
+            binding.translation.text = wordCard.word.translation
 
             //блок if else решает проблему переиспользуемости холдеров
             if (wordCard.cardHasChanged){
                 binding.translation.visibility=View.VISIBLE
                 binding.yesButton.isEnabled=false
-//                binding.yesButton.setColorFilter(ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) }))
                 binding.noButton.isEnabled=false
-//                binding.noButton.setColorFilter(ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) }))
                 binding.lookButton.isEnabled=false
-//                binding.lookButton.setColorFilter(ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) }))
             }else{
                 binding.translation.visibility=View.INVISIBLE
                 binding.yesButton.isEnabled=true
-//                binding.yesButton.colorFilter = null
                 binding.noButton.isEnabled=true
-//                binding.noButton.colorFilter = null
                 binding.lookButton.isEnabled=true
-//                binding.lookButton.colorFilter = null
                 if (wordCard.lookButtonPressed/*проверка нажатости кнопки look*/){
                     binding.translation.visibility=View.VISIBLE
                     binding.lookButton.isEnabled=false
-//                    binding.lookButton.setColorFilter(ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) }))
                 }
 
                 println("ОТРАБОТАЛ МЕТОД BIND КАРТОЧКИ: "+ wordCard.word.foreignWord)
             }
 
             binding.yesButton.setOnClickListener {
-                listener.onClickYesButton(wordCard)
+                listener.onClickYesButton(wordCard, position)
             }
 
             binding.noButton.setOnClickListener {
-                listener.onClickNoButton(wordCard)
+                listener.onClickNoButton(wordCard, position)
             }
 
             binding.lookButton.setOnClickListener {
@@ -64,6 +62,66 @@ class ViewHolderFactory {
             }
             binding.optionsButton.setOnClickListener{
                 listener.onClickOptionsButton(wordCard)
+            }
+
+            sleepDialogShow(wordCard)
+        }
+
+        /**
+         * отрисует или спрячет окошко с предложением усыпить карточку
+         */
+        private fun sleepDialogShow(wordCard: WordCard) {
+            if (wordCard.sleepEvent){
+                binding.sleepDialog.visibility = View.VISIBLE
+
+                binding.textDialog.text = "Кажется вы уже запомнили эту карточку. Рекомендуем вам повторить ее спустя некоторое время. Карточка уснет на "+binding.slider.value.toInt().toString()+ " дня(дней)."
+                binding.slider.addOnChangeListener { slider, value, fromUser ->
+                    binding.textDialog.text = "Кажется вы уже запомнили эту карточку. Рекомендуем вам повторить ее спустя некоторое время. Карточка уснет на "+value.toInt().toString()+ " дня(дней)."
+                }
+                //Настройка слайдера
+                when(wordCard.progressWord?.statProgress){
+                    StatProgress.NEW.value ->{
+                        binding.slider.valueTo = 10F
+                        binding.slider.value = 5F
+                    }
+                    StatProgress.PARTIALLY_LEARNED.value ->{
+                        binding.slider.valueTo = 18F
+                        binding.slider.value = 9F
+                    }
+                    StatProgress.ALMOST_LEARNED.value ->{
+                        binding.slider.value = 0F
+                        binding.slider.visibility = View.GONE
+                        binding.textDialog.text = "Кажется вы уже запомнили эту карточку. Нажав \"OK\", вы перенесете эту карточку в группу \"изученные\"."
+                    }
+                }
+
+                binding.btnYes.setOnClickListener {
+                    wordCard.sleepEvent = false
+                    //отправим желание пользователя на усыпление карточки
+                    EventBus.getDefault().post(
+                        CardEvent(
+                            CrEvEnum.INTENT_SLEEP,
+                            wordCard,
+                            mapOf(
+                                "countDay" to binding.slider.value.toInt(),
+                                "positionAdapter" to position
+                            )
+                        )
+                    )
+                    binding.sleepDialog.visibility = View.GONE
+                }
+                binding.btnCansel.setOnClickListener {
+                    wordCard.sleepEvent = false
+                    //просто уведомим view чтобы она перелистнула пейджер
+                    //по сути изменений нет
+                    EventBus.getDefault().post(
+                        CardEvent(CrEvEnum.CARD_CHANGED, wordCard, mapOf("positionAdapter" to position))
+                    )
+                    binding.sleepDialog.visibility = View.GONE
+                }
+
+            } else {
+                binding.sleepDialog.visibility = View.GONE
             }
         }
     }
