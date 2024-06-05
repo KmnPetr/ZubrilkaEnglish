@@ -48,7 +48,7 @@ services:
   victoriametrics:
     container_name: victoriametrics
     build:
-      context: ./victoriametrics
+      context: /victoriametrics
     restart: always
     ports:
       - "8428:8428"
