@@ -47,22 +47,19 @@ services:
 
   victoriametrics:
     container_name: victoriametrics
-    build:
-      context: /victoriametrics
+    image: victoriametrics/victoria-metrics:v1.93.12
     restart: always
     ports:
       - "8428:8428"
-    environment:
-      value: value
+    entrypoint: /victoria-metrics-prod -promscrape.config=/promscrape.yaml
     networks:
       - ze_network
     volumes:
-      - victoriametrics:/victoria-metrics-data
+      - /victoriametrics/promscrape.yaml:/promscrape.yaml
 
 volumes:
   ze-db-postgres:
   certbot_keys:
-  victoriametrics:
 
 networks:
   ze_network:

@@ -112,7 +112,7 @@ jobs:
         sshpass -p "$SERVER_PASSWORD" scp -o StrictHostKeyChecking=no ze-app/docker-compose.yaml $SERVER_USERNAME@$SERVER_IP:/ze/docker-compose.yaml
         
         #файлы для сборщика метрик
-        sshpass -p "$SERVER_PASSWORD" scp -o StrictHostKeyChecking=no victoriametrics/Dockerfile $SERVER_USERNAME@$SERVER_IP:/victoriametrics/Dockerfile
+#        sshpass -p "$SERVER_PASSWORD" scp -o StrictHostKeyChecking=no victoriametrics/Dockerfile $SERVER_USERNAME@$SERVER_IP:/victoriametrics/Dockerfile
         sshpass -p "$SERVER_PASSWORD" scp -o StrictHostKeyChecking=no victoriametrics/promscrape.yaml $SERVER_USERNAME@$SERVER_IP:/victoriametrics/promscrape.yaml
         
 
