@@ -57,9 +57,21 @@ services:
     volumes:
       - /victoriametrics/promscrape.yaml:/promscrape.yaml
 
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:10.2.4
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana:/var/lib/grafana/
+    networks:
+      - ze_network
+
+
 volumes:
   ze-db-postgres:
   certbot_keys:
+  grafana:
 
 networks:
   ze_network:
