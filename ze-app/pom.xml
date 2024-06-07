@@ -10,7 +10,7 @@
   </parent>
   <groupId>com.example</groupId>
   <artifactId>ze-app</artifactId>
-  <version>1.1.75</version>
+  <version>1.1.76</version>
   <name>ze-app</name>
   <description>Demo project for Spring Boot</description>
   <properties>
@@ -71,7 +71,8 @@
       <artifactId>loki-logback-appender</artifactId>
       <version>1.4.2</version>
     </dependency>
-    <dependency> <!--для добавления различных условий в логбэк типа если во время тестов логи не нужно слать в локи-->
+    <dependency>
+      <!--для добавления различных условий в логбэк типа если во время тестов логи не нужно слать в локи-->
       <groupId>org.codehaus.janino</groupId>
       <artifactId>janino</artifactId>
     </dependency>
