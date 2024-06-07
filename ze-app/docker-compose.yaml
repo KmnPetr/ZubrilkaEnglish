@@ -43,6 +43,10 @@ services:
     volumes:
       - certbot_keys:/keys
     depends_on:
+      victoriametrics:
+        condition: service_healthy
+      loki:
+        condition: service_healthy
       ze-db-postgres:
         condition: service_healthy
 
