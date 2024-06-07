@@ -29,6 +29,7 @@ public class  HealthCheckController {
      */
     @GetMapping()
     public Mono<String> healthCheck(){
+        log.info("healthCheck called");
         return Mono.just("All ok.");
     }
 

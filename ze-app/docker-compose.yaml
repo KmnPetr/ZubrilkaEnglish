@@ -26,7 +26,6 @@ services:
     image: kmnpetr/ze-app:${TAG_IMAGE}
     restart: always
     ports:
-#      - "28700:28700"
       - "8443:8443"
     environment:
       spring.r2dbc.url: "r2dbc:postgresql://ze-db-postgres:5432/${BD_USER}"
@@ -43,10 +42,10 @@ services:
     volumes:
       - certbot_keys:/keys
     depends_on:
-      victoriametrics:
-        condition: service_healthy
-      loki:
-        condition: service_healthy
+#      victoriametrics:
+#        condition: service_healthy
+#      loki:
+#        condition: service_healthy
       ze-db-postgres:
         condition: service_healthy
 
@@ -62,11 +61,11 @@ services:
     volumes:
       - /victoriametrics/promscrape.yaml:/promscrape.yaml
       - victoriametrics:/victoria-metrics-data
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:8428/health || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
+#    healthcheck:
+#      test: ["CMD-SHELL", "curl -f http://localhost:8428/health || exit 1"]
+#      interval: 30s
+#      timeout: 10s
+#      retries: 5
 #      start_period: 30s
 
   loki:
@@ -78,11 +77,11 @@ services:
       - loki:/loki
     networks:
       - ze_network
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:3100/ready || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
+#    healthcheck:
+#      test: ["CMD-SHELL", "wget --spider -q http://localhost:3100/ready || exit 1"]
+#      interval: 30s
+#      timeout: 10s
+#      retries: 5
 #      start_period: 30s
 
   grafana:
