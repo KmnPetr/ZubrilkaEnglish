@@ -5,6 +5,6 @@ import retrofit2.Response
 import retrofit2.http.GET
 
 interface WordApi {
-@GET("/ze-app/words")
+@GET("/words")
 suspend fun getAllWords(): Response<List<Word>>
 }

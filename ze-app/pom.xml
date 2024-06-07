@@ -66,6 +66,15 @@
       <artifactId>reactor-test</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>com.github.loki4j</groupId>
+      <artifactId>loki-logback-appender</artifactId>
+      <version>1.4.2</version>
+    </dependency>
+    <dependency> <!--для добавления различных условий в логбэк типа если во время тестов логи не нужно слать в локи-->
+      <groupId>org.codehaus.janino</groupId>
+      <artifactId>janino</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <plugins>

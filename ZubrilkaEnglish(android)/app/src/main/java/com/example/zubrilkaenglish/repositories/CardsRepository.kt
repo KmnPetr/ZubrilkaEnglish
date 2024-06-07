@@ -15,6 +15,7 @@ import com.example.zubrilkaenglish.repositories.room.RoomService
 import com.example.zubrilkaenglish.utils.LOG
 import com.example.zubrilkaenglish.utils.SIM_FORM_DATE
 import com.example.zubrilkaenglish.utils.StatProgress
+import com.example.zubrilkaenglish.utils.numAnsForSleep
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -224,7 +225,7 @@ class CardsRepository private constructor(){
      * функция предложит ему усыпить карточку
      */
     private fun checkCardSleep(wordCard: WordCard): Boolean {
-        return wordCard.progressWord?.numCorrAnsv!! >= 3
+        return wordCard.progressWord?.numCorrAnsv!! >= numAnsForSleep
     }
 
     /**
