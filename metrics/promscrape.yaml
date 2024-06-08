@@ -1,0 +1,14 @@
+scrape_configs:
+  - job_name: ze-app
+    scheme: https
+    static_configs:
+      - targets: ["zubrilka-english.com:8443"]
+    metrics_path: /actuator/prometheus
+#    oauth2:
+#      client_id: victoria-metrics
+#      client_secret:
+#      token_url:
+#      scopes:
+#        - metrics
+#      endpoint_params:
+#        grant_type: client_credentials

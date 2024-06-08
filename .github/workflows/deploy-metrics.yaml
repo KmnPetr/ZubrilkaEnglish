@@ -1,0 +1,64 @@
+#задеплоит на сервер несколько сервисов по сбору метрик с приложения, это графана, викториаметрикс, локи, сервис трасировки
+#простым способом через docker-compose
+name: Deploy_Metrics
+on: workflow_dispatch
+
+
+#on:
+#  push:
+#    branches:
+#      - deploy-release-back
+
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup git config
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "<>"
+
+      - name: Make Directory "metrics"
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          script: |
+            mkdir -p /metrics/
+
+      - name: Docker Compose Down
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          script: |
+            docker compose -f /metrics/docker-compose.yaml down || true
+
+      - name: Copy files to remote server
+        env:
+          SERVER_IP: ${{ secrets.SERVER_IP }}
+          SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
+          SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
+        run: |
+          sshpass -p "$SERVER_PASSWORD" scp -o StrictHostKeyChecking=no metrics/docker-compose.yaml $SERVER_USERNAME@$SERVER_IP:/metrics/docker-compose.yaml
+          
+          sshpass -p "$SERVER_PASSWORD" scp -o StrictHostKeyChecking=no metrics/promscrape.yaml $SERVER_USERNAME@$SERVER_IP:/metrics/promscrape.yaml
+          sshpass -p "$SERVER_PASSWORD" scp -o StrictHostKeyChecking=no metrics/tempo.yaml $SERVER_USERNAME@$SERVER_IP:/metrics/tempo.yaml
+
+
+      - name: Docker Compose Up
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          script: |
+            docker compose -f /metrics/docker-compose.yaml -p ze up --build -d
