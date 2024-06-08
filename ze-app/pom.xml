@@ -82,11 +82,11 @@
       <artifactId>micrometer-tracing</artifactId>
       <version>1.2.1</version>
     </dependency>
-    <!--    <dependency>-->
-    <!--      <groupId>io.micrometer</groupId>-->
-    <!--      <artifactId>micrometer-tracing-bridge-otel</artifactId>-->
-    <!--      <version>1.2.1</version>-->
-    <!--    </dependency>-->
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-tracing-bridge-otel</artifactId>
+      <version>1.2.1</version>
+    </dependency>
     <dependency>
       <groupId>io.opentelemetry</groupId>
       <artifactId>opentelemetry-exporter-zipkin</artifactId>
@@ -97,12 +97,12 @@
       <artifactId>datasource-micrometer-spring-boot</artifactId>
       <version>1.0.3</version>
     </dependency>
-    <!--    подсмотрено из образца для реактивного кора-->
-    <dependency>
-      <groupId>io.micrometer</groupId>
-      <artifactId>micrometer-tracing-bridge-brave</artifactId>
-      <version>1.2.1</version>
-    </dependency>
+<!--    подсмотрено из образца для реактивного кора-->
+<!--    <dependency>-->
+<!--      <groupId>io.micrometer</groupId>-->
+<!--      <artifactId>micrometer-tracing-bridge-brave</artifactId>-->
+<!--      <version>1.2.1</version>-->
+<!--    </dependency>-->
   </dependencies>
   <build>
     <plugins>
