@@ -75,6 +75,22 @@
       <!--для добавления различных условий в логбэк типа если во время тестов логи не нужно слать в локи-->
       <groupId>org.codehaus.janino</groupId>
       <artifactId>janino</artifactId>
+      <version>3.1.11</version>
+    </dependency>
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-tracing</artifactId>
+      <version>1.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-tracing-bridge-otel</artifactId>
+      <version>1.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-exporter-zipkin</artifactId>
+      <version>1.31.0</version>
     </dependency>
   </dependencies>
   <build>
