@@ -92,6 +92,11 @@
       <artifactId>opentelemetry-exporter-zipkin</artifactId>
       <version>1.31.0</version>
     </dependency>
+    <dependency>
+      <groupId>net.ttddyy.observation</groupId>
+      <artifactId>datasource-micrometer-spring-boot</artifactId>
+      <version>1.0.3</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>

@@ -98,6 +98,8 @@ services:
     volumes:
       - /metrics/tempo.yaml:/etc/tempo.yaml
       - tempo:/var/lib/tempo
+    networks:
+      - ze_network
 
 
   grafana:
