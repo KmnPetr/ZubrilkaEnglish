@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+
+  victoriametrics:
+    container_name: victoriametrics
+    image: victoriametrics/victoria-metrics:v1.93.12
+    restart: always
+    ports:
+      - "8428:8428"
+    entrypoint: /victoria-metrics-prod -promscrape.config=/promscrape.yaml
+    networks:
+      - ze_network
+    volumes:
+      - /victoriametrics/promscrape.yaml:/promscrape.yaml
+      - victoriametrics:/victoria-metrics-data
+  #    healthcheck:
+  #      test: ["CMD-SHELL", "curl -f http://localhost:8428/health || exit 1"]
+  #      interval: 30s
+  #      timeout: 10s
+  #      retries: 5
+  #      start_period: 30s
+
+  loki:
+    container_name: loki
+    image: grafana/loki:2.9.4
+    ports:
+      - "3100:3100"
+    volumes:
+      - loki:/loki
+    networks:
+      - ze_network
+  #    healthcheck:
+  #      test: ["CMD-SHELL", "wget --spider -q http://localhost:3100/ready || exit 1"]
+  #      interval: 30s
+  #      timeout: 10s
+  #      retries: 5
+  #      start_period: 30s
+
+  tracing:
+    container_name: tracing
+    image: grafana/tempo:2.3.1
+    command: ["--config.file=/etc/tempo.yaml"]
+    ports:
+      - "3200:3200" #собственный для rest api
+      - "9095:9095" #для grps
+      - "4317:4317" #для опен телеметрии grps
+      - "4318:4318" #для http опен телеметрии
+      - "9411:9411" #для формата zipkin
+      - "14268:14268" #джагер
+    volumes:
+      - /metrics/tempo.yaml:/etc/tempo.yaml
+      - tempo:/var/lib/tempo
+    networks:
+      - ze_network
+
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:10.2.4
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana:/var/lib/grafana/
+    networks:
+      - ze_network
+
+
+
+
+volumes:
+  certbot_keys:
+  grafana:
+  victoriametrics:
+  loki:
+  tempo:
+
+networks:
+  ze_network:
+    driver: bridge

@@ -92,8 +92,8 @@ jobs:
         password: ${{ secrets.SERVER_PASSWORD }}
         script: |
           mkdir -p /ze/
-          mkdir -p /victoriametrics/
-          mkdir -p /metrics/
+          #mkdir -p /victoriametrics/
+          #mkdir -p /metrics/
 
     - name: Docker Compose Down
       uses: appleboy/ssh-action@master
@@ -114,8 +114,8 @@ jobs:
         
         #файлы для метрик
         #sshpass -p "$SERVER_PASSWORD" scp -o StrictHostKeyChecking=no victoriametrics/Dockerfile $SERVER_USERNAME@$SERVER_IP:/victoriametrics/Dockerfile
-        sshpass -p "$SERVER_PASSWORD" scp -o StrictHostKeyChecking=no victoriametrics/promscrape.yaml $SERVER_USERNAME@$SERVER_IP:/victoriametrics/promscrape.yaml
-        sshpass -p "$SERVER_PASSWORD" scp -o StrictHostKeyChecking=no metrics/tempo.yaml $SERVER_USERNAME@$SERVER_IP:/metrics/tempo.yaml
+        #sshpass -p "$SERVER_PASSWORD" scp -o StrictHostKeyChecking=no victoriametrics/promscrape.yaml $SERVER_USERNAME@$SERVER_IP:/victoriametrics/promscrape.yaml
+        #sshpass -p "$SERVER_PASSWORD" scp -o StrictHostKeyChecking=no metrics/tempo.yaml $SERVER_USERNAME@$SERVER_IP:/metrics/tempo.yaml
         
 
     - name: Docker Compose Up
