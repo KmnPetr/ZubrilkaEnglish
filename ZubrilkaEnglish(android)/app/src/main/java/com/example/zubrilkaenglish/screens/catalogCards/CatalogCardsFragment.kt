@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
+import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.FragmentCatalogCardsBinding
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.screens.catalogCards.fragments.CatalogItemFragment
@@ -54,7 +55,7 @@ class CatalogCardsFragment : Fragment() {
         SearchObject.instance //требует заранее прогрузки для скачивания данных с БД
 
 
-        customizeBackground(binding.background,resources)
+        customizeBackground(binding.background, resources, R.drawable.library_correct1)
 
         setListFragment()
         tabLayoutListener()

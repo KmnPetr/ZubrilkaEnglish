@@ -1,6 +1,5 @@
-package com.example.zeauth.controllers.validation;
+package com.example.zeapp.controllers.validation;
 
-import com.auth0.jwt.exceptions.TokenExpiredException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;

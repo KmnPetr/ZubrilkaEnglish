@@ -1,4 +1,4 @@
-package com.example.zeauth.models;
+package com.example.zeapp.models;
 
 public enum UserRole {
     ROLE_USER,

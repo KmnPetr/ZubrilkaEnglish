@@ -1,4 +1,4 @@
-package com.example.zeauth.services;
+package com.example.zeapp.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

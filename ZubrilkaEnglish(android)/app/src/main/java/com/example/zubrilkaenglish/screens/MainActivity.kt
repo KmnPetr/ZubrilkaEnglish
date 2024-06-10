@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
 
 
-//    lateinit var navController: NavController//TODO ???
+    //lateinit var navController: NavController//TODO ???
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,8 +55,7 @@ class MainActivity : AppCompatActivity() {
         // Получаем NavHostFragment и NavController
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
         navController = navHostFragment.navController
-//        navController=Navigation.findNavController(this, R.id.nav_host_fragment_activity_main)//TODO ???
-
+        //navController=Navigation.findNavController(this, R.id.nav_host_fragment_activity_main)//TODO ???
 
         // Создание ActionBarDrawerToggle для управления выдвижной шторкой
         val toggle = ActionBarDrawerToggle(
