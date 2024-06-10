@@ -1,9 +1,8 @@
-package com.example.zeauth.controllers;
+package com.example.zeapp.controllers;
 
-import com.example.zeauth.models.Person;
-import com.example.zeauth.models.ProfileDTO;
-import com.example.zeauth.models.PropModel;
-import com.example.zeauth.services.PersonService;
+import com.example.zeapp.models.ProfileDTO;
+import com.example.zeapp.models.PropModel;
+import com.example.zeapp.services.PersonService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

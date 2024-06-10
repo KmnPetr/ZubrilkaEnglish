@@ -1,4 +1,4 @@
-package com.example.zeauth.controllers.validation;
+package com.example.zeapp.controllers.validation;
 
 public class UnauthorizedException extends Exception{
     public UnauthorizedException(String message){

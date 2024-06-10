@@ -1,4 +1,4 @@
-package com.example.zeauth.controllers.validation;
+package com.example.zeapp.controllers.validation;
 
 /**
  * ошибка выбрасываемая при ошибка в валидации входящих данных

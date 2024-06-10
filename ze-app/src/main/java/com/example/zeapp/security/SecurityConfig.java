@@ -1,4 +1,4 @@
-package com.example.zeauth.security;
+package com.example.zeapp.security;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import reactor.core.publisher.Mono;
@@ -42,8 +41,13 @@ public class SecurityConfig {
                             "/",
                             "/auth/login",
                             "/auth/registration",
-                            "/healthcheck",
-                            "/test-auth/guest"
+                            "/healthcheck/**", //TODO
+                            "/actuator/**", //TODO
+                            "/test-auth/guest",
+                            "/properties/**",
+                            "/sys/reload", //TODO
+                            "/voice/**",
+                            "/words"
                     ).permitAll();
 
                     auth.pathMatchers(

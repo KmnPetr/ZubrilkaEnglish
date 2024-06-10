@@ -1,6 +1,6 @@
-package com.example.zeauth.repositories;
+package com.example.zeapp.repositories;
 
-import com.example.zeauth.models.Person;
+import com.example.zeapp.models.Person;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Mono;
 

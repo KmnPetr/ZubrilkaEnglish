@@ -1,12 +1,12 @@
-package com.example.zeauth.services;
+package com.example.zeapp.services;
 
-import com.example.zeauth.controllers.validation.UnauthorizedException;
-import com.example.zeauth.controllers.validation.ValidationException;
-import com.example.zeauth.models.Person;
-import com.example.zeauth.models.ProfileDTO;
-import com.example.zeauth.models.UserRole;
-import com.example.zeauth.repositories.PersonRepository;
-import com.example.zeauth.security.JwtUtil;
+import com.example.zeapp.controllers.validation.UnauthorizedException;
+import com.example.zeapp.controllers.validation.ValidationException;
+import com.example.zeapp.models.Person;
+import com.example.zeapp.models.ProfileDTO;
+import com.example.zeapp.models.UserRole;
+import com.example.zeapp.repositories.PersonRepository;
+import com.example.zeapp.security.JwtUtil;
 import jakarta.validation.constraints.AssertTrue;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

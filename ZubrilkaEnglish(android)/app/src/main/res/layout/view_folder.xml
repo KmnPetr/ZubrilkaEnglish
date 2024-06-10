@@ -6,7 +6,7 @@
     android:layout_margin="1dp"
     app:cardCornerRadius="10dp"
     app:cardElevation="0dp"
-    app:cardBackgroundColor="#4DA371C1"
+    app:cardBackgroundColor="#00A371C1"
     >
 
     <LinearLayout
@@ -32,7 +32,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:textSize="18sp"
-                android:text="nameFolder" />
+                android:text="nameFolder"
+                android:textColor="#AFDDE3"/>
 
         </LinearLayout>
     </LinearLayout>

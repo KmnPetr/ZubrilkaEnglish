@@ -5,15 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.FragmentMenuBinding
-import com.example.zubrilkaenglish.events.VoiceEvent
-import com.example.zubrilkaenglish.models.Voice
 import com.example.zubrilkaenglish.utils.customizeBackground
-import org.greenrobot.eventbus.EventBus
 
 class MenuFragment : Fragment() {
     private lateinit var viewModel: MenuViewModel
@@ -32,7 +28,7 @@ class MenuFragment : Fragment() {
 
         viewModel=ViewModelProvider(this).get(MenuViewModel::class.java)
 
-        customizeBackground(binding.background,resources)
+        customizeBackground(binding.background,resources,R.drawable.london03)
         initButton()
     }
     private fun initButton(){

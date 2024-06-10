@@ -1,4 +1,4 @@
-package com.example.zeauth.controllers;
+package com.example.zeapp.controllers;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -7,6 +7,9 @@ import reactor.core.publisher.Mono;
 
 import java.security.Principal;
 
+/**
+ * тестовый контроллер для проверки корректности работы security
+ */
 @RestController
 @RequestMapping("/test-auth")
 public class TestAuthController {

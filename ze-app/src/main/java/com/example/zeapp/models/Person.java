@@ -1,4 +1,4 @@
-package com.example.zeauth.models;
+package com.example.zeapp.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;

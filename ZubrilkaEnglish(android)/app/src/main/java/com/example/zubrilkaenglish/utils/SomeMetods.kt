@@ -17,7 +17,7 @@ import kotlinx.coroutines.withContext
  * функция обрезает картинку перед ее установкой в качестве фона
  * здесь некая логика обрезки левого края изображения по пропорциям экрана
  */
-fun customizeBackground(background: ImageView, resources: Resources) {
+fun customizeBackground(background: ImageView, resources: Resources, drawable: Int) {
 
     val displayMetrics = resources.displayMetrics
     val widthPixels = displayMetrics.widthPixels
@@ -26,7 +26,7 @@ fun customizeBackground(background: ImageView, resources: Resources) {
     val attitude = widthPixels.toFloat()/heightPixels.toFloat()
 
 
-    val originalBitmap: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.fon_1)
+    val originalBitmap: Bitmap = BitmapFactory.decodeResource(resources, drawable)
     val desiredWidth = originalBitmap.height*attitude
     val desiredHeight = originalBitmap.height
 

@@ -1,10 +1,10 @@
-package com.example.zeauth.controllers;
+package com.example.zeapp.controllers;
 
-import com.example.zeauth.models.Person;
-import com.example.zeauth.models.ProfileDTO;
-import com.example.zeauth.models.PropModel;
-import com.example.zeauth.security.JwtUtil;
-import com.example.zeauth.services.PersonService;
+import com.example.zeapp.models.Person;
+import com.example.zeapp.models.ProfileDTO;
+import com.example.zeapp.models.PropModel;
+import com.example.zeapp.security.JwtUtil;
+import com.example.zeapp.services.PersonService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.AssertTrue;
 import lombok.extern.slf4j.Slf4j;
