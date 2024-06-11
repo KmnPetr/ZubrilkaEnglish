@@ -1,4 +1,4 @@
-package com.example.zubrilkaenglish.models
+package com.example.zubrilkaenglish.screens.training
 
 interface ICard {
 
@@ -7,7 +7,7 @@ interface ICard {
      */
     companion object{
         const val WORD_CARD_TYPE: Int=0
-        const val NEWS_CARD_TYPE: Int=1
+        const val REVIEW_CARD_TYPE: Int=1
     }
 
     fun getItemViewType():Int

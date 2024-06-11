@@ -2,9 +2,8 @@ package com.example.zubrilkaenglish.screens.training
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.zubrilkaenglish.models.ICard
-import com.example.zubrilkaenglish.models.NewsCard
 import com.example.zubrilkaenglish.models.WordCard
+import com.example.zubrilkaenglish.screens.training.additionalCards.ReviewCard
 
 class CardAdapter(val listener: Listener):RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
@@ -41,8 +40,8 @@ class CardAdapter(val listener: Listener):RecyclerView.Adapter<RecyclerView.View
         if (holder is ViewHolderFactory.WordCardHolder){
             holder.bind((cardList[position] as WordCard),listener,position)
         }
-        else if (holder is ViewHolderFactory.NewsCardHolder){
-            holder.bind((cardList[position] as NewsCard),listener)
+        else if (holder is ViewHolderFactory.ReviewCardHolder){
+            holder.bind((cardList[position] as ReviewCard),listener)
         }
     }
 
@@ -68,5 +67,7 @@ class CardAdapter(val listener: Listener):RecyclerView.Adapter<RecyclerView.View
         fun onClickNoButton(wordCard: WordCard, position: Int)
         fun onClickLookButton(wordCard: WordCard)
         fun onClickOptionsButton(wordCard: WordCard)
+        fun completeTraining()
+        fun restartTraining()
     }
 }

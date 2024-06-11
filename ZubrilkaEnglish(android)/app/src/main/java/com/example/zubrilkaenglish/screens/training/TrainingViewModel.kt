@@ -3,7 +3,6 @@ package com.example.zubrilkaenglish.screens.training
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.zubrilkaenglish.models.ICard
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.repositories.CardsRepository
 import kotlinx.coroutines.launch
@@ -43,5 +42,22 @@ class TrainingViewModel : ViewModel() {
             }
         }
         return listForTreining
+    }
+
+    /**
+     * запросит список заново
+     * при рестарте обучения
+     */
+    fun overwriteList() {
+        viewModelScope.launch {
+            val newList: ArrayList<ICard> = cardsRepository.getListForTreining()
+
+            countWordCards = 0
+            newList.forEach {
+                //надо както посчитать количество именно слов среди других неучебных карточек неактуально уже но посчитать надо все равно
+                if (it is WordCard) countWordCards++
+            }
+            listForTreining.value = newList
+        }
     }
 }

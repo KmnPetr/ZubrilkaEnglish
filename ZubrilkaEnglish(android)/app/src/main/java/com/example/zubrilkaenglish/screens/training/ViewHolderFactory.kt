@@ -1,20 +1,16 @@
 package com.example.zubrilkaenglish.screens.training
 
-import android.graphics.ColorMatrix
-import android.graphics.ColorMatrixColorFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.Embedded
 import com.example.zubrilkaenglish.R
-import com.example.zubrilkaenglish.databinding.ViewNewsCardBinding
+import com.example.zubrilkaenglish.databinding.ViewReviewCardBinding
 import com.example.zubrilkaenglish.databinding.ViewWordCardBinding
 import com.example.zubrilkaenglish.events.CardEvent
 import com.example.zubrilkaenglish.events.CrEvEnum
-import com.example.zubrilkaenglish.models.ICard
-import com.example.zubrilkaenglish.models.NewsCard
 import com.example.zubrilkaenglish.models.WordCard
+import com.example.zubrilkaenglish.screens.training.additionalCards.ReviewCard
 import com.example.zubrilkaenglish.utils.StatProgress
 import org.greenrobot.eventbus.EventBus
 
@@ -125,11 +121,16 @@ class ViewHolderFactory {
             }
         }
     }
-    class NewsCardHolder(item: View): RecyclerView.ViewHolder(item){
-        val binding= ViewNewsCardBinding.bind(item)
+    class ReviewCardHolder(item: View): RecyclerView.ViewHolder(item){
+        val binding= ViewReviewCardBinding.bind(item)
 
-        fun bind(newsCard: NewsCard, listener: CardAdapter.Listener/*listener в будущем пригодится*/){
-            binding.textNewsCard.text=newsCard.news
+        fun bind(reviewCard: ReviewCard, listener: CardAdapter.Listener/*listener в будущем пригодится*/){
+            binding.btnNo.setOnClickListener {
+                listener.completeTraining()
+            }
+            binding.btnYes.setOnClickListener {
+                listener.restartTraining()
+            }
         }
     }
 
@@ -140,9 +141,8 @@ class ViewHolderFactory {
                     val view= LayoutInflater.from(parent.context).inflate(R.layout.view_word_card,parent,false)
                     return WordCardHolder(view)
                 }
-                ICard.NEWS_CARD_TYPE ->{
-                    val view= LayoutInflater.from(parent.context).inflate(R.layout.view_news_card,parent,false)
-                    return NewsCardHolder(view)
+                ICard.REVIEW_CARD_TYPE ->{
+                    return ReviewCardHolder(ReviewCard.getView(parent))
                 }
                 else->{
                     return throw java.lang.IllegalStateException("Invalid rating param value")

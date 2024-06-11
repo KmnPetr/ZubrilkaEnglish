@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
-import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.example.zubrilkaenglish.databinding.FragmentTrainingBinding
 import com.example.zubrilkaenglish.events.CardEvent
@@ -19,6 +19,7 @@ import com.example.zubrilkaenglish.events.VcEvEnum
 import com.example.zubrilkaenglish.events.VoiceEvent
 import com.example.zubrilkaenglish.models.Voice
 import com.example.zubrilkaenglish.models.WordCard
+import com.example.zubrilkaenglish.screens.training.additionalCards.ReviewCard
 import com.example.zubrilkaenglish.screens.training.popup.PopupOptions
 import com.example.zubrilkaenglish.services.ads.YandexAds
 import com.example.zubrilkaenglish.utils.LOG
@@ -38,7 +39,7 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
 
     private lateinit var viewModel: TrainingViewModel
     private lateinit var binding: FragmentTrainingBinding
-    private val adapter = CardAdapter(this)
+    private lateinit var adapter: CardAdapter
     private lateinit var countCards : TextView
 
 
@@ -56,7 +57,7 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
         viewModel = ViewModelProvider(this).get(TrainingViewModel::class.java)
         countCards = binding.countCards
 
-
+        adapter = CardAdapter(this)
         binding.viewPager2.adapter=adapter
         binding.viewPager2.offscreenPageLimit =3
         binding.viewPager2.clipToPadding = false
@@ -86,6 +87,8 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
          */
         viewModel.getListForTreining().observe(viewLifecycleOwner){list->
             if (list != null) {
+                list.add(ReviewCard())
+
                 adapter.setList(list)
             }
             countCards.text = "( ${binding.viewPager2.currentItem + 1} / ${viewModel.countWordCards} )"
@@ -162,6 +165,7 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
     override fun onClickOptionsButton(wordCard: WordCard) {
         PopupOptions(requireActivity(),wordCard).show()
     }
+
 
     /**
      *  метод инициирует озвучку карточки
@@ -265,5 +269,22 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
                 }
             }
         })
+    }
+
+    /**
+     * завершит обучение
+     * закроет фрагмент
+     */
+    override fun completeTraining() {
+        findNavController().popBackStack(findNavController().graph.startDestinationId, false)
+    }
+
+    /**
+     * начнет обучение заново
+     * перезапросит список для обучения
+     */
+    override fun restartTraining() {
+        viewModel.overwriteList()
+        binding.viewPager2.currentItem = 0
     }
 }

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:id="@+id/textNewsCard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Вы повторили все карточки.\n Хотите просмотреть их еще раз?"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="10dp"
+        android:padding="5dp"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textNewsCard">
+
+        <com.example.zubrilkaenglish.utils.ui.CustButton
+            android:id="@+id/btnYes"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            android:paddingEnd="35dp"
+            android:layout_marginRight="30dp"
+            app:backgroundColor="#B6B6B6"
+            app:borderColor="#7E7E7E"
+            app:borderWidth="1dp"
+            app:cornerRadius="7dp"
+            app:fontFamily="sans-serif"
+            app:text="Да"
+            app:textColor="@color/white"
+            app:textSize="12sp"
+            app:textStyle="bold_italic" />
+
+        <com.example.zubrilkaenglish.utils.ui.CustButton
+            android:id="@+id/btnNo"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            android:paddingEnd="35dp"
+            app:backgroundColor="#B6B6B6"
+            app:borderColor="#7E7E7E"
+            app:borderWidth="1dp"
+            app:cornerRadius="7dp"
+            app:fontFamily="sans-serif"
+            app:text="Нет"
+            app:textColor="@color/white"
+            app:textSize="12sp"
+            app:textStyle="bold_italic" />
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

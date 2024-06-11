@@ -2,6 +2,7 @@ package com.example.zubrilkaenglish.models
 
 import androidx.room.Embedded
 import androidx.room.Ignore
+import com.example.zubrilkaenglish.screens.training.ICard
 
 data class WordCard(
     @Embedded

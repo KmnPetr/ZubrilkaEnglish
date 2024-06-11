@@ -5,8 +5,7 @@ import android.util.Log
 import com.example.zubrilkaenglish.events.CardEvent
 import com.example.zubrilkaenglish.events.CrEvEnum
 import com.example.zubrilkaenglish.events.NotificationEvent
-import com.example.zubrilkaenglish.models.ICard
-import com.example.zubrilkaenglish.models.NewsCard
+import com.example.zubrilkaenglish.screens.training.ICard
 import com.example.zubrilkaenglish.models.ProgressWord
 import com.example.zubrilkaenglish.models.Word
 import com.example.zubrilkaenglish.models.WordCard
@@ -199,7 +198,6 @@ class CardsRepository private constructor(){
         }
 
         listForTreining.shuffle()
-        listForTreining.add(NewsCard("news will be here"))
 
         return listForTreining
     }

@@ -18,17 +18,10 @@ object RetrofitInstance {
         Retrofit.Builder()
             .baseUrl(URL)
             .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-
-    //этот инстанс временный для локального тестирования настройки профиля
-    private val profileJsonRetrofit by lazy{
-        Retrofit.Builder()
-            .baseUrl(LOCAL_URL)
-            .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()
     }
+
     //этот инстанс ретрофита принимает просто байты не пытаясь их распарсить в json
     private val voiceRetrofit by lazy{
         Retrofit.Builder()
@@ -46,6 +39,6 @@ object RetrofitInstance {
         voiceRetrofit.create(VoiceApi::class.java)
     }
     val profileApi:ProfileApi by lazy {
-        profileJsonRetrofit.create(ProfileApi::class.java)
+        jsonRetrofit.create(ProfileApi::class.java)
     }
 }
