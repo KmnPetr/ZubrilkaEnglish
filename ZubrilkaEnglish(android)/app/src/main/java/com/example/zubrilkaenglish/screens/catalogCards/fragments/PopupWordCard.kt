@@ -71,25 +71,25 @@ class PopupWordCard(
         //в CardEvent добавляем позицию адаптера для дальнейшего обновления элемента адаптера а не всего списка адаптера
         if (addToTrain.isEnabled){
             addToTrain.setOnClickListener {
-                EventBus.getDefault().post(CardEvent(CrEvEnum.ADD_WORD_TO_TRAINING,wordCard, mapOf("positionAdapter" to position)))
+                EventBus.getDefault().post(CardEvent(CrEvEnum.ADD_WORD_TO_TRAINING,wordCard, mutableMapOf("positionAdapter" to position)))
                 dismiss()
             }
         }
         if (markLearned.isEnabled){
             markLearned.setOnClickListener {
-                EventBus.getDefault().post(CardEvent(CrEvEnum.SET_AS_LEARNED,wordCard, mapOf("positionAdapter" to position)))
+                EventBus.getDefault().post(CardEvent(CrEvEnum.SET_AS_LEARNED,wordCard, mutableMapOf("positionAdapter" to position)))
                 dismiss()
             }
         }
         if (resetProgress.isEnabled){
             resetProgress.setOnClickListener {
-                EventBus.getDefault().post(CardEvent(CrEvEnum.RESET_PROGRESS,wordCard, mapOf("positionAdapter" to position)))
+                EventBus.getDefault().post(CardEvent(CrEvEnum.RESET_PROGRESS,wordCard, mutableMapOf("positionAdapter" to position)))
                 dismiss()
             }
         }
         if (deleteCard.isEnabled){
             deleteCard.setOnClickListener {
-                EventBus.getDefault().post(CardEvent(CrEvEnum.DELETE_CARD,wordCard, mapOf("positionAdapter" to position)))
+                EventBus.getDefault().post(CardEvent(CrEvEnum.DELETE_CARD,wordCard, mutableMapOf("positionAdapter" to position)))
                 dismiss()
             }
         }

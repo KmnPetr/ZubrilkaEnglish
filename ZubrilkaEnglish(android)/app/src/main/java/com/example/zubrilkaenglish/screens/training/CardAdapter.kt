@@ -66,7 +66,7 @@ class CardAdapter(val listener: Listener):RecyclerView.Adapter<RecyclerView.View
         fun onClickYesButton(wordCard: WordCard, position: Int)
         fun onClickNoButton(wordCard: WordCard, position: Int)
         fun onClickLookButton(wordCard: WordCard)
-        fun onClickOptionsButton(wordCard: WordCard)
+        fun onClickOptionsButton(wordCard: WordCard, position: Int)
         fun completeTraining()
         fun restartTraining()
     }

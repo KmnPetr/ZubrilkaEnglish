@@ -33,7 +33,7 @@
                 android:layout_margin="8dp"
                 android:textSize="18sp"
                 android:text="nameFolder"
-                android:textColor="#AFDDE3"/>
+                android:textColor="@color/black"/>
 
         </LinearLayout>
     </LinearLayout>

@@ -6,6 +6,8 @@ import androidx.room.Query
 import androidx.room.Update
 import com.example.zubrilkaenglish.models.ProgressWord
 import com.example.zubrilkaenglish.models.WordCard
+import com.example.zubrilkaenglish.utils.StatProgress
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ProgressDAO {
@@ -19,4 +21,6 @@ interface ProgressDAO {
     suspend fun getProgressWordById(progId: Int?): ProgressWord?
     @Query("DELETE FROM progress_word WHERE wordId = :idWord")
     suspend fun deleteProgressByWordId(idWord: Int?)
+    @Query("SELECT * FROM progress_word WHERE statProgress !=  :status")
+    fun getAllProgressUnlearnedCards(status: String = StatProgress.LEARNED.value): Flow<List<ProgressWord>>
 }

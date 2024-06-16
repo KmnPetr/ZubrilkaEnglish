@@ -4,10 +4,10 @@ import android.widget.Toast
 
 class NotificationEvent(
     val message: String,
-    override val typeEvent: NfEvEnum = NfEvEnum.SHOW_TOAST,
-    var properties: Map<String, Any>? = mapOf("duration" to Toast.LENGTH_SHORT)
+    override val typeEvent: NfEvEnum,
+    override var properties: MutableMap<String, Any> = mutableMapOf()
     ) : iEvent<NfEvEnum>
 
 enum class NfEvEnum{
-    SHOW_TOAST
+    LIMIT_ACTIVE_WORDS
 }

@@ -17,6 +17,7 @@ class RoomService{
      * вернет PropDAO с его методами
      */
     fun getPropDAO() = dataBase.getPropDAO()
+    fun getProgressDAO() = dataBase.getProgressDAO() //даст прямой доступ к методам ProgressDAO
 
 
     suspend fun getVoiceByName(name: String): Voice?{

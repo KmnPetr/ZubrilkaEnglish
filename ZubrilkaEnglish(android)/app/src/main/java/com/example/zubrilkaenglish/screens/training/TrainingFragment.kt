@@ -103,8 +103,8 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
         EventBus.getDefault().register(this)
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onStop() {
+        super.onStop()
         EventBus.getDefault().unregister(this)
     }
 
@@ -138,7 +138,7 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
      */
     override fun onClickYesButton(wordCard: WordCard, position: Int) {
         wordCard.cardHasChanged=true
-        EventBus.getDefault().post(CardEvent(CrEvEnum.INCREASE_PROGRESS,wordCard, mapOf("positionAdapter" to position)))
+        EventBus.getDefault().post(CardEvent(CrEvEnum.INCREASE_PROGRESS,wordCard, mutableMapOf("positionAdapter" to position)))
     }
 
     /**
@@ -148,7 +148,7 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
     override fun onClickNoButton(wordCard: WordCard, position: Int) {
         wordCard.cardHasChanged=true
         //отправим запрос на сброс значения numCorrAnsv
-        EventBus.getDefault().post(CardEvent(CrEvEnum.RESET_numCorrAnsv, wordCard, mapOf("positionAdapter" to position)))
+        EventBus.getDefault().post(CardEvent(CrEvEnum.RESET_numCorrAnsv, wordCard, mutableMapOf("positionAdapter" to position)))
     }
 
     /**
@@ -162,8 +162,8 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
     /**
      * функция вызывается при нажатии на кнопку "три точки"
      */
-    override fun onClickOptionsButton(wordCard: WordCard) {
-        PopupOptions(requireActivity(),wordCard).show()
+    override fun onClickOptionsButton(wordCard: WordCard, position: Int) {
+        PopupOptions(requireActivity(),wordCard,position).show()
     }
 
 
@@ -261,7 +261,7 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
                 if (state == 0 && position == ((viewPager2.adapter?.itemCount ?: 0) - 1)){
 
                     GlobalScope.launch {
-                        delay(500) //небольшая задержка чтоб прогрузилось все и не сразу выпригивала реклама
+                        delay(350) //небольшая задержка чтоб прогрузилось все и не сразу выпригивала реклама
                         withContext(Dispatchers.Main){
                             showYandexAds()
                         }

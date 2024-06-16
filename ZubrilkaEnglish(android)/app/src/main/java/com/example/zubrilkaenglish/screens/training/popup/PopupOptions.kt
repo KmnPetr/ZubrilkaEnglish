@@ -18,7 +18,8 @@ import org.greenrobot.eventbus.EventBus
  */
 class PopupOptions(
     context: Context,
-    wordCard: WordCard
+    wordCard: WordCard,
+    position: Int
 ) : Dialog(context) {
     private var binding = PopupOptionsTrainCardBinding.inflate(layoutInflater)
 
@@ -28,24 +29,24 @@ class PopupOptions(
         setContentView(binding.root)
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        setListeners(wordCard)
+        setListeners(wordCard,position)
     }
 
     /**
      * функция установит слушатели на все кнопки диалогового окна
      */
-    private fun setListeners(wordCard: WordCard) {
+    private fun setListeners(wordCard: WordCard, position: Int) {
         binding.markLearned.setOnClickListener {
             //попросим репозиторий сделать карточку выученной
-            EventBus.getDefault().post(CardEvent(CrEvEnum.SET_AS_LEARNED,wordCard))
+            EventBus.getDefault().post(CardEvent(CrEvEnum.SET_AS_LEARNED,wordCard, mutableMapOf("positionAdapter" to position)))
             dismiss()
         }
         binding.resetProgress.setOnClickListener {
-            EventBus.getDefault().post(CardEvent(CrEvEnum.RESET_PROGRESS,wordCard))
+            EventBus.getDefault().post(CardEvent(CrEvEnum.RESET_PROGRESS,wordCard, mutableMapOf("positionAdapter" to position)))
             dismiss()
         }
         binding.deleteCard.setOnClickListener {
-            EventBus.getDefault().post(CardEvent(CrEvEnum.DELETE_CARD,wordCard))
+            EventBus.getDefault().post(CardEvent(CrEvEnum.DELETE_CARD,wordCard, mutableMapOf("positionAdapter" to position)))
             dismiss()
         }
     }

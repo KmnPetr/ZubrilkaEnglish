@@ -21,14 +21,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="foreignWord"
-            android:textColor="#AFDDE3" />
+            android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/translation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="translation"
-            android:textColor="#AFDDE3" />
+            android:textColor="#818181" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
 </androidx.cardview.widget.CardView>

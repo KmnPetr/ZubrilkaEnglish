@@ -19,7 +19,6 @@ import com.example.zubrilkaenglish.screens.catalogCards.fragments.FragmentItem
 import com.example.zubrilkaenglish.screens.catalogCards.fragments.PopupWordCard
 import com.example.zubrilkaenglish.screens.catalogCards.fragments.searchCardFragment.SearchCardFragment
 import com.example.zubrilkaenglish.utils.SearchObject
-import com.example.zubrilkaenglish.utils.customizeBackground
 import com.google.android.material.tabs.TabLayout
 
 /**
@@ -55,7 +54,7 @@ class CatalogCardsFragment : Fragment() {
         SearchObject.instance //требует заранее прогрузки для скачивания данных с БД
 
 
-        customizeBackground(binding.background, resources, R.drawable.library_correct1)
+//        customizeBackground(binding.background, resources, R.drawable.library_correct1)
 
         setListFragment()
         tabLayoutListener()

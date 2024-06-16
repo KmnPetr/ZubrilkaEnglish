@@ -50,8 +50,8 @@ class SearchCardFragment(
         EventBus.getDefault().register(this)
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onStop() {
+        super.onStop()
         EventBus.getDefault().unregister(this)
     }
     /**

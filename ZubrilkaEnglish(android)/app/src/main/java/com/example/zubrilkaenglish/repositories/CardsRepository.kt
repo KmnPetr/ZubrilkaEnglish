@@ -4,6 +4,7 @@ import android.database.sqlite.SQLiteConstraintException
 import android.util.Log
 import com.example.zubrilkaenglish.events.CardEvent
 import com.example.zubrilkaenglish.events.CrEvEnum
+import com.example.zubrilkaenglish.events.NfEvEnum
 import com.example.zubrilkaenglish.events.NotificationEvent
 import com.example.zubrilkaenglish.screens.training.ICard
 import com.example.zubrilkaenglish.models.ProgressWord
@@ -11,7 +12,9 @@ import com.example.zubrilkaenglish.models.Word
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.repositories.retrofit.RetrofitService
 import com.example.zubrilkaenglish.repositories.room.RoomService
+import com.example.zubrilkaenglish.utils.LIMIT_ACTIVE_CARDS
 import com.example.zubrilkaenglish.utils.LOG
+import com.example.zubrilkaenglish.services.apiNotification.NotifProp
 import com.example.zubrilkaenglish.utils.SIM_FORM_DATE
 import com.example.zubrilkaenglish.utils.StatProgress
 import com.example.zubrilkaenglish.utils.numAnsForSleep
@@ -24,6 +27,7 @@ import org.greenrobot.eventbus.Subscribe
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * этот класс будет сосредоточен на обработке логики связанной с карточками
@@ -36,8 +40,21 @@ class CardsRepository private constructor(){
     private val roomService = RoomService()
     private val retrofitService= RetrofitService()
 
+    var countActiveCards: AtomicInteger = AtomicInteger(0) //обновляемые сведения о количестве активных карточек
+
     init {
         EventBus.getDefault().register(this)
+
+        //обновляем значение countActiveCards в фоновом процессе
+        GlobalScope.launch {
+            roomService.getProgressDAO().getAllProgressUnlearnedCards().collect {
+                var countAC:Int = 0
+                it.forEach {
+                    if(compareDate(it.sleepTime)) countAC++
+                }
+                countActiveCards.set(countAC)
+            }
+        }
     }
 
     /**
@@ -48,7 +65,7 @@ class CardsRepository private constructor(){
     fun subscribeOnCardEvent(event: CardEvent){
         when(event.typeEvent){
             CrEvEnum.INTENT_SLEEP -> {
-                event.wordCard = setSleepCard(event.wordCard,event.properties!!.get("countDay") as Int)
+                event.wordCard = setSleepCard(event.wordCard,event.properties.get("countDay") as Int)
                 notifyChangeCard(event)
             }
             CrEvEnum.INCREASE_PROGRESS -> {
@@ -65,29 +82,54 @@ class CardsRepository private constructor(){
                 GlobalScope.launch(Dispatchers.Default) {
                     event.wordCard = setCardAsLearned(event.wordCard)
                     withContext(Dispatchers.Main) {
+                        event.properties.putAll(NotifProp.learnCard.pair) //apiNotification надо знать что мы изменили в карточке
                         notifyChangeCard(event)
                     }
                 }
             }
             CrEvEnum.ADD_WORD_TO_TRAINING -> {
-                GlobalScope.launch(Dispatchers.Default) {
-                    event.wordCard = addWordToTraining(event.wordCard)
-                    withContext(Dispatchers.Main) {
-                        notifyChangeCard(event)
+                if (checkLimitActiveCards(event)){
+                    GlobalScope.launch(Dispatchers.Default) {
+                        event.wordCard = addWordToTraining(event.wordCard)
+                        withContext(Dispatchers.Main) {
+                            event.properties.putAll(NotifProp.addToWordTrain.pair) //apiNotification надо знать что мы изменили в карточке
+                            notifyChangeCard(event)
+                        }
                     }
                 }
             }
             CrEvEnum.RESET_PROGRESS -> {
-                event.wordCard = resetProgressCard(event.wordCard)
-                notifyChangeCard(event)
+                if (checkLimitActiveCards(event)){
+                    event.wordCard = resetProgressCard(event.wordCard)
+                    event.properties.putAll(NotifProp.resetProgress.pair) //apiNotification надо знать что мы изменили в карточке
+                    notifyChangeCard(event)
+                }
             }
             CrEvEnum.DELETE_CARD -> {
                 event.wordCard = deleteProgressCard(event.wordCard)
+                event.properties.putAll(NotifProp.deleteCard.pair) //apiNotification надо знать что мы изменили в карточке
                 notifyChangeCard(event)
             }
             else -> {}
         }
     }
+
+    /**
+     * проверит, количество находящихся в обучении карточек и сверит с тарифным лимитом
+     */
+    private fun checkLimitActiveCards(failedEvent: CardEvent): Boolean {
+        return if (countActiveCards.get() >= LIMIT_ACTIVE_CARDS){
+            if(failedEvent.properties["approvedCard"] == true) return true
+            else {
+            EventBus.getDefault().post(NotificationEvent(
+                "Лимит активных карточек (${countActiveCards.get()}/$LIMIT_ACTIVE_CARDS)",
+                NfEvEnum.LIMIT_ACTIVE_WORDS,
+                mutableMapOf("failedEvent" to failedEvent)))
+           return false
+        }
+        } else true
+    }
+
     /**
      * удалит ProgressWord по id Word
      */
@@ -95,8 +137,6 @@ class CardsRepository private constructor(){
         //удалим progressWord из БД
         GlobalScope.launch(Dispatchers.Default) {
             roomService.deleteProgressByWordId(wordCard.word.id)
-            notifyToast("Слово/фраза удалена из ваших карточек")
-//        Toast.makeText(MyApplication.context,"Слово/фраза удалена из ваших карточек",Toast.LENGTH_SHORT).show()//TODO надо будет как нибудь поправить тосты а то они не очень вызываются из репозитория
         }
         //изменим progressWord для view без обращения к БД
         wordCard.progressWord = null
@@ -116,8 +156,7 @@ class CardsRepository private constructor(){
         GlobalScope.launch(Dispatchers.Default) {
             if (wordCard.progressWord != null) {
                 roomService.updateProgressWord(wordCard.progressWord!!)
-//                Toast.makeText(MyApplication.context,"Прогресс сброшен",Toast.LENGTH_SHORT).show() //TODO надо будет как нибудь поправить тосты а то они не очень вызываются из репозитория
-            }/*else Toast.makeText(MyApplication.context,"Ошибка",Toast.LENGTH_SHORT).show()*/
+            }
         }
         return wordCard
     }
@@ -136,7 +175,6 @@ class CardsRepository private constructor(){
         )
         try {
             roomService.addWordToTraining(progressWord)
-//                Toast.makeText(MyApplication.context,"Слово/фраза добавлено(а) в изучаемые.", Toast.LENGTH_LONG).show() //TODO yflj xnj,s njcns gjrfpsdfkbcm
             val updatedWordCard = roomService.getWordCardById(wordCard.word.id)
 
             //обновляем progressWord во всех обьектах ссылочным образом
@@ -144,7 +182,6 @@ class CardsRepository private constructor(){
         }catch (e: SQLiteConstraintException){
             e.printStackTrace()
             //может выпасть эксепшен если попытаться добавить progressWord в БД второй раз
-//                Toast.makeText(MyApplication.context,e.javaClass.name+"\n"+e.message, Toast.LENGTH_LONG).show() //TODO yflj xnj,s njcns gjrfpsdfkbcm
         }
         return wordCard
     }
@@ -274,12 +311,6 @@ class CardsRepository private constructor(){
         )
     }
 
-    /**
-     * функция отправит евент с прозбой активити показать тоаст сообщение
-     */
-    private fun notifyToast(message: String){
-        EventBus.getDefault().post(NotificationEvent(message))
-    }
 
     /**
      * функция получит список Words из сети и положит его в БД из БД вернет новые данные

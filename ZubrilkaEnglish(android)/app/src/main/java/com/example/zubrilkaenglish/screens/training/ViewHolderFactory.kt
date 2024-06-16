@@ -41,8 +41,6 @@ class ViewHolderFactory {
                     binding.translation.visibility=View.VISIBLE
                     binding.lookButton.isEnabled=false
                 }
-
-                println("ОТРАБОТАЛ МЕТОД BIND КАРТОЧКИ: "+ wordCard.word.foreignWord)
             }
 
             binding.yesButton.setOnClickListener {
@@ -57,7 +55,7 @@ class ViewHolderFactory {
                 listener.onClickLookButton(wordCard)
             }
             binding.optionsButton.setOnClickListener{
-                listener.onClickOptionsButton(wordCard)
+                listener.onClickOptionsButton(wordCard, position)
             }
 
             sleepDialogShow(wordCard)
@@ -98,7 +96,7 @@ class ViewHolderFactory {
                         CardEvent(
                             CrEvEnum.INTENT_SLEEP,
                             wordCard,
-                            mapOf(
+                            mutableMapOf(
                                 "countDay" to binding.slider.value.toInt(),
                                 "positionAdapter" to position
                             )
@@ -111,7 +109,7 @@ class ViewHolderFactory {
                     //просто уведомим view чтобы она перелистнула пейджер
                     //по сути изменений нет
                     EventBus.getDefault().post(
-                        CardEvent(CrEvEnum.CARD_CHANGED, wordCard, mapOf("positionAdapter" to position))
+                        CardEvent(CrEvEnum.CARD_CHANGED, wordCard, mutableMapOf("positionAdapter" to position))
                     )
                     binding.sleepDialog.visibility = View.GONE
                 }

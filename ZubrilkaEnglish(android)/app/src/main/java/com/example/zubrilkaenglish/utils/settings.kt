@@ -21,3 +21,11 @@ val DEFAULT_MEMO = Memo(
     "\tПовторяйте слова чаще, чтобы лучше их запоминать. \n Ваш словарный запас - ваша уверенность владения языком!",
     listOf(DayOfWeek.DAILY)
 )
+
+val APP_NAME:String = "Zubrilka English"
+val APP_EMAIL:String = "zubrilka.en@gmail.com"
+
+val LIMIT_ACTIVE_CARDS:Int = 70
+
+val rewardedAdUnitId:String = "R-M-7862350-2"
+val interstitialAdUnitId:String = "R-M-7862350-1"

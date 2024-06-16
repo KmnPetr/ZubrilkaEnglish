@@ -8,7 +8,7 @@ class CardEvent(
     // чтобы например в viewModels и adapters не писать дополнительный код по замене wordCard,
     // оно само там ссылочно обновляется
     var wordCard: WordCard,
-    var properties: Map<String, Any>? = null
+    override var properties: MutableMap<String, Any> = mutableMapOf()
 ): iEvent<CrEvEnum>
 
 enum class CrEvEnum{
