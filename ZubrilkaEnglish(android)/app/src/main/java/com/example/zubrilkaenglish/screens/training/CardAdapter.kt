@@ -3,6 +3,7 @@ package com.example.zubrilkaenglish.screens.training
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.zubrilkaenglish.models.WordCard
+import com.example.zubrilkaenglish.screens.training.additionalCards.FewCards
 import com.example.zubrilkaenglish.screens.training.additionalCards.ReviewCard
 
 class CardAdapter(val listener: Listener):RecyclerView.Adapter<RecyclerView.ViewHolder>(){
@@ -37,12 +38,8 @@ class CardAdapter(val listener: Listener):RecyclerView.Adapter<RecyclerView.View
      * реализация классов холдеров вынесено в класс фабрику ViewHolderFactory
      */
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is ViewHolderFactory.WordCardHolder){
-            holder.bind((cardList[position] as WordCard),listener,position)
-        }
-        else if (holder is ViewHolderFactory.ReviewCardHolder){
-            holder.bind((cardList[position] as ReviewCard),listener)
-        }
+
+        ViewHolderFactory.onBindViewHolder(holder,cardList[position],listener,position)
     }
 
     fun setList(listForTreining: ArrayList<ICard>) {

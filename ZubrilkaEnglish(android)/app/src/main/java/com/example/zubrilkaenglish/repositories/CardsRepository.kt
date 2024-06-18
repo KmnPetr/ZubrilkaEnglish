@@ -12,6 +12,9 @@ import com.example.zubrilkaenglish.models.Word
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.repositories.retrofit.RetrofitService
 import com.example.zubrilkaenglish.repositories.room.RoomService
+import com.example.zubrilkaenglish.screens.training.additionalCards.FewCards
+import com.example.zubrilkaenglish.screens.training.additionalCards.NoMemosCard
+import com.example.zubrilkaenglish.screens.training.additionalCards.ReviewCard
 import com.example.zubrilkaenglish.utils.LIMIT_ACTIVE_CARDS
 import com.example.zubrilkaenglish.utils.LOG
 import com.example.zubrilkaenglish.services.apiNotification.NotifProp
@@ -28,6 +31,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.concurrent.atomic.AtomicInteger
+import kotlin.random.Random
 
 /**
  * этот класс будет сосредоточен на обработке логики связанной с карточками
@@ -39,6 +43,7 @@ class CardsRepository private constructor(){
     }
     private val roomService = RoomService()
     private val retrofitService= RetrofitService()
+    private val memoRepository = MemoRepository.instance
 
     var countActiveCards: AtomicInteger = AtomicInteger(0) //обновляемые сведения о количестве активных карточек
 
@@ -48,14 +53,11 @@ class CardsRepository private constructor(){
         //обновляем значение countActiveCards в фоновом процессе
         GlobalScope.launch {
             roomService.getProgressDAO().getAllProgressUnlearnedCards().collect {
-                var countAC:Int = 0
-                it.forEach {
-                    if(compareDate(it.sleepTime)) countAC++
-                }
-                countActiveCards.set(countAC)
+                countActiveCards.set(getCountActiveCards(it))
             }
         }
     }
+
 
     /**
      * метод используется библиотечкой EventBus
@@ -99,7 +101,7 @@ class CardsRepository private constructor(){
                 }
             }
             CrEvEnum.RESET_PROGRESS -> {
-                if (checkLimitActiveCards(event)){
+                if (compareDate(event.wordCard.progressWord?.sleepTime) || checkLimitActiveCards(event)){
                     event.wordCard = resetProgressCard(event.wordCard)
                     event.properties.putAll(NotifProp.resetProgress.pair) //apiNotification надо знать что мы изменили в карточке
                     notifyChangeCard(event)
@@ -236,7 +238,28 @@ class CardsRepository private constructor(){
 
         listForTreining.shuffle()
 
+        listForTreining.add(installLatestCard())
+
         return listForTreining
+    }
+
+    /**
+     * определит какая дополнительная карточка будет в конце списка
+     * это может быть карточка с предложением начать трен.заново, какое нибудь уведомление или подсказка
+     */
+    private suspend fun installLatestCard(): ICard {
+        val countActiveCards = getCountActiveCards(roomService.getProgressDAO().getAllProgressUnlearnedCards2())
+        val isUserHasOwnMemos:Boolean = memoRepository.isUserHasOwnMemos()
+        val randomInt: Int = Random.nextInt(0, 100)
+
+        if (randomInt in 50..75 && !isUserHasOwnMemos) return NoMemosCard() //если пользователь еще не добавлял напоминалку с вероятностью 25% предложим ему добавить
+
+        if (countActiveCards<50 && randomInt in 0..49){ //если активных карточек меньше 50 с вероятностью 50% подскажем где найти новые
+            return FewCards()
+        } else if (countActiveCards<40){//если активных карточек меньше 40 то точно подскажем где найти новые:)
+            return FewCards()
+        }
+        return ReviewCard()
     }
 
     /**
@@ -406,5 +429,14 @@ class CardsRepository private constructor(){
             return false
         }
         return false
+    }
+
+    //отфильтрует список и посчитает количество карт на данный момент выспавшихся, активных
+    private fun getCountActiveCards(it: List<ProgressWord>): Int {
+        var countAC:Int = 0
+        it.forEach {
+            if(it.statProgress!=StatProgress.LEARNED.value && compareDate(it.sleepTime)) countAC++
+        }
+        return countAC
     }
 }

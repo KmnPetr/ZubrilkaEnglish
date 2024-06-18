@@ -5,19 +5,24 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.zubrilkaenglish.R
+import com.example.zubrilkaenglish.databinding.ViewFewCardsBinding
+import com.example.zubrilkaenglish.databinding.ViewNoMemosCardsBinding
 import com.example.zubrilkaenglish.databinding.ViewReviewCardBinding
 import com.example.zubrilkaenglish.databinding.ViewWordCardBinding
 import com.example.zubrilkaenglish.events.CardEvent
 import com.example.zubrilkaenglish.events.CrEvEnum
+import com.example.zubrilkaenglish.events.NfEvEnum
+import com.example.zubrilkaenglish.events.NotificationEvent
 import com.example.zubrilkaenglish.models.WordCard
+import com.example.zubrilkaenglish.screens.training.additionalCards.FewCards
+import com.example.zubrilkaenglish.screens.training.additionalCards.NoMemosCard
 import com.example.zubrilkaenglish.screens.training.additionalCards.ReviewCard
 import com.example.zubrilkaenglish.utils.StatProgress
 import org.greenrobot.eventbus.EventBus
 
 class ViewHolderFactory {
     class WordCardHolder(item: View): RecyclerView.ViewHolder(item){
-        val binding= ViewWordCardBinding.bind(item)
-
+        val binding = ViewWordCardBinding.bind(item)
         fun bind(wordCard: WordCard, listener: CardAdapter.Listener,position:Int){
             binding.numCorrAnsv.text = "("+wordCard.progressWord?.numCorrAnsv.toString()+")"
             binding.statusCard.text = "status: "+ wordCard.progressWord?.statProgress
@@ -122,7 +127,7 @@ class ViewHolderFactory {
     class ReviewCardHolder(item: View): RecyclerView.ViewHolder(item){
         val binding= ViewReviewCardBinding.bind(item)
 
-        fun bind(reviewCard: ReviewCard, listener: CardAdapter.Listener/*listener в будущем пригодится*/){
+        fun bind(reviewCard: ReviewCard, listener: CardAdapter.Listener){
             binding.btnNo.setOnClickListener {
                 listener.completeTraining()
             }
@@ -131,21 +136,74 @@ class ViewHolderFactory {
             }
         }
     }
+    class FewCardsHolder(item: View): RecyclerView.ViewHolder(item){
+        val binding= ViewFewCardsBinding.bind(item)
+
+        fun bind(fewCards: FewCards, listener: CardAdapter.Listener){
+            binding.goToCatalog.setOnClickListener {
+                EventBus.getDefault().post(NotificationEvent("GO_TO_CATALOG_EVENT", NfEvEnum.GO_TO_CATALOG))
+            }
+        }
+    }
+    class NoMemosCardsHolder(item: View): RecyclerView.ViewHolder(item){
+        val binding = ViewNoMemosCardsBinding.bind(item)
+
+        fun bind(noMemosCard: NoMemosCard, listener: CardAdapter.Listener){
+            binding.goToMemos.setOnClickListener {
+                EventBus.getDefault().post(NotificationEvent("GO_TO_MEMOS_EVENT", NfEvEnum.GO_TO_MEMOS))
+            }
+        }
+    }
 
     companion object {
         fun create(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             when(viewType){
                 ICard.WORD_CARD_TYPE ->{
-                    val view= LayoutInflater.from(parent.context).inflate(R.layout.view_word_card,parent,false)
+                    val view = LayoutInflater.from(parent.context).inflate(R.layout.view_word_card,parent,false)
                     return WordCardHolder(view)
                 }
                 ICard.REVIEW_CARD_TYPE ->{
-                    return ReviewCardHolder(ReviewCard.getView(parent))
+                    val view = LayoutInflater.from(parent.context).inflate(R.layout.view_review_card,parent,false)
+                    return ReviewCardHolder(view)
+                }
+                ICard.FEW_CARDS_TYPE -> {
+                    val view = LayoutInflater.from(parent.context).inflate(R.layout.view_few_cards,parent,false)
+                    return FewCardsHolder(view)
+                }
+                ICard.NO_MEMOS_CARD_TYPE -> {
+                    val view = LayoutInflater.from(parent.context).inflate(R.layout.view_no_memos_cards,parent,false)
+                    return NoMemosCardsHolder(view)
                 }
                 else->{
-                    return throw java.lang.IllegalStateException("Invalid rating param value")
+                    throw java.lang.IllegalStateException("Invalid rating param value")
                 }
             }
+        }
+
+        /**
+         * вынесли метод построения холдера из адаптера, чтоб все здесь было а не там
+         */
+        fun onBindViewHolder(holder: RecyclerView.ViewHolder, card: ICard, listener: CardAdapter.Listener, position: Int) {
+            val viewType = card.getItemViewType()
+
+            when(viewType){
+                ICard.WORD_CARD_TYPE ->{
+                    (holder as WordCardHolder).bind((card as WordCard),listener,position)
+                }
+                ICard.REVIEW_CARD_TYPE ->{
+                    (holder as ReviewCardHolder).bind((card as ReviewCard),listener)
+                }
+                ICard.FEW_CARDS_TYPE -> {
+                    (holder as FewCardsHolder).bind((card as FewCards),listener)
+                }
+                ICard.NO_MEMOS_CARD_TYPE -> {
+                    (holder as NoMemosCardsHolder).bind((card as NoMemosCard),listener)
+                }
+                else->{
+                    throw java.lang.IllegalStateException("Invalid rating param value")
+                }
+            }
+
         }
     }
 }

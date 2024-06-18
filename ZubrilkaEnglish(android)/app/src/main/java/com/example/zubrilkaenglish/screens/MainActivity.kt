@@ -175,9 +175,22 @@ class MainActivity : AppCompatActivity() {
         EventBus.getDefault().unregister(this)
     }
 
-
     @Subscribe
     fun <T : Enum<T>, E : iEvent<T>> notificationApi(event: E){
         apiNotification.handleEvent(event,this) //передадим евент здесь потомучто для его показа нужен контекст
+    }
+    /**
+     * переключит в фрагмент каталога из любого другого фрагмента
+     */
+    fun goToCatalog() {
+        navController.popBackStack(navController.graph.startDestinationId, false)
+        navController.navigate(R.id.action_menuFragment_to_catalogCardsFragment)
+    }
+    /**
+     * переключит в фрагмент напоминаний из любого другого фрагмента
+     */
+    fun goToMemos() {
+        navController.popBackStack(navController.graph.startDestinationId, false)
+        navController.navigate(R.id.action_menuFragment_to_memoFragment)
     }
 }

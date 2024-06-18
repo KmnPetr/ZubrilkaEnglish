@@ -87,4 +87,9 @@ class PropRepository private constructor(){
         .getPropDAO()
         .getAllProperties()
         .map { list -> list.associate { propModel -> propModel.key to propModel.value } }
+
+    /**
+     * вернет проперти из БД по ключу
+     */
+    suspend fun getPropModelByKey(key: String): PropModel? = roomService.getPropDAO().getPropByKey(key)
 }

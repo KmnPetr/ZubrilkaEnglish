@@ -29,11 +29,9 @@ class TrainingViewModel : ViewModel() {
      * запросит у репозитория список карточек для изучения
      */
     fun getListForTreining(): MutableLiveData<ArrayList<ICard>?> {
-
         if (listForTreining.value==null){
             viewModelScope.launch {
                 val newList: ArrayList<ICard> = cardsRepository.getListForTreining()
-
                 newList.forEach {
                     //надо както посчитать количество именно слов среди других неучебных карточек
                     if (it is WordCard) countWordCards++

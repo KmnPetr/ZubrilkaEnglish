@@ -37,7 +37,7 @@
         app:cornerRadius="10dp"
         app:borderWidth="1dp"
         app:borderColor="#00FFFFFF"
-        app:drawable="@drawable/ad4"
+        app:drawable="@drawable/ad6"
         app:imageSize="65dp"
         android:layout_gravity="end|bottom"/>
 </FrameLayout>

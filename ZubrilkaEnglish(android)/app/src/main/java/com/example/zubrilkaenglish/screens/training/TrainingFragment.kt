@@ -19,7 +19,6 @@ import com.example.zubrilkaenglish.events.VcEvEnum
 import com.example.zubrilkaenglish.events.VoiceEvent
 import com.example.zubrilkaenglish.models.Voice
 import com.example.zubrilkaenglish.models.WordCard
-import com.example.zubrilkaenglish.screens.training.additionalCards.ReviewCard
 import com.example.zubrilkaenglish.screens.training.popup.PopupOptions
 import com.example.zubrilkaenglish.services.ads.YandexAds
 import com.example.zubrilkaenglish.utils.LOG
@@ -70,10 +69,7 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
             val r = 1 - abs(position)
             page.scaleY = 0.85f + r * 0.14f
         }
-
         binding.viewPager2.setPageTransformer(transformer)
-
-
 
         binding.viewPager2.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
             override fun onPageScrollStateChanged(state: Int) {
@@ -87,8 +83,6 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
          */
         viewModel.getListForTreining().observe(viewLifecycleOwner){list->
             if (list != null) {
-                list.add(ReviewCard())
-
                 adapter.setList(list)
             }
             countCards.text = "( ${binding.viewPager2.currentItem + 1} / ${viewModel.countWordCards} )"
@@ -116,7 +110,7 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
     fun event_CardChanged(event: CardEvent){
         when(event.typeEvent){
             CrEvEnum.CARD_CHANGED -> {
-                adapter.notifyItemChanged(event.properties?.get("positionAdapter") as Int)
+                adapter.notifyItemChanged(event.properties.get("positionAdapter") as Int)
 
                 flippingCard()
             }
@@ -125,7 +119,7 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
                 viewModel.userScrolls = 0
                 //покажем окошко с предложением усыпить карточку
                 event.wordCard.sleepEvent = true
-                adapter.notifyItemChanged(event.properties?.get("positionAdapter") as Int)
+                adapter.notifyItemChanged(event.properties.get("positionAdapter") as Int)
             }
             else -> {}
         }

@@ -21,6 +21,8 @@ interface ProgressDAO {
     suspend fun getProgressWordById(progId: Int?): ProgressWord?
     @Query("DELETE FROM progress_word WHERE wordId = :idWord")
     suspend fun deleteProgressByWordId(idWord: Int?)
-    @Query("SELECT * FROM progress_word WHERE statProgress !=  :status")
+    @Query("SELECT * FROM progress_word WHERE statProgress != :status")
     fun getAllProgressUnlearnedCards(status: String = StatProgress.LEARNED.value): Flow<List<ProgressWord>>
+    @Query("SELECT * FROM progress_word WHERE statProgress != :status")
+    suspend fun getAllProgressUnlearnedCards2(status: String = StatProgress.LEARNED.value): List<ProgressWord>
 }

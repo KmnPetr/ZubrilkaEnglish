@@ -8,6 +8,9 @@ import com.example.zubrilkaenglish.events.NotificationEvent
 import com.example.zubrilkaenglish.events.iEvent
 import com.example.zubrilkaenglish.screens.MainActivity
 import android.view.View
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.zubrilkaenglish.utils.LOG
 import com.google.android.material.snackbar.Snackbar
 
@@ -35,8 +38,15 @@ class ApiNotification private constructor() {
             NfEvEnum.LIMIT_ACTIVE_WORDS -> {
                 limitActiveWords(event as NotificationEvent,activity)
             }
+            NfEvEnum.GO_TO_CATALOG -> {
+                activity.goToCatalog()
+            }
+            NfEvEnum.GO_TO_MEMOS -> {
+                activity.goToMemos()
+            }
         }
     }
+
 
     //покажет уведомление что наступил лимит активных карточек
     private fun limitActiveWords(event: NotificationEvent, activity: MainActivity) {
