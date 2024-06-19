@@ -78,6 +78,10 @@ class CatalogItemFragment(
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel_CC.refreshData() //обновим данные мог поменяться состав и количество карточек особенно в личных карточках пользователя
+    }
     override fun onStart() {
         super.onStart()
         EventBus.getDefault().register(this)
@@ -96,7 +100,7 @@ class CatalogItemFragment(
         when(event.typeEvent){
             CrEvEnum.CARD_CHANGED -> {
                 if (recyclerView.adapter is ListCardsAdapter){
-                    cardAdapter.notifyItemChanged(event.properties!!.get("positionAdapter") as Int)
+                    cardAdapter.notifyItemChanged(event.properties.get("positionAdapter") as Int)
                 }
             }
 

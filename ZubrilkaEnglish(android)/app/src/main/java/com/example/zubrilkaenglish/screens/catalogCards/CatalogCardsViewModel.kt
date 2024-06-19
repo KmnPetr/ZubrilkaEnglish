@@ -15,6 +15,7 @@ class CatalogCardsViewModel : ViewModel() {
 
     private val cardsRepository = CardsRepository.instance
     private val propRepository = PropRepository.instance
+    private val searchObject = SearchObject.instance
 
     var searchCreated: Boolean = false //указывает, создан ли ранее фрагмент поиска слова
     var lastPositionTablayout: Int = 0 //указ.последний используемый фрагмент для возврата на него после удаления поискового фрагмента
@@ -32,29 +33,26 @@ class CatalogCardsViewModel : ViewModel() {
     val filterProperties: MutableLiveData<Map<String,String?>> = MutableLiveData()
 
     init {
-
         viewModelScope.launch {
             propRepository.getAllProperties().collect{
                 filterProperties.value = mutableMapOf<String, String?>().apply {
                     this[PropKey.catalogFilter_hideLearned.key] = it[PropKey.catalogFilter_hideLearned.key]
                     this[PropKey.catalogFilter_hideSleepingAndActive.key] = it[PropKey.catalogFilter_hideSleepingAndActive.key]
 
-                    downloadAllWords() //TODO временно слишком тяжелый запрос
+                    downloadAllWords()
                 }
             }
         }
 
-//        dataDownload()
+        //подгружаем из поискового обьекта найденные слова
+        viewModelScope.launch {
+            searchObject.listSearchWords.collect{
+                listSearchWords.value = it
+            }
+        }
+
         downloadAllWords()
         downloadUsersWord()
-    }
-
-
-    /**
-     * будет изменять список при вводе в поисковую строку нового слова
-     */
-    fun changeListSearchWord(word: String){
-        listSearchWords.value = SearchObject.instance.search(word)
     }
 
     /**
@@ -121,5 +119,13 @@ class CatalogCardsViewModel : ViewModel() {
                     }else return@filter true
                 }
         }else return listAllCards
+    }
+
+    /**
+     * обновит списки слов и папок
+     */
+    fun refreshData() {
+        downloadAllWords()
+        downloadUsersWord()
     }
 }

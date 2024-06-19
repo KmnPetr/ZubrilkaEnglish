@@ -45,8 +45,8 @@ class SearchCardFragment(
         }
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onStart() {
+        super.onStart()
         EventBus.getDefault().register(this)
     }
 
@@ -62,7 +62,7 @@ class SearchCardFragment(
     fun event_CardChanged(event: CardEvent){
         when(event.typeEvent){
             CrEvEnum.CARD_CHANGED -> {
-                    adapter.notifyItemChanged(event.properties!!.get("positionAdapter") as Int)
+                    adapter.notifyItemChanged(event.properties.get("positionAdapter") as Int)
             }
 
             else -> {}

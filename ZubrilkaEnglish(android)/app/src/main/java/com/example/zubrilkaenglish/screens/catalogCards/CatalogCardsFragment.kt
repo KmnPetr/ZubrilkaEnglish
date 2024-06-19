@@ -129,7 +129,7 @@ class CatalogCardsFragment : Fragment() {
                 val updatedText = s.toString() // Получить новый текст из CharSequence
                 if(updatedText.trim().isNotEmpty()){
                     //передаем данные с поисковой строки в viewModel
-                    viewModel.changeListSearchWord(updatedText.trim())
+                    SearchObject.instance.search(updatedText.trim())
                     //создаем фрагмент по поиску слов
                     if (!viewModel.searchCreated){
                         viewModel.searchCreated = true
@@ -143,6 +143,7 @@ class CatalogCardsFragment : Fragment() {
                         tabLayout.getTabAt(tabLayout.tabCount - 1)?.select()
                     }
                 }else{
+                    SearchObject.instance.clearList()
                     //удаляем фрагмент по поиску слов
                     if (viewModel.searchCreated){
                         viewModel.searchCreated = false
