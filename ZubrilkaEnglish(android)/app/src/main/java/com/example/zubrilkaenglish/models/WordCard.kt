@@ -18,6 +18,14 @@ data class WordCard(
     var voiceSounded:Boolean=false
     @Ignore
     var sleepEvent:Boolean=false //указывает на то что было предложено усыпить карточку
+    @Ignore
+    var variants:MutableList<String?>? = null //содержит список ответов при многовариантном режиме обучения
+    @Ignore
+    var rightPosition:Int? = null //при многовариантном режиме обучения содержит ответ юзера (позицию в списке)
+    @Ignore
+    var userAnswer:Int? = null //при многовариантном режиме обучения содержит ответ юзера (позицию в списке)
+
+
 
     override fun getItemViewType(): Int {
         return ICard.WORD_CARD_TYPE

@@ -12,6 +12,7 @@ import com.example.zubrilkaenglish.models.Word
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.repositories.retrofit.RetrofitService
 import com.example.zubrilkaenglish.repositories.room.RoomService
+import com.example.zubrilkaenglish.screens.training.Modes
 import com.example.zubrilkaenglish.screens.training.additionalCards.FewCards
 import com.example.zubrilkaenglish.screens.training.additionalCards.NoMemosCard
 import com.example.zubrilkaenglish.screens.training.additionalCards.ReviewCard
@@ -44,6 +45,7 @@ class CardsRepository private constructor(){
     private val roomService = RoomService()
     private val retrofitService= RetrofitService()
     private val memoRepository = MemoRepository.instance
+    private val propRepository = PropRepository.instance
 
     var countActiveCards: AtomicInteger = AtomicInteger(0) //обновляемые сведения о количестве активных карточек
 
@@ -222,11 +224,10 @@ class CardsRepository private constructor(){
         return wordCard
     }
 
-
     /**
      * выдаст список для изучения
      */
-    suspend fun getListForTreining(): ArrayList<ICard> {
+    suspend fun getListForTreining(mode: Modes): ArrayList<ICard> {
         val listAllCards: List<WordCard>? = roomService.getListWordsCards()
         val listForTreining: ArrayList<ICard> = ArrayList()
 
@@ -238,10 +239,48 @@ class CardsRepository private constructor(){
 
         listForTreining.shuffle()
 
+        if (mode == Modes.multipleChoice) fillAnswerVariants(listForTreining)
+
         listForTreining.add(installLatestCard())
 
         return listForTreining
     }
+
+    /**
+     * заполнит варианты ответов при многовариантном режиме обучения
+     */
+    private suspend fun fillAnswerVariants(listForTreining: ArrayList<ICard>) {
+
+        var allTranslations:ArrayList<String?>? = ArrayList(roomService.getWordDAO().getAllTranslations())
+
+        listForTreining.forEach {
+            if (it is WordCard){
+                it.rightPosition = Random.nextInt(0, 4)
+
+                it.variants = MutableList(4) { null }
+                it.variants!![it.rightPosition!!] = it.word.translation.toString()
+                it.variants!!.forEachIndexed { index, s ->
+                    if (index!= it.rightPosition) it.variants!![index] = setWrongAnswer(allTranslations, it.variants!!)
+                }
+            }
+        }
+
+        // Освобождение ресурсов поможем гарбадж коллектору
+        allTranslations?.clear()
+        allTranslations = null
+    }
+
+    /**
+     * установит ложный вариант ответа в список variants
+     */
+    private fun setWrongAnswer(allTranslations: ArrayList<String?>?, listAnswers: MutableList<String?>): String {
+        var wrongAnswer = allTranslations?.get(Random.nextInt(0,allTranslations.size))
+        listAnswers.forEach {//проверим чтобы ответ не совпадал с предыдущими ответами
+            if (wrongAnswer.equals(it)) wrongAnswer = setWrongAnswer(allTranslations,listAnswers)
+        }
+        return wrongAnswer.toString()
+    }
+
 
     /**
      * определит какая дополнительная карточка будет в конце списка
@@ -321,6 +360,7 @@ class CardsRepository private constructor(){
         }
         return wordCard
     }
+
     /**
      * функция отправит уведомление в EventBus о смене карточки
      */

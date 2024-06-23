@@ -38,5 +38,7 @@ enum class PropKey(val key: String) {
     catalogFilter_hideLearned("catalogFilter_hideLearned"),//пользовательская фильтровка слов в каталоге хранит boolean
     catalogFilter_hideSleepingAndActive("catalogFilter_hideSleepingAndActive"),//пользовательская фильтровка слов в каталоге хранит boolean
 
-    isUserHasOwnMemos("isUserHasOwnMemos") //содержит "true" если пользователь раньше уже создавал memo напоминания
+    isUserHasOwnMemos("isUserHasOwnMemos"), //содержит "true" если пользователь раньше уже создавал memo напоминания
+
+    learningMode("learningMode") //режим обучения, например на честность или многовариантный выбор
 }

@@ -1,5 +1,6 @@
 package com.example.zubrilkaenglish.screens.training
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.ViewFewCardsBinding
 import com.example.zubrilkaenglish.databinding.ViewNoMemosCardsBinding
 import com.example.zubrilkaenglish.databinding.ViewReviewCardBinding
+import com.example.zubrilkaenglish.databinding.ViewWordCard2mBinding
 import com.example.zubrilkaenglish.databinding.ViewWordCardBinding
 import com.example.zubrilkaenglish.events.CardEvent
 import com.example.zubrilkaenglish.events.CrEvEnum
@@ -17,7 +19,9 @@ import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.screens.training.additionalCards.FewCards
 import com.example.zubrilkaenglish.screens.training.additionalCards.NoMemosCard
 import com.example.zubrilkaenglish.screens.training.additionalCards.ReviewCard
+import com.example.zubrilkaenglish.services.VibrationHandler
 import com.example.zubrilkaenglish.utils.StatProgress
+import com.example.zubrilkaenglish.utils.ui.CustButton
 import org.greenrobot.eventbus.EventBus
 
 class ViewHolderFactory {
@@ -124,6 +128,91 @@ class ViewHolderFactory {
             }
         }
     }
+    class WordCard2mHolder(item: View): RecyclerView.ViewHolder(item){
+        val binding = ViewWordCard2mBinding.bind(item)
+        fun bind(wordCard: WordCard, listener: CardAdapter.Listener,position:Int){
+            binding.apply {
+                numCorrAnsv.text = "("+wordCard.progressWord?.numCorrAnsv.toString()+")"
+                statusCard.text = "status: "+ wordCard.progressWord?.statProgress
+
+                foreignWord.text = wordCard.word.foreignWord
+                transcription.text = wordCard.word.transcription
+
+
+                val listButtons: Array<CustButton> = arrayOf(variant0,variant1,variant2,variant3)
+
+                listButtons.forEachIndexed{ index, it ->
+                    it.text = wordCard.variants?.get(index).toString()
+                    it.requestLayout()
+                }
+
+                root.requestLayout()
+
+                if (wordCard.cardHasChanged && wordCard.userAnswer!= null){
+                    root.setCardBackgroundColor(Color.parseColor("#E1E1E1"))
+                    changeViewButtons(listButtons, false, wordCard, position)
+                } else{
+                    root.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+                    changeViewButtons(listButtons, true, wordCard,position)
+                }
+
+                listButtons.forEachIndexed { index, button ->
+                    button.setOnClickListener {
+                        clickVariant(index,wordCard,position)
+                    }
+                }
+
+                optionsButton.setOnClickListener{
+                    listener.onClickOptionsButton(wordCard, position)
+                }
+            }
+        }
+
+        //поменяет фон и активность кнопок ответов
+        private fun changeViewButtons(listButtons: Array<CustButton>, isEnable: Boolean, wordCard: WordCard, adapterPosition: Int) {
+            if (!isEnable){
+                listButtons.forEachIndexed { index, it ->
+                    it.isEnabled = isEnable
+                    if (index == wordCard.rightPosition){
+                        it.setBackgroundColor(Color.parseColor("#B4F469"))
+                    } else if (index == wordCard.userAnswer){
+                        it.setBackgroundColor(Color.parseColor("#FF7B3D"))
+                    } else{
+                        it.visibility = View.INVISIBLE
+                    }
+                    it.setOnClickListener(null)
+                }
+            }else{
+                listButtons.forEachIndexed { index, it ->
+                    it.isEnabled = isEnable
+                    it.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+                    it.visibility = View.VISIBLE
+                    it.setOnClickListener {
+                        clickVariant(index,wordCard,adapterPosition)
+                    }
+                }
+            }
+        }
+
+        //вызывается при клике по ответу
+        private fun clickVariant(bPosition: Int, wordCard: WordCard, adapterPosition: Int) {
+            wordCard.userAnswer = bPosition
+
+            if (bPosition == wordCard.rightPosition){
+
+                VibrationHandler.instance.vibratePositive()
+                wordCard.cardHasChanged=true
+                EventBus.getDefault().post(CardEvent(CrEvEnum.INCREASE_PROGRESS,wordCard, mutableMapOf("positionAdapter" to adapterPosition)))
+            }else {
+
+                VibrationHandler.instance.vibrateNegative()
+                wordCard.cardHasChanged=true
+                EventBus.getDefault().post(CardEvent(CrEvEnum.RESET_numCorrAnsv, wordCard, mutableMapOf("positionAdapter" to position))) //отправим запрос на сброс значения numCorrAnsv
+            }
+        }
+    }
+
+
     class ReviewCardHolder(item: View): RecyclerView.ViewHolder(item){
         val binding= ViewReviewCardBinding.bind(item)
 
@@ -156,11 +245,16 @@ class ViewHolderFactory {
     }
 
     companion object {
-        fun create(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        fun create(parent: ViewGroup, viewType: Int, mode: Modes): RecyclerView.ViewHolder {
             when(viewType){
                 ICard.WORD_CARD_TYPE ->{
-                    val view = LayoutInflater.from(parent.context).inflate(R.layout.view_word_card,parent,false)
-                    return WordCardHolder(view)
+                    if (mode == Modes.ofHonesty){
+                        val view = LayoutInflater.from(parent.context).inflate(R.layout.view_word_card,parent,false)
+                        return WordCardHolder(view)
+                    }else if (mode == Modes.multipleChoice){
+                        val view = LayoutInflater.from(parent.context).inflate(R.layout.view_word_card2m,parent,false)
+                        return WordCard2mHolder(view)
+                    }else throw java.lang.IllegalStateException("Invalid mode value")
                 }
                 ICard.REVIEW_CARD_TYPE ->{
                     val view = LayoutInflater.from(parent.context).inflate(R.layout.view_review_card,parent,false)
@@ -188,7 +282,11 @@ class ViewHolderFactory {
 
             when(viewType){
                 ICard.WORD_CARD_TYPE ->{
-                    (holder as WordCardHolder).bind((card as WordCard),listener,position)
+                    if (listener.mode == Modes.ofHonesty){
+                        (holder as WordCardHolder).bind((card as WordCard),listener,position)
+                    }else if (listener.mode == Modes.multipleChoice){
+                        (holder as WordCard2mHolder).bind((card as WordCard),listener,position)
+                    }else throw java.lang.IllegalStateException("Invalid mode value")
                 }
                 ICard.REVIEW_CARD_TYPE ->{
                     (holder as ReviewCardHolder).bind((card as ReviewCard),listener)

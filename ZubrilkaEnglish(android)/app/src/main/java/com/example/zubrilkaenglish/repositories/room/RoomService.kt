@@ -9,16 +9,10 @@ class RoomService{
 
     private val dataBase = DataBase.getInstanceDB()
 
-    /**
-     * вернет MemoDAO с его методами
-     */
-    fun getMemoDAO() = dataBase.getMemoDAO()
-    /**
-     * вернет PropDAO с его методами
-     */
-    fun getPropDAO() = dataBase.getPropDAO()
+    fun getMemoDAO() = dataBase.getMemoDAO() //вернет MemoDAO с его методами
+    fun getPropDAO() = dataBase.getPropDAO() //вернет PropDAO с его методами
     fun getProgressDAO() = dataBase.getProgressDAO() //даст прямой доступ к методам ProgressDAO
-
+    fun getWordDAO() = dataBase.getWordDAO() //даст прямой доступ к методам WordDAO
 
     suspend fun getVoiceByName(name: String): Voice?{
         return dataBase.getVoiceDAO().getVoiceByName(name)
@@ -33,10 +27,6 @@ class RoomService{
         return dataBase.getWordDAO().getAllWords()
     }
 
-//    suspend fun deleteAllWords(){
-//        println("method \"deleteAllWords\" called")
-//        dataBase.getWordDAO().deleteAllWords()
-//    }
 
     suspend fun getDictionaryVersion(): String? {
             return dataBase.getPropDAO().getDictionaryVersion()?.value
@@ -94,6 +84,7 @@ class RoomService{
             dataBase.getVoiceDAO().insertNewVoice(voice)
         }
     }
+
 
 
 }

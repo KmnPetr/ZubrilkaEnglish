@@ -2,10 +2,15 @@ package com.example.zubrilkaenglish.repositories
 
 import com.example.zubrilkaenglish.events.PrEvEnum
 import com.example.zubrilkaenglish.events.PropEvent
+import com.example.zubrilkaenglish.models.Profile
 import com.example.zubrilkaenglish.models.PropModel
 import com.example.zubrilkaenglish.repositories.room.RoomService
+import com.example.zubrilkaenglish.screens.training.Modes
+import com.example.zubrilkaenglish.utils.defaultMode
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
@@ -22,12 +27,24 @@ class PropRepository private constructor(){
     private val USERS_LAST_ENTER_key = "USERS_LAST_ENTER"
     private val IS_DEFAULT_MEMO_WAS_DELETED_key = "IS_DEFAULT_MEMO_WAS_DELETED"
 
-
+    val properties: MutableStateFlow<Map<String,String>> = MutableStateFlow(mapOf())
 
 
     init {
         EventBus.getDefault().register(this)
+
+        setupProperties()
     }
+
+    //займется списком всех проперти
+    private fun setupProperties() {
+        GlobalScope.launch {
+            getAllProperties().collect{
+                properties.value = it
+            }
+        }
+    }
+
 
     /**
      * метод используется библиотечкой EventBus

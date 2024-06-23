@@ -3,8 +3,6 @@ package com.example.zubrilkaenglish.screens.training
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.zubrilkaenglish.models.WordCard
-import com.example.zubrilkaenglish.screens.training.additionalCards.FewCards
-import com.example.zubrilkaenglish.screens.training.additionalCards.ReviewCard
 
 class CardAdapter(val listener: Listener):RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
@@ -27,7 +25,7 @@ class CardAdapter(val listener: Listener):RecyclerView.Adapter<RecyclerView.View
      * вынесены в класс фабрику ViewHolderFactory
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ViewHolderFactory.create(parent, viewType)
+        return ViewHolderFactory.create(parent, viewType,listener.mode)
     }
 
     override fun getItemCount(): Int {
@@ -60,6 +58,7 @@ class CardAdapter(val listener: Listener):RecyclerView.Adapter<RecyclerView.View
 
 
     interface Listener{
+        var mode: Modes
         fun onClickYesButton(wordCard: WordCard, position: Int)
         fun onClickNoButton(wordCard: WordCard, position: Int)
         fun onClickLookButton(wordCard: WordCard)
