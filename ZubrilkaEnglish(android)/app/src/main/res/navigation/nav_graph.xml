@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_menuFragment_to_profileInfoFragment"
             app:destination="@id/profileInfoFragment" />
+        <action
+            android:id="@+id/action_menuFragment_to_competitionFragment"
+            app:destination="@id/competitionFragment" />
     </fragment>
     <fragment
         android:id="@+id/trainingFragment"
@@ -69,4 +72,9 @@
             android:id="@+id/action_profileInfoFragment_to_profileRegistrationFragment"
             app:destination="@id/profileRegistrationFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/competitionFragment"
+        android:name="com.example.zubrilkaenglish.onlineCompetition.CompetitionFragment"
+        android:label="fragment_competition"
+        tools:layout="@layout/fragment_competition" />
 </navigation>

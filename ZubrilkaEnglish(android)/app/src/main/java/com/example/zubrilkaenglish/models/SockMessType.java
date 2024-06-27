@@ -1,0 +1,10 @@
+package com.example.zubrilkaenglish.models;
+
+import org.jetbrains.annotations.Nullable;
+
+public enum SockMessType {
+    PING, //в мапе под ключем "time" должен содержать время отправки с устройства юзера в миллисикундах
+    REQUEST_ACTIVE_CARDS, //запрос от сервера активных карточек пользователя в мапе должно находиться число требуемых активных карточек под ключем "numberActiveCards"
+    ACTIVE_CARDS, //отправка от пользователя на сервер списка id слов находящихся у него в активном обучении, список должен лежать под ключем "listIdActiveCards"
+    START_COMPETITION; //отправляется после подбора поединка, каждому игроку
+}

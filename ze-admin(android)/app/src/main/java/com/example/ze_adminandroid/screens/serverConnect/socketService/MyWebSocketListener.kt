@@ -1,16 +1,9 @@
 package com.example.ze_adminandroid.screens.serverConnect.socketService
 
-import com.google.gson.Gson
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import okio.ByteString
-import okio.ByteString.Companion.toByteString
-import org.apache.lucene.analysis.CharArraySet
 
 class MyWebSocketListener : WebSocketListener() {
     val sendDataManager = SendDataManager.instanse

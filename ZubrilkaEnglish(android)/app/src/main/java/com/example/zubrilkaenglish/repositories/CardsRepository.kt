@@ -479,4 +479,14 @@ class CardsRepository private constructor(){
         }
         return countAC
     }
+
+    /**
+     * выдаст список id всех активных карточек пользователя
+     * в основном используется на сервере для формирования списка для соревнования
+     */
+    suspend fun getIdAllActiveCards(): List<Long> {
+        return roomService.getProgressDAO().getAllProgressUnlearnedCards2()
+            .filter { it.statProgress!=StatProgress.LEARNED.value && compareDate(it.sleepTime) }
+            .map { it.wordId.toLong() }
+    }
 }

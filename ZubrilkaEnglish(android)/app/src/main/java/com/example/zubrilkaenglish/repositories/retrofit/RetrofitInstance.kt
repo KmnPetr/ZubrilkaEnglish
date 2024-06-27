@@ -1,6 +1,5 @@
 package com.example.zubrilkaenglish.repositories.retrofit
 
-import com.example.zubrilkaenglish.utils.LOCAL_URL
 import com.example.zubrilkaenglish.utils.URL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

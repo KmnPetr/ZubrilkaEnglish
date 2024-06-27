@@ -53,7 +53,8 @@ public class SecurityConfig {
                     auth.pathMatchers(
                             "/auth/getAccessToken",
                             "/test-auth/user",
-                            "/profile/**"
+                            "/profile/**",
+                            "/competition"
                     ).hasAnyRole("USER","ADMIN");
 
                     auth.pathMatchers(

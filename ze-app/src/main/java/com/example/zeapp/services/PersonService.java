@@ -49,8 +49,8 @@ public class PersonService implements ReactiveUserDetailsService {
                                     rPerson.setRole(UserRole.ROLE_USER);
                                     rPerson.setCreated_at(new Timestamp(System.currentTimeMillis()));
                                     rPerson.setPassword(passwordEncoder.encode(rPerson.getPassword()));
-                                    return personRepository.save(rPerson)
-                                            .map(this::convertToProfileDTO);
+                                    return personRepository.save(rPerson).flatMap(this::convertToProfileDTO);
+//                                            .map(this::convertToProfileDTO);
                                 } else {
                                     return Mono.error(new ValidationException("This email is already in use."));
                                 }
@@ -68,9 +68,12 @@ public class PersonService implements ReactiveUserDetailsService {
 
         return findByUsername(username)
                 .cast(Person.class)
+//        return personRepository
+//                .findByEmail(username)
                 .flatMap(person ->{
                             if (passwordEncoder.matches(password,person.getPassword())){
-                                return Mono.just(convertToProfileDTO(person));
+                                return convertToProfileDTO(person);
+//                                return Mono.just(convertToProfileDTO(person));
                             }else {
                                 return Mono.error(new UnauthorizedException("Invalid login or password."));
                             }
@@ -79,8 +82,8 @@ public class PersonService implements ReactiveUserDetailsService {
                 .switchIfEmpty(Mono.error(new UnauthorizedException("Invalid login or password.")));
     }
     //конвертирует Person в ProfileDTO
-    private ProfileDTO convertToProfileDTO(Person person){
-        return new ProfileDTO(
+    private Mono<ProfileDTO> convertToProfileDTO(Person person){
+        return Mono.just(new ProfileDTO(
                 (long)person.getId(),
                 person.getEmail(),
                 null,
@@ -88,7 +91,7 @@ public class PersonService implements ReactiveUserDetailsService {
                 jwtUtil.generateAccessToken(person),
                 jwtUtil.generateRefreshToken(person),
                 person.getCreated_at()
-        );
+        ));
     }
 
     /**
@@ -102,14 +105,16 @@ public class PersonService implements ReactiveUserDetailsService {
 
         switch (fieldName) {
             case "name" -> {
-                return personRepository.updateUserName(id, newValue).map(this::convertToProfileDTO);
+                return personRepository.updateUserName(id, newValue).flatMap(this::convertToProfileDTO);
+//                return personRepository.updateUserName(id, newValue).map(this::convertToProfileDTO);
             }
             case "email" -> {
                 if (isEmailValid(newValue)){
                     return personRepository.existsByEmail(newValue)
                             .flatMap(result->{
                                 if (!result){
-                                    return personRepository.updateUserEmail(id, newValue).map(this::convertToProfileDTO);
+                                    return personRepository.updateUserEmail(id, newValue).flatMap(this::convertToProfileDTO);
+//                                    return personRepository.updateUserEmail(id, newValue).map(this::convertToProfileDTO);
                                 } else {
                                     return Mono.error(new ValidationException("This Email is already used."));
                                 }
@@ -132,5 +137,12 @@ public class PersonService implements ReactiveUserDetailsService {
      */
     private boolean isEmailValid(String email){
         return Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$").matcher(email).matches();
+    }
+
+    /**
+     * Вернет Mono<Person> из БД по id
+     */
+    public Mono<Person> findPersonById(Long personId) {
+        return personRepository.findById(personId.intValue());
     }
 }
