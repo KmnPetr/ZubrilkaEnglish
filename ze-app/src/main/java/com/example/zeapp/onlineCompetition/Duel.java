@@ -66,4 +66,16 @@ public class Duel {
             players.forEach(player -> player.sendMessage(socketMessage));
         }catch (Exception ignore){}//на всякий вдруг null какие будут
     }
+
+    /**
+     * вернет список активных карточек всех юзеров поединка
+     */
+    public List<List<Long>> getUsersList() {
+        List<List<Long>> listUserWords = new ArrayList<>(players.size());
+
+        players.forEach(player -> {
+            listUserWords.add(player.getListActiveCards());
+        });
+        return listUserWords;
+    }
 }

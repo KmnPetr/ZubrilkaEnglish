@@ -5,7 +5,6 @@ import com.example.zeapp.models.SocketMessage;
 import com.example.zeapp.services.PersonService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import org.flywaydb.core.internal.util.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
@@ -21,18 +20,21 @@ public class CompetitionManager {
     private final PersonService personService;
     private final PlayerHolder playerHolder;
     private final DuelHolder duelHolder;
+    private final WordListBuilder wordListBuilder;
     private final Integer numberActiveCards = 30; //укажет количество желаемых активных карточек для поединка
     private Long numberDuels = 0L;
 
     @Autowired
-    public CompetitionManager(PersonService personService, PlayerHolder playerHolder, DuelHolder duelHolder) {
+    public CompetitionManager(PersonService personService, PlayerHolder playerHolder, DuelHolder duelHolder, WordListBuilder wordListBuilder) {
         this.personService = personService;
         this.playerHolder = playerHolder;
         this.duelHolder = duelHolder;
+        this.wordListBuilder = wordListBuilder;
 
 
         Flux.interval(Duration.ofSeconds(1)).onBackpressureBuffer(1).doOnNext(tick -> duelPicker()).subscribe();
         Flux.interval(Duration.ofMillis(500)).onBackpressureBuffer(1).doOnNext(tick -> readinessChecker()).subscribe();
+
     }
 
     /**
@@ -63,6 +65,8 @@ public class CompetitionManager {
      * передает в DuelHolder
      */
     public synchronized void duelPicker() {
+        if(!wordListBuilder.getServiceReady()) return; //сервис формирования списков не готов, уходим.. вернемся позже
+
         try {
             Map<Long, Player> playersMap = playerHolder.getPlayersMap();
             Set<Long> idSet  = playersMap.keySet();
@@ -77,7 +81,7 @@ public class CompetitionManager {
                     newDuel.addPlayers(player);
                 }
                 if (newDuel.isFull()){
-                    makeListWords(newDuel); //составляем список для игроков
+                    wordListBuilder.makeListWords(newDuel); //составляем список для игроков
                     newDuel.setPlayersBusy(); //устанавливаем их поля как занятые
                     duelHolder.addNewDuel(newDuel); //добавляем в пул поединков
                     startDuel(newDuel); //стартуем поединок
@@ -94,13 +98,6 @@ public class CompetitionManager {
     private void startDuel(Duel newDuel) {
         newDuel.sendToAllPlayers(new SocketMessage(SockMessType.START_COMPETITION,Collections.EMPTY_MAP));
         System.out.println("startDuel");  //TODO
-    }
-
-    /**
-     * составит список слов для поединка
-     */
-    private void makeListWords(Duel newDuel) {
-        //TODO составить список слов для поединка
     }
 
     /**
