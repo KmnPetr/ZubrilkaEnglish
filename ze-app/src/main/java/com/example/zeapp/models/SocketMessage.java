@@ -3,10 +3,11 @@ package com.example.zeapp.models;
 import com.google.gson.Gson;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class SocketMessage {
     private SockMessType type;
-    private Map<String,String> map;
+    private Map<String, String> map;
 
     public SocketMessage(SockMessType type, Map<String, String> map) {
         this.type = type;

@@ -8,6 +8,7 @@ import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.util.*;
@@ -48,6 +49,9 @@ public class CompetitionManager {
             case ACTIVE_CARDS:
                 receivedListIdActiveCards(personId,socketMessage);
                 break;
+            case CLICK_ANSWER:
+                userSentAnswer(personId,socketMessage);
+                break;
 //            case TYPE3:
 //                System.out.println("Handling TYPE3");
 //                break;
@@ -58,13 +62,20 @@ public class CompetitionManager {
         }
     }
 
+    /**
+     * обработает выбор пользователем одного из предложенных ответов переводов иностранного слова
+     */
+    private void userSentAnswer(long personId, SocketMessage socketMessage) {
+        System.out.println(socketMessage.toJson());
+    }
+
 
     /**
      * метод формирует поединки игроков
      * собирает в них всю необходимую для начала информацию
      * передает в DuelHolder
      */
-    public synchronized void duelPicker() {
+    private synchronized void duelPicker() {
         if(!wordListBuilder.getServiceReady()) return; //сервис формирования списков не готов, уходим.. вернемся позже
 
         try {
@@ -81,7 +92,7 @@ public class CompetitionManager {
                     newDuel.addPlayers(player);
                 }
                 if (newDuel.isFull()){
-                    wordListBuilder.makeListWords(newDuel); //составляем список для игроков
+                    newDuel.setDuelsListWords(wordListBuilder.makeListWords(newDuel));; //составляем список для игроков
                     newDuel.setPlayersBusy(); //устанавливаем их поля как занятые
                     duelHolder.addNewDuel(newDuel); //добавляем в пул поединков
                     startDuel(newDuel); //стартуем поединок
@@ -96,8 +107,19 @@ public class CompetitionManager {
      * да начнется
      */
     private void startDuel(Duel newDuel) {
-        newDuel.sendToAllPlayers(new SocketMessage(SockMessType.START_COMPETITION,Collections.EMPTY_MAP));
-        System.out.println("startDuel");  //TODO
+        newDuel.sendStartInfo();
+        Flux.just(3, 2, 1).delayElements(Duration.ofSeconds(1))
+                .doOnNext(tick->{
+                    //отправит тик обратного отсчета перед стартом игры
+                    newDuel.sendToAllPlayers(new SocketMessage(SockMessType.START_COUNTDOWN,Map.of("tick",tick.toString())));
+                })
+                .concatWith(Mono.delay(Duration.ofSeconds(1)).map(Long::intValue))  // добавляет задержку в 1 секунду после последнего элемента
+                .doOnComplete(() -> {
+                                //отправит первое слово
+                                newDuel.sendToAllPlayers(new SocketMessage(SockMessType.NEXT_WORD,Map.of("nextWord",newDuel.getNextWord().toJson())));
+                        }
+                ).subscribe();
+
     }
 
     /**
@@ -108,7 +130,7 @@ public class CompetitionManager {
         String jsonList = socketMessage.getMap().get("listIdActiveCards");
         List<Long> parsedList = null;
         try{
-            parsedList = new Gson().fromJson(jsonList,new TypeToken<List<Long>>(){}.getType());
+            parsedList = new Gson().fromJson(jsonList,new TypeToken<List<Long>>(){}.getType()); //TODO
         }catch (Exception e){e.printStackTrace();}
         playerHolder.setListIdActiveCards(personId,parsedList);
     }

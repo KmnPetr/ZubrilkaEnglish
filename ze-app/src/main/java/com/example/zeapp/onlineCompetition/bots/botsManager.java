@@ -1,18 +1,20 @@
 package com.example.zeapp.onlineCompetition.bots;
 
 import com.example.zeapp.models.Person;
+import com.example.zeapp.models.SockMessType;
 import com.example.zeapp.models.SocketMessage;
 import com.example.zeapp.models.UserRole;
-import com.example.zeapp.onlineCompetition.Player;
-import com.example.zeapp.onlineCompetition.PlayerHolder;
+import com.example.zeapp.onlineCompetition.*;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 
 import java.sql.Timestamp;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 
 /**
@@ -23,11 +25,17 @@ import java.util.Map;
 @Component
 public class botsManager {
     //хранит в себе пользователей находящихся онлайн
-    private static Map<Long, Player> bots = new HashMap<>();
-    private final PlayerHolder playerHolder;
+    private static final Map<Long, Player> bots = new HashMap<>();
+    private static final Integer maxProbability = 70; //максимальная вероятность правильного ответа ботом
+    private static final Integer minProbability = 30; //минимальная вероятность правильного ответа ботом
 
-    public botsManager(PlayerHolder playerHolder) {
+    private final PlayerHolder playerHolder;
+    private final CompetitionManager competitionManager;
+
+
+    public botsManager(PlayerHolder playerHolder, CompetitionManager competitionManager) {
         this.playerHolder = playerHolder;
+        this.competitionManager = competitionManager;
 
 
         createBots();
@@ -45,14 +53,77 @@ public class botsManager {
         SocketMessage socketMessage = SocketMessage.fromJson(jsonMessage);
 
         switch (socketMessage.getType()) {
-            case START_COMPETITION:
-                System.out.println(socketMessage.getType()+ " получил бот: "+ bots.get(botId).getPerson().getShort_name());
+            case START_INFO,
+                 START_COUNTDOWN: logMessage(botId,jsonMessage);
+                break;
+            case NEXT_WORD: nextWord(botId, jsonMessage);
                 break;
             default:
                 System.out.println("Unknown type");
                 System.out.println(socketMessage.toJson());
                 break;
         }
+    }
+
+    /**
+     * вызывается при получении следующего слова при поединке с сокета
+     * отправит случайный ответ с случайной задержкой
+     */
+    private void nextWord(Long botId, String jsonMessage) {
+
+        Player bot = bots.get(botId);
+        Integer rightAnsw = bot.getCurrentDuel().getRightAnswer(); //позиция текущего правильного ответа
+        Long curWordId = bot.getCurrentDuel().getCurWordId();
+
+
+        Integer botAnswer;
+
+        Integer posWord = bot.getCurrentDuel().getCurWordPos(); //текущая позиция слова
+
+
+        //вероятность правильного ответа
+        // вероятность уменьшается в связи с продвежением поединка по списку слов,
+        // последнее слово в списке имеет для бота наиболее низкую вероятность правильного ответа
+        Integer probability = maxProbability+(minProbability-maxProbability)*(posWord)/(WordListBuilder.sizeDuelList-1);
+
+        System.out.println("Вероятность правильного ответа бота: "+probability);
+
+        // Генерируем число от 0 до 99
+        int randomInt = new Random().nextInt(100);
+
+        if (randomInt < probability) {
+            // С вероятностью {probability}% выбираем правильный ответ
+            botAnswer = rightAnsw;
+        } else {
+            //с оставшейся вероятностью выберем ложный ответ
+            int[] wrongAnswers = new int[ComplexWord.numberAnswers-1];
+            boolean wasMissing = false;
+            for (int i = 0; i < ComplexWord.numberAnswers; i++) {
+                if (i!=rightAnsw){
+                    if (!wasMissing){
+                        wrongAnswers[i] = i;
+                    } else wrongAnswers[(i-1)] = i;
+                } else wasMissing = true;
+            }
+            botAnswer = wrongAnswers[new Random().nextInt(0,wrongAnswers.length)];
+        }
+
+        Integer randomDelay = (int) (Math.random() * (3001 - 200)) + 200;// Генерация случайной задержки от 200 до 3000 миллисекунд
+        Mono.delay(Duration.ofMillis(randomDelay)).subscribe(tick->
+                competitionManager.receiveMessage(
+                        botId,
+                        new SocketMessage(
+                                SockMessType.CLICK_ANSWER,
+                                Map.of(
+                                        "position", botAnswer.toString(),
+                                        "wordId",curWordId.toString()))));
+    }
+
+    /**
+     * просто залогирует сообщение
+     */
+    private void logMessage(Long botId, String jsonMessage) {
+        System.out.println("botId: "+botId+" Message: "+jsonMessage);
     }
 
     /**
@@ -87,7 +158,9 @@ public class botsManager {
                 Sinks.many().unicast().onBackpressureBuffer(),
                 new ArrayList<>(),
                 false,
-                false
+                false,
+                100,
+                null
         ));
         bots.put(-2L,new Player(
                 -2L,
@@ -102,7 +175,9 @@ public class botsManager {
                 Sinks.many().unicast().onBackpressureBuffer(),
                 new ArrayList<>(),
                 false,
-                false
+                false,
+                100,
+                null
         ));
         bots.put(-3L,new Player(
                 -3L,
@@ -117,7 +192,9 @@ public class botsManager {
                 Sinks.many().unicast().onBackpressureBuffer(),
                 new ArrayList<>(),
                 false,
-                false
+                false,
+                100,
+                null
         ));
         bots.put(-4L,new Player(
                 -4L,
@@ -132,7 +209,9 @@ public class botsManager {
                 Sinks.many().unicast().onBackpressureBuffer(),
                 new ArrayList<>(),
                 false,
-                false
+                false,
+                100,
+                null
         ));
         bots.put(-5L,new Player(
                 -5L,
@@ -147,7 +226,9 @@ public class botsManager {
                 Sinks.many().unicast().onBackpressureBuffer(),
                 new ArrayList<>(),
                 false,
-                false
+                false,
+                100,
+                null
         ));
     }
 }

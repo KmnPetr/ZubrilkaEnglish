@@ -374,7 +374,6 @@ class CardsRepository private constructor(){
         )
     }
 
-
     /**
      * функция получит список Words из сети и положит его в БД из БД вернет новые данные
      */
@@ -488,5 +487,14 @@ class CardsRepository private constructor(){
         return roomService.getProgressDAO().getAllProgressUnlearnedCards2()
             .filter { it.statProgress!=StatProgress.LEARNED.value && compareDate(it.sleepTime) }
             .map { it.wordId.toLong() }
+    }
+
+    /**
+     * выдаст слово из БД по id
+     */
+    suspend fun getWordFromDbById(idWord: Long?): Word? {
+        return if (idWord != null) {
+            roomService.getWordDAO().getWordById(idWord.toInt())
+        }else null
     }
 }
