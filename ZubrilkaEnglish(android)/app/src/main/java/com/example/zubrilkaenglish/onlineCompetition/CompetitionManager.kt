@@ -1,17 +1,17 @@
 package com.example.zubrilkaenglish.onlineCompetition
 
 import android.util.Log
-import com.example.zubrilkaenglish.events.CardEvent
 import com.example.zubrilkaenglish.events.CmpEvEnum
 import com.example.zubrilkaenglish.events.CompetitionEvent
-import com.example.zubrilkaenglish.events.CrEvEnum
 import com.example.zubrilkaenglish.models.SockMessType
 import com.example.zubrilkaenglish.models.SocketMessage
 import com.example.zubrilkaenglish.models.Word
-import com.example.zubrilkaenglish.onlineCompetition.socketDto.DuelInfo
-import com.example.zubrilkaenglish.onlineCompetition.socketDto.NextWord
+import com.example.zubrilkaenglish.models.socketDto.ClickResult
+import com.example.zubrilkaenglish.models.socketDto.DuelInfo
+import com.example.zubrilkaenglish.models.socketDto.FinishInfo
+import com.example.zubrilkaenglish.models.socketDto.NextWord
+import com.example.zubrilkaenglish.models.socketDto.StatusInfo
 import com.example.zubrilkaenglish.repositories.CardsRepository
-import com.example.zubrilkaenglish.services.apiNotification.NotifProp
 import com.example.zubrilkaenglish.utils.LOG
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +20,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 
@@ -39,6 +38,8 @@ class CompetitionManager private constructor(){
     val duelInfo: MutableStateFlow<DuelInfo?> = MutableStateFlow(null)
     val startCountDown: MutableStateFlow<Int?> = MutableStateFlow(null)
     val nextWord: MutableStateFlow<NextWord?> = MutableStateFlow(null)
+    val finishInfo: MutableStateFlow<FinishInfo?> = MutableStateFlow(null)
+    val statusInfo: MutableStateFlow<StatusInfo?> = MutableStateFlow(null)
 
     init {
         EventBus.getDefault().register(this)
@@ -47,15 +48,41 @@ class CompetitionManager private constructor(){
     fun receiveMessage(message: SocketMessage?) {
         when(message?.type){
             SockMessType.PING -> receivePing(message)
+            SockMessType.STATUS_INFO -> receiveStatusInfo(message)
             SockMessType.REQUEST_ACTIVE_CARDS -> sendActiveCards()
             SockMessType.START_INFO -> startInfo(message)
             SockMessType.START_COUNTDOWN -> startCountdown(message)
             SockMessType.NEXT_WORD -> nextWord(message)
-            else -> {
-                Log.d(LOG,message?.toJson().toString())
-            }
+            SockMessType.CLICK_RESULT -> receiveClickResult(message)
+            SockMessType.PEN_WAIT -> receivePenaltyWaiting(message)
+            SockMessType.FINISH_INFO -> receiveFinishInfo(message)
+            else -> { Log.d(LOG,message?.toJson().toString()) }
         }
     }
+
+    /**
+     * при получении обьекта StatusInfo с сервера
+     */
+    private fun receiveStatusInfo(message: SocketMessage) {
+        statusInfo.value = StatusInfo.fromJson(message.map["statusInfo"])
+    }
+
+    /**
+     * при подключении запросит первоначальные данные
+     * кто знает можт он уже играет просто соединение моргнуло или вышел на пару секунд
+     */
+    private fun requestStatusInfo() {
+        socketHolder.sendSocketMessage(SocketMessage(SockMessType.REQUEST_STATUS_INFO, mapOf()))
+    }
+
+    /**
+     * вызывается при получении обьекта FinishInfo при завершении поединка
+     */
+    private fun receiveFinishInfo(message: SocketMessage) {
+        nextWord.value = null
+        this.finishInfo.value = FinishInfo.fromJson(message.map["finishInfo"])
+    }
+
     /**
      * метод используется библиотечкой EventBus
      * для прослушивания запросов от различных view
@@ -64,9 +91,46 @@ class CompetitionManager private constructor(){
     fun subscribeOnCompetitionEvent(event: CompetitionEvent){
         when(event.typeEvent){
             CmpEvEnum.CLICK_ANSWER -> sendClickAnswer(event)
+            CmpEvEnum.CLOSE_SESSION -> closeConnection()
             else -> {}
         }
     }
+
+    /**
+     * закроет сокет сессию очистиит данные
+     */
+    private fun closeConnection() {
+        socketHolder.closeConnect()
+        stopPing()
+        ping.value = null
+        duelInfo.value = null
+        startCountDown.value = null
+        nextWord.value = null
+        finishInfo.value = null
+        statusInfo.value = null
+    }
+
+    /**
+     * вызывается при получении сообщении о штрафе за чрезмерную задержку времени
+     */
+    private fun receivePenaltyWaiting(message: SocketMessage) {
+        GlobalScope.launch(Dispatchers.Main) {
+            EventBus.getDefault().post(CompetitionEvent(CmpEvEnum.PEN_WAIT, message.map.toMutableMap()))
+        }
+    }
+
+    /**
+     * обработает пришедший с сервера результат по выбору ответа
+     */
+    private fun receiveClickResult(message: SocketMessage) {
+        val clickResult: ClickResult = ClickResult.fromJson(message.map["clickResult"])
+        if (clickResult.idWord == (nextWord.value?.idWord ?: false)){
+            GlobalScope.launch(Dispatchers.Main){
+                EventBus.getDefault().post(CompetitionEvent(CmpEvEnum.CLICK_RESULT, mutableMapOf("clickResult" to clickResult)))
+            }
+        }
+    }
+
 
     /**
      * отошлет на сервер соощение о том что пользователь сделал свой выбор ответа
@@ -136,6 +200,7 @@ class CompetitionManager private constructor(){
      * вызывается при открытии сессии
      */
     fun onOpenConection() {
+        requestStatusInfo()
         startPing()
     }
 
@@ -152,7 +217,7 @@ class CompetitionManager private constructor(){
      */
     private fun startPing() {
         pingJob = GlobalScope.launch {
-            while (pingJob!=null){
+            while (true/*pingJob!=null*/){
                 socketHolder.sendSocketMessage(SocketMessage(SockMessType.PING, mapOf("time" to System.currentTimeMillis().toString())))
                 delay(1000)
             }

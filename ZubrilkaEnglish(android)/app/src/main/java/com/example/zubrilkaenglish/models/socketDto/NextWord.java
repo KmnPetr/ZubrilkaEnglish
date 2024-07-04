@@ -1,4 +1,4 @@
-package com.example.zubrilkaenglish.onlineCompetition.socketDto;
+package com.example.zubrilkaenglish.models.socketDto;
 
 import com.example.zubrilkaenglish.models.Word;
 import com.google.gson.Gson;
@@ -33,7 +33,7 @@ public class NextWord {
     public Word getWord() {return word;}
     public void setWord(@Nullable Word word) {this.word = word;}
 
-    // Статический метод для создания объекта SocketMessage из JSON
+    // Статический метод для создания объекта из JSON
     public static NextWord fromJson(String json) {
         Gson gson = new Gson();
         return gson.fromJson(json, NextWord.class);

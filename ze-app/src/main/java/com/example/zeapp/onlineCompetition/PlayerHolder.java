@@ -1,6 +1,7 @@
 package com.example.zeapp.onlineCompetition;
 
 import com.example.zeapp.models.SocketMessage;
+import com.example.zeapp.onlineCompetition.socketDto.StatusPlayer;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
@@ -33,6 +34,7 @@ public class PlayerHolder {
             Player newPlayer = new Player();
             newPlayer.setId(personId);
             newPlayer.setSink(sink);
+            newPlayer.setStatusPlayer(StatusPlayer.BUSY);
             playersMap.put(personId,newPlayer);
         }
     }
@@ -83,5 +85,12 @@ public class PlayerHolder {
      */
     public void saveBot(Player bot) {
         playersMap.put(bot.getId(), bot);
+    }
+
+    /**
+     * выдаст игрока по его id
+     */
+    public Player getPlayer(long personId) {
+        return playersMap.get(personId);
     }
 }

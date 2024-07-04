@@ -35,22 +35,20 @@ public class CompetitionWebSocketHandler implements WebSocketHandler {
         //к сожалению не работает
         //session.getHandshakeInfo().getPrincipal().doOnNext(it-> System.out.println("Principal "+it.getName()+" "+it.toString()+" "+it.hashCode()));
 
+        //получаем id авторизованного пользователя
         String jwtToken = Objects.requireNonNull(session.getHandshakeInfo().getHeaders().get("authorization")).get(0).substring(7);
         String personId = jwtUtil.getClaimsFromToken(jwtToken).get("personId");
-
+        //создаем синк
         Sinks.Many<String> sink = Sinks.many().unicast().onBackpressureBuffer();
-
-        playerHolder.saveSink(Long.parseLong(personId),sink);
-
-
-        Flux<WebSocketMessage> receive = session.receive()
-                .doOnNext(message -> {
-                    competitionManager.receiveMessage(Long.parseLong(personId), SocketMessage.fromJson(message.getPayloadAsText()));
-                });
-
-
-
+        //направляем поток синка пользователю
         Mono<Void> send = session.send(sink.asFlux().map(session::textMessage));
+        //сохраняем синк
+        playerHolder.saveSink(Long.parseLong(personId),sink);
+        //направляем полученные мессаджи в менеджер
+        Flux<WebSocketMessage> receive = session.receive()
+                .doOnNext(message -> competitionManager.receiveMessage(Long.parseLong(personId), SocketMessage.fromJson(message.getPayloadAsText())));
+
+
 
         System.out.println("A connection has been established with a user with id="+personId);
 
@@ -61,5 +59,4 @@ public class CompetitionWebSocketHandler implements WebSocketHandler {
                     playerHolder.onCloseSession(Long.parseLong(personId));
                 });
     }
-
 }

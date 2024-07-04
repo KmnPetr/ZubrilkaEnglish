@@ -3,6 +3,7 @@ package com.example.zeapp.onlineCompetition;
 
 import com.example.zeapp.models.Person;
 import com.example.zeapp.models.SocketMessage;
+import com.example.zeapp.onlineCompetition.socketDto.StatusPlayer;
 import lombok.*;
 import reactor.core.publisher.Sinks;
 
@@ -24,7 +25,11 @@ public class Player {
     private Boolean isReady; //укажет готов ли игрок и укомплектованы ли его поля
     private Boolean isBusy = false; //укажет свободен ли игрок для следующего поединка или на него пока не формировать Duel
     private Integer health = 100; //значение здоровья
-    private Duel currentDuel = null; //хранит или null или ссылку на текущий поединок
+    private Long currentDuelId = null; //хранит или null или ссылку на текущий поединок
+    //хранит время начала отсчета задержки пользователем ответа,
+    //при отсутствии необходимости измерения ставится в null
+    private Long answerStartTime = null;
+    private StatusPlayer statusPlayer = StatusPlayer.BUSY;
 
     /**
      * отошлет пользователю сообщение
@@ -34,4 +39,30 @@ public class Player {
             sink.tryEmitNext(socketMessage.toJson());
         }
     }
+
+    /**
+     * обновит пользователя подготовит его к следующему поединку
+     */
+    public void renew() {
+        isBusy = true; //позже игрок сам снимет этот лок чтобы сформировать следующий поединок
+        System.out.println("СТАВИМ ЛОк");
+        health = 100;
+        currentDuelId = null;
+        answerStartTime = null;
+    }
+
+    /**
+     * сеттер на здоровье
+     * он должен быть в диапазоне от 0 до 100
+     */
+    public void setHealth(Integer health) {
+        if (health<0){
+            this.health = 0;
+        } else if(health>100){
+            this.health = 100;
+        }else{
+            this.health = health;
+        }
+    }
+
 }

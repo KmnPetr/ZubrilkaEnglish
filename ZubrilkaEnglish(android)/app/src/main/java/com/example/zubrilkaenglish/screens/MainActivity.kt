@@ -193,4 +193,10 @@ class MainActivity : AppCompatActivity() {
         navController.popBackStack(navController.graph.startDestinationId, false)
         navController.navigate(R.id.action_menuFragment_to_memoFragment)
     }
+    /**
+     * переключит наверх фрагментов по стеку
+     */
+    fun popBackStack() {
+        navController.popBackStack(navController.graph.startDestinationId, false)
+    }
 }

@@ -152,7 +152,6 @@ public class WordListBuilder {
                 List<Word> collect = list.stream()
                         .sorted((w1, w2) -> Integer.compare(w2.getSorting_value(), w1.getSorting_value())).toList();
 
-                System.out.println("newList.size() "+collect.size());
 
                 words = new ArrayList<>(collect);
                 mapWords = new HashMap<>();
@@ -169,6 +168,5 @@ public class WordListBuilder {
      */
     private void calculateCountUserWords() {
         countUserWords = (int) (sizeDuelList * shareUsersWords)/2;
-        System.out.println("countUserWords: "+countUserWords);
     }
 }

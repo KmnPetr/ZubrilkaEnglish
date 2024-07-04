@@ -212,7 +212,6 @@ class ViewHolderFactory {
         }
     }
 
-
     class ReviewCardHolder(item: View): RecyclerView.ViewHolder(item){
         val binding= ViewReviewCardBinding.bind(item)
 

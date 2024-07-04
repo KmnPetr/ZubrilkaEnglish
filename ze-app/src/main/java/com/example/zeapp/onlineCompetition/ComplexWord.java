@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * это слово предназначенное для соревнований поединков
@@ -16,7 +17,8 @@ import java.util.ArrayList;
 @Setter
 public class ComplexWord {
     private Word word;
+    public static final int numberAnswers = 4; //количество ответов в списке определяет его размер
     private ArrayList<String> listAnswers; //строки возможные переводы слова включая один верный
     private int rightAnswer; //позиция правильного ответа
-    public static final int numberAnswers = 4; //количество ответов в списке определяет его размер
+    private AtomicInteger countReplies = new AtomicInteger(0); //посчитает количество ответивших игроков, чтобы приступить к следующему слову
 }

@@ -74,7 +74,7 @@
     </fragment>
     <fragment
         android:id="@+id/competitionFragment"
-        android:name="com.example.zubrilkaenglish.onlineCompetition.CompetitionFragment"
+        android:name="com.example.zubrilkaenglish.screens.competition.CompetitionFragment"
         android:label="fragment_competition"
         tools:layout="@layout/fragment_competition" />
 </navigation>

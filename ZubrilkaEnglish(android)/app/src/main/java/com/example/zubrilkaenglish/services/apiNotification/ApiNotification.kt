@@ -32,18 +32,11 @@ class ApiNotification private constructor() {
         Log.d(LOG,"Event: ${event.typeEvent.name}") //покажет все ивенты в приложении от EventBus
 
         when(event.typeEvent){
-            CrEvEnum.CARD_CHANGED -> {
-                cardChanged(event as CardEvent,activity)
-            }
-            NfEvEnum.LIMIT_ACTIVE_WORDS -> {
-                limitActiveWords(event as NotificationEvent,activity)
-            }
-            NfEvEnum.GO_TO_CATALOG -> {
-                activity.goToCatalog()
-            }
-            NfEvEnum.GO_TO_MEMOS -> {
-                activity.goToMemos()
-            }
+            CrEvEnum.CARD_CHANGED -> cardChanged(event as CardEvent,activity)
+            NfEvEnum.LIMIT_ACTIVE_WORDS -> limitActiveWords(event as NotificationEvent,activity)
+            NfEvEnum.GO_TO_CATALOG -> activity.goToCatalog()
+            NfEvEnum.GO_TO_MEMOS -> activity.goToMemos()
+            NfEvEnum.GO_TO_UPSTACK -> activity.popBackStack()
         }
     }
 

@@ -3,6 +3,7 @@ package com.example.zeapp.onlineCompetition;
 import com.example.zeapp.models.SockMessType;
 import com.example.zeapp.models.SocketMessage;
 import com.example.zeapp.onlineCompetition.socketDto.DuelInfo;
+import com.example.zeapp.onlineCompetition.socketDto.FinishInfo;
 import com.example.zeapp.onlineCompetition.socketDto.NextWord;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -20,13 +21,66 @@ import java.util.concurrent.ExecutionException;
 @Getter
 @Setter
 public class Duel {
-    Long id;
+    private Long id;
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     private final Integer countPlayers = 2;
     List<Player> players = new ArrayList<>(countPlayers);
     private ArrayList<ComplexWord> duelsListWords; //список предлагаемый обоим пользователям для поединка
     private int curWordPos = -1; //указывает на текущее слово в игре, инкрементируется при раздаче слова
+    private Long timeToNextWord; //время в будущем когда можно будет разослать следующее слово игрокам, чтобы рассылка была с небольшой задержкой
+
+    /**
+     * проверит, является ли текущее слово последним в списке
+     */
+    public boolean isWordsEnded() {
+        return curWordPos >= (duelsListWords.size() - 1);
+    }
+
+    /**
+     * выдаст следующее слово по позиции списка
+     * а также некоторую другую информацию
+     */
+    public NextWord getNextWord() {
+        curWordPos++;
+        NextWord nextWord = null;
+        try{
+            nextWord = new NextWord(
+                    (long) duelsListWords.get(curWordPos).getWord().getId(),
+                    curWordPos,
+                    duelsListWords.size(),
+                    duelsListWords.get(curWordPos).getListAnswers()
+            );
+        }catch (Exception e){e.printStackTrace();}
+        return nextWord;
+    }
+    /**
+     * установит время в будущее когда можно будет разослать следующее слово игрокам
+     */
+    public void setNewTimeNextWord(){
+        timeToNextWord = System.currentTimeMillis()+1000;
+    }
+    /**
+     * проверит, настало ли время разослать следующее слово игрокам
+     */
+    public boolean isTimeNextWord() {
+        return System.currentTimeMillis() > timeToNextWord;
+    }
+    /**
+     * инкрементирует поле countReplies в текущем ComplexWord
+     * и проверит все ли участники поединка дали ответ на текущий вопрос
+     */
+    public boolean incrementAndIsFullCountReplies() {
+        int countReplies = duelsListWords.get(curWordPos).getCountReplies().incrementAndGet();
+        return countReplies == players.size();
+    }
+    /**
+     * положит id поединка не только в поле самого поединка но и каждому игроку
+     */
+    public void setId(Long id) {
+        this.id = id;
+        players.forEach(it->it.setCurrentDuelId(id));
+    }
 
     /**
      * выдаст id текущего слова
@@ -41,25 +95,12 @@ public class Duel {
     /**
      * выдаст позицию текущего правильного ответа
      */
-    public Integer getRightAnswer() {
+    public int getRightAnswer() {
         Integer rightAnsw = null;
         try {
             rightAnsw = duelsListWords.get(curWordPos).getRightAnswer();
         }catch (Exception e){e.printStackTrace();}
         return rightAnsw;
-    }
-    /**
-     * выдаст следующее слово по позиции списка
-     * а также некоторую другую информацию
-     */
-    public NextWord getNextWord() {
-        curWordPos++;
-        return new NextWord(
-                (long)duelsListWords.get(curWordPos).getWord().getId(),
-                curWordPos,
-                duelsListWords.size(),
-                duelsListWords.get(curWordPos).getListAnswers()
-        );
     }
     /**
      * добавит пользователя в поединок
@@ -68,7 +109,6 @@ public class Duel {
     public void addPlayers(Player player) {
         if(players.size() < countPlayers){
             players.add(player);
-            player.setCurrentDuel(this);
         }
     }
 
@@ -139,4 +179,7 @@ public class Duel {
         }
     }
 
+    public FinishInfo getFinishInfo() {
+        return new FinishInfo();
+    }
 }

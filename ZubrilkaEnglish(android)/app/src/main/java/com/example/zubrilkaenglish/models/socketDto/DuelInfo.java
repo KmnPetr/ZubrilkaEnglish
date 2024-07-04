@@ -1,4 +1,4 @@
-package com.example.zubrilkaenglish.onlineCompetition.socketDto;
+package com.example.zubrilkaenglish.models.socketDto;
 
 import com.google.gson.Gson;
 
