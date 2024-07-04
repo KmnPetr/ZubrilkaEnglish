@@ -23,13 +23,12 @@ public class Player {
     private Sinks.Many<String> sink;
     private List<Long> listActiveCards; //хранит запрошенные у пользователя список его активных карточек из которых потом формируется список карточек для соревнования
     private Boolean isReady; //укажет готов ли игрок и укомплектованы ли его поля
-    private Boolean isBusy = false; //укажет свободен ли игрок для следующего поединка или на него пока не формировать Duel
     private Integer health = 100; //значение здоровья
     private Long currentDuelId = null; //хранит или null или ссылку на текущий поединок
     //хранит время начала отсчета задержки пользователем ответа,
     //при отсутствии необходимости измерения ставится в null
     private Long answerStartTime = null;
-    private StatusPlayer statusPlayer = StatusPlayer.BUSY;
+    private StatusPlayer statusPlayer = StatusPlayer.BUSY; //статус игрока
 
     /**
      * отошлет пользователю сообщение
@@ -44,7 +43,7 @@ public class Player {
      * обновит пользователя подготовит его к следующему поединку
      */
     public void renew() {
-        isBusy = true; //позже игрок сам снимет этот лок чтобы сформировать следующий поединок
+        statusPlayer = StatusPlayer.BUSY; //позже игрок сам снимет этот лок чтобы сформировать следующий поединок
         System.out.println("СТАВИМ ЛОк");
         health = 100;
         currentDuelId = null;

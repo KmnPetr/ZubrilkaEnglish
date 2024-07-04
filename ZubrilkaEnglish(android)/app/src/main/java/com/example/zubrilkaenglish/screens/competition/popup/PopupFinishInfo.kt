@@ -49,7 +49,8 @@ class PopupFinishInfo(
             EventBus.getDefault().post(NotificationEvent("",NfEvEnum.GO_TO_UPSTACK))
         }
         binding.buttonNextRound.setOnClickListener {
-
+            this.dismiss()
+            EventBus.getDefault().post(CompetitionEvent(CmpEvEnum.SET_WAITING_STATUS))
         }
     }
 }

@@ -56,8 +56,7 @@ public class botsManager {
         SocketMessage socketMessage = SocketMessage.fromJson(jsonMessage);
 
         switch (socketMessage.getType()) {
-            case START_INFO,
-                 START_COUNTDOWN,
+            case START_COUNTDOWN,
                  CLICK_RESULT,
                  PEN_WAIT: logMessage(botId,jsonMessage);
                 break;
@@ -76,7 +75,6 @@ public class botsManager {
      * при окончании поединка
      */
     private void finishInfo(Long botId, String jsonMessage) {
-        bots.get(botId).setIsBusy(false); //снимем лок чтобы бот смог продолжить играть
         bots.get(botId).setStatusPlayer(StatusPlayer.WAITING); //снимем лок чтобы бот смог продолжить играть
         System.out.println("СНИМАЕМ С БОТА ЛОк");
     }
@@ -172,7 +170,6 @@ public class botsManager {
                 Sinks.many().unicast().onBackpressureBuffer(),
                 new ArrayList<>(),
                 false,
-                false,
                 100,
                 null,
                 null,
@@ -190,7 +187,6 @@ public class botsManager {
 //                ),
 //                Sinks.many().unicast().onBackpressureBuffer(),
 //                new ArrayList<>(),
-//                false,
 //                false,
 //                100,
 //                null,
@@ -210,7 +206,6 @@ public class botsManager {
 //                Sinks.many().unicast().onBackpressureBuffer(),
 //                new ArrayList<>(),
 //                false,
-//                false,
 //                100,
 //                null,
 //                null,
@@ -229,7 +224,6 @@ public class botsManager {
 //                Sinks.many().unicast().onBackpressureBuffer(),
 //                new ArrayList<>(),
 //                false,
-//                false,
 //                100,
 //                null,
 //                null,
@@ -247,7 +241,6 @@ public class botsManager {
 //                ),
 //                Sinks.many().unicast().onBackpressureBuffer(),
 //                new ArrayList<>(),
-//                false,
 //                false,
 //                100,
 //                null,

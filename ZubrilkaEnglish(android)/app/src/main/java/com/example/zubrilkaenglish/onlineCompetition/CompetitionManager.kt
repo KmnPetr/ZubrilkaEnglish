@@ -50,7 +50,6 @@ class CompetitionManager private constructor(){
             SockMessType.PING -> receivePing(message)
             SockMessType.STATUS_INFO -> receiveStatusInfo(message)
             SockMessType.REQUEST_ACTIVE_CARDS -> sendActiveCards()
-            SockMessType.START_INFO -> startInfo(message)
             SockMessType.START_COUNTDOWN -> startCountdown(message)
             SockMessType.NEXT_WORD -> nextWord(message)
             SockMessType.CLICK_RESULT -> receiveClickResult(message)
@@ -65,6 +64,7 @@ class CompetitionManager private constructor(){
      */
     private fun receiveStatusInfo(message: SocketMessage) {
         statusInfo.value = StatusInfo.fromJson(message.map["statusInfo"])
+        duelInfo.value = DuelInfo.fromJson(message.map["duelInfo"])
     }
 
     /**
@@ -92,8 +92,16 @@ class CompetitionManager private constructor(){
         when(event.typeEvent){
             CmpEvEnum.CLICK_ANSWER -> sendClickAnswer(event)
             CmpEvEnum.CLOSE_SESSION -> closeConnection()
+            CmpEvEnum.SET_WAITING_STATUS -> setWaitingStatus()
             else -> {}
         }
+    }
+
+    /**
+     * отправит запрос на сервер поставит юзера в режим ожидания соперника
+     */
+    private fun setWaitingStatus() {
+        socketHolder.sendSocketMessage(SocketMessage(SockMessType.SET_WAITING_STATUS, mapOf()))
     }
 
     /**
@@ -173,14 +181,6 @@ class CompetitionManager private constructor(){
                 startCountDown.value = null //обналим tick чтоб он убрался с экрана
             }
         }
-    }
-
-    /**
-     * первоначальная информация по поединку пользователей
-     */
-    private fun startInfo(message: SocketMessage) {
-        val duelInfo = DuelInfo.fromJson(message.map["duelInfo"])
-        this.duelInfo.value = duelInfo
     }
 
     //отошлет на север список активных карточек пользователя

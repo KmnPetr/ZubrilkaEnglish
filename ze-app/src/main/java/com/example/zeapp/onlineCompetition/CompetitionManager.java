@@ -4,6 +4,7 @@ import com.example.zeapp.models.SockMessType;
 import com.example.zeapp.models.SocketMessage;
 import com.example.zeapp.onlineCompetition.socketDto.ClickResult;
 import com.example.zeapp.onlineCompetition.socketDto.StatusInfo;
+import com.example.zeapp.onlineCompetition.socketDto.StatusPlayer;
 import com.example.zeapp.services.PersonService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -53,7 +54,10 @@ public class CompetitionManager {
                 receivedPing(personId,socketMessage);
                 break;
             case REQUEST_STATUS_INFO:
-                sendStatusInfo(personId,socketMessage);
+                sendStatusInfo(personId);
+                break;
+            case SET_WAITING_STATUS:
+                setWaitingStatus(personId);
                 break;
             case ACTIVE_CARDS:
                 receivedListIdActiveCards(personId,socketMessage);
@@ -69,9 +73,18 @@ public class CompetitionManager {
     }
 
     /**
+     * поставит игрока в режим ожидания поединка и поиска нового противника
+     */
+    private void setWaitingStatus(long personId) {
+        playerHolder.getPlayer(personId).setStatusPlayer(StatusPlayer.WAITING); //установим новый статус
+        sendStatusInfo(personId); // отправим пользователю инфу по статусу
+
+    }
+
+    /**
      * отправит игроку данные о его статусе о его сессиях и другое
      */
-    private void sendStatusInfo(long personId, SocketMessage socketMessage) {
+    private void sendStatusInfo(long personId) {
         Player player = playerHolder.getPlayer(personId);
         StatusInfo statusInfo = new StatusInfo();
         statusInfo.setStatusPlayer(player.getStatusPlayer());
@@ -258,12 +271,12 @@ public class CompetitionManager {
             for (Long key : keyList) {
                 Player player = playersMap.get(key);
 
-                if (player.getIsReady() && !player.getIsBusy()){
+                if (player.getIsReady() && player.getStatusPlayer()== StatusPlayer.WAITING){
                     newDuel.addPlayers(player);
                 }
                 if (newDuel.isFull()){
                     newDuel.setDuelsListWords(wordListBuilder.makeListWords(newDuel));; //составляем список для игроков
-                    newDuel.setPlayersBusy(); //устанавливаем их поля как занятые
+                    newDuel.setPlayersStatusPlaying(); //устанавливаем их поля как занятые
                     duelHolder.addNewDuel(newDuel); //добавляем в пул поединков, создает также id поединка и ложит это id каждому игроку
                     startDuel(newDuel); //стартуем поединок
 

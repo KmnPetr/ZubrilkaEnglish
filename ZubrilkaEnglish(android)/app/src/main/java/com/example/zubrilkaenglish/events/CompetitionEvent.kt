@@ -17,5 +17,7 @@ enum class CmpEvEnum{
     PEN_WAIT,
     //при желании юзера выйти
     //сигнал на очистку данных сессии поединков
-    CLOSE_SESSION;
+    CLOSE_SESSION,
+    //отправит запрос на сервер поставит юзера в режим ожидания соперника
+    SET_WAITING_STATUS;
 }

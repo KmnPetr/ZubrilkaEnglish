@@ -29,6 +29,7 @@ class CompetitionFragment : Fragment() {
     private lateinit var viewModel: CompetitionViewModel
     private lateinit var binding: FragmentCompetitionBinding
     private val socketHolder = SocketHolder.instance
+    private lateinit var popupSearchOpponent: PopupSearchOpponent
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,6 +42,7 @@ class CompetitionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel= ViewModelProvider(this).get(CompetitionViewModel::class.java)
+        popupSearchOpponent = PopupSearchOpponent(requireActivity(),viewModel,viewLifecycleOwner)
 
         setupListeners()
     }
@@ -140,7 +142,7 @@ class CompetitionFragment : Fragment() {
     private fun receiveStatusInfo(statusInfo: StatusInfo?) {
         if (statusInfo!=null){
             if (statusInfo.statusPlayer == StatusPlayer.BUSY||statusInfo.statusPlayer == StatusPlayer.WAITING){
-                PopupSearchOpponent(requireContext(),statusInfo)
+                popupSearchOpponent.show()
             }
         }
     }
@@ -158,7 +160,6 @@ class CompetitionFragment : Fragment() {
             binding.opponentHealth.visibility = View.GONE
         }
     }
-
 
     /**
      * покажет информацию о соперниках их имена, количество здоровья и другое

@@ -2,9 +2,7 @@ package com.example.zeapp.onlineCompetition;
 
 import com.example.zeapp.models.SockMessType;
 import com.example.zeapp.models.SocketMessage;
-import com.example.zeapp.onlineCompetition.socketDto.DuelInfo;
-import com.example.zeapp.onlineCompetition.socketDto.FinishInfo;
-import com.example.zeapp.onlineCompetition.socketDto.NextWord;
+import com.example.zeapp.onlineCompetition.socketDto.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -124,11 +122,11 @@ public class Duel {
      * установит статус игроков как занятые
      * здесь это сделать удобнее всего
      */
-    public void setPlayersBusy() {
+    public void setPlayersStatusPlaying() {
             players.forEach(it->{
                 if (it!=null)//игрок мог уже выйти
-                        it.setIsBusy(true);
-                else setPlayersNotBusy();
+                        it.setStatusPlayer(StatusPlayer.PLAYING);
+                else setPlayersStatusWaiting();
                     }
             );
     }
@@ -136,8 +134,8 @@ public class Duel {
     /**
      * установит статус игроков как незанятые
      */
-    private void setPlayersNotBusy() {
-        players.forEach(it->{if(it!=null) it.setIsBusy(false);});
+    private void setPlayersStatusWaiting() {
+        players.forEach(it->{if(it!=null) it.setStatusPlayer(StatusPlayer.WAITING);});
     }
 
     /**
@@ -171,11 +169,15 @@ public class Duel {
         HashMap<String,String> map = new HashMap<>();
         DuelInfo duelInfo = new DuelInfo(this);
 
+        StatusInfo statusInfo = new StatusInfo();
+
         for (int i = 0; i < players.size(); i++) {
             duelInfo.setOwnId(players.get(i).getId());
             duelInfo.setOwnPosition(i);
+            statusInfo.setStatusPlayer(players.get(i).getStatusPlayer());
             map.put("duelInfo",duelInfo.toJson());
-            players.get(i).sendMessage(new SocketMessage(SockMessType.START_INFO,map));
+            map.put("statusInfo",statusInfo.toJson());
+            players.get(i).sendMessage(new SocketMessage(SockMessType.STATUS_INFO,map));
         }
     }
 
