@@ -4,15 +4,21 @@ import android.database.sqlite.SQLiteConstraintException
 import android.util.Log
 import com.example.zubrilkaenglish.events.CardEvent
 import com.example.zubrilkaenglish.events.CrEvEnum
+import com.example.zubrilkaenglish.events.NfEvEnum
 import com.example.zubrilkaenglish.events.NotificationEvent
-import com.example.zubrilkaenglish.models.ICard
-import com.example.zubrilkaenglish.models.NewsCard
+import com.example.zubrilkaenglish.screens.training.ICard
 import com.example.zubrilkaenglish.models.ProgressWord
 import com.example.zubrilkaenglish.models.Word
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.repositories.retrofit.RetrofitService
 import com.example.zubrilkaenglish.repositories.room.RoomService
+import com.example.zubrilkaenglish.screens.training.Modes
+import com.example.zubrilkaenglish.screens.training.additionalCards.FewCards
+import com.example.zubrilkaenglish.screens.training.additionalCards.NoMemosCard
+import com.example.zubrilkaenglish.screens.training.additionalCards.ReviewCard
+import com.example.zubrilkaenglish.utils.LIMIT_ACTIVE_CARDS
 import com.example.zubrilkaenglish.utils.LOG
+import com.example.zubrilkaenglish.services.apiNotification.NotifProp
 import com.example.zubrilkaenglish.utils.SIM_FORM_DATE
 import com.example.zubrilkaenglish.utils.StatProgress
 import com.example.zubrilkaenglish.utils.numAnsForSleep
@@ -25,6 +31,8 @@ import org.greenrobot.eventbus.Subscribe
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
+import java.util.concurrent.atomic.AtomicInteger
+import kotlin.random.Random
 
 /**
  * этот класс будет сосредоточен на обработке логики связанной с карточками
@@ -36,10 +44,22 @@ class CardsRepository private constructor(){
     }
     private val roomService = RoomService()
     private val retrofitService= RetrofitService()
+    private val memoRepository = MemoRepository.instance
+    private val propRepository = PropRepository.instance
+
+    var countActiveCards: AtomicInteger = AtomicInteger(0) //обновляемые сведения о количестве активных карточек
 
     init {
         EventBus.getDefault().register(this)
+
+        //обновляем значение countActiveCards в фоновом процессе
+        GlobalScope.launch {
+            roomService.getProgressDAO().getAllProgressUnlearnedCards().collect {
+                countActiveCards.set(getCountActiveCards(it))
+            }
+        }
     }
+
 
     /**
      * метод используется библиотечкой EventBus
@@ -49,7 +69,7 @@ class CardsRepository private constructor(){
     fun subscribeOnCardEvent(event: CardEvent){
         when(event.typeEvent){
             CrEvEnum.INTENT_SLEEP -> {
-                event.wordCard = setSleepCard(event.wordCard,event.properties!!.get("countDay") as Int)
+                event.wordCard = setSleepCard(event.wordCard,event.properties.get("countDay") as Int)
                 notifyChangeCard(event)
             }
             CrEvEnum.INCREASE_PROGRESS -> {
@@ -66,29 +86,54 @@ class CardsRepository private constructor(){
                 GlobalScope.launch(Dispatchers.Default) {
                     event.wordCard = setCardAsLearned(event.wordCard)
                     withContext(Dispatchers.Main) {
+                        event.properties.putAll(NotifProp.learnCard.pair) //apiNotification надо знать что мы изменили в карточке
                         notifyChangeCard(event)
                     }
                 }
             }
             CrEvEnum.ADD_WORD_TO_TRAINING -> {
-                GlobalScope.launch(Dispatchers.Default) {
-                    event.wordCard = addWordToTraining(event.wordCard)
-                    withContext(Dispatchers.Main) {
-                        notifyChangeCard(event)
+                if (checkLimitActiveCards(event)){
+                    GlobalScope.launch(Dispatchers.Default) {
+                        event.wordCard = addWordToTraining(event.wordCard)
+                        withContext(Dispatchers.Main) {
+                            event.properties.putAll(NotifProp.addToWordTrain.pair) //apiNotification надо знать что мы изменили в карточке
+                            notifyChangeCard(event)
+                        }
                     }
                 }
             }
             CrEvEnum.RESET_PROGRESS -> {
-                event.wordCard = resetProgressCard(event.wordCard)
-                notifyChangeCard(event)
+                if (compareDate(event.wordCard.progressWord?.sleepTime) || checkLimitActiveCards(event)){
+                    event.wordCard = resetProgressCard(event.wordCard)
+                    event.properties.putAll(NotifProp.resetProgress.pair) //apiNotification надо знать что мы изменили в карточке
+                    notifyChangeCard(event)
+                }
             }
             CrEvEnum.DELETE_CARD -> {
                 event.wordCard = deleteProgressCard(event.wordCard)
+                event.properties.putAll(NotifProp.deleteCard.pair) //apiNotification надо знать что мы изменили в карточке
                 notifyChangeCard(event)
             }
             else -> {}
         }
     }
+
+    /**
+     * проверит, количество находящихся в обучении карточек и сверит с тарифным лимитом
+     */
+    private fun checkLimitActiveCards(failedEvent: CardEvent): Boolean {
+        return if (countActiveCards.get() >= LIMIT_ACTIVE_CARDS){
+            if(failedEvent.properties["approvedCard"] == true) return true
+            else {
+            EventBus.getDefault().post(NotificationEvent(
+                "Лимит активных карточек (${countActiveCards.get()}/$LIMIT_ACTIVE_CARDS)",
+                NfEvEnum.LIMIT_ACTIVE_WORDS,
+                mutableMapOf("failedEvent" to failedEvent)))
+           return false
+        }
+        } else true
+    }
+
     /**
      * удалит ProgressWord по id Word
      */
@@ -96,8 +141,6 @@ class CardsRepository private constructor(){
         //удалим progressWord из БД
         GlobalScope.launch(Dispatchers.Default) {
             roomService.deleteProgressByWordId(wordCard.word.id)
-            notifyToast("Слово/фраза удалена из ваших карточек")
-//        Toast.makeText(MyApplication.context,"Слово/фраза удалена из ваших карточек",Toast.LENGTH_SHORT).show()//TODO надо будет как нибудь поправить тосты а то они не очень вызываются из репозитория
         }
         //изменим progressWord для view без обращения к БД
         wordCard.progressWord = null
@@ -117,8 +160,7 @@ class CardsRepository private constructor(){
         GlobalScope.launch(Dispatchers.Default) {
             if (wordCard.progressWord != null) {
                 roomService.updateProgressWord(wordCard.progressWord!!)
-//                Toast.makeText(MyApplication.context,"Прогресс сброшен",Toast.LENGTH_SHORT).show() //TODO надо будет как нибудь поправить тосты а то они не очень вызываются из репозитория
-            }/*else Toast.makeText(MyApplication.context,"Ошибка",Toast.LENGTH_SHORT).show()*/
+            }
         }
         return wordCard
     }
@@ -137,7 +179,6 @@ class CardsRepository private constructor(){
         )
         try {
             roomService.addWordToTraining(progressWord)
-//                Toast.makeText(MyApplication.context,"Слово/фраза добавлено(а) в изучаемые.", Toast.LENGTH_LONG).show() //TODO yflj xnj,s njcns gjrfpsdfkbcm
             val updatedWordCard = roomService.getWordCardById(wordCard.word.id)
 
             //обновляем progressWord во всех обьектах ссылочным образом
@@ -145,7 +186,6 @@ class CardsRepository private constructor(){
         }catch (e: SQLiteConstraintException){
             e.printStackTrace()
             //может выпасть эксепшен если попытаться добавить progressWord в БД второй раз
-//                Toast.makeText(MyApplication.context,e.javaClass.name+"\n"+e.message, Toast.LENGTH_LONG).show() //TODO yflj xnj,s njcns gjrfpsdfkbcm
         }
         return wordCard
     }
@@ -184,11 +224,10 @@ class CardsRepository private constructor(){
         return wordCard
     }
 
-
     /**
      * выдаст список для изучения
      */
-    suspend fun getListForTreining(): ArrayList<ICard> {
+    suspend fun getListForTreining(mode: Modes): ArrayList<ICard> {
         val listAllCards: List<WordCard>? = roomService.getListWordsCards()
         val listForTreining: ArrayList<ICard> = ArrayList()
 
@@ -199,9 +238,67 @@ class CardsRepository private constructor(){
         }
 
         listForTreining.shuffle()
-        listForTreining.add(NewsCard("news will be here"))
+
+        if (mode == Modes.multipleChoice) fillAnswerVariants(listForTreining)
+
+        listForTreining.add(installLatestCard())
 
         return listForTreining
+    }
+
+    /**
+     * заполнит варианты ответов при многовариантном режиме обучения
+     */
+    private suspend fun fillAnswerVariants(listForTreining: ArrayList<ICard>) {
+
+        var allTranslations:ArrayList<String?>? = ArrayList(roomService.getWordDAO().getAllTranslations())
+
+        listForTreining.forEach {
+            if (it is WordCard){
+                it.rightPosition = Random.nextInt(0, 4)
+
+                it.variants = MutableList(4) { null }
+                it.variants!![it.rightPosition!!] = it.word.translation.toString()
+                it.variants!!.forEachIndexed { index, s ->
+                    if (index!= it.rightPosition) it.variants!![index] = setWrongAnswer(allTranslations, it.variants!!)
+                }
+            }
+        }
+
+        // Освобождение ресурсов поможем гарбадж коллектору
+        allTranslations?.clear()
+        allTranslations = null
+    }
+
+    /**
+     * установит ложный вариант ответа в список variants
+     */
+    private fun setWrongAnswer(allTranslations: ArrayList<String?>?, listAnswers: MutableList<String?>): String {
+        var wrongAnswer = allTranslations?.get(Random.nextInt(0,allTranslations.size))
+        listAnswers.forEach {//проверим чтобы ответ не совпадал с предыдущими ответами
+            if (wrongAnswer.equals(it)) wrongAnswer = setWrongAnswer(allTranslations,listAnswers)
+        }
+        return wrongAnswer.toString()
+    }
+
+
+    /**
+     * определит какая дополнительная карточка будет в конце списка
+     * это может быть карточка с предложением начать трен.заново, какое нибудь уведомление или подсказка
+     */
+    private suspend fun installLatestCard(): ICard {
+        val countActiveCards = getCountActiveCards(roomService.getProgressDAO().getAllProgressUnlearnedCards2())
+        val isUserHasOwnMemos:Boolean = memoRepository.isUserHasOwnMemos()
+        val randomInt: Int = Random.nextInt(0, 100)
+
+        if (randomInt in 50..75 && !isUserHasOwnMemos) return NoMemosCard() //если пользователь еще не добавлял напоминалку с вероятностью 25% предложим ему добавить
+
+        if (countActiveCards<50 && randomInt in 0..49){ //если активных карточек меньше 50 с вероятностью 50% подскажем где найти новые
+            return FewCards()
+        } else if (countActiveCards<40){//если активных карточек меньше 40 то точно подскажем где найти новые:)
+            return FewCards()
+        }
+        return ReviewCard()
     }
 
     /**
@@ -263,6 +360,7 @@ class CardsRepository private constructor(){
         }
         return wordCard
     }
+
     /**
      * функция отправит уведомление в EventBus о смене карточки
      */
@@ -274,13 +372,6 @@ class CardsRepository private constructor(){
                 event.properties //там может передаваться например позиция адаптера или еще чтонибудь, поэтому вернем проперти таким каким оно пришло в репозиторий
             )
         )
-    }
-
-    /**
-     * функция отправит евент с прозбой активити показать тоаст сообщение
-     */
-    private fun notifyToast(message: String){
-        EventBus.getDefault().post(NotificationEvent(message))
     }
 
     /**
@@ -377,5 +468,33 @@ class CardsRepository private constructor(){
             return false
         }
         return false
+    }
+
+    //отфильтрует список и посчитает количество карт на данный момент выспавшихся, активных
+    private fun getCountActiveCards(it: List<ProgressWord>): Int {
+        var countAC:Int = 0
+        it.forEach {
+            if(it.statProgress!=StatProgress.LEARNED.value && compareDate(it.sleepTime)) countAC++
+        }
+        return countAC
+    }
+
+    /**
+     * выдаст список id всех активных карточек пользователя
+     * в основном используется на сервере для формирования списка для соревнования
+     */
+    suspend fun getIdAllActiveCards(): List<Long> {
+        return roomService.getProgressDAO().getAllProgressUnlearnedCards2()
+            .filter { it.statProgress!=StatProgress.LEARNED.value && compareDate(it.sleepTime) }
+            .map { it.wordId.toLong() }
+    }
+
+    /**
+     * выдаст слово из БД по id
+     */
+    suspend fun getWordFromDbById(idWord: Long?): Word? {
+        return if (idWord != null) {
+            roomService.getWordDAO().getWordById(idWord.toInt())
+        }else null
     }
 }

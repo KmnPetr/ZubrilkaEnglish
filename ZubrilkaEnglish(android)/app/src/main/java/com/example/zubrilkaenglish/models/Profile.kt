@@ -15,7 +15,7 @@ data class Profile(
     val name:String,
     var accessToken:String?,
     val refreshToken: String?,
-    val created_at: Timestamp?
+//    val created_at: Timestamp?
 ){
     fun toJson(): String {
         val gson = Gson()

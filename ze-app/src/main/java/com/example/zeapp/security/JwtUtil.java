@@ -67,6 +67,7 @@ public class JwtUtil {
         return JWT.create()
 //                .withSubject("User details")
 //                .withIssuer("ZubrilkaEnglish")
+                .withClaim("personId",person.getId().toString())
                 .withClaim("email",person.getEmail())
                 .withClaim("role", person.getRole().toString())
                 .withIssuedAt(creationDate)

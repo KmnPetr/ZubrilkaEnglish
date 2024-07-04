@@ -24,7 +24,7 @@ public class ReceivedDataManager {
     private final EmitterProcessor<byte[]> emitterProcessor = EmitterProcessor.create();
     private final VoiceFileService voiceFileService;
     private final SerializedWordStore serializedWordStore;
-
+1
     @Autowired
     public ReceivedDataManager(VoiceFileService voiceFileService, SerializedWordStore serializedWordStore) {
         this.voiceFileService = voiceFileService;

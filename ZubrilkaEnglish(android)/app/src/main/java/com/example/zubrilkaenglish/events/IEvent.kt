@@ -5,4 +5,5 @@ package com.example.zubrilkaenglish.events
  */
 interface iEvent<T : Enum<T>>{
     val typeEvent: T
+    var properties: MutableMap<String, Any>
 }

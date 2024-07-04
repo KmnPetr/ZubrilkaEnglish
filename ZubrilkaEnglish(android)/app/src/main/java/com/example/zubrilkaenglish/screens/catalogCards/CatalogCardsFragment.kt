@@ -19,7 +19,6 @@ import com.example.zubrilkaenglish.screens.catalogCards.fragments.FragmentItem
 import com.example.zubrilkaenglish.screens.catalogCards.fragments.PopupWordCard
 import com.example.zubrilkaenglish.screens.catalogCards.fragments.searchCardFragment.SearchCardFragment
 import com.example.zubrilkaenglish.utils.SearchObject
-import com.example.zubrilkaenglish.utils.customizeBackground
 import com.google.android.material.tabs.TabLayout
 
 /**
@@ -55,7 +54,7 @@ class CatalogCardsFragment : Fragment() {
         SearchObject.instance //требует заранее прогрузки для скачивания данных с БД
 
 
-        customizeBackground(binding.background, resources, R.drawable.library_correct1)
+//        customizeBackground(binding.background, resources, R.drawable.library_correct1)
 
         setListFragment()
         tabLayoutListener()
@@ -130,7 +129,7 @@ class CatalogCardsFragment : Fragment() {
                 val updatedText = s.toString() // Получить новый текст из CharSequence
                 if(updatedText.trim().isNotEmpty()){
                     //передаем данные с поисковой строки в viewModel
-                    viewModel.changeListSearchWord(updatedText.trim())
+                    SearchObject.instance.search(updatedText.trim())
                     //создаем фрагмент по поиску слов
                     if (!viewModel.searchCreated){
                         viewModel.searchCreated = true
@@ -144,6 +143,7 @@ class CatalogCardsFragment : Fragment() {
                         tabLayout.getTabAt(tabLayout.tabCount - 1)?.select()
                     }
                 }else{
+                    SearchObject.instance.clearList()
                     //удаляем фрагмент по поиску слов
                     if (viewModel.searchCreated){
                         viewModel.searchCreated = false

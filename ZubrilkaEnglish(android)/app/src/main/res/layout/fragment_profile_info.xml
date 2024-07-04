@@ -62,14 +62,14 @@
                 android:textStyle="italic"/>
 
         </RelativeLayout>
-        <TextView
-            android:id="@+id/dateOfCreation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Date of creation"
-            android:textStyle="italic"
-            android:textSize="16sp"/>
+<!--        <TextView-->
+<!--            android:id="@+id/dateOfCreation"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:text="Date of creation"-->
+<!--            android:textStyle="italic"-->
+<!--            android:textSize="16sp"/>-->
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

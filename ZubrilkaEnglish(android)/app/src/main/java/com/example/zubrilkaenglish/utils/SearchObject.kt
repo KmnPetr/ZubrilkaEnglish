@@ -4,6 +4,10 @@ import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.repositories.CardsRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.apache.commons.lang3.StringUtils
 import org.tartarus.snowball.SnowballProgram
@@ -27,7 +31,26 @@ class SearchObject private constructor(){
     private val englishStemmer = EnglishStemmer()
     private val russianStemmer = RussianStemmer()
 
-    fun search(word: String): List<WordCard> {
+    val listSearchWords: MutableStateFlow<List<WordCard>> = MutableStateFlow(emptyList()) //сюда будут складываться найденные слова
+
+    private var searchJob: Job? = null
+
+    //делаем поиск в корутине чтобы не замедлять основной поток
+    fun search(word: String){
+        GlobalScope.launch {
+            searchJob?.cancelAndJoin() //если пользователь пишет несколько букв подряд чтобы на каждую не создавался джоб
+            // Запускаем корутину в контексте текущего (главного) потока
+            searchJob = GlobalScope.launch {
+                search2(word)
+            try {
+            } catch (e: Exception) {
+                println("Ошибка в корутине поиска слова")
+            }
+            }
+        }
+    }
+    //выполнит поиск
+    private fun search2(word: String) {
 
         //список для слов с точным совпадением
         val firstList = ArrayList<WordCard>()
@@ -35,6 +58,8 @@ class SearchObject private constructor(){
         val secondList = ArrayList<WordCard>()
         //список для слов с примерным совпадением по алгоритму Левенштейна
         val thirdList = ArrayList<WordCard>()
+        //список для слов с совпадением комбинации символов (типа "ain" в слове "contains")
+        val fourthList = ArrayList<WordCard>()
 
         if (isEnglish(word)) {
             listAllWordCard.forEach {
@@ -44,6 +69,8 @@ class SearchObject private constructor(){
                     secondList.add(it)
                 } else if (levenshteinDistance(word, it.word.foreignWord)) {
                     thirdList.add(it)
+                }else if (it.word.foreignWord.contains(word)) {
+                    fourthList.add(it)
                 }
             }
         } else if (isRussian(word)) {
@@ -54,6 +81,8 @@ class SearchObject private constructor(){
                     secondList.add(it)
                 } else if (levenshteinDistance(word, it.word.translation)) {
                     thirdList.add(it)
+                }else if (it.word.translation.contains(word)) {
+                    fourthList.add(it)
                 }
             }
         }
@@ -62,7 +91,9 @@ class SearchObject private constructor(){
         firstList.forEach { list.add(it) }
         secondList.forEach { list.add(it) }
         thirdList.forEach { list.add(it) }
-        return list
+        fourthList.forEach { list.add(it) }
+
+        listSearchWords.value = list
         //криво косо работает
     }
 
@@ -101,5 +132,10 @@ class SearchObject private constructor(){
     private fun isEnglish(text: String): Boolean {
         val englishCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         return text.filter { englishCharacters.contains(it) }.length > 0
+    }
+
+    //очиистиит список найденных слов
+    fun clearList() {
+        listSearchWords.value = emptyList()
     }
 }

@@ -9,4 +9,8 @@
         <item name="android:windowIsFloating">false</item>
         <item name="android:background">@drawable/sbp_rounded_dialog</item>
     </style>
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/dialog_enter_anim</item>
+        <!-- Дополнительные анимации могут быть указаны здесь, если требуется -->
+    </style>
 </resources>

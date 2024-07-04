@@ -1,24 +1,40 @@
 package com.example.zubrilkaenglish.screens
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.zubrilkaenglish.models.Profile
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.repositories.CardsRepository
+import com.example.zubrilkaenglish.repositories.ProfileRepository
 import com.example.zubrilkaenglish.repositories.VoiceRepository
+import com.example.zubrilkaenglish.utils.LOG
 import kotlinx.coroutines.launch
 
 class MainViewModel: ViewModel() {
 
     private val cardsRepository = CardsRepository.instance
     private val voiceRepository = VoiceRepository.instance
+    private val profileRepository = ProfileRepository.instance
+
 
     val listAllWords: MutableLiveData<List<WordCard>> = MutableLiveData()
     val mapWordsByTopic: MutableLiveData<Map<String, ArrayList<WordCard>>> = MutableLiveData()
     val namesTopics: MutableLiveData<List<String>> = MutableLiveData()
 
+    val profile: MutableLiveData<Profile?> = MutableLiveData()
+
     init {
+        viewModelScope.launch{
+            profileRepository.profile.collect{
+                Log.d(LOG,"Profile was changed: ViewModel: "+it?.toString())
+                this@MainViewModel.profile.postValue(it)
+            }
+        }
+
         getListWordsFromRepository()
+
     }
 
     /**

@@ -1,13 +1,19 @@
 package com.example.zubrilkaenglish.events
 
-import android.widget.Toast
-
+/**
+ * класс со всякими разными ивентами
+ * на которые не захотелось реализовывать отдельного класса эвента
+ * прослушивается как правило из MainActivity который передает их классу ApiNotification
+ */
 class NotificationEvent(
     val message: String,
-    override val typeEvent: NfEvEnum = NfEvEnum.SHOW_TOAST,
-    var properties: Map<String, Any>? = mapOf("duration" to Toast.LENGTH_SHORT)
+    override val typeEvent: NfEvEnum,
+    override var properties: MutableMap<String, Any> = mutableMapOf()
     ) : iEvent<NfEvEnum>
 
 enum class NfEvEnum{
-    SHOW_TOAST
+    LIMIT_ACTIVE_WORDS,
+    GO_TO_CATALOG, //попытка перейти в каталог карт из любого фрагмента
+    GO_TO_MEMOS, //переход в каталог напоминаний из любого фрагмента
+    GO_TO_UPSTACK //поднимет по фрагментам приложения на верх стека
 }

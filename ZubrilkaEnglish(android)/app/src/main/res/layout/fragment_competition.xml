@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".screens.competition.CompetitionFragment">
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:gravity="left"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/ownHealth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="100" />
+
+            <TextView
+                android:id="@+id/ownName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Own Name"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:gravity="right"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/opponentHealth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="100" />
+
+            <TextView
+                android:id="@+id/opponentName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Opponent Name"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/countCards"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="countCards"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+
+    <LinearLayout
+        android:id="@+id/wordBlock"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:padding="20dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/countCards">
+
+        <!--распорочка-->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="5dp"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/foreignWord"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="Foreign Word"
+                android:gravity="center"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/transcription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:gravity="center"
+                android:text="[transcription]"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <com.example.zubrilkaenglish.utils.ui.CustButton
+                android:id="@+id/variant0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:layout_margin="3dp"
+                app:backgroundColor="@color/white"
+                app:cornerRadius="7dp"
+                app:borderWidth="1dp"
+                app:borderColor="#7E7E7E"
+                app:textSize="14sp"
+                app:text="variant0"
+                app:textStyle="italic"
+                app:fontFamily="sans-serif"/>
+            <com.example.zubrilkaenglish.utils.ui.CustButton
+                android:id="@+id/variant1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:layout_margin="3dp"
+                app:backgroundColor="#FF7B3D"
+                app:cornerRadius="7dp"
+                app:borderWidth="1dp"
+                app:borderColor="#7E7E7E"
+                app:textSize="14sp"
+                app:text="variant1"
+                app:textStyle="italic"
+                app:fontFamily="sans-serif"/>
+            <com.example.zubrilkaenglish.utils.ui.CustButton
+                android:id="@+id/variant2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:layout_margin="3dp"
+                app:backgroundColor="@color/white"
+                app:cornerRadius="7dp"
+                app:borderWidth="1dp"
+                app:borderColor="#7E7E7E"
+                app:textSize="14sp"
+                app:text="variant2"
+                app:textStyle="italic"
+                app:fontFamily="sans-serif"/>
+            <com.example.zubrilkaenglish.utils.ui.CustButton
+                android:id="@+id/variant3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:layout_margin="3dp"
+                app:backgroundColor="#B4F469"
+                app:cornerRadius="7dp"
+                app:borderWidth="1dp"
+                app:borderColor="#7E7E7E"
+                app:textSize="14sp"
+                app:text="variant3"
+                app:textStyle="italic"
+                app:fontFamily="sans-serif"/>
+        </LinearLayout>
+        <!--распорочка-->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ping: "
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/ping"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="There is no connection"
+            android:textColor="#FF9800" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/countDown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CD"
+        android:textColor="#A84FC3F7"
+        android:textSize="96sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/countCards"
+        app:layout_constraintVertical_bias="0.40" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

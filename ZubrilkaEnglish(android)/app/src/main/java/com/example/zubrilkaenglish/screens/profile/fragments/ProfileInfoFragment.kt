@@ -72,6 +72,6 @@ class ProfileInfoFragment : Fragment() {
     private fun showProfileInfo(profile: Profile) {
         binding.name.setText(profile.name)
         binding.email.setText(profile.email)
-        binding.dateOfCreation.setText(profile.created_at.toString())
+//        binding.dateOfCreation.setText(profile.created_at.toString())
     }
 }

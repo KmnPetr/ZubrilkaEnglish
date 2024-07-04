@@ -5,23 +5,37 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
-import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
+import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.FragmentTrainingBinding
 import com.example.zubrilkaenglish.events.CardEvent
 import com.example.zubrilkaenglish.events.CrEvEnum
+import com.example.zubrilkaenglish.events.PrEvEnum
+import com.example.zubrilkaenglish.events.PropEvent
 import com.example.zubrilkaenglish.events.VcEvEnum
 import com.example.zubrilkaenglish.events.VoiceEvent
+import com.example.zubrilkaenglish.models.PropModel
 import com.example.zubrilkaenglish.models.Voice
 import com.example.zubrilkaenglish.models.WordCard
+import com.example.zubrilkaenglish.repositories.room.PropKey
 import com.example.zubrilkaenglish.screens.training.popup.PopupOptions
+import com.example.zubrilkaenglish.services.VibrationHandler
 import com.example.zubrilkaenglish.services.ads.YandexAds
 import com.example.zubrilkaenglish.utils.LOG
+import com.example.zubrilkaenglish.utils.StatProgress
+import com.example.zubrilkaenglish.utils.defaultMode
+import com.example.zubrilkaenglish.utils.delayFlipping_0
+import com.example.zubrilkaenglish.utils.delayFlipping_1
+import com.example.zubrilkaenglish.utils.delayFlipping_3
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -29,19 +43,20 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
+import java.lang.IllegalArgumentException
 import kotlin.math.abs
 
 /**
  * фрагмент отвечает за отображение основного экрана с процессом изучения карточек
  */
-class TrainingFragment : Fragment(), CardAdapter.Listener {
+class TrainingFragment() : Fragment(), CardAdapter.Listener {
 
     private lateinit var viewModel: TrainingViewModel
     private lateinit var binding: FragmentTrainingBinding
-    private val adapter = CardAdapter(this)
+    private lateinit var adapter: CardAdapter
     private lateinit var countCards : TextView
 
-
+    override lateinit var mode: Modes
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -56,23 +71,12 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
         viewModel = ViewModelProvider(this).get(TrainingViewModel::class.java)
         countCards = binding.countCards
 
+        setupModes()
 
+        adapter = CardAdapter(this)
         binding.viewPager2.adapter=adapter
-        binding.viewPager2.offscreenPageLimit =3
-        binding.viewPager2.clipToPadding = false
-        binding.viewPager2.clipChildren = false
-        binding.viewPager2.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
 
-        val transformer = CompositePageTransformer()
-//        transformer.addTransformer(MarginPageTransformer(40))
-        transformer.addTransformer{page,position->
-            val r = 1 - abs(position)
-            page.scaleY = 0.85f + r * 0.14f
-        }
-
-        binding.viewPager2.setPageTransformer(transformer)
-
-
+        customizeViewPager2()
 
         binding.viewPager2.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
             override fun onPageScrollStateChanged(state: Int) {
@@ -95,13 +99,64 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
         registerOnPageChangeCallback()
     }
 
+    /**
+     * настроит выпадающий список с режимами обучения
+     */
+    private fun setupModes() {
+        val learningModes = listOf(Modes.ofHonesty,Modes.multipleChoice)
+        val arrayAdapter = ArrayAdapter(requireContext(),R.layout.view_dropdown_item,learningModes.map { it.ruName })
+        binding.modes.setAdapter(arrayAdapter)
+        mode = viewModel.learningMode.value?: defaultMode
+        binding.modes.setText(mode.ruName, false)
+        viewModel.learningMode.observe(viewLifecycleOwner) {
+            if (mode != it && it!=null) {
+                mode = it
+                binding.modes.setText(mode.ruName, false)
+                Log.d(LOG,"новый мод: $mode")
+
+                recreateAdapter()
+            }
+        }
+
+        binding.modes.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+            if (!learningModes[position].equals(mode)){
+                EventBus.getDefault().post(PropEvent(PrEvEnum.UPDATE_REQUEST, PropModel(PropKey.learningMode.key,learningModes[position].name)))
+            }
+        }
+    }
+
+    //пересоздаст заново адаптер, в основном нужен при смене режима обучения
+    private fun recreateAdapter(){
+        adapter = CardAdapter(this)
+        binding.viewPager2.adapter = adapter
+        viewModel.overwriteList()
+        countCards.text = "( ${binding.viewPager2.currentItem + 1} / ${viewModel.countWordCards} )"
+    }
+
+    //кастомизирует вид ViewPager2
+    private fun customizeViewPager2() {
+        binding.viewPager2.offscreenPageLimit =3
+        binding.viewPager2.clipToPadding = false
+        binding.viewPager2.clipChildren = false
+        binding.viewPager2.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+
+        val transformer = CompositePageTransformer()
+//        transformer.addTransformer(MarginPageTransformer(40))
+        transformer.addTransformer{page,position->
+            val r = 1 - abs(position)
+            page.scaleY = 0.85f + r * 0.14f
+        }
+        binding.viewPager2.setPageTransformer(transformer)
+    }
+
+
     override fun onStart() {
         super.onStart()
         EventBus.getDefault().register(this)
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onStop() {
+        super.onStop()
         EventBus.getDefault().unregister(this)
     }
 
@@ -113,21 +168,41 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
     fun event_CardChanged(event: CardEvent){
         when(event.typeEvent){
             CrEvEnum.CARD_CHANGED -> {
-                adapter.notifyItemChanged(event.properties?.get("positionAdapter") as Int)
+                adapter.notifyItemChanged(event.properties.get("positionAdapter") as Int)
 
-                flippingCard()
+                flippingCard(event.wordCard)
             }
             CrEvEnum.SLEEP_EVENT -> {
-                //отменим перелистывание
-                viewModel.userScrolls = 0
-                //покажем окошко с предложением усыпить карточку
-                event.wordCard.sleepEvent = true
-                adapter.notifyItemChanged(event.properties?.get("positionAdapter") as Int)
+                if (viewModel.learningMode.value == Modes.ofHonesty){
+                    //отменим перелистывание
+                    viewModel.userScrolls = 0
+                    //покажем вьюшку с предложением усыпить карточку
+                    event.wordCard.sleepEvent = true
+                    adapter.notifyItemChanged(event.properties.get("positionAdapter") as Int)
+                } else {
+                    //просто отправим интент на усыпление,
+                    // в режиме многовариантного выбора диалог по поводу количества дней спячки не предусмотрен
+                    var countDay = 0
+                    when(event.wordCard.progressWord?.statProgress){
+                        StatProgress.NEW.value -> countDay = 5
+                        StatProgress.PARTIALLY_LEARNED.value -> countDay = 9
+                        StatProgress.ALMOST_LEARNED.value ->countDay = 0
+                    }
+                    EventBus.getDefault().post(
+                        CardEvent(
+                            CrEvEnum.INTENT_SLEEP,
+                            event.wordCard,
+                            mutableMapOf(
+                                "countDay" to countDay,
+                                "positionAdapter" to event.properties.get("positionAdapter") as Int
+                            )
+                        )
+                    )
+                }
             }
             else -> {}
         }
     }
-
 
     /**
      * слушатель при нажатии на кнопку "Yes"
@@ -135,7 +210,8 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
      */
     override fun onClickYesButton(wordCard: WordCard, position: Int) {
         wordCard.cardHasChanged=true
-        EventBus.getDefault().post(CardEvent(CrEvEnum.INCREASE_PROGRESS,wordCard, mapOf("positionAdapter" to position)))
+        VibrationHandler.instance.vibratePositive()
+        EventBus.getDefault().post(CardEvent(CrEvEnum.INCREASE_PROGRESS,wordCard, mutableMapOf("positionAdapter" to position)))
     }
 
     /**
@@ -144,8 +220,9 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
      */
     override fun onClickNoButton(wordCard: WordCard, position: Int) {
         wordCard.cardHasChanged=true
+        VibrationHandler.instance.vibrateNegative()
         //отправим запрос на сброс значения numCorrAnsv
-        EventBus.getDefault().post(CardEvent(CrEvEnum.RESET_numCorrAnsv, wordCard, mapOf("positionAdapter" to position)))
+        EventBus.getDefault().post(CardEvent(CrEvEnum.RESET_numCorrAnsv, wordCard, mutableMapOf("positionAdapter" to position)))
     }
 
     /**
@@ -159,9 +236,10 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
     /**
      * функция вызывается при нажатии на кнопку "три точки"
      */
-    override fun onClickOptionsButton(wordCard: WordCard) {
-        PopupOptions(requireActivity(),wordCard).show()
+    override fun onClickOptionsButton(wordCard: WordCard, position: Int) {
+        PopupOptions(requireActivity(),wordCard,position).show()
     }
+
 
     /**
      *  метод инициирует озвучку карточки
@@ -186,10 +264,26 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
      * перелистывание фрагмента на следующий
      * с защитой от перелистывания во время скролла пальцем
      */
-    private fun flippingCard(){
-        viewModel.userScrolls =1
+    private fun flippingCard(wordCard: WordCard){
+        viewModel.userScrolls = 1
         GlobalScope.launch{
-            delay(700L)
+
+            when(viewModel.learningMode.value){ //на разные режимы разное время задержки перелистывания
+                Modes.ofHonesty -> delay(delayFlipping_0)
+                Modes.multipleChoice -> {
+                    if (wordCard.userAnswer == wordCard.rightPosition){
+                        delay(delayFlipping_3) //при удачном откадывании карточки быстро перелистываем
+                    } else delay(delayFlipping_1) //при неудачном отгадывании даем юзеру время на посмотреть подумать
+                }
+                else -> { throw IllegalArgumentException("LearningMode is invalid") }
+            }
+
+
+
+
+
+
+
             if (viewModel.userScrolls !=0) {
                 viewModel.userScrolls =0
                 binding.viewPager2.setCurrentItem((binding.viewPager2.currentItem + 1),true)
@@ -257,7 +351,7 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
                 if (state == 0 && position == ((viewPager2.adapter?.itemCount ?: 0) - 1)){
 
                     GlobalScope.launch {
-                        delay(500) //небольшая задержка чтоб прогрузилось все и не сразу выпригивала реклама
+                        delay(350) //небольшая задержка чтоб прогрузилось все и не сразу выпригивала реклама
                         withContext(Dispatchers.Main){
                             showYandexAds()
                         }
@@ -266,4 +360,29 @@ class TrainingFragment : Fragment(), CardAdapter.Listener {
             }
         })
     }
+
+    /**
+     * завершит обучение
+     * закроет фрагмент
+     */
+    override fun completeTraining() {
+        findNavController().popBackStack(findNavController().graph.startDestinationId, false)
+    }
+
+    /**
+     * начнет обучение заново
+     * перезапросит список для обучения
+     */
+    override fun restartTraining() {
+        viewModel.overwriteList()
+        binding.viewPager2.currentItem = 0
+    }
+}
+
+/**
+ * содержит значения режимов обучения
+ */
+enum class Modes(val ruName:String){
+    ofHonesty("На честность"), //в этом режиме пользователь сам должен ответить знает ли карточку
+    multipleChoice("Многовариантный выбор") //пользователь должен будет выбрать из  нескольких предложенных
 }

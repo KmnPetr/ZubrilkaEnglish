@@ -13,7 +13,6 @@ import com.example.zubrilkaenglish.events.CrEvEnum
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.screens.catalogCards.CatalogCardsFragment
 import com.example.zubrilkaenglish.screens.catalogCards.CatalogCardsViewModel
-import com.example.zubrilkaenglish.utils.buttonAnimationClick
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 
@@ -54,23 +53,42 @@ class CatalogItemFragment(
         namesFolders.observe(viewLifecycleOwner){list->
             val modifiedList = list.map { it+"   (слов: "+ (mapFoldersCards.value?.get(it)?.size ?: "null") + ")"}
             folderAdapter.setList(modifiedList)
+            hideOptionsButton()
         }
 
-        binding.rollBack.visibility = View.GONE
+        binding.wordsSmallMenu.visibility = View.GONE
         binding.rollBack.isEnabled = false
+        binding.wordsOptions.isEnabled = false
         binding.rollBack.setOnClickListener {
-            buttonAnimationClick(it)
+//            buttonAnimationClick(it)
             rollBackRecycler()
         }
+        binding.wordsOptions.setOnClickListener { PopupWordsOptions(requireActivity(),viewModel_CC).show() }
+
+    }
+
+    //если это фрагмент со списком пользовательских карточек то опциональное окошко с возможностью скрыть выученные и другие карточки не к чему
+    private fun hideOptionsButton(){
+        if(namesFolders.value!=null){
+            if (namesFolders.value!!.contains("активные") && namesFolders.value!!.contains("активные")&& namesFolders.value!!.contains("активные")){
+                binding.wordsOptions.visibility = View.GONE
+                binding.wordsOptions.isEnabled = false
+            }
+        }
+
     }
 
     override fun onResume() {
         super.onResume()
+        viewModel_CC.refreshData() //обновим данные мог поменяться состав и количество карточек особенно в личных карточках пользователя
+    }
+    override fun onStart() {
+        super.onStart()
         EventBus.getDefault().register(this)
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onStop() {
+        super.onStop()
         EventBus.getDefault().unregister(this)
     }
     /**
@@ -82,7 +100,7 @@ class CatalogItemFragment(
         when(event.typeEvent){
             CrEvEnum.CARD_CHANGED -> {
                 if (recyclerView.adapter is ListCardsAdapter){
-                    cardAdapter.notifyItemChanged(event.properties!!.get("positionAdapter") as Int)
+                    cardAdapter.notifyItemChanged(event.properties.get("positionAdapter") as Int)
                 }
             }
 
@@ -94,15 +112,22 @@ class CatalogItemFragment(
      * выполняется при нажатии на элемент папки
      */
     override fun onClickFolder(positionFolder: Int) {
-        binding.rollBack.visibility = View.VISIBLE
+
+        binding.wordsSmallMenu.visibility = View.VISIBLE
         binding.rollBack.isEnabled = true
+        binding.wordsOptions.isEnabled = true
 
         recyclerView.adapter = cardAdapter
 
         viewModel_CC.isRecyclerChanged.value?.set(positionInPager,true)
 
+        val nameKey: String? = namesFolders.value?.get(positionFolder)
         mapFoldersCards.observe(viewLifecycleOwner){
-            it[namesFolders.value?.get(positionFolder)]?.let { it1 -> cardAdapter.setList(it1) }
+            if (it.containsKey(nameKey)){
+                it[nameKey]?.let { it1 -> cardAdapter.setList(it1) }
+            } else {
+                cardAdapter.setList(emptyList()) //особенность фильтровки если все слова отфильтрованы то пустой лист
+            }
         }
     }
 
@@ -113,7 +138,8 @@ class CatalogItemFragment(
         viewModel_CC.isRecyclerChanged.value?.set(positionInPager,false)
         recyclerView.adapter = folderAdapter
 
-        binding.rollBack.visibility = View.GONE
+        binding.wordsSmallMenu.visibility = View.GONE
         binding.rollBack.isEnabled = false
+        binding.wordsOptions.isEnabled = false
     }
 }

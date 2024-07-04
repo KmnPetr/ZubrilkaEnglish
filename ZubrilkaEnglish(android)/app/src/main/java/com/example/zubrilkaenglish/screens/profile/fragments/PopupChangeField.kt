@@ -32,7 +32,6 @@ class PopupChangeProfileField(
         setContentView(binding.root)
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        //тоже не могу вспомнить
         val displayMetrics = context.resources.displayMetrics
         val screenWidth = displayMetrics.widthPixels
         binding.root.layoutParams.width = (screenWidth*0.90).toInt()

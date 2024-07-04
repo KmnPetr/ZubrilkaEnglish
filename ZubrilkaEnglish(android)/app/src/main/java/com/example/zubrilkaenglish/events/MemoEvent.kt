@@ -5,7 +5,7 @@ import com.example.zubrilkaenglish.models.Memo
 class MemoEvent(
     override val typeEvent: MmEvEnum,
     val memo: Memo,
-    var properties: Map<String, Any>? = null
+    override var properties: MutableMap<String, Any> = mutableMapOf()
 ): iEvent<MmEvEnum>
 
 enum class MmEvEnum{

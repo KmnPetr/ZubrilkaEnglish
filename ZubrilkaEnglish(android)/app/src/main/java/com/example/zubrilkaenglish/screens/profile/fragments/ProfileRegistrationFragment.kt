@@ -145,7 +145,7 @@ class ProfileRegistrationFragment : Fragment() {
             viewModel.regName,
             null,
             null,
-            null
+//            null
         )
         ProfileRepository.instance.registrationRequest(newProfile)
     }

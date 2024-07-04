@@ -60,55 +60,55 @@
 
             <com.example.zubrilkaenglish.utils.ui.CustImageButton
                 android:id="@+id/deleteCard"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_margin="3dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="1dp"
                 android:padding="0dp"
                 app:backgroundColor="#00FFFFFF"
                 app:cornerRadius="10dp"
                 app:borderWidth="1dp"
                 app:borderColor="#EAEAEA"
                 app:drawable="@drawable/urn_button"
-                app:imageSize="40dp" />
+                app:imageSize="30dp" />
 
             <com.example.zubrilkaenglish.utils.ui.CustImageButton
                 android:id="@+id/resetProgress"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_margin="3dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="1dp"
                 android:padding="0dp"
                 app:backgroundColor="#00FFFFFF"
                 app:cornerRadius="10dp"
                 app:borderWidth="1dp"
                 app:borderColor="#EAEAEA"
                 app:drawable="@drawable/reset_button"
-                app:imageSize="40dp" />
+                app:imageSize="30dp" />
 
             <com.example.zubrilkaenglish.utils.ui.CustImageButton
                 android:id="@+id/markLearned"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_margin="3dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="1dp"
                 android:padding="0dp"
                 app:backgroundColor="#00FFFFFF"
                 app:cornerRadius="10dp"
                 app:borderWidth="1dp"
                 app:borderColor="#EAEAEA"
                 app:drawable="@drawable/check_mark2"
-                app:imageSize="40dp" />
+                app:imageSize="30dp" />
 
             <com.example.zubrilkaenglish.utils.ui.CustImageButton
                 android:id="@+id/addToTrain"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_margin="3dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="1dp"
                 android:padding="0dp"
                 app:backgroundColor="#00FFFFFF"
                 app:cornerRadius="10dp"
                 app:borderWidth="1dp"
                 app:borderColor="#EAEAEA"
                 app:drawable="@drawable/add_button"
-                app:imageSize="40dp" />
+                app:imageSize="30dp" />
         </LinearLayout>
 
     </LinearLayout>

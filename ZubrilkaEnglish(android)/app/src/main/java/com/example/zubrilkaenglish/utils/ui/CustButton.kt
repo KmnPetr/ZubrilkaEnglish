@@ -10,10 +10,17 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Typeface
+import android.text.Layout
+import android.text.StaticLayout
+import android.text.TextPaint
 import android.util.AttributeSet
+import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.widget.TextView
 import com.example.zubrilkaenglish.R
+import com.example.zubrilkaenglish.utils.LOG
 import kotlin.math.min
 
 open class CustButton @JvmOverloads constructor(
@@ -27,9 +34,11 @@ open class CustButton @JvmOverloads constructor(
     private var cornerRadius: Float
     private var borderWidth: Float
 
+    private var paintText:TextPaint
     private var textColor: Int
     private var textSize: Float
-    private var text: String
+    var text: String
+    private lateinit var textView:TextView
     private var textStyle: Int
     private var fontFamily: String?
     // Переменные для измерения текста
@@ -43,8 +52,6 @@ open class CustButton @JvmOverloads constructor(
 
     private var paintBorder:Paint
     private var paintBackground:Paint
-    private var paintText:Paint
-
     init {
         context
             .theme
@@ -76,13 +83,14 @@ open class CustButton @JvmOverloads constructor(
                     style = Paint.Style.FILL
                     isAntiAlias = true
                 }
-                paintText = Paint().apply {
+                paintText = TextPaint().apply {//при переиспользовании данного вью возникают проблемы из-за того что эта вещь сохраняет старые настройки
                     color = textColor
                     textSize = this@CustButton.textSize
-                    textAlign = Paint.Align.CENTER
+//                    textAlign = Paint.Align.CENTER //используется отрисовке текста без разбиения на строки с использованием StaticLayout
                     isAntiAlias = true
                     typeface = Typeface.create(fontFamily, textStyle)
                     getTextBounds(text, 0, text.length, textBounds)
+                    textAlign = Paint.Align.LEFT  // Используем Align.LEFT для многострочного текста
                 }
             }
 
@@ -118,25 +126,61 @@ open class CustButton @JvmOverloads constructor(
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+
+        paintText.getTextBounds(text, 0, text.length, textBounds)
+
+        val textWidth0:Int = textBounds.width()// Определение ширины текста если бы он не делился на несколько строк
+        val desiredWidth0:Int = textWidth0 + paddingLeft + paddingRight
+
         val widthMode = MeasureSpec.getMode(widthMeasureSpec)
         val heightMode = MeasureSpec.getMode(heightMeasureSpec)
 
-        val desiredWidth = textBounds.width() + paddingLeft + paddingRight
-        val desiredHeight = textBounds.height() + paddingTop + paddingBottom
+        // Определение доступной ширины
+        val widthSize = MeasureSpec.getSize(widthMeasureSpec)
 
-        val measuredWidth = when (widthMode) {
-            MeasureSpec.EXACTLY -> MeasureSpec.getSize(widthMeasureSpec)
-            MeasureSpec.AT_MOST -> min(desiredWidth, MeasureSpec.getSize(widthMeasureSpec))
-            else -> desiredWidth
+        if (desiredWidth0<=widthSize){
+            //если данной максимальной ширины достаточно на на написание этой строки,
+            // то измеряем размеры view без разбиения текста на строки
+
+            val desiredHeight0:Int = textBounds.height() + paddingTop + paddingBottom
+
+            val measuredWidth = when (widthMode) {
+                MeasureSpec.EXACTLY -> MeasureSpec.getSize(widthMeasureSpec)
+                MeasureSpec.AT_MOST -> min(desiredWidth0, MeasureSpec.getSize(widthMeasureSpec))
+                else -> desiredWidth0
+            }
+
+            val measuredHeight = when (heightMode) {
+                MeasureSpec.EXACTLY -> MeasureSpec.getSize(heightMeasureSpec)
+                MeasureSpec.AT_MOST -> min(desiredHeight0, MeasureSpec.getSize(heightMeasureSpec))
+                else -> desiredHeight0
+            }
+
+            setMeasuredDimension(measuredWidth, measuredHeight)
+        } else {
+            //если максимальной ширины не достаточно то измеряем с учетом разбиения текста на строки
+
+            // Создание StaticLayout для измерения текста
+            val staticLayout = StaticLayout(text, paintText, widthSize, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false)
+
+            // Учитывание padding
+            val desiredWidth:Int = staticLayout.width + paddingLeft + paddingRight
+            val desiredHeight:Int = staticLayout.height + paddingTop + paddingBottom
+
+            val measuredWidth = when (widthMode) {
+                MeasureSpec.EXACTLY -> MeasureSpec.getSize(widthMeasureSpec)
+                MeasureSpec.AT_MOST -> minOf(desiredWidth,textWidth0, MeasureSpec.getSize(widthMeasureSpec))
+                else -> desiredWidth
+            }
+
+            val measuredHeight = when (heightMode) {
+                MeasureSpec.EXACTLY -> MeasureSpec.getSize(heightMeasureSpec)
+                MeasureSpec.AT_MOST -> min(desiredHeight, MeasureSpec.getSize(heightMeasureSpec))
+                else -> desiredHeight
+            }
+
+            setMeasuredDimension(measuredWidth, measuredHeight)
         }
-
-        val measuredHeight = when (heightMode) {
-            MeasureSpec.EXACTLY -> MeasureSpec.getSize(heightMeasureSpec)
-            MeasureSpec.AT_MOST -> min(desiredHeight, MeasureSpec.getSize(heightMeasureSpec))
-            else -> desiredHeight
-        }
-
-        setMeasuredDimension(measuredWidth, measuredHeight)
     }
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
@@ -151,12 +195,36 @@ open class CustButton @JvmOverloads constructor(
         drawText(canvas)
     }
     private fun drawText(canvas: Canvas) {
+        paintText.getTextBounds(text, 0, text.length, textBounds)
 
-        // Compute the position to draw the text
-        val xPos = width / 2f
-        val yPos = (height / 2f - (paintText.descent() + paintText.ascent()) / 2)
+        if ((textBounds.width() + paddingLeft + paddingRight)<=canvas.width){
+        //если бы текст умещался в предоставленную ширину канваса то рисуем его без попыток деления на строки
 
-        canvas.drawText(text, xPos, yPos, paintText)
+
+            paintText.textAlign = Paint.Align.CENTER
+            // Compute the position to draw the text
+            val xPos = width / 2f
+            val yPos = (height / 2f - (paintText.descent() + paintText.ascent()) / 2)
+            canvas.drawText(text, xPos, yPos, paintText)
+
+        }else{
+            paintText.textAlign = Paint.Align.LEFT
+            // Ограничение ширины текста
+            val textWidth = canvas.width - paddingLeft - paddingRight
+
+            // Создание StaticLayout для многострочного текста
+            val staticLayout = StaticLayout(text, paintText, textWidth, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false)
+
+            // Позиционирование текста
+            val xPos = paddingLeft.toFloat()
+            val yPos = (canvas.height/ 2 - (staticLayout.height / 2)).toFloat()
+
+
+            canvas.save()// Сохранение состояния канвы
+            canvas.translate(xPos, yPos)// Позиционирование канвы
+            staticLayout.draw(canvas)// Рисование текста
+            canvas.restore()// Восстановление состояния канвы
+        }
     }
 
     private fun drawBackground(canvas: Canvas, widthGap: Float, heightGap: Float) {
@@ -185,5 +253,11 @@ open class CustButton @JvmOverloads constructor(
 
         // Рисуем прямоугольник с закругленными краями
         canvas.drawRoundRect(rectF, cornerRadius, cornerRadius, paintBorder)
+    }
+    override fun setBackgroundColor(color: Int) {
+//        super.setBackgroundColor(color)
+        backgroundColor = color
+        paintBackground.color = backgroundColor
+        invalidate()
     }
 }

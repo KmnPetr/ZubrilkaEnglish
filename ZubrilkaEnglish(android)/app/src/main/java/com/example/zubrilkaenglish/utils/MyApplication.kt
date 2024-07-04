@@ -13,6 +13,6 @@ class MyApplication:Application() {
         context=this
 
         //для работы ZonedDateTime на версии android ниже 8(там старая библиотечка, но есть и новая)
-        AndroidThreeTen.init(this)
+        AndroidThreeTen.init(this) //наверное удалить уже можно
     }
 }

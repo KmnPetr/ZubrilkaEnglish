@@ -9,6 +9,7 @@ services:
         DOMAIN_NAME: ${DOMAIN_NAME}
         MY_EMAIL: ${MY_EMAIL}
         CONTEXT_RELOAD_KEY: ${CONTEXT_RELOAD_KEY}
+    restart: always
 #    certbot renew --dry-run   для перезаписи пробная симуляция
     ports:
       - "80:80"

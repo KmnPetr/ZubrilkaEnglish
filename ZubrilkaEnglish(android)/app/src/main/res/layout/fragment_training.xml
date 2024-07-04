@@ -7,18 +7,41 @@
     tools:context=".screens.training.TrainingFragment">
 
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/element1"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Режим"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.5"
+        app:startIconDrawable="?attr/actionModeCopyDrawable">
+
+        <AutoCompleteTextView
+            android:id="@+id/modes"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:inputType="none"
+            android:text="Режим"
+            android:textSize="10dp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager2"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="100dp"
         android:paddingStart="40dp"
         android:paddingEnd="40dp"
-        android:layout_marginTop="130dp"
-        android:layout_marginBottom="130dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/element1"
         tools:ignore="MissingConstraints" />
 
     <TextView
@@ -30,5 +53,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/viewPager2" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

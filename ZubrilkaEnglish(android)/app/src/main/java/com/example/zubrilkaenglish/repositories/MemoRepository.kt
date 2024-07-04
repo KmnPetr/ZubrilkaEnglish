@@ -2,8 +2,8 @@ package com.example.zubrilkaenglish.repositories
 
 import com.example.zubrilkaenglish.events.MemoEvent
 import com.example.zubrilkaenglish.events.MmEvEnum
-import com.example.zubrilkaenglish.models.DayOfWeek
 import com.example.zubrilkaenglish.models.Memo
+import com.example.zubrilkaenglish.repositories.room.PropKey
 import com.example.zubrilkaenglish.services.memoService.MemoNotificationManager
 import com.example.zubrilkaenglish.repositories.room.RoomService
 import com.example.zubrilkaenglish.utils.DEFAULT_MEMO
@@ -82,4 +82,9 @@ class MemoRepository private constructor() {
      */
     fun getAllMemos() = roomService.getMemoDAO().getAllMemos()
     suspend fun getMemoById(memoId: Long): Memo? = roomService.getMemoDAO().getMemoById(memoId)
+
+    /**
+     * вернет true если пользователь уже создавал напоминания для себя
+     */
+    suspend fun isUserHasOwnMemos(): Boolean = propRepository.getPropModelByKey(PropKey.isUserHasOwnMemos.key)?.value.toBoolean()
 }

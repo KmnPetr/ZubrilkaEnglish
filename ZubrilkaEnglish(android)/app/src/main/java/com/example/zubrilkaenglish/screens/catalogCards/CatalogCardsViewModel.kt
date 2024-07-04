@@ -1,16 +1,21 @@
 package com.example.zubrilkaenglish.screens.catalogCards
 
+import com.example.zubrilkaenglish.utils.StatProgress
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.repositories.CardsRepository
+import com.example.zubrilkaenglish.repositories.PropRepository
+import com.example.zubrilkaenglish.repositories.room.PropKey
 import com.example.zubrilkaenglish.utils.SearchObject
 import kotlinx.coroutines.launch
 
 class CatalogCardsViewModel : ViewModel() {
 
     private val cardsRepository = CardsRepository.instance
+    private val propRepository = PropRepository.instance
+    private val searchObject = SearchObject.instance
 
     var searchCreated: Boolean = false //указывает, создан ли ранее фрагмент поиска слова
     var lastPositionTablayout: Int = 0 //указ.последний используемый фрагмент для возврата на него после удаления поискового фрагмента
@@ -24,17 +29,30 @@ class CatalogCardsViewModel : ViewModel() {
 
     //в списке находится информация, изменялся ли в показываемом на данный момент фрагменте список папок на список слов содержащихся в папках
     val isRecyclerChanged: MutableLiveData<ArrayList<Boolean>> = MutableLiveData()
+    //держит проперти пользовательские настройки по фильтровке и скрыванию карточек
+    val filterProperties: MutableLiveData<Map<String,String?>> = MutableLiveData()
 
     init {
-        dataDownload()
-    }
+        viewModelScope.launch {
+            propRepository.getAllProperties().collect{
+                filterProperties.value = mutableMapOf<String, String?>().apply {
+                    this[PropKey.catalogFilter_hideLearned.key] = it[PropKey.catalogFilter_hideLearned.key]
+                    this[PropKey.catalogFilter_hideSleepingAndActive.key] = it[PropKey.catalogFilter_hideSleepingAndActive.key]
 
+                    downloadAllWords()
+                }
+            }
+        }
 
-    /**
-     * будет изменять список при вводе в поисковую строку нового слова
-     */
-    fun changeListSearchWord(word: String){
-        listSearchWords.value = SearchObject.instance.search(word)
+        //подгружаем из поискового обьекта найденные слова
+        viewModelScope.launch {
+            searchObject.listSearchWords.collect{
+                listSearchWords.value = it
+            }
+        }
+
+        downloadAllWords()
+        downloadUsersWord()
     }
 
     /**
@@ -63,17 +81,51 @@ class CatalogCardsViewModel : ViewModel() {
         return topicsName
     }
 
-    /**
-     * загрузит\обновит данные из репозитория
-     */
-    private fun dataDownload(){
+    //скачает все слова из репозитория
+    private fun downloadAllWords(){
         viewModelScope.launch {
             val listAllCards = cardsRepository.getAllWordCards()
-            mapWordsByTopic.value = sortWordsByTopic(listAllCards)
+            mapWordsByTopic.value = sortWordsByTopic(filterByProperties(listAllCards))
             namesTopics.value = fillNamesTopics(mapWordsByTopic.value as MutableMap<String, ArrayList<WordCard>>)
-
+        }
+    }
+    //достанет из репозитория все карточки пользователя
+    private fun downloadUsersWord(){
+        viewModelScope.launch {
             mapUserCards.value = cardsRepository.getMapMyCards()
             namesTopicsUserCards.value = mapUserCards.value?.keys?.toList()
         }
+    }
+
+    /**
+     * функция отфильтрует карточки если пользователь решил скрыть из каталога какие-нибудь выученные или активные
+     */
+    private fun filterByProperties(listAllCards: List<WordCard>): List<WordCard> {
+        val mapProp: Map<String, String?>? = filterProperties.value
+        val hideLearned:Boolean = mapProp?.get(PropKey.catalogFilter_hideLearned.key).toBoolean()
+        val hideSleepingAndActive:Boolean = mapProp?.get(PropKey.catalogFilter_hideSleepingAndActive.key).toBoolean()
+        if (mapProp!=null){
+            return listAllCards
+                .filter {//фильтруем по полю hideLearned если пользователь захотел скрыть изученные карточки
+                    if (hideLearned){
+                        return@filter !it.progressWord?.statProgress.equals(StatProgress.LEARNED.value)
+                    }else return@filter true
+                }
+                .filter {//фильтруем по полю hideSleepingAndActive если пользователь захотел скрыть спящие и выученные карточки
+                    if (hideSleepingAndActive){
+                        return@filter !(it.progressWord?.statProgress.equals(StatProgress.NEW.value)
+                                ||it.progressWord?.statProgress.equals(StatProgress.PARTIALLY_LEARNED.value)
+                                ||it.progressWord?.statProgress.equals(StatProgress.ALMOST_LEARNED.value))
+                    }else return@filter true
+                }
+        }else return listAllCards
+    }
+
+    /**
+     * обновит списки слов и папок
+     */
+    fun refreshData() {
+        downloadAllWords()
+        downloadUsersWord()
     }
 }

@@ -20,7 +20,7 @@ public class ZeAppApplication {
 		savedArgs = args;
 		context = SpringApplication.run(ZeAppApplication.class, args);
 
-//		printIpAddress();
+		printIpAddress();
 	}
 
 	/**
