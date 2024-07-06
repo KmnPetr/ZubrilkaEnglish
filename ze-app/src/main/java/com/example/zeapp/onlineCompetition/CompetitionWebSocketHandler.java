@@ -49,13 +49,12 @@ public class CompetitionWebSocketHandler implements WebSocketHandler {
                 .doOnNext(message -> competitionManager.receiveMessage(Long.parseLong(personId), SocketMessage.fromJson(message.getPayloadAsText())));
 
 
-
-        System.out.println("A connection has been established with a user with id="+personId);
+//        System.out.println("A connection has been established with a user with id="+personId);
 
         return Flux.merge(receive,send)
                 .then()
                 .doFinally(signalType -> {
-                    System.out.println("Lost connection with user with id="+personId);
+//                    System.out.println("Lost connection with user with id="+personId);
                     playerHolder.onCloseSession(Long.parseLong(personId));
                 });
     }
