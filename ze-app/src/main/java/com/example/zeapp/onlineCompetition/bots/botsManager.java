@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**
@@ -76,7 +77,6 @@ public class botsManager {
      */
     private void finishInfo(Long botId, String jsonMessage) {
         bots.get(botId).setStatusPlayer(StatusPlayer.WAITING); //снимем лок чтобы бот смог продолжить играть
-        System.out.println("СНИМАЕМ С БОТА ЛОк");
     }
 
     /**
@@ -173,6 +173,7 @@ public class botsManager {
                 100,
                 null,
                 null,
+                new AtomicInteger(0),
                 StatusPlayer.WAITING
         ));
 //        bots.put(-2L,new Player(

@@ -5,12 +5,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.zubrilkaenglish.databinding.FragmentCompetitionBinding
 import com.example.zubrilkaenglish.events.CmpEvEnum
 import com.example.zubrilkaenglish.events.CompetitionEvent
+import com.example.zubrilkaenglish.events.VcEvEnum
+import com.example.zubrilkaenglish.events.VoiceEvent
+import com.example.zubrilkaenglish.models.Profile
+import com.example.zubrilkaenglish.models.Voice
 import com.example.zubrilkaenglish.models.socketDto.ClickResult
 import com.example.zubrilkaenglish.models.socketDto.DuelInfo
 import com.example.zubrilkaenglish.models.socketDto.NextWord
@@ -21,6 +24,7 @@ import com.example.zubrilkaenglish.screens.competition.popup.PopupSearchOpponent
 import com.example.zubrilkaenglish.screens.training.popup.PopupFinishInfo
 import com.example.zubrilkaenglish.services.VibrationHandler
 import com.example.zubrilkaenglish.utils.ui.CustButton
+import com.example.zubrilkaenglish.utils.ui.HealthStrip
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 
@@ -79,7 +83,6 @@ class CompetitionFragment : Fragment() {
 
         val listButtons: Array<CustButton> = arrayOf(binding.variant0,binding.variant1,binding.variant2,binding.variant3)
 
-
         if (clickResult.idPlayer == viewModel.duelInfo.value?.ownId){ //если информация о пользователе этой мобилы
             //настройка вибрации
             if(clickResult.isRight == true) VibrationHandler.instance.vibratePositive()
@@ -98,12 +101,12 @@ class CompetitionFragment : Fragment() {
                 }
             }
 
-            binding.ownHealth.text = clickResult.newHealth.toString()
+            binding.ownHealthStrip.setHealth(clickResult.newHealth)
 
         } else if (clickResult.idPlayer == viewModel.opponentId){ //если информация пришла о противнике
 
             //настройка вибрации
-            if(clickResult.isRight == true) VibrationHandler.instance.vibrateNegative()
+            if(clickResult.isRight == true) VibrationHandler.instance.vibratePositive()
             else VibrationHandler.instance.vibratePositive()
 
             viewModel.opponentWrongPos = clickResult.wrongPos
@@ -117,13 +120,14 @@ class CompetitionFragment : Fragment() {
                 }
             }
 
-            binding.opponentHealth.text = clickResult.newHealth.toString()
+            binding.opponentHealthStrip.setHealth(clickResult.newHealth)
         }
 
     }
 
     //установит слушатели на различные кнопки и LiveData
     private fun setupListeners() {
+        viewModel.profile.observe(viewLifecycleOwner){showProfile(it)}
         viewModel.ping.observe(viewLifecycleOwner){ showPing(it) }
         viewModel.duelInfo.observe(viewLifecycleOwner){ showDuelInfo(it) }
         viewModel.startCountDown.observe(viewLifecycleOwner){ showCountDown(it) }
@@ -131,12 +135,19 @@ class CompetitionFragment : Fragment() {
             configureCountWords(it)
             configureWordBlock(it)
         }
-        viewModel.ownHealth.observe(viewLifecycleOwner){ changeHealth(it,binding.ownHealth) }
-        viewModel.opponentHealth.observe(viewLifecycleOwner){ changeHealth(it,binding.opponentHealth) }
+        viewModel.ownHealth.observe(viewLifecycleOwner){ changeHealth(it,binding.ownHealthStrip) }
+        viewModel.opponentHealth.observe(viewLifecycleOwner){ changeHealth(it,binding.opponentHealthStrip) }
         viewModel.finishInfo.observe(viewLifecycleOwner){
             if (it!=null) PopupFinishInfo(requireContext(),it,viewModel).show()
         }
         viewModel.statusInfo.observe(viewLifecycleOwner){ receiveStatusInfo(it) }
+    }
+
+    /**
+     * покажетнекоторые данные по профилю
+     */
+    private fun showProfile(profile: Profile?) {
+        if (profile!=null) binding.ownName.text = profile.name
     }
 
     private fun receiveStatusInfo(statusInfo: StatusInfo?) {
@@ -150,14 +161,12 @@ class CompetitionFragment : Fragment() {
     /**
      * вызывается при изменении показателя здоровья игрока
      */
-    private fun changeHealth(health: Int?, viewHealth: TextView) {
+    private fun changeHealth(health: Int?, healthStrip: HealthStrip) {
         if (health != null){
-            viewHealth.text = health.toString()
-            viewHealth.visibility = View.VISIBLE
+            healthStrip.visibility = View.VISIBLE
+            healthStrip.setHealth(health)
         } else {
-            binding.ownHealth.text = "100"
-            binding.opponentHealth.text = ""
-            binding.opponentHealth.visibility = View.GONE
+            binding.opponentHealthStrip.visibility = View.GONE
         }
     }
 
@@ -236,7 +245,6 @@ class CompetitionFragment : Fragment() {
             binding.foreignWord.text = nextWord.word?.foreignWord ?: ""
             binding.transcription.text = nextWord.word?.transcription ?: ""
             try {
-
                 listButtons.forEachIndexed{ index, it ->
                     it.text = nextWord.listAnswers[index]
                     it.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
@@ -246,8 +254,9 @@ class CompetitionFragment : Fragment() {
                 it.requestLayout()
                 }
             binding.wordBlock.requestLayout()
-
             } catch (e:Exception){e.printStackTrace()}
+            if (nextWord.word!=null&& nextWord.word?.link_voice !=null)
+                EventBus.getDefault().post(VoiceEvent(VcEvEnum.PLAY_VOICE, Voice(nextWord.word!!.link_voice!!,null)))
         } else {
             binding.wordBlock.visibility = View.GONE
             binding.foreignWord.text = ""

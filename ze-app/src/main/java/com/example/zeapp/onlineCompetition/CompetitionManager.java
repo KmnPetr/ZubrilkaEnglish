@@ -199,35 +199,39 @@ public class CompetitionManager {
             Player player = playerHolder.getPlayer(personId);
             Duel duel = duelHolder.getDuelById(player.getCurrentDuelId());
 
-            resetDelayAnsw(player);
+            resetDelayAnsw(player); //сбросит, чтобы по времени не штрафовало
 
-            if (idWord == duel.getCurWordId()){ //проверка что  id слова совпадают чтобы не нарваться на какие задержки в сокете
+            //проверка что  id слова совпадают чтобы не нарваться на какие задержки в сокете
+            //а также защита чтобы юзер не отвечал дважды на один вопрос
+            if (idWord == duel.getCurWordId()&&player.getCountAnswer().get()==duel.getCurWordId()){
+                int i = player.getCountAnswer().incrementAndGet();
+                if (i>(duel.getCurWordId()+1)) {player.getCountAnswer().decrementAndGet();} //даблчек
+                else {
+                    int rightPos = duel.getRightAnswer();
+                    boolean isRight = (rightPos == posChoice);
+                    Integer wrongPos = isRight ? null : posChoice;
+                    int newHealth = changeHealthByAnswer(isRight,player);
 
-                int rightPos = duel.getRightAnswer();
-                boolean isRight = (rightPos == posChoice);
-                Integer wrongPos = isRight ? null : posChoice;
-                int newHealth = changeHealthByAnswer(isRight,player);
 
+                    ClickResult clickResult = new ClickResult(personId, newHealth, idWord, isRight, rightPos, wrongPos);
 
-                ClickResult clickResult = new ClickResult(personId, newHealth, idWord, isRight, rightPos, wrongPos);
+                    duel.getPlayers().forEach(it->{
+                        if (Objects.equals(it.getId(), player.getId())){
+                            clickResult.setRightPos(rightPos);
+                        } else {
+                            clickResult.setRightPos(null); //противнику не будем отправлять правильный вариант
+                        }
+                        it.sendMessage(new SocketMessage(SockMessType.CLICK_RESULT,Map.of("clickResult", clickResult.toJson())));
+                    });
 
-                duel.getPlayers().forEach(it->{
-                    if (Objects.equals(it.getId(), player.getId())){
-                        clickResult.setRightPos(rightPos);
-                    } else {
-                        clickResult.setRightPos(null); //противнику не будем отправлять правильный вариант
-                    }
-                    it.sendMessage(new SocketMessage(SockMessType.CLICK_RESULT,Map.of("clickResult", clickResult.toJson())));
-                });
-
-                if (!(player.getHealth()<=0)){ //проверим уровень жизни игрока
-                    if (duel.incrementAndIsFullCountReplies()){ //инкрементируем поле countReplies и проверит все ли игроки ответили
-                        System.out.println("ВСЕ ОТВЕТИЛИ, ПЕРЕЛИСТЫВАЕМ");
-                        duel.setNewTimeNextWord(); //установили время для отправки следующего слова
-                        appForNextWord.add(duel); //отправим заявку на отправку следующего слова специализированным потоком
-                    }
-                }else finishDuel(duel); //остановим дуель если очки у одного из игроков кончились
-
+                    if (!(player.getHealth()<=0)){ //проверим уровень жизни игрока
+                        if (duel.incrementAndIsFullCountReplies()){ //инкрементируем поле countReplies и проверит все ли игроки ответили
+                            System.out.println("ВСЕ ОТВЕТИЛИ, ПЕРЕЛИСТЫВАЕМ");
+                            duel.setNewTimeNextWord(); //установили время для отправки следующего слова
+                            appForNextWord.add(duel); //отправим заявку на отправку следующего слова специализированным потоком
+                        }
+                    }else finishDuel(duel); //остановим дуель если очки у одного из игроков кончились
+                }
             }
         }catch (Exception e){e.printStackTrace();}
     }
@@ -312,7 +316,7 @@ public class CompetitionManager {
         if (!duel.isWordsEnded()){
             duel.sendToAllPlayers(new SocketMessage(SockMessType.NEXT_WORD,Map.of("nextWord",duel.getNextWord().toJson())));
             duel.getPlayers().forEach(player -> {
-                startMeasureDelay(duel.getPlayers()); //отправим в поток для измерения задержки ответа
+                startMeasureDelay(duel.getPlayers()); //установим начальное время для измерения задержки ответа
             });
         } else{
             finishDuel(duel);
