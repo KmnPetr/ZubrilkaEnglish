@@ -181,7 +181,6 @@ public class CompetitionManager {
      * закончит поединок
      */
     private void finishDuel(Duel duel) {
-        System.out.println("FINISH DUEL");
         duel.getPlayers().forEach(Player::renew);
         duel.sendToAllPlayers(new SocketMessage(SockMessType.FINISH_INFO,Map.of("finishInfo",duel.getFinishInfo().toJson())));
         duelHolder.remove(duel);
@@ -203,9 +202,11 @@ public class CompetitionManager {
 
             //проверка что  id слова совпадают чтобы не нарваться на какие задержки в сокете
             //а также защита чтобы юзер не отвечал дважды на один вопрос
-            if (idWord == duel.getCurWordId()&&player.getCountAnswer().get()==duel.getCurWordId()){
+            if (duel!=null&&idWord == duel.getCurWordId()&&player.getCountAnswer().get()==duel.getCurWordPos()){
                 int i = player.getCountAnswer().incrementAndGet();
-                if (i>(duel.getCurWordId()+1)) {player.getCountAnswer().decrementAndGet();} //даблчек
+                if (i>(duel.getCurWordPos()+1)) {
+                    player.getCountAnswer().decrementAndGet();
+                } //даблчек
                 else {
                     int rightPos = duel.getRightAnswer();
                     boolean isRight = (rightPos == posChoice);
@@ -226,7 +227,6 @@ public class CompetitionManager {
 
                     if (!(player.getHealth()<=0)){ //проверим уровень жизни игрока
                         if (duel.incrementAndIsFullCountReplies()){ //инкрементируем поле countReplies и проверит все ли игроки ответили
-                            System.out.println("ВСЕ ОТВЕТИЛИ, ПЕРЕЛИСТЫВАЕМ");
                             duel.setNewTimeNextWord(); //установили время для отправки следующего слова
                             appForNextWord.add(duel); //отправим заявку на отправку следующего слова специализированным потоком
                         }
@@ -262,7 +262,6 @@ public class CompetitionManager {
      * передает в DuelHolder
      */
     private synchronized void duelPicker() {
-        System.out.println("количество игроков: "+playerHolder.getPlayersMap().size());
         if(!wordListBuilder.getServiceReady()) return; //сервис формирования списков не готов, уходим.. вернемся позже
 
         try {

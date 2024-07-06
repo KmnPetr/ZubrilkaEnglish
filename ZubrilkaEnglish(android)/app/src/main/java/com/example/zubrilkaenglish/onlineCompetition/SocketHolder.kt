@@ -31,7 +31,7 @@ class SocketHolder private constructor(){
 
         val client = OkHttpClient()
         val request: Request = Request.Builder()
-            .url(prod_url+"/competition")
+            .url(URL+"/competition")
             .addHeader("Authorization", "Bearer $token")  // Добавляем JWT токен в заголовок
             .build()
         val listener = SocketListener()

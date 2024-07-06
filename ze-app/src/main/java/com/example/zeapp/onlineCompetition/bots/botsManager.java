@@ -66,8 +66,6 @@ public class botsManager {
             case FINISH_INFO: finishInfo(botId, jsonMessage);
                 break;
             default:
-                System.out.println("Unknown type");
-                System.out.println(socketMessage.toJson());
                 break;
         }
     }
@@ -135,7 +133,7 @@ public class botsManager {
      * просто залогирует сообщение
      */
     private void logMessage(Long botId, String jsonMessage) {
-        System.out.println("botId: "+botId+" Message: "+jsonMessage);
+//        System.out.println("botId: "+botId+" Message: "+jsonMessage);
     }
 
     /**
@@ -192,6 +190,7 @@ public class botsManager {
 //                100,
 //                null,
 //                null,
+//                new AtomicInteger(0),
 //                StatusPlayer.WAITING
 //        ));
 //        bots.put(-3L,new Player(
@@ -210,6 +209,7 @@ public class botsManager {
 //                100,
 //                null,
 //                null,
+//                new AtomicInteger(0),
 //                StatusPlayer.WAITING
 //        ));
 //        bots.put(-4L,new Player(
@@ -228,6 +228,7 @@ public class botsManager {
 //                100,
 //                null,
 //                null,
+//                new AtomicInteger(0),
 //                StatusPlayer.WAITING
 //        ));
 //        bots.put(-5L,new Player(
@@ -246,6 +247,7 @@ public class botsManager {
 //                100,
 //                null,
 //                null,
+//                new AtomicInteger(0),
 //                StatusPlayer.WAITING
 //        ));
     }

@@ -35,7 +35,8 @@ public class DuelHolder {
      * выдаст Duel по его id
      */
     public Duel getDuelById(Long currentDuelId) {
-        return duelMap.get(currentDuelId);
+        if (currentDuelId!=null) return duelMap.get(currentDuelId);
+        else return null;
     }
 
     /**
