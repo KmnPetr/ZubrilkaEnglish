@@ -3,6 +3,7 @@ package com.example.zubrilkaenglish.onlineCompetition
 import com.example.zubrilkaenglish.models.SocketMessage
 import com.example.zubrilkaenglish.repositories.ProfileRepository
 import com.example.zubrilkaenglish.utils.URL
+import com.example.zubrilkaenglish.utils.prod_url
 import com.example.zubrilkaenglish.utils.test_url
 import kotlinx.coroutines.flow.MutableStateFlow
 import okhttp3.OkHttpClient
@@ -30,7 +31,7 @@ class SocketHolder private constructor(){
 
         val client = OkHttpClient()
         val request: Request = Request.Builder()
-            .url(test_url+"/competition")
+            .url(prod_url+"/competition")
             .addHeader("Authorization", "Bearer $token")  // Добавляем JWT токен в заголовок
             .build()
         val listener = SocketListener()

@@ -13,6 +13,7 @@ import com.example.zubrilkaenglish.models.socketDto.StatusInfo
 import com.example.zubrilkaenglish.onlineCompetition.CompetitionManager
 import com.example.zubrilkaenglish.repositories.CardsRepository
 import com.example.zubrilkaenglish.repositories.ProfileRepository
+import com.example.zubrilkaenglish.services.VibrationHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
@@ -122,9 +123,11 @@ class CompetitionViewModel : ViewModel() {
      */
     private fun receivePenaltyWaiting(event: CompetitionEvent) {
         if (event.properties["idPlayer"].toString().toLong() == (profile.value?.id ?: false)){ //значит штраф пришел на этого игрока
+            VibrationHandler.instance.vibrateNegative()
             ownHealth.value = event.properties["newHealth"].toString().toInt()
         }
         if (event.properties["idPlayer"].toString().toLong()==opponentId){ //значит штраф пришел на противника
+            VibrationHandler.instance.vibratePositive()
             opponentHealth.value = event.properties["newHealth"].toString().toInt()
         }
     }

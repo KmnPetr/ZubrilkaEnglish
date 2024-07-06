@@ -3,11 +3,13 @@ package com.example.zeapp.onlineCompetition;
 
 import com.example.zeapp.models.Person;
 import com.example.zeapp.models.SocketMessage;
+import com.example.zeapp.models.UserRole;
 import com.example.zeapp.onlineCompetition.socketDto.StatusPlayer;
 import lombok.*;
 import reactor.core.publisher.Sinks;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * класс хранит информацию о пользователе находящимся в игре
@@ -28,6 +30,7 @@ public class Player {
     //хранит время начала отсчета задержки пользователем ответа,
     //при отсутствии необходимости измерения ставится в null
     private Long answerStartTime = null;
+    private AtomicInteger countAnswer = new AtomicInteger(0); //защита чтобы юзер не отвечал на один вопрос дважды
     private StatusPlayer statusPlayer = StatusPlayer.BUSY; //статус игрока
 
     /**
@@ -43,11 +46,12 @@ public class Player {
      * обновит пользователя подготовит его к следующему поединку
      */
     public void renew() {
-        statusPlayer = StatusPlayer.BUSY; //позже игрок сам снимет этот лок чтобы сформировать следующий поединок
-        System.out.println("СТАВИМ ЛОк");
+        if (person.getRole()!= UserRole.BOT)statusPlayer = StatusPlayer.BUSY; //позже игрок сам снимет этот лок чтобы сформировать следующий поединок
+        else statusPlayer = StatusPlayer.WAITING;
         health = 100;
         currentDuelId = null;
         answerStartTime = null;
+        countAnswer = new AtomicInteger(0);
     }
 
     /**

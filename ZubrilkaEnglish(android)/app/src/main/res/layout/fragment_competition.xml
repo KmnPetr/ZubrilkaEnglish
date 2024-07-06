@@ -10,6 +10,7 @@
         android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,12 +23,12 @@
             android:gravity="left"
             android:orientation="vertical"
             android:padding="5dp">
-
+<!--
             <TextView
                 android:id="@+id/ownHealth"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="100" />
+                android:text="100" />-->
 
             <TextView
                 android:id="@+id/ownName"
@@ -35,6 +36,15 @@
                 android:layout_height="wrap_content"
                 android:text="Own Name"
                 android:textStyle="bold" />
+
+            <com.example.zubrilkaenglish.utils.ui.HealthStrip
+                android:id="@+id/ownHealthStrip"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:padding="3dp"
+                app:borderWidth="1dp"
+                app:borderColor="#7E7E7E"/>
+
         </LinearLayout>
 
         <LinearLayout
@@ -45,11 +55,11 @@
             android:orientation="vertical"
             android:padding="5dp">
 
-            <TextView
-                android:id="@+id/opponentHealth"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="100" />
+<!--            <TextView-->
+<!--                android:id="@+id/opponentHealth"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="100" />-->
 
             <TextView
                 android:id="@+id/opponentName"
@@ -57,17 +67,18 @@
                 android:layout_height="wrap_content"
                 android:text="Opponent Name"
                 android:textStyle="bold" />
+            <com.example.zubrilkaenglish.utils.ui.HealthStrip
+                android:id="@+id/opponentHealthStrip"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                app:reflect="true"
+                android:padding="3dp"
+                app:borderWidth="1dp"
+                app:borderColor="#7E7E7E"/>
+
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/countCards"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="countCards"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
     <LinearLayout
         android:id="@+id/wordBlock"
@@ -75,16 +86,24 @@
         android:layout_height="0dp"
         android:padding="20dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/countCards">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout4">
 
+
+        <TextView
+            android:id="@+id/countCards"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="countCards"
+            android:layout_gravity="center"/>
         <!--распорочка-->
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_weight="0.5"/>
+            android:layout_weight="0.3"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -111,8 +130,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingEnd="10dp"
-            android:paddingStart="10dp"
+            android:paddingEnd="15dp"
+            android:paddingStart="15dp"
             android:orientation="vertical"
             android:gravity="center">
 
@@ -124,7 +143,7 @@
                 android:paddingBottom="14dp"
                 android:paddingStart="5dp"
                 android:paddingEnd="5dp"
-                android:layout_margin="3dp"
+                android:layout_margin="4dp"
                 app:backgroundColor="@color/white"
                 app:cornerRadius="7dp"
                 app:borderWidth="1dp"
@@ -141,7 +160,7 @@
                 android:paddingBottom="14dp"
                 android:paddingStart="5dp"
                 android:paddingEnd="5dp"
-                android:layout_margin="3dp"
+                android:layout_margin="4dp"
                 app:backgroundColor="#FF7B3D"
                 app:cornerRadius="7dp"
                 app:borderWidth="1dp"
@@ -158,7 +177,7 @@
                 android:paddingBottom="14dp"
                 android:paddingStart="5dp"
                 android:paddingEnd="5dp"
-                android:layout_margin="3dp"
+                android:layout_margin="4dp"
                 app:backgroundColor="@color/white"
                 app:cornerRadius="7dp"
                 app:borderWidth="1dp"
@@ -175,7 +194,7 @@
                 android:paddingBottom="14dp"
                 android:paddingStart="5dp"
                 android:paddingEnd="5dp"
-                android:layout_margin="3dp"
+                android:layout_margin="4dp"
                 app:backgroundColor="#B4F469"
                 app:cornerRadius="7dp"
                 app:borderWidth="1dp"
@@ -189,10 +208,9 @@
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_weight="0.5"/>
-
-
+            android:layout_weight="0.7"/>
     </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/linearLayout4"
@@ -227,11 +245,10 @@
         android:textColor="#A84FC3F7"
         android:textSize="96sp"
         android:textStyle="bold"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
+        android:visibility="visible"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/countCards"
-        app:layout_constraintVertical_bias="0.40" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

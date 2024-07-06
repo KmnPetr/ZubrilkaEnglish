@@ -18,5 +18,6 @@
         <attr name="drawable" format="reference"/>
         <attr name="imageSize" format="dimension"/>
         <attr name="indentationBetweenEl" format="dimension"/>
+        <attr name="reflect" format="boolean" />
     </declare-styleable>
 </resources>
