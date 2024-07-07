@@ -20,6 +20,13 @@ public class ProfileController {
     }
 
     /**
+     * выдаст нового пользователя со случайно сгенерированным именем
+     */
+    @GetMapping("/getTemporaryProfile")
+    public Mono<ProfileDTO> getTemporaryProfile(){
+        return personService.getTemporaryProfile();
+    }
+    /**
      * метод обновляет информацию по некоторым полям пользователя например email, name или другое
      * он принимает PropModel  json
      * в поле key - название поля для замены
