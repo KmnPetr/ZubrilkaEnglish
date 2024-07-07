@@ -34,9 +34,12 @@ public class SecurityContextRepository implements ServerSecurityContextRepositor
 
         if (authHeader != null && authHeader.startsWith("Bearer ")){
             String authToken = authHeader.substring(7);
-            return authenticationManager
-                    .authenticate(new UsernamePasswordAuthenticationToken(authToken,authToken))
-                    .map(SecurityContextImpl::new);
+
+            if (authToken.length() > 10){ //короче фронт просто "null" текстом шлет
+                return authenticationManager
+                        .authenticate(new UsernamePasswordAuthenticationToken(authToken,authToken))
+                        .map(SecurityContextImpl::new);
+            }
         }
 
         return Mono.empty();

@@ -15,8 +15,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
 
+import java.security.SecureRandom;
 import java.sql.Timestamp;
+import java.time.Duration;
 import java.util.regex.Pattern;
 
 @Service
@@ -31,6 +34,50 @@ public class PersonService implements ReactiveUserDetailsService {
         this.personRepository = personRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
+    }
+
+    /**
+     * метод попытается сгенерировать нового временного пользователя а также
+     * в случае уже существующего пользователя повторит генерацию
+     */
+    public Mono<ProfileDTO> getTemporaryProfile() {
+        return generateAndRegisterProfile()
+                .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(1))
+                        .filter(throwable -> throwable instanceof ValidationException
+                                && throwable.getMessage().equals("This email is already in use.")));
+    }
+    /**
+     * выдаст временный профиль со случайным именем
+     */
+    public Mono<ProfileDTO> generateAndRegisterProfile() {
+        String name = "Guest_"+generateRandomString(8);
+        String email = name+"@zubrilka.en";
+        String password = generateRandomString(8);
+        Person person = new Person(
+                null,
+                email,
+                password,
+                name,
+                null,
+                null
+        );
+        Mono<ProfileDTO> response = registerPerson(Mono.just(person));
+
+        return response;
+    }
+
+    /**
+     * Создаст рандомную строку для имени пользователя
+     */
+    public String generateRandomString(int length) {
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        SecureRandom random = new SecureRandom();
+        StringBuilder sb = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            int index = random.nextInt(characters.length());
+            sb.append(characters.charAt(index));
+        }
+        return sb.toString();
     }
 
     @Override
@@ -145,4 +192,5 @@ public class PersonService implements ReactiveUserDetailsService {
     public Mono<Person> findPersonById(Long personId) {
         return personRepository.findById(personId.intValue());
     }
+
 }

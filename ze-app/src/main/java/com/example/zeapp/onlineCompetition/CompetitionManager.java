@@ -84,7 +84,6 @@ public class CompetitionManager {
      * Обрабатывает намерение пользователя играть с ботами или не играть
      */
     private void setLoyalToBots(long personId, SocketMessage socketMessage) {
-        System.out.println(socketMessage.toJson()); //TODO
         playerHolder.getPlayer(personId).setLoyalToBots(Boolean.parseBoolean(socketMessage.getMap().get("loyalToBots")));
     }
 
@@ -213,7 +212,6 @@ public class CompetitionManager {
             player.setAnswerStartTime(System.currentTimeMillis());
         });
     }
-
 
     /**
      * будет проверять в цикле заявки поединков на получение следующего Word
@@ -366,7 +364,6 @@ public class CompetitionManager {
      * да начнется
      */
     private void startDuel(Duel newDuel) {
-        System.out.println("НАЧАЛИ ИГРУ: "+newDuel.getPlayers().get(0).getPerson().getShort_name()+"  "+newDuel.getPlayers().get(1).getPerson().getShort_name());
         newDuel.sendStartInfo();
         Flux.just(3, 2, 1).delayElements(Duration.ofSeconds(1))
                 .doOnNext(tick->{
