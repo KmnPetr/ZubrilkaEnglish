@@ -13,9 +13,9 @@ import reactor.core.publisher.Sinks;
 import java.sql.Timestamp;
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -25,9 +25,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  * даже потестить сложно будет без них
  */
 @Component
-public class botsManager {
-    //хранит в себе пользователей находящихся онлайн
-    private static final Map<Long, Player> bots = new HashMap<>();
+public class BotsManager {
+    //хранит в себе пользователей находящихся онлайн, пришлось сделать паблик
+    public static final Map<Long, Player> bots = new ConcurrentHashMap<>();
+    private int countWaitingBots = 0;
     private static final Integer maxProbability = 60; //максимальная вероятность правильного ответа ботом
     private static final Integer minProbability = 20; //минимальная вероятность правильного ответа ботом
     private static final Integer minDelayAnsw = 1000;
@@ -38,7 +39,7 @@ public class botsManager {
     private final CompetitionManager competitionManager;
 
 
-    public botsManager(PlayerHolder playerHolder, DuelHolder duelHolder, CompetitionManager competitionManager) {
+    public BotsManager(PlayerHolder playerHolder, DuelHolder duelHolder, CompetitionManager competitionManager) {
         this.playerHolder = playerHolder;
         this.duelHolder = duelHolder;
         this.competitionManager = competitionManager;
@@ -144,7 +145,7 @@ public class botsManager {
     }
 
     /**
-     * отправит ботов в общий с игроками пул
+     * Отправит ботов в общий с игроками пул
      */
     private void sendBotsToPlayerHolder() {
         bots.forEach((id,bot)-> playerHolder.saveBot(bot) );
@@ -152,7 +153,7 @@ public class botsManager {
     }
 
     /**
-     * создаст несколько ботов
+     * Создаст несколько ботов
      */
     private void createBots() {
         bots.put(-1L,new Player(
@@ -172,83 +173,103 @@ public class botsManager {
                 null,
                 null,
                 new AtomicInteger(0),
-                StatusPlayer.WAITING
+                StatusPlayer.WAITING,
+                new ArrayList<>(10),
+                new ArrayList<>(10),
+                null,
+                false
         ));
-//        bots.put(-2L,new Player(
-//                -2L,
-//                new Person(
-//                        -2,
-//                        "bot2@bot.bot",
-//                        "tochnoBot",
-//                        "Bip-Bop [Bot]",
-//                        UserRole.BOT,
-//                        new Timestamp(System.currentTimeMillis())
-//                ),
-//                Sinks.many().unicast().onBackpressureBuffer(),
-//                new ArrayList<>(),
-//                false,
-//                100,
-//                null,
-//                null,
-//                new AtomicInteger(0),
-//                StatusPlayer.WAITING
-//        ));
-//        bots.put(-3L,new Player(
-//                -3L,
-//                new Person(
-//                        -3,
-//                        "bot3@bot.bot",
-//                        "tochnoBot",
-//                        "Hyperdrive [Bot]",
-//                        UserRole.BOT,
-//                        new Timestamp(System.currentTimeMillis())
-//                ),
-//                Sinks.many().unicast().onBackpressureBuffer(),
-//                new ArrayList<>(),
-//                false,
-//                100,
-//                null,
-//                null,
-//                new AtomicInteger(0),
-//                StatusPlayer.WAITING
-//        ));
-//        bots.put(-4L,new Player(
-//                -4L,
-//                new Person(
-//                        -4,
-//                        "bot4@bot.bot",
-//                        "tochnoBot",
-//                        "TurboByte [Bot]",
-//                        UserRole.BOT,
-//                        new Timestamp(System.currentTimeMillis())
-//                ),
-//                Sinks.many().unicast().onBackpressureBuffer(),
-//                new ArrayList<>(),
-//                false,
-//                100,
-//                null,
-//                null,
-//                new AtomicInteger(0),
-//                StatusPlayer.WAITING
-//        ));
-//        bots.put(-5L,new Player(
-//                -5L,
-//                new Person(
-//                        -5,
-//                        "bot5@bot.bot",
-//                        "tochnoBot",
-//                        "A bot from America [Bot]",
-//                        UserRole.BOT,
-//                        new Timestamp(System.currentTimeMillis())
-//                ),
-//                Sinks.many().unicast().onBackpressureBuffer(),
-//                new ArrayList<>(),
-//                false,
-//                100,
-//                null,
-//                null,
-//                new AtomicInteger(0),
-//                StatusPlayer.WAITING
-//        ));
+        bots.put(-2L,new Player(
+                -2L,
+                new Person(
+                        -2,
+                        "bot2@bot.bot",
+                        "tochnoBot",
+                        "Bip-Bop [Bot]",
+                        UserRole.BOT,
+                        new Timestamp(System.currentTimeMillis())
+                ),
+                Sinks.many().unicast().onBackpressureBuffer(),
+                new ArrayList<>(),
+                false,
+                100,
+                null,
+                null,
+                new AtomicInteger(0),
+                StatusPlayer.WAITING,
+                new ArrayList<>(10),
+                new ArrayList<>(10),
+                null,
+                false
+        ));
+        bots.put(-3L,new Player(
+                -3L,
+                new Person(
+                        -3,
+                        "bot3@bot.bot",
+                        "tochnoBot",
+                        "Hyperdrive [Bot]",
+                        UserRole.BOT,
+                        new Timestamp(System.currentTimeMillis())
+                ),
+                Sinks.many().unicast().onBackpressureBuffer(),
+                new ArrayList<>(),
+                false,
+                100,
+                null,
+                null,
+                new AtomicInteger(0),
+                StatusPlayer.WAITING,
+                new ArrayList<>(10),
+                new ArrayList<>(10),
+                null,
+                false
+        ));
+        bots.put(-4L,new Player(
+                -4L,
+                new Person(
+                        -4,
+                        "bot4@bot.bot",
+                        "tochnoBot",
+                        "TurboByte [Bot]",
+                        UserRole.BOT,
+                        new Timestamp(System.currentTimeMillis())
+                ),
+                Sinks.many().unicast().onBackpressureBuffer(),
+                new ArrayList<>(),
+                false,
+                100,
+                null,
+                null,
+                new AtomicInteger(0),
+                StatusPlayer.WAITING,
+                new ArrayList<>(10),
+                new ArrayList<>(10),
+                null,
+                false
+        ));
+        bots.put(-5L,new Player(
+                -5L,
+                new Person(
+                        -5,
+                        "bot5@bot.bot",
+                        "tochnoBot",
+                        "A bot from America [Bot]",
+                        UserRole.BOT,
+                        new Timestamp(System.currentTimeMillis())
+                ),
+                Sinks.many().unicast().onBackpressureBuffer(),
+                new ArrayList<>(),
+                false,
+                100,
+                null,
+                null,
+                new AtomicInteger(0),
+                StatusPlayer.WAITING,
+                new ArrayList<>(10),
+                new ArrayList<>(10),
+                null,
+                false
+        ));
     }
 }

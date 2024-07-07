@@ -8,6 +8,7 @@ import com.example.zeapp.onlineCompetition.socketDto.StatusPlayer;
 import lombok.*;
 import reactor.core.publisher.Sinks;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -32,9 +33,13 @@ public class Player {
     private Long answerStartTime = null;
     private AtomicInteger countAnswer = new AtomicInteger(0); //защита чтобы юзер не отвечал на один вопрос дважды
     private StatusPlayer statusPlayer = StatusPlayer.BUSY; //статус игрока
+    private ArrayList<Long> mistakes = new ArrayList<>(10); //список ошибок, отсылаемые пользователю после поединка
+    private ArrayList<Long> correctAnswers = new ArrayList<>(10); //список ошибок, отсылаемые пользователю после поединка
+    private Long timeStartWaiting = null; //время начала ожидания перед формированием дуэли
+    private boolean loyalToBots = false; //указывает, готов ли юзер играть с ботом
 
     /**
-     * отошлет пользователю сообщение
+     * Отошлет пользователю сообщение
      */
     public void sendMessage(SocketMessage socketMessage) {
         if (sink!=null){
@@ -43,19 +48,22 @@ public class Player {
     }
 
     /**
-     * обновит пользователя подготовит его к следующему поединку
+     * Обновит пользователя, подготовит его к следующему поединку
      */
     public void renew() {
-        if (person.getRole()!= UserRole.BOT)statusPlayer = StatusPlayer.BUSY; //позже игрок сам снимет этот лок чтобы сформировать следующий поединок
+        if (person.getRole()!= UserRole.BOT)statusPlayer = StatusPlayer.BUSY; //позже игрок сам снимет этот лок, чтобы сформировать следующий поединок
         else statusPlayer = StatusPlayer.WAITING;
         health = 100;
         currentDuelId = null;
         answerStartTime = null;
         countAnswer = new AtomicInteger(0);
+        mistakes.clear();
+        correctAnswers.clear();
+        loyalToBots = false;
     }
 
     /**
-     * сеттер на здоровье
+     * Сеттер на здоровье
      * он должен быть в диапазоне от 0 до 100
      */
     public void setHealth(Integer health) {
@@ -68,4 +76,11 @@ public class Player {
         }
     }
 
+    /**
+     * Запишет в результаты ошибки и правильные ответы
+     */
+    public void recordResult(Long wordId, boolean isRight) {
+        if (isRight) correctAnswers.add(wordId);
+        else mistakes.add(wordId);
+    }
 }

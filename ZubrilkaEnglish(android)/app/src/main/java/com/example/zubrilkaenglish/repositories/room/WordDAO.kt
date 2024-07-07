@@ -33,4 +33,10 @@ interface WordDAO {
     suspend fun getAllWordCards(): List<WordCard>
     @Query("SELECT translation FROM all_word_table")
     suspend fun getAllTranslations(): List<String?>
+
+    /**
+     * вернет список карточек по списку id
+     */
+    @Query("SELECT w.*, c.* FROM all_word_table w LEFT JOIN progress_word c ON w.id = c.wordId WHERE w.id IN (:listId)")
+    suspend fun getListWordCardsBiId(listId: ArrayList<Long>?): List<WordCard>
 }

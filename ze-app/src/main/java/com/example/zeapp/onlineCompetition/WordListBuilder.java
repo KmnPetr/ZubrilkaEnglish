@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * класс занимается компоновкой списка слов для поединков игроков
+ * Класс занимается компоновкой списка слов для поединков игроков
  */
 @Component
 public class WordListBuilder {
@@ -18,7 +18,7 @@ public class WordListBuilder {
     private ArrayList<Word> words;
     private HashMap<Long,Word> mapWords;
     private Boolean isServiceReady = false;
-    public static final int sizeDuelList = 20; //количество слов для списка в поединке
+    public static final int sizeDuelList = 25; //количество слов для списка в поединке
     private int countUserWords = 0; //максимальное количество слов взятые у одного игрока требуемые для общего списка, вычисляется позже
     private double shareUsersWords = 0.80; //доля слов взятых у игроков в конечном списке, остальные будут забиты другими случайными словами из глобального списка
 

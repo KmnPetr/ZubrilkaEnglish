@@ -9,11 +9,11 @@ import com.google.gson.Gson;
  * и другое
  */
 public class StatusInfo {
-
     private StatusPlayer statusPlayer; //укажет текущий статус пользователя
+
+
     public StatusPlayer getStatusPlayer() {return statusPlayer;}
     public void setStatusPlayer(StatusPlayer statusPlayer) {this.statusPlayer = statusPlayer;}
-
 
 
 
