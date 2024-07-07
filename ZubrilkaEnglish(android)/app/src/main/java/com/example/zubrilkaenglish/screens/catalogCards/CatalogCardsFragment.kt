@@ -67,7 +67,7 @@ class CatalogCardsFragment : Fragment() {
      * показывает popup окошко при нажатии на элемент карточки
      */
     fun onClickCard(wordCard: WordCard,position: Int){
-        PopupWordCard(requireContext(),viewModel,wordCard,position).show()
+        PopupWordCard(requireContext(),wordCard,position).show()
     }
 
     /**

@@ -43,7 +43,7 @@
         android:id="@+id/catalogCards"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
         app:backgroundColor="#80B51717"
@@ -53,13 +53,13 @@
         app:drawable="@drawable/stack_of_books_small"
         app:fontFamily="sans-serif"
         app:imageSize="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/competitionFragment"
         app:text="Каталог Слов"
         app:textColor="@color/white"
         app:textSize="20sp"
-        app:textStyle="italic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonGo" />
+        app:textStyle="italic" />
 
     <com.example.zubrilkaenglish.utils.ui.CustButton
         android:id="@+id/buttonPayFragment"
@@ -80,24 +80,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/catalogCards"/>
 
-    <com.example.zubrilkaenglish.utils.ui.CustButton
+    <com.example.zubrilkaenglish.utils.ui.CustImgTxtButton
         android:id="@+id/competitionFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:padding="16dp"
-        app:backgroundColor="#80510ACC"
-        app:cornerRadius="7dp"
-        app:borderWidth="1dp"
+        android:layout_marginTop="24dp"
+        android:paddingStart="20dp"
+        android:paddingTop="5dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="5dp"
+        app:backgroundColor="#ABC1FF"
         app:borderColor="#33691E"
-        app:textColor="@color/white"
-        app:textSize="14sp"
-        app:text="CompetitionFragment"
-        app:textStyle="bold_italic"
+        app:borderWidth="1dp"
+        app:cornerRadius="15dp"
+        app:drawable="@drawable/pvp"
         app:fontFamily="sans-serif"
+        app:imageSize="45dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonPayFragment"/>
+        app:layout_constraintTop_toBottomOf="@+id/buttonGo"
+        app:text="Онлайн"
+        app:textColor="@color/white"
+        app:textSize="24sp"
+        app:textStyle="italic" />
 
 
 

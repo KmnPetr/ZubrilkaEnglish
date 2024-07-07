@@ -16,7 +16,6 @@ import org.greenrobot.eventbus.EventBus
 
 class PopupWordCard(
     context: Context,
-    viewModel: CatalogCardsViewModel,
     wordCard: WordCard,
     position: Int
 ): Dialog(context) {

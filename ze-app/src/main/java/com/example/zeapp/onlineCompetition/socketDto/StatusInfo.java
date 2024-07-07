@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * класс дто приносит с сервера состояние юзера
+ * Класс дто приносит с сервера состояние юзера
  * находится ли он в поиске соперника или имеет статус занят или офлайн
  * и другую информацию о времени ожидания и количестве пользователей онлайн
  * и другое
@@ -13,12 +13,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class StatusInfo {
-    public StatusPlayer statusPlayer; //укажет текущий статус пользователя
+    private StatusPlayer statusPlayer; //укажет текущий статус пользователя
 
-
-
-
-    // Метод для преобразования объекта DuelInfo в JSON
+    // Метод для преобразования объекта в JSON
     public String toJson() {
         Gson gson = new Gson();
         return gson.toJson(this);

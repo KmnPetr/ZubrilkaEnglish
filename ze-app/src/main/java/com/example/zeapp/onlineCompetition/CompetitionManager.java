@@ -2,9 +2,9 @@ package com.example.zeapp.onlineCompetition;
 
 import com.example.zeapp.models.SockMessType;
 import com.example.zeapp.models.SocketMessage;
-import com.example.zeapp.onlineCompetition.socketDto.ClickResult;
-import com.example.zeapp.onlineCompetition.socketDto.StatusInfo;
-import com.example.zeapp.onlineCompetition.socketDto.StatusPlayer;
+import com.example.zeapp.models.UserRole;
+import com.example.zeapp.onlineCompetition.bots.BotsManager;
+import com.example.zeapp.onlineCompetition.socketDto.*;
 import com.example.zeapp.services.PersonService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -27,6 +27,9 @@ public class CompetitionManager {
     private final DuelHolder duelHolder;
     private final WordListBuilder wordListBuilder;
     private final Integer numberActiveCards = 30; //укажет количество желаемых активных карточек для поединка
+    private int countPlayers = 0; //количество игроков онлайн
+    private int notInGame_0 = 0; //количество игроков не в игровой сессии, инкриминируемая вспомогательная переменная
+    private int notInGame = 0; //количество игроков не в игровой сессии, считается циклом
 
     //заявки поединков на получение следующего слова, сделаем общий поток вызывающий nextWord у поединков чтобы не тратить лишние ресурсы и потоки
     private final ConcurrentLinkedQueue<Duel> appForNextWord = new ConcurrentLinkedQueue<>();
@@ -43,7 +46,9 @@ public class CompetitionManager {
         Flux.interval(Duration.ofMillis(500)).onBackpressureBuffer(1).doOnNext(tick -> readinessChecker()).subscribe();
         Flux.interval(Duration.ofMillis(500)).onBackpressureBuffer(1).doOnNext(tick -> checkAppNextWord()).subscribe();
         Flux.interval(Duration.ofSeconds(1)).onBackpressureBuffer(1).doOnNext(tick -> measureAnswerDelay()).subscribe();
+        Flux.interval(Duration.ofSeconds(1)).onBackpressureBuffer(1).doOnNext(tick -> sendingInfo_4()).subscribe();
     }
+
 
     /**
      * приймет от пользователя сокет сообщение и передаст его в соответствующий метод согласно типу сообщения
@@ -65,6 +70,9 @@ public class CompetitionManager {
             case CLICK_ANSWER:
                 userSentAnswer(personId,socketMessage);
                 break;
+            case SET_LOYAL_TO_BOTS:
+                setLoyalToBots(personId,socketMessage);
+                break;
             default:
                 System.out.println("Unknown type");
                 System.out.println(socketMessage.toJson());
@@ -73,10 +81,57 @@ public class CompetitionManager {
     }
 
     /**
+     * Обрабатывает намерение пользователя играть с ботами или не играть
+     */
+    private void setLoyalToBots(long personId, SocketMessage socketMessage) {
+        System.out.println(socketMessage.toJson()); //TODO
+        playerHolder.getPlayer(personId).setLoyalToBots(Boolean.parseBoolean(socketMessage.getMap().get("loyalToBots")));
+    }
+
+    /**
+     * Метод в цикле рассылает участникам различную информацию
+     * о времени его ожидания поединка
+     * о количестве игроков находящихся онлайн и другое
+     */
+    private void sendingInfo_4() {
+        try {
+            countPlayers = playerHolder.getPlayersMap().size() - BotsManager.bots.size();
+            //количество незадействованных ботов, пришлось вынести сюда из-за циклической связанности
+            int countWaitingBots = (int) BotsManager.bots.values().stream().filter(it->it.getStatusPlayer()==StatusPlayer.WAITING).count();
+
+
+            Map<String,String> map = new HashMap<>();
+            Info_4 info4 = new Info_4();
+            info4.setCountPlayers(countPlayers);
+            info4.setCountBots(countWaitingBots);
+            info4.setNotInGame(notInGame);
+            SocketMessage socketMessage = new SocketMessage(SockMessType.INFO_4, map);
+
+            notInGame_0 = 0;//обнулим потом в цикле инкрементируем
+            playerHolder.getPlayersMap().forEach((id,player)->{
+                if (player.getPerson()!=null && player.getPerson().getRole()!=UserRole.BOT){
+                    if (player.getStatusPlayer()==StatusPlayer.BUSY || player.getStatusPlayer()==StatusPlayer.WAITING){
+                        notInGame_0++;
+
+                        if (player.getTimeStartWaiting()!=null){
+                            info4.setWaitingTime((int)((System.currentTimeMillis()-player.getTimeStartWaiting())/1000));
+                        }else info4.setWaitingTime(null);
+                        map.put("info_4",info4.toJson());
+                        player.sendMessage(socketMessage);
+                    }
+                }
+
+            });
+            notInGame = notInGame_0;
+        }catch (Exception e){e.printStackTrace();}
+    }
+
+    /**
      * поставит игрока в режим ожидания поединка и поиска нового противника
      */
     private void setWaitingStatus(long personId) {
         playerHolder.getPlayer(personId).setStatusPlayer(StatusPlayer.WAITING); //установим новый статус
+        playerHolder.getPlayer(personId).setTimeStartWaiting(System.currentTimeMillis()); //установим время начала ожидания
         sendStatusInfo(personId); // отправим пользователю инфу по статусу
 
     }
@@ -103,8 +158,8 @@ public class CompetitionManager {
             Long actualTime = System.currentTimeMillis();
 
             duelHolder.getDuels().forEach((duelId,duel)->{
-                if (duel.players!=null){
-                    duel.players.forEach(player -> {
+                if (duel.getPlayers()!=null){
+                    duel.getPlayers().forEach(player -> {
                         if (player!=null&&player.getAnswerStartTime()!=null){
                             int delay = (int) ((actualTime - player.getAnswerStartTime())/1000);
 
@@ -166,23 +221,30 @@ public class CompetitionManager {
      * далее он циклом проверяет все элементы списка чьё время наступило делает дело и останавливается
      */
     private synchronized void checkAppNextWord() {
-        while (true){
-            if (appForNextWord.peek()!=null&&appForNextWord.peek().isTimeNextWord()){
-                Duel duel = appForNextWord.poll();
-                if (duel!=null){
-                    //отправит следующее слово
-                    sendNextWord(duel);
-                }
-            } else break;
-        }
+        try{
+            while (true){
+                if (appForNextWord.peek()!=null&&appForNextWord.peek().isTimeNextWord()){
+                    Duel duel = appForNextWord.poll();
+                    if (duel!=null){
+                        //отправит следующее слово
+                        sendNextWord(duel);
+                    }
+                } else break;
+            }
+        }catch (Exception e){e.printStackTrace();}
     }
 
     /**
      * закончит поединок
      */
     private void finishDuel(Duel duel) {
+        FinishInfo finishInfo = duel.getFinishInfo();
+        duel.getPlayers().forEach(player -> {
+            finishInfo.setCorrectAnswers(player.getCorrectAnswers());
+            finishInfo.setMistakes(player.getMistakes());
+            player.sendMessage(new SocketMessage(SockMessType.FINISH_INFO,Map.of("finishInfo",finishInfo.toJson())));
+        });
         duel.getPlayers().forEach(Player::renew);
-        duel.sendToAllPlayers(new SocketMessage(SockMessType.FINISH_INFO,Map.of("finishInfo",duel.getFinishInfo().toJson())));
         duelHolder.remove(duel);
     }
 
@@ -200,19 +262,19 @@ public class CompetitionManager {
 
             resetDelayAnsw(player); //сбросит, чтобы по времени не штрафовало
 
-            //проверка что  id слова совпадают чтобы не нарваться на какие задержки в сокете
+            //проверка, что id слова совпадают чтобы не нарваться на какие задержки в сокете,
             //а также защита чтобы юзер не отвечал дважды на один вопрос
             if (duel!=null&&idWord == duel.getCurWordId()&&player.getCountAnswer().get()==duel.getCurWordPos()){
                 int i = player.getCountAnswer().incrementAndGet();
-                if (i>(duel.getCurWordPos()+1)) {
+                if (i>(duel.getCurWordPos()+1)) { //даблчек
                     player.getCountAnswer().decrementAndGet();
-                } //даблчек
-                else {
+                } else {
                     int rightPos = duel.getRightAnswer();
                     boolean isRight = (rightPos == posChoice);
                     Integer wrongPos = isRight ? null : posChoice;
                     int newHealth = changeHealthByAnswer(isRight,player);
 
+                    player.recordResult(duel.getCurWordId(),isRight);
 
                     ClickResult clickResult = new ClickResult(personId, newHealth, idWord, isRight, rightPos, wrongPos);
 
@@ -274,8 +336,19 @@ public class CompetitionManager {
             for (Long key : keyList) {
                 Player player = playersMap.get(key);
 
-                if (player.getIsReady() && player.getStatusPlayer()== StatusPlayer.WAITING){
-                    newDuel.addPlayers(player);
+                if (player.getIsReady() && player.getStatusPlayer() == StatusPlayer.WAITING){
+                    if (player.getPerson().getRole()!=UserRole.BOT){
+                        newDuel.addPlayers(player);
+                    } else{ //решим нужен ли нам бот в компашке
+                        // не будем брать бота если список только начал формироваться
+                        if (newDuel.getPlayers().size()>0){
+                            boolean result = true;
+                            for (Player player1: newDuel.getPlayers() ){//цикл расчитан на будущее расширение количества игроков в одной сессии:)
+                                if (!player1.isLoyalToBots()) result = false;
+                            }
+                            if (result) newDuel.addPlayers(player); //положили бота в сессию
+                        }
+                    }
                 }
                 if (newDuel.isFull()){
                     newDuel.setDuelsListWords(wordListBuilder.makeListWords(newDuel));; //составляем список для игроков
@@ -293,6 +366,7 @@ public class CompetitionManager {
      * да начнется
      */
     private void startDuel(Duel newDuel) {
+        System.out.println("НАЧАЛИ ИГРУ: "+newDuel.getPlayers().get(0).getPerson().getShort_name()+"  "+newDuel.getPlayers().get(1).getPerson().getShort_name());
         newDuel.sendStartInfo();
         Flux.just(3, 2, 1).delayElements(Duration.ofSeconds(1))
                 .doOnNext(tick->{

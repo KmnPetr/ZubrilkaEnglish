@@ -35,6 +35,7 @@ public class PlayerHolder {
             newPlayer.setId(personId);
             newPlayer.setSink(sink);
             newPlayer.setStatusPlayer(StatusPlayer.BUSY);
+            newPlayer.setLoyalToBots(false);
             playersMap.put(personId,newPlayer);
         }
     }

@@ -8,6 +8,7 @@ import com.example.zubrilkaenglish.events.CompetitionEvent
 import com.example.zubrilkaenglish.models.Profile
 import com.example.zubrilkaenglish.models.socketDto.DuelInfo
 import com.example.zubrilkaenglish.models.socketDto.FinishInfo
+import com.example.zubrilkaenglish.models.socketDto.Info_4
 import com.example.zubrilkaenglish.models.socketDto.NextWord
 import com.example.zubrilkaenglish.models.socketDto.StatusInfo
 import com.example.zubrilkaenglish.onlineCompetition.CompetitionManager
@@ -31,11 +32,14 @@ class CompetitionViewModel : ViewModel() {
     val nextWord: MutableLiveData<NextWord?> = MutableLiveData(null)
     val finishInfo: MutableLiveData<FinishInfo?> = MutableLiveData(null)
     val statusInfo: MutableLiveData<StatusInfo?> = MutableLiveData(null)
+    val info_4: MutableLiveData<Info_4?> = MutableLiveData(null)
 
     var opponentId: Long? = null //id противника
     var opponentWrongPos:Int? = null //позиция кнопки неправильно отвеченная противником будет подкрашена серым
     val ownHealth: MutableLiveData<Int?> = MutableLiveData(null) //здоровье данного игрока
     val opponentHealth: MutableLiveData<Int?> = MutableLiveData(null) //здоровье данного игрока
+
+    var lockShowStartPopup:Boolean = false //при значении true блокирует пока первоначальноко попап окошка перед стартом
 
     init {
         EventBus.getDefault().register(this)
@@ -82,6 +86,12 @@ class CompetitionViewModel : ViewModel() {
         viewModelScope.launch{
             competitionManager.statusInfo.collect{
                 statusInfo.postValue(it)
+            }
+        }
+        //вернет значение info_4 из CompetitionManager
+        viewModelScope.launch{
+            competitionManager.info_4.collect{
+                info_4.postValue(it)
             }
         }
     }

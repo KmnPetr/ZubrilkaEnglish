@@ -9,6 +9,7 @@ import com.example.zubrilkaenglish.models.Word
 import com.example.zubrilkaenglish.models.socketDto.ClickResult
 import com.example.zubrilkaenglish.models.socketDto.DuelInfo
 import com.example.zubrilkaenglish.models.socketDto.FinishInfo
+import com.example.zubrilkaenglish.models.socketDto.Info_4
 import com.example.zubrilkaenglish.models.socketDto.NextWord
 import com.example.zubrilkaenglish.models.socketDto.StatusInfo
 import com.example.zubrilkaenglish.repositories.CardsRepository
@@ -40,6 +41,7 @@ class CompetitionManager private constructor(){
     val nextWord: MutableStateFlow<NextWord?> = MutableStateFlow(null)
     val finishInfo: MutableStateFlow<FinishInfo?> = MutableStateFlow(null)
     val statusInfo: MutableStateFlow<StatusInfo?> = MutableStateFlow(null)
+    val info_4: MutableStateFlow<Info_4?> = MutableStateFlow(null)
 
     init {
         EventBus.getDefault().register(this)
@@ -55,14 +57,26 @@ class CompetitionManager private constructor(){
             SockMessType.CLICK_RESULT -> receiveClickResult(message)
             SockMessType.PEN_WAIT -> receivePenaltyWaiting(message)
             SockMessType.FINISH_INFO -> receiveFinishInfo(message)
+            SockMessType.INFO_4 -> receiveInfo_4(message)
             else -> { Log.d(LOG,message?.toJson().toString()) }
         }
+    }
+
+    /**
+     * Метод в цикле рассылается участникам с различной информацией
+     * о времени его ожидания поединка
+     * о количестве игроков находящихся онлайн и другое
+     */
+    private fun receiveInfo_4(message: SocketMessage) {
+        println(message.map["info_4"])
+        info_4.value = Info_4.fromJson(message.map["info_4"])
     }
 
     /**
      * при получении обьекта StatusInfo с сервера
      */
     private fun receiveStatusInfo(message: SocketMessage) {
+        println(message.map["statusInfo"])
         statusInfo.value = StatusInfo.fromJson(message.map["statusInfo"])
         duelInfo.value = DuelInfo.fromJson(message.map["duelInfo"])
     }
@@ -93,8 +107,16 @@ class CompetitionManager private constructor(){
             CmpEvEnum.CLICK_ANSWER -> sendClickAnswer(event)
             CmpEvEnum.CLOSE_SESSION -> closeConnection()
             CmpEvEnum.SET_WAITING_STATUS -> setWaitingStatus()
+            CmpEvEnum.SET_LOYAL_TO_BOTS-> setLoyalToBots(event)
             else -> {}
         }
+    }
+
+    /**
+     * отправит запрос на сервер намерение пользователя играть с ботами или не играть
+     */
+    private fun setLoyalToBots(event: CompetitionEvent) {
+        socketHolder.sendSocketMessage(SocketMessage(SockMessType.SET_LOYAL_TO_BOTS, mapOf("loyalToBots" to event.properties["loyalToBots"].toString())))
     }
 
     /**

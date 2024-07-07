@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp"
+        android:padding="15dp"
         android:gravity="center">
 
         <TextView
@@ -25,9 +25,139 @@
             android:textStyle="bold"/>
 
         <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:orientation="horizontal"
+                android:layout_gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="3dp"
+                    android:textSize="12sp"
+                    android:text="Правильных ответов: "/>
+                <TextView
+                    android:id="@+id/numCorrAnsv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:text="99"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:textColor="@color/green"/>
+
+                <com.example.zubrilkaenglish.utils.ui.CustButton
+                    android:id="@+id/buttonLookCorrectAnsw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:paddingLeft="24dp"
+                    android:paddingRight="24dp"
+                    app:backgroundColor="@color/white"
+                    app:cornerRadius="7dp"
+                    app:borderWidth="1dp"
+                    app:borderColor="@color/myGray"
+                    app:textColor="@color/black"
+                    app:textSize="12sp"
+                    app:text="посмотреть"
+                    app:textStyle="italic"
+                    app:fontFamily="sans-serif"/>
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:orientation="horizontal"
+                android:layout_gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="3dp"
+                    android:textSize="12sp"
+                    android:text="Ошибок: "/>
+                <TextView
+                    android:id="@+id/numMistakes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:text="99"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:textColor="@color/red"/>
+
+                <com.example.zubrilkaenglish.utils.ui.CustButton
+                    android:id="@+id/buttonLookMistakes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:paddingLeft="24dp"
+                    android:paddingRight="24dp"
+                    app:backgroundColor="@color/white"
+                    app:cornerRadius="7dp"
+                    app:borderWidth="1dp"
+                    app:borderColor="@color/myGray"
+                    app:textColor="@color/black"
+                    app:textSize="12sp"
+                    app:text="посмотреть"
+                    app:textStyle="italic"
+                    app:fontFamily="sans-serif"/>
+
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/listWords"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:visibility="visible">
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tab_layout"
+                android:background="@android:color/transparent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0">
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ошибки" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Правильные ответы" />
+            </com.google.android.material.tabs.TabLayout>
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/view_pager2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:gravity="center">
 
             <com.example.zubrilkaenglish.utils.ui.CustButton
@@ -41,7 +171,7 @@
                 android:paddingRight="24dp"
                 app:backgroundColor="@color/myGray"
                 app:cornerRadius="7dp"
-                app:borderWidth="2dp"
+                app:borderWidth="1dp"
                 app:borderColor="#686868"
                 app:textColor="@color/white"
                 app:textSize="14sp"
@@ -56,7 +186,7 @@
                 android:padding="16dp"
                 app:backgroundColor="#81C100"
                 app:cornerRadius="7dp"
-                app:borderWidth="2dp"
+                app:borderWidth="1dp"
                 app:borderColor="#33691E"
                 app:textColor="@color/white"
                 app:textSize="14sp"

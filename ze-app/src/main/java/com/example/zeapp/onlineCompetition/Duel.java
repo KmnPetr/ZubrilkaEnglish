@@ -22,7 +22,7 @@ public class Duel {
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     private final Integer countPlayers = 2;
-    List<Player> players = new ArrayList<>(countPlayers);
+    private List<Player> players = new ArrayList<>(countPlayers);
     private ArrayList<ComplexWord> duelsListWords; //список предлагаемый обоим пользователям для поединка
     private int curWordPos = -1; //указывает на текущее слово в игре, инкрементируется при раздаче слова
     private Long timeToNextWord; //время в будущем когда можно будет разослать следующее слово игрокам, чтобы рассылка была с небольшой задержкой
@@ -51,18 +51,21 @@ public class Duel {
         }catch (Exception e){e.printStackTrace();}
         return nextWord;
     }
+
     /**
      * установит время в будущее когда можно будет разослать следующее слово игрокам
      */
     public void setNewTimeNextWord(){
         timeToNextWord = System.currentTimeMillis()+1000;
     }
+
     /**
      * проверит, настало ли время разослать следующее слово игрокам
      */
     public boolean isTimeNextWord() {
         return System.currentTimeMillis() > timeToNextWord;
     }
+
     /**
      * инкрементирует поле countReplies в текущем ComplexWord
      * и проверит все ли участники поединка дали ответ на текущий вопрос
@@ -71,6 +74,7 @@ public class Duel {
         int countReplies = duelsListWords.get(curWordPos).getCountReplies().incrementAndGet();
         return countReplies == players.size();
     }
+
     /**
      * положит id поединка не только в поле самого поединка но и каждому игроку
      */
@@ -89,6 +93,7 @@ public class Duel {
         }catch (Exception e){e.printStackTrace();}
         return curWordId;
     }
+
     /**
      * выдаст позицию текущего правильного ответа
      */
@@ -99,6 +104,7 @@ public class Duel {
         }catch (Exception e){e.printStackTrace();}
         return rightAnsw;
     }
+
     /**
      * добавит пользователя в поединок
      * а также добавит ссылку дуели в пользователя
@@ -123,9 +129,10 @@ public class Duel {
      */
     public void setPlayersStatusPlaying() {
             players.forEach(it->{
-                if (it!=null)//игрок мог уже выйти
-                        it.setStatusPlayer(StatusPlayer.PLAYING);
-                else setPlayersStatusWaiting();
+                if (it!=null){ //игрок мог уже выйти
+                    it.setStatusPlayer(StatusPlayer.PLAYING);
+                    it.setLoyalToBots(false);
+                } else setPlayersStatusWaiting();
                     }
             );
     }
@@ -134,7 +141,12 @@ public class Duel {
      * установит статус игроков как незанятые
      */
     private void setPlayersStatusWaiting() {
-        players.forEach(it->{if(it!=null) it.setStatusPlayer(StatusPlayer.WAITING);});
+        players.forEach(it->{
+            if(it!=null){
+                it.setStatusPlayer(StatusPlayer.WAITING);
+                it.setLoyalToBots(false);
+            }
+        });
     }
 
     /**
@@ -180,6 +192,9 @@ public class Duel {
         }
     }
 
+    /**
+     * Выдаст объект FinishInfo c результатами и заработанными очками
+     */
     public FinishInfo getFinishInfo() {
         return new FinishInfo();
     }

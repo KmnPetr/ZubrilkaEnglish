@@ -497,4 +497,15 @@ class CardsRepository private constructor(){
             roomService.getWordDAO().getWordById(idWord.toInt())
         }else null
     }
+
+    /**
+     * выдаст список карточек из БД по списку id
+     */
+    suspend fun getListWordCardsBiId(listId: ArrayList<Long>?): List<WordCard> {
+        return if (listId==null||listId.isEmpty()) {
+            emptyList()
+        } else {
+            roomService.getWordDAO().getListWordCardsBiId(listId)
+        }
+    }
 }

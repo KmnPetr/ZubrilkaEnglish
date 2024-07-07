@@ -72,8 +72,6 @@ dependencies {
     kapt'androidx.room:room-compiler:2.5.1'
     implementation'androidx.room:room-ktx:2.5.1'
 
-    //для работы ZonedDateTime на версии android ниже 8(старая библиотечка, но есть и новая)
-    implementation 'com.jakewharton.threetenabp:threetenabp:1.3.0'
 
     //для использования метода getLevenshteinDistance
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
@@ -85,10 +83,6 @@ dependencies {
     //для использования Event Bus от компании Green Robot
     implementation 'org.greenrobot:eventbus:3.2.0'
 
-    //jlayer для декодирования аудиофайлов из mp3 в pcm// TODO наверное убрать
-    //https://mvnrepository.com/artifact/com.googlecode.soundlibs/jlayer
-    implementation 'com.googlecode.soundlibs:jlayer:1.0.1-1'
-
     //яндекс реклама
-    implementation 'com.yandex.android:mobileads:7.0.1'
+    implementation 'com.yandex.android:mobileads:7.2.0'
 }
