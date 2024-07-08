@@ -86,6 +86,7 @@ class CompetitionManager private constructor(){
      * кто знает можт он уже играет просто соединение моргнуло или вышел на пару секунд
      */
     private fun requestStatusInfo() {
+        println("requestStatusInfo()")
         socketHolder.sendSocketMessage(SocketMessage(SockMessType.REQUEST_STATUS_INFO, mapOf()))
     }
 
@@ -93,6 +94,7 @@ class CompetitionManager private constructor(){
      * вызывается при получении обьекта FinishInfo при завершении поединка
      */
     private fun receiveFinishInfo(message: SocketMessage) {
+        println(message.map["finishInfo"])
         nextWord.value = null
         this.finishInfo.value = FinishInfo.fromJson(message.map["finishInfo"])
     }
@@ -116,6 +118,7 @@ class CompetitionManager private constructor(){
      * отправит запрос на сервер намерение пользователя играть с ботами или не играть
      */
     private fun setLoyalToBots(event: CompetitionEvent) {
+        println("setLoyalToBots(event: CompetitionEvent)")
         socketHolder.sendSocketMessage(SocketMessage(SockMessType.SET_LOYAL_TO_BOTS, mapOf("loyalToBots" to event.properties["loyalToBots"].toString())))
     }
 
@@ -123,6 +126,7 @@ class CompetitionManager private constructor(){
      * отправит запрос на сервер поставит юзера в режим ожидания соперника
      */
     private fun setWaitingStatus() {
+        println("setWaitingStatus()")
         socketHolder.sendSocketMessage(SocketMessage(SockMessType.SET_WAITING_STATUS, mapOf()))
     }
 
@@ -130,6 +134,7 @@ class CompetitionManager private constructor(){
      * закроет сокет сессию очистиит данные
      */
     private fun closeConnection() {
+        println("closeConnection()")
         socketHolder.closeConnect()
         stopPing()
         ping.value = null
@@ -144,6 +149,7 @@ class CompetitionManager private constructor(){
      * вызывается при получении сообщении о штрафе за чрезмерную задержку времени
      */
     private fun receivePenaltyWaiting(message: SocketMessage) {
+        println(message.map)
         GlobalScope.launch(Dispatchers.Main) {
             EventBus.getDefault().post(CompetitionEvent(CmpEvEnum.PEN_WAIT, message.map.toMutableMap()))
         }
@@ -153,6 +159,7 @@ class CompetitionManager private constructor(){
      * обработает пришедший с сервера результат по выбору ответа
      */
     private fun receiveClickResult(message: SocketMessage) {
+        println(message.map)
         val clickResult: ClickResult = ClickResult.fromJson(message.map["clickResult"])
         if (clickResult.idWord == (nextWord.value?.idWord ?: false)){
             GlobalScope.launch(Dispatchers.Main){
@@ -166,6 +173,7 @@ class CompetitionManager private constructor(){
      * отошлет на сервер соощение о том что пользователь сделал свой выбор ответа
      */
     private fun sendClickAnswer(event: CompetitionEvent) {
+        println("sendClickAnswer(event: CompetitionEvent)")
         socketHolder.sendSocketMessage(
             SocketMessage(
                 SockMessType.CLICK_ANSWER,
@@ -179,8 +187,8 @@ class CompetitionManager private constructor(){
      * вызывается при получении следующего слова при поединке с сокета
      */
     private fun nextWord(message: SocketMessage) {
+        println("private fun nextWord(message: SocketMessage)")
         val nextWord: NextWord? = NextWord.fromJson(message.map["nextWord"])
-        println("nextWord")
         GlobalScope.launch {
             val word: Word? = cardsRepository.getWordFromDbById(nextWord?.idWord)
 
@@ -195,6 +203,7 @@ class CompetitionManager private constructor(){
      * обратный отсчет перед началом игры
      */
     private fun startCountdown(message: SocketMessage) {
+        println(message.map)
         val tick:Int? = message.map.get("tick")?.toInt()
         startCountDown.value = tick
         if (tick == 1){
@@ -207,6 +216,7 @@ class CompetitionManager private constructor(){
 
     //отошлет на север список активных карточек пользователя
     private fun sendActiveCards() {
+        println("sendActiveCards()")
         GlobalScope.launch {
             val listIdActiveCards:List<Long> = cardsRepository.getIdAllActiveCards()
             socketHolder.sendSocketMessage(SocketMessage(SockMessType.ACTIVE_CARDS, mapOf("listIdActiveCards" to Gson().toJson(listIdActiveCards))))
@@ -222,6 +232,7 @@ class CompetitionManager private constructor(){
      * вызывается при открытии сессии
      */
     fun onOpenConection() {
+        println("onOpenConection()")
         requestStatusInfo()
         startPing()
     }

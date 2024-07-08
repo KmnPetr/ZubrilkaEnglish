@@ -38,6 +38,18 @@ class ProfileRepository private constructor() {
     }
 
     /**
+     * запросит у ссервера временный профиль
+     * сохранит его в БД
+     */
+    suspend fun getTemporaryProfile(): Profile? {
+        val response = retrofitService.getProfileApi().requestTemporaryProfile()
+        val profile: Profile? = response.body()
+        if (profile != null) { updateProfile(profile) }
+        this.profile.value = profile
+        return response.body()
+    }
+
+    /**
      * выполнит вызов к серверу вместе с обработкой ситуации когда истечет срок действия accesToken, refreshToken
      * в параметры принимается лямбда, в которую вбивается запрос к серверу, который требует токен-менеджмента
      */
@@ -188,7 +200,6 @@ class ProfileRepository private constructor() {
     private suspend fun updateProfile(profile: Profile){
         roomService.getPropDAO().insertNewProp(PropModel("profile",profile.toJson()))
     }
-
 
 
     /**

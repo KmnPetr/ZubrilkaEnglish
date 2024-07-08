@@ -6,6 +6,7 @@ import com.example.zeapp.models.UserRole;
 import com.example.zeapp.onlineCompetition.bots.BotsManager;
 import com.example.zeapp.onlineCompetition.socketDto.*;
 import com.example.zeapp.services.PersonService;
+import com.example.zeapp.services.StatisticsServise;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ public class CompetitionManager {
     private final PlayerHolder playerHolder;
     private final DuelHolder duelHolder;
     private final WordListBuilder wordListBuilder;
+    private final StatisticsServise statisticsServise;
     private final Integer numberActiveCards = 30; //укажет количество желаемых активных карточек для поединка
     private int countPlayers = 0; //количество игроков онлайн
     private int notInGame_0 = 0; //количество игроков не в игровой сессии, инкриминируемая вспомогательная переменная
@@ -35,11 +37,12 @@ public class CompetitionManager {
     private final ConcurrentLinkedQueue<Duel> appForNextWord = new ConcurrentLinkedQueue<>();
 
     @Autowired
-    public CompetitionManager(PersonService personService, PlayerHolder playerHolder, DuelHolder duelHolder, WordListBuilder wordListBuilder) {
+    public CompetitionManager(PersonService personService, PlayerHolder playerHolder, DuelHolder duelHolder, WordListBuilder wordListBuilder, StatisticsServise statisticsServise) {
         this.personService = personService;
         this.playerHolder = playerHolder;
         this.duelHolder = duelHolder;
         this.wordListBuilder = wordListBuilder;
+        this.statisticsServise = statisticsServise;
 
 
         Flux.interval(Duration.ofSeconds(1)).onBackpressureBuffer(1).doOnNext(tick -> duelPicker()).subscribe();
@@ -237,13 +240,55 @@ public class CompetitionManager {
      */
     private void finishDuel(Duel duel) {
         FinishInfo finishInfo = duel.getFinishInfo();
-        duel.getPlayers().forEach(player -> {
-            finishInfo.setCorrectAnswers(player.getCorrectAnswers());
-            finishInfo.setMistakes(player.getMistakes());
-            player.sendMessage(new SocketMessage(SockMessType.FINISH_INFO,Map.of("finishInfo",finishInfo.toJson())));
-        });
+
+        finishInfo.setPlayersNames(new ArrayList<>(duel.getPlayers().size()));
+        for (Player player: duel.getPlayers()){
+            finishInfo.getPlayersNames().add(player.getPerson().getShort_name()); //сложим их имена
+        }
+        finishInfo.setResultPoints(calculateEarnedPoints(duel)); //посчитаем результаты очков
+
+        for (int i = 0; i < duel.getPlayers().size(); i++) {
+            finishInfo.setOwnPos(i);
+            finishInfo.setCorrectAnswers(duel.getPlayers().get(i).getCorrectAnswers());
+            finishInfo.setMistakes(duel.getPlayers().get(i).getMistakes());
+            duel.getPlayers().get(i).sendMessage(new SocketMessage(SockMessType.FINISH_INFO,Map.of("finishInfo",finishInfo.toJson())));//отошлем инфу пользователям
+            statisticsServise.updatePoints(duel.getPlayers().get(i).getId(),(long)finishInfo.getResultPoints()[i]);//отошлем инфу в БД
+        }
         duel.getPlayers().forEach(Player::renew);
         duelHolder.remove(duel);
+    }
+
+    /**
+     * Посчитает заработанные очки,
+     * положит их в FinishInfo для отправки пользователям
+     * отправит запрос на сохранение очков в БД
+     */
+    private int[] calculateEarnedPoints(Duel duel) {
+        int[] resultHealth = new int[duel.getPlayers().size()];
+        for (int i = 0; i < duel.getPlayers().size(); i++) {
+            resultHealth[i] = duel.getPlayers().get(i).getHealth();
+        }
+
+        //поиск юзера с наибольшим числом очков
+        int largestHealth = resultHealth[0];
+        int indexOfLargest = 0;
+        for (int i = 1; i < resultHealth.length; i++) {
+            if (resultHealth[i] > largestHealth) {
+                largestHealth = resultHealth[i];
+                indexOfLargest = i;
+            }
+        }
+
+        //преобразуем число хитпоинтов оставшихся игроков в очки
+        for (int i = 0; i < resultHealth.length; i++) {
+            if (i!=indexOfLargest&&resultHealth[i]!=largestHealth){ //если очки оказались равны то оставляем
+                int countByMiddle = resultHealth[i]-(Player.defaultHealth/2); //посчитаем разницу относительно середины максимального значения здоровья
+                int countByLargHP = resultHealth[i]-largestHealth; //посчитаем разницу относительно максимального значения здоровья из группы игроков
+
+                resultHealth[i] = Math.max(countByMiddle, countByLargHP); //выберем наибольшее из двух
+            }
+        }
+        return resultHealth;
     }
 
     /**
