@@ -1,14 +1,20 @@
 package com.example.zubrilkaenglish.onlineCompetition
 
+import com.example.zubrilkaenglish.models.Profile
 import com.example.zubrilkaenglish.models.SocketMessage
 import com.example.zubrilkaenglish.repositories.ProfileRepository
 import com.example.zubrilkaenglish.utils.URL
 import com.example.zubrilkaenglish.utils.prod_url
 import com.example.zubrilkaenglish.utils.test_url
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.Response
 import okhttp3.WebSocket
+import okhttp3.WebSocketListener
+import okio.ByteString
 
 class SocketHolder private constructor(){
     companion object{
@@ -16,27 +22,29 @@ class SocketHolder private constructor(){
     }
 
     val profileRepository = ProfileRepository.instance
-
-    val ping: MutableStateFlow<Long?> = MutableStateFlow(null)
     var webSocket: WebSocket? = null
 
 
     /**
      * установит сокет соединение
      */
-    fun socketConnect() {
-        val token: String? = profileRepository.profile.value?.refreshToken
+    suspend fun socketConnect() {
+        var token: String? = profileRepository.profile.value?.refreshToken
 
         println(token.toString())
+
+        if (token==null){
+            val profile: Profile? = profileRepository.getTemporaryProfile();
+            token = profile?.refreshToken
+        }
 
         val client = OkHttpClient()
         val request: Request = Request.Builder()
             .url(URL+"/competition")
             .addHeader("Authorization", "Bearer $token")  // Добавляем JWT токен в заголовок
             .build()
-        val listener = SocketListener()
         webSocket?.close(1000,"reason") //в случае если оно было открыто ранее
-        webSocket = client.newWebSocket(request, listener)
+        webSocket = client.newWebSocket(request, SocketListener())
 
 
         // Trigger shutdown of the dispatcher's executor so this process can
@@ -55,4 +63,6 @@ class SocketHolder private constructor(){
     fun closeConnect() {
         webSocket?.close(1000,"reason")
     }
+
+
 }

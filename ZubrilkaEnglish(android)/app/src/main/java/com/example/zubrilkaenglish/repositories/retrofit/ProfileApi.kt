@@ -28,4 +28,10 @@ interface ProfileApi {
     suspend fun refreshAccessToken(
         @Header("Authorization") refreshToken: String
     ): Response<PropModel?>
+
+    /**
+     * запросит временный профиль
+     */
+    @GET("/profile/getTemporaryProfile")
+    suspend fun requestTemporaryProfile(): Response<Profile?>
 }

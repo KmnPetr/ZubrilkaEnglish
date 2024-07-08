@@ -107,7 +107,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
-                    android:text="попробовать с ботом" />
+                    android:text="играть с ботом" />
             </LinearLayout>
 
 

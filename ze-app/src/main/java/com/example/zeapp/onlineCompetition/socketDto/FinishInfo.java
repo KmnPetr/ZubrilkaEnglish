@@ -7,7 +7,7 @@ import lombok.Setter;
 import java.util.ArrayList;
 
 /**
- * класс отправиться на фронт с различной информацией о результатах поединка
+ * Класс отправиться на фронт с различной информацией о результатах поединка
  */
 @Getter
 @Setter
@@ -15,6 +15,9 @@ public class FinishInfo {
 
     private ArrayList<Long> mistakes;
     private ArrayList<Long> correctAnswers;
+    private int[] resultPoints; //очки результата послепоединка
+    private ArrayList<String> playersNames; //имена игроков после прохождения поединка
+    private int ownPos; //позиция адресата в некоторых списках. напр. "resultPoints" и "playersNames"
 
 
     // Метод для преобразования объекта DuelInfo в JSON

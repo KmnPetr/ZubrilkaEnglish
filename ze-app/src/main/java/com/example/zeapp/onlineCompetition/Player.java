@@ -26,6 +26,7 @@ public class Player {
     private Sinks.Many<String> sink;
     private List<Long> listActiveCards; //хранит запрошенные у пользователя список его активных карточек из которых потом формируется список карточек для соревнования
     private Boolean isReady; //укажет готов ли игрок и укомплектованы ли его поля
+    public static final Integer defaultHealth = 100; //значение здоровья по умолчанию выставляемое TODO, пока не везде в коде пременено ее использование
     private Integer health = 100; //значение здоровья
     private Long currentDuelId = null; //хранит или null или ссылку на текущий поединок
     //хранит время начала отсчета задержки пользователем ответа,

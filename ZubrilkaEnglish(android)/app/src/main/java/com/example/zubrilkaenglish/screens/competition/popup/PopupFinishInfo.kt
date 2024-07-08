@@ -51,10 +51,61 @@ class PopupFinishInfo(
             WindowManager.LayoutParams.WRAP_CONTENT
         )
 
-
+        showResults()
         setupListWords()
         settingsView()
         setListeners()
+    }
+
+    /**
+     * покажет результаты, имена игроков, очки
+     */
+    private fun showResults() {
+
+        var opponentPos: Int? = null
+        if (finishInfo.ownPos==0)opponentPos = 1
+        else if (finishInfo.ownPos==1) opponentPos = 0
+
+        if (opponentPos!=null){
+            if (finishInfo.resultPoints.get(finishInfo.ownPos)>finishInfo.resultPoints.get(opponentPos)){ //победа
+                binding.result.text = "Победа!"
+                binding.result.setTextColor(Color.parseColor("#FF64DD17"))
+            }else if (finishInfo.resultPoints.get(finishInfo.ownPos)<finishInfo.resultPoints.get(opponentPos)){ //проигр
+                binding.result.text = "Поражение!"
+                binding.result.setTextColor(Color.parseColor("#FFA11717"))
+            }else if (finishInfo.resultPoints.get(finishInfo.ownPos)==finishInfo.resultPoints.get(opponentPos)){ //ничья
+                binding.result.text = "Ничья!"
+                binding.result.setTextColor(Color.parseColor("#00B8D4"))
+            }
+        }
+
+        //покажем имена игроков
+        binding.ownName.text = finishInfo.playersNames.get(finishInfo.ownPos)
+        binding.opponentName.text = opponentPos?.let { finishInfo.playersNames.get(it) }
+        //выставим значения очков и покрасим их
+        if (finishInfo.resultPoints.get(finishInfo.ownPos)>0){
+            binding.ownPoints.text = "+"+finishInfo.resultPoints.get(finishInfo.ownPos).toString()
+            binding.ownPoints.setTextColor(Color.GREEN)
+        }else if (finishInfo.resultPoints.get(finishInfo.ownPos)==0){
+            binding.ownPoints.text = finishInfo.resultPoints.get(finishInfo.ownPos).toString()
+            binding.ownPoints.setTextColor(Color.YELLOW)
+        }else if (finishInfo.resultPoints.get(finishInfo.ownPos)<0){
+            binding.ownPoints.text = finishInfo.resultPoints.get(finishInfo.ownPos).toString()
+            binding.ownPoints.setTextColor(Color.RED)
+        }
+
+        if (opponentPos!=null){
+            if (finishInfo.resultPoints.get(opponentPos)>0){
+                binding.opponentPoints.text = "+"+finishInfo.resultPoints.get(opponentPos).toString()
+                binding.opponentPoints.setTextColor(Color.GREEN)
+            }else if (finishInfo.resultPoints.get(opponentPos)==0){
+                binding.opponentPoints.text = finishInfo.resultPoints.get(opponentPos).toString()
+                binding.opponentPoints.setTextColor(Color.YELLOW)
+            }else if (finishInfo.resultPoints.get(opponentPos)<0){
+                binding.opponentPoints.text = finishInfo.resultPoints.get(opponentPos).toString()
+                binding.opponentPoints.setTextColor(Color.RED)
+            }
+        }
     }
 
     /**

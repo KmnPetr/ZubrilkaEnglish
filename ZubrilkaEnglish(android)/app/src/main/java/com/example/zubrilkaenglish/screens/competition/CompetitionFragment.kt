@@ -25,6 +25,8 @@ import com.example.zubrilkaenglish.screens.training.popup.PopupFinishInfo
 import com.example.zubrilkaenglish.services.VibrationHandler
 import com.example.zubrilkaenglish.utils.ui.CustButton
 import com.example.zubrilkaenglish.utils.ui.HealthStrip
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 
@@ -54,8 +56,9 @@ class CompetitionFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         EventBus.getDefault().register(this) //отписываемся от EventBus
-        socketHolder.socketConnect()
-
+        GlobalScope.launch {
+            socketHolder.socketConnect()
+        }
     }
 
     override fun onStop() {
