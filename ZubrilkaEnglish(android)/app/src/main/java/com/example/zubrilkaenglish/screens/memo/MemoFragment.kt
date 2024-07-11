@@ -36,7 +36,6 @@ class MemoFragment : Fragment() {
             memoAdapter.setList(list)
         }
 
-
         setListeners()
     }
 

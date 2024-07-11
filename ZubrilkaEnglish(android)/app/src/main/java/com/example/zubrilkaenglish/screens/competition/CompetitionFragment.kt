@@ -5,11 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.zubrilkaenglish.databinding.FragmentCompetitionBinding
 import com.example.zubrilkaenglish.events.CmpEvEnum
 import com.example.zubrilkaenglish.events.CompetitionEvent
+import com.example.zubrilkaenglish.events.NfEvEnum
+import com.example.zubrilkaenglish.events.NotificationEvent
 import com.example.zubrilkaenglish.events.VcEvEnum
 import com.example.zubrilkaenglish.events.VoiceEvent
 import com.example.zubrilkaenglish.models.Profile
@@ -48,9 +51,10 @@ class CompetitionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel= ViewModelProvider(this).get(CompetitionViewModel::class.java)
-        popupSearchOpponent = PopupSearchOpponent(requireActivity(),viewModel,viewLifecycleOwner)
+        popupSearchOpponent = PopupSearchOpponent(requireContext(),viewModel,viewLifecycleOwner)
 
         setupListeners()
+        overrideClickBack()
     }
 
     override fun onStart() {
@@ -278,5 +282,21 @@ class CompetitionFragment : Fragment() {
     private fun clickVariant(position: Int) {
         EventBus.getDefault().post(CompetitionEvent(CmpEvEnum.CLICK_ANSWER, mutableMapOf("position" to position)))
         println("Click position: $position")
+    }
+
+
+    /**
+     * переопределяет поведение системой кнопки "Back"
+     */
+    private fun overrideClickBack() {
+        requireActivity()
+            .onBackPressedDispatcher
+            .addCallback(
+                viewLifecycleOwner,
+                object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    EventBus.getDefault().post(NotificationEvent("",NfEvEnum.GO_TO_UPSTACK))
+                }
+            })
     }
 }
