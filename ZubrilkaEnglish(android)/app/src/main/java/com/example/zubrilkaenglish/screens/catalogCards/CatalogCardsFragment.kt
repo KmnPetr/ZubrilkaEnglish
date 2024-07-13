@@ -75,7 +75,9 @@ class CatalogCardsFragment : Fragment() {
      * в случае если открыта какаято папка, сначала закроет и следующим нажатием закроет фрагмент
      */
     private fun overrideClickBack() {
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+        requireActivity()
+            .onBackPressedDispatcher
+            .addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 val position = viewPager2.currentItem
 

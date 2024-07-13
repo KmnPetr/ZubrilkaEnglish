@@ -52,4 +52,6 @@ class RetrofitService {
      * выдаст все методы profileApi
      */
     fun getProfileApi() = RetrofitInstance.profileApi
+    //выдаст все методы statisticsApi
+    fun getStatisticsApi() = RetrofitInstance.statisticsApi
 }

@@ -37,7 +37,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.40"/>
+        app:layout_constraintVertical_bias="0.30"/>
 
     <com.example.zubrilkaenglish.utils.ui.CustImgTxtButton
         android:id="@+id/catalogCards"
@@ -61,6 +61,29 @@
         app:textSize="20sp"
         app:textStyle="italic" />
 
+    <com.example.zubrilkaenglish.utils.ui.CustImgTxtButton
+        android:id="@+id/rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        app:backgroundColor="#80510ACC"
+        app:borderColor="#33691E"
+        app:borderWidth="1dp"
+        app:cornerRadius="15dp"
+        app:drawable="@drawable/rating_213"
+        app:imageOrientation="right"
+        app:fontFamily="sans-serif"
+        app:imageSize="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/catalogCards"
+        app:text="Рейтинг"
+        app:textColor="@color/white"
+        app:textSize="20sp"
+        app:textStyle="italic" />
+
     <com.example.zubrilkaenglish.utils.ui.CustButton
         android:id="@+id/buttonPayFragment"
         android:layout_width="wrap_content"
@@ -78,7 +101,7 @@
         app:fontFamily="sans-serif"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/catalogCards"/>
+        app:layout_constraintTop_toBottomOf="@+id/rating"/>
 
     <com.example.zubrilkaenglish.utils.ui.CustImgTxtButton
         android:id="@+id/competitionFragment"

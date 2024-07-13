@@ -44,5 +44,8 @@ class MenuFragment : Fragment() {
         binding.competitionFragment.setOnClickListener {
             findNavController().navigate(R.id.action_menuFragment_to_competitionFragment)
         }
+        binding.rating.setOnClickListener {
+            findNavController().navigate(R.id.action_menuFragment_to_ratingFragment)
+        }
     }
 }

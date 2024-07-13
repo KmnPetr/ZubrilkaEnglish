@@ -26,5 +26,5 @@ public class Statistics {
     @Column("last_entry")
     private LocalDateTime lastEntry; //последний вход пользователя
     @Column("new_points")
-    private Long newPoints; //заработанные очки за последние сутки
+    private Integer newPoints; //заработанные очки за последние сутки
 }

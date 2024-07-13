@@ -19,5 +19,9 @@
         <attr name="imageSize" format="dimension"/>
         <attr name="indentationBetweenEl" format="dimension"/>
         <attr name="reflect" format="boolean" />
+        <attr name="imageOrientation" format="enum">
+            <enum name="left" value="0"/>
+            <enum name="right" value="1"/>
+        </attr>
     </declare-styleable>
 </resources>

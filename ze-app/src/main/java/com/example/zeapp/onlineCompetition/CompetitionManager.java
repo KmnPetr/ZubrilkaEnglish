@@ -252,7 +252,7 @@ public class CompetitionManager {
             finishInfo.setCorrectAnswers(duel.getPlayers().get(i).getCorrectAnswers());
             finishInfo.setMistakes(duel.getPlayers().get(i).getMistakes());
             duel.getPlayers().get(i).sendMessage(new SocketMessage(SockMessType.FINISH_INFO,Map.of("finishInfo",finishInfo.toJson())));//отошлем инфу пользователям
-            statisticsServise.updatePoints(duel.getPlayers().get(i).getId(),(long)finishInfo.getResultPoints()[i]);//отошлем инфу в БД
+            statisticsServise.updatePoints(duel.getPlayers().get(i).getId(),(long)finishInfo.getResultPoints()[i]).subscribe();//отошлем инфу в БД
         }
         duel.getPlayers().forEach(Player::renew);
         duelHolder.remove(duel);

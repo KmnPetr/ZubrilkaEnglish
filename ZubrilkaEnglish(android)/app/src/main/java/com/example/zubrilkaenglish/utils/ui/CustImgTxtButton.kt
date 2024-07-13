@@ -49,6 +49,7 @@ class CustImgTxtButton @JvmOverloads constructor(
     private var bitmap: Bitmap? = null
     var imageSize: Int = 80 //предполагается что картинка квадратная
     var indentationBetweenEl: Int = 20
+    var imageOrientation: Int = ImageOrientation.LEFT.ordinal
 
     private var paintBorder:Paint
     private var paintBackground:Paint
@@ -72,6 +73,7 @@ class CustImgTxtButton @JvmOverloads constructor(
                     drawable = getResourceId(R.styleable.CustomView_drawable, R.drawable.book_with_light_bulb_small)
                     imageSize = getDimensionPixelSize(R.styleable.CustomView_imageSize, 80)
                     indentationBetweenEl = getDimensionPixelSize(R.styleable.CustomView_indentationBetweenEl, 20)
+                    imageOrientation = getInt(R.styleable.CustomView_imageOrientation, ImageOrientation.LEFT.ordinal)
 
                 } finally {
                     recycle()
@@ -107,6 +109,7 @@ class CustImgTxtButton @JvmOverloads constructor(
         if (drawable!=0) bitmap = BitmapFactory.decodeResource(resources, drawable)
     }
 
+
     @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
@@ -132,17 +135,36 @@ class CustImgTxtButton @JvmOverloads constructor(
     }
 
     private fun drawImage(canvas: Canvas, imageOffset: Int, imageSizeEnd: Int) {
+        var left:Int = 0
+        var right:Int = 0
+        //определим положение картинки относительно текста
+        if (imageOrientation==ImageOrientation.LEFT.ordinal){
+            left = (width/2-imageSizeEnd/2)-imageOffset
+            right = (width/2-imageSizeEnd/2)+imageSizeEnd-imageOffset
+        } else if (imageOrientation==ImageOrientation.RIGHT.ordinal){
+            left = (width/2-imageSizeEnd/2)+imageOffset
+            right = (width/2-imageSizeEnd/2)+imageSizeEnd+imageOffset
+        }
+
         val destRect = Rect(
-            (width/2-imageSizeEnd/2)-imageOffset,
+            left,
             (height/2-imageSizeEnd/2),
-            (width/2-imageSizeEnd/2)+imageSizeEnd-imageOffset,
+            right,
             (height/2-imageSizeEnd/2)+imageSizeEnd)
         if (bitmap!=null) canvas.drawBitmap(bitmap!!, null, destRect, null)
     }
     private fun drawText(canvas: Canvas, textOffset: Int) {
+
         paintText.textSize = this@CustImgTxtButton.textSize*reduction
         // Compute the position to draw the text
-        val xPos = width / 2f+textOffset
+        var xPos:Float = 0f
+        //определим положение картинки относительно текста
+        if (imageOrientation==ImageOrientation.LEFT.ordinal){
+            xPos = width / 2f+textOffset
+        }else if (imageOrientation==ImageOrientation.RIGHT.ordinal){
+            xPos = width / 2f-textOffset
+        }
+
         val yPos = (height / 2f - (paintText.descent() + paintText.ascent()) / 2)
 
         canvas.drawText(text, xPos, yPos, paintText)
@@ -221,5 +243,13 @@ class CustImgTxtButton @JvmOverloads constructor(
 
         // Рисуем прямоугольник с закругленными краями
         canvas.drawRoundRect(rectF, cornerRadius, cornerRadius, paintBorder)
+    }
+
+    /**
+     * показывает положение картинки относительно текста
+     */
+    enum class ImageOrientation{
+        LEFT,
+        RIGHT;
     }
 }

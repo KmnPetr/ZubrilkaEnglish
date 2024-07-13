@@ -1,17 +1,19 @@
 package com.example.zubrilkaenglish.screens .competition.popup
 
 import android.app.Dialog
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.view.KeyEvent
 import android.view.View
 import android.view.Window
-import android.view.WindowManager
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.example.zubrilkaenglish.databinding.PopupSearchOpponentBinding
 import com.example.zubrilkaenglish.events.CmpEvEnum
 import com.example.zubrilkaenglish.events.CompetitionEvent
+import com.example.zubrilkaenglish.events.NfEvEnum
+import com.example.zubrilkaenglish.events.NotificationEvent
 import com.example.zubrilkaenglish.models.socketDto.StatusInfo
 import com.example.zubrilkaenglish.models.socketDto.StatusPlayer
 import com.example.zubrilkaenglish.screens.competition.CompetitionViewModel
@@ -26,13 +28,13 @@ import java.util.Locale
  * с различной инвормацией о начальном поиске соперника перед поединком
  */
 class PopupSearchOpponent(
-    context: FragmentActivity,
+    context: Context,
     private val viewModel: CompetitionViewModel,
     private val viewLifecycleOwner: LifecycleOwner
 ) : Dialog(context) {
     private var binding = PopupSearchOpponentBinding.inflate(layoutInflater)
 
-    private lateinit var observer:Observer<StatusInfo?>
+    private var observer:Observer<StatusInfo?>
 
 
     init {
@@ -144,5 +146,16 @@ class PopupSearchOpponent(
     override fun dismiss() {
         binding.loyalToBots.isChecked = false
         super.dismiss()
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            // Здесь вы можете добавить логику, которая должна выполняться при нажатии кнопки "Back"
+            dismiss() // Закрыть диалог
+            EventBus.getDefault().post(NotificationEvent("", NfEvEnum.GO_TO_UPSTACK))
+
+            return true
+        }
+        return super.onKeyDown(keyCode, event)
     }
 }

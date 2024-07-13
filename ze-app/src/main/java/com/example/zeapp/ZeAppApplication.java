@@ -1,10 +1,19 @@
 package com.example.zeapp;
 
+import io.r2dbc.spi.ConnectionFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
+import org.springframework.r2dbc.connection.R2dbcTransactionManager;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.transaction.ReactiveTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.reactive.TransactionalOperator;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -12,6 +21,7 @@ import java.net.UnknownHostException;
 @SpringBootApplication
 @EnableAsync
 @Slf4j
+//@EnableTransactionManagement
 public class ZeAppApplication {
 	public static ConfigurableApplicationContext context;
 	public static String[] savedArgs;
@@ -32,4 +42,20 @@ public class ZeAppApplication {
 			log.info("IP адрес машины: {}", InetAddress.getLocalHost().getHostAddress());
 		} catch (UnknownHostException e) {e.printStackTrace();}
 	}
+
+
+//	@Bean
+//	public R2dbcEntityTemplate r2dbcEntityTemplate(@Qualifier("connectionFactory") ConnectionFactory connectionFactory) {
+//		return new R2dbcEntityTemplate(connectionFactory);
+//	}
+//
+//	@Bean
+//	public ReactiveTransactionManager transactionManager(@Qualifier("connectionFactory") ConnectionFactory connectionFactory) {
+//		return new R2dbcTransactionManager(connectionFactory);
+//	}
+//
+//	@Bean
+//	public TransactionalOperator transactionalOperator(ReactiveTransactionManager transactionManager) {
+//		return TransactionalOperator.create(transactionManager);
+//	}
 }
