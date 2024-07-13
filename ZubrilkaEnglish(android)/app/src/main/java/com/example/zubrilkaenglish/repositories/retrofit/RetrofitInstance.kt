@@ -40,4 +40,7 @@ object RetrofitInstance {
     val profileApi:ProfileApi by lazy {
         jsonRetrofit.create(ProfileApi::class.java)
     }
+    val statisticsApi: StatisticsApi by lazy {
+        jsonRetrofit.create(StatisticsApi::class.java)
+    }
 }

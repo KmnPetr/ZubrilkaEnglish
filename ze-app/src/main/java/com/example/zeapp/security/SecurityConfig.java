@@ -48,7 +48,8 @@ public class SecurityConfig {
                             "/sys/reload", //TODO
                             "/voice/**",
                             "/words",
-                            "/profile/getTemporaryProfile"
+                            "/profile/getTemporaryProfile",
+                            "/stat/first1500users_rating"
                     ).permitAll();
 
                     auth.pathMatchers(

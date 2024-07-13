@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.FragmentRatingBinding
 import com.example.zubrilkaenglish.models.StatisticsDTO
+import com.example.zubrilkaenglish.repositories.StatisticsRepository
 import com.example.zubrilkaenglish.utils.LOG
 import kotlin.math.absoluteValue
 
@@ -48,6 +49,16 @@ class RatingFragment : Fragment() {
         listenOwnPosition()
     }
 
+    override fun onStart() {
+        StatisticsRepository.instance.getStatFirst1500()
+        super.onStart()
+    }
+
+    override fun onStop() {
+        StatisticsRepository.instance.clearStatList()
+        super.onStop()
+    }
+
     /**
      * будет прослушивать положение основной карточки статистики пользователя и предпринимать определеннные действия
      */
@@ -58,9 +69,6 @@ class RatingFragment : Fragment() {
         recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                // Этот метод вызывается при каждой прокрутке
-                println("RecyclerView прокручен на dx: $dx, dy: $dy")
-
                 showOwnAddStat()
             }
         })
@@ -73,19 +81,19 @@ class RatingFragment : Fragment() {
     private fun showOwnAddStat() {
         when(isOwnStatVisible()){
             -1 -> {
-                (binding.ownAddPlace.layoutParams as ConstraintLayout.LayoutParams).verticalBias = 0.0f
                 binding.ownAddPlace.visibility = View.VISIBLE
                 binding.topEmptyStatAdd.visibility = View.GONE
                 binding.bottomEmptyStatAdd.visibility = View.VISIBLE
+                (binding.ownAddPlace.layoutParams as ConstraintLayout.LayoutParams).verticalBias = 0.0f
             }
             0 -> {
                 binding.ownAddPlace.visibility = View.GONE
             }
             1 -> {
-                (binding.ownAddPlace.layoutParams as ConstraintLayout.LayoutParams).verticalBias = 1.0f
                 binding.ownAddPlace.visibility = View.VISIBLE
                 binding.topEmptyStatAdd.visibility = View.VISIBLE
                 binding.bottomEmptyStatAdd.visibility = View.GONE
+                (binding.ownAddPlace.layoutParams as ConstraintLayout.LayoutParams).verticalBias = 1.0f
             }
         }
     }
@@ -118,9 +126,10 @@ class RatingFragment : Fragment() {
      */
     private fun setListeners() {
         viewModel.statistics.observe(viewLifecycleOwner){
+            showOwnAddStat()
             if (it != null) {
-                adapter.setListAndOwnId(it,viewModel.testStatisticsDTO.personId)
-                bindOwnAddStat(viewModel.testStatisticsDTO)
+                adapter.setListAndOwnId(it,viewModel.ownStats?.personId)
+                bindOwnAddStat(viewModel.ownStats)
             } else adapter.setListAndOwnId(emptyList(),null)
         }
     }
@@ -128,7 +137,9 @@ class RatingFragment : Fragment() {
     /**
      * заполнит поля дополнительной карточки основного пользователя
      */
-    private fun bindOwnAddStat(stat: StatisticsDTO) {
+    private fun bindOwnAddStat(stat: StatisticsDTO?) {
+        if (stat!=null){
+            binding.ownAddPlace.visibility = View.VISIBLE
 
             binding.place.setTextColor(Color.parseColor("#5A9E2F"))
             binding.name.setTextColor(Color.parseColor("#5A9E2F"))
@@ -139,61 +150,66 @@ class RatingFragment : Fragment() {
             binding.points.setTypeface(null, Typeface.BOLD_ITALIC)
             binding.lastEntry.setTypeface(null, Typeface.BOLD_ITALIC)
 
-        if (stat.place == 1){
-            binding.place.visibility = View.GONE
-            binding.placeImage.visibility = View.VISIBLE
-            binding.placeImage.setImageResource(R.drawable.place1th)
-            binding.ownStatAdd.setBackgroundColor(Color.parseColor("#FFEE96"))
-        }else if (stat.place == 2){
-            binding.place.visibility = View.GONE
-            binding.placeImage.visibility = View.VISIBLE
-            binding.placeImage.setImageResource(R.drawable.place2th)
-            binding.ownStatAdd.setBackgroundColor(Color.parseColor("#FFEE96"))
-        }else if (stat.place == 3){
-            binding.place.visibility = View.GONE
-            binding.placeImage.visibility = View.VISIBLE
-            binding.placeImage.setImageResource(R.drawable.place3th)
-            binding.ownStatAdd.setBackgroundColor(Color.parseColor("#FFEE96"))
-        }else if (stat.place in 4..10){
-            binding.place.visibility = View.VISIBLE
-            binding.placeImage.visibility = View.GONE
-            binding.place.text = stat.place.toString()
-            binding.ownStatAdd.setBackgroundColor(Color.parseColor("#FFEE96"))
-        }else if (stat.place in 11..100){
-            binding.place.visibility = View.VISIBLE
-            binding.placeImage.visibility = View.GONE
-            binding.place.text = stat.place.toString()
-            binding.ownStatAdd.setBackgroundColor(Color.parseColor("#A2DCFF"))
-        }else if (stat.place in 101..1000){
-            binding.place.visibility = View.VISIBLE
-            binding.placeImage.visibility = View.GONE
-            binding.place.text = stat.place.toString()
-            binding.ownStatAdd.setBackgroundColor(Color.WHITE)
-        }else if(stat.place>1000){
-            binding.place.visibility = View.VISIBLE
-            binding.placeImage.visibility = View.GONE
-            binding.place.text = "  "
-            binding.ownStatAdd.setBackgroundColor(Color.WHITE)
-        }
+            if (stat.place == 1){
+                binding.place.visibility = View.GONE
+                binding.placeImage.visibility = View.VISIBLE
+                binding.placeImage.setImageResource(R.drawable.place1th)
+                binding.ownStatAdd.setBackgroundColor(Color.parseColor("#FFEE96"))
+            }else if (stat.place == 2){
+                binding.place.visibility = View.GONE
+                binding.placeImage.visibility = View.VISIBLE
+                binding.placeImage.setImageResource(R.drawable.place2th)
+                binding.ownStatAdd.setBackgroundColor(Color.parseColor("#FFEE96"))
+            }else if (stat.place == 3){
+                binding.place.visibility = View.GONE
+                binding.placeImage.visibility = View.VISIBLE
+                binding.placeImage.setImageResource(R.drawable.place3th)
+                binding.ownStatAdd.setBackgroundColor(Color.parseColor("#FFEE96"))
+            }else if (stat.place in 4..10){
+                binding.place.visibility = View.VISIBLE
+                binding.placeImage.visibility = View.GONE
+                binding.place.text = stat.place.toString()
+                binding.ownStatAdd.setBackgroundColor(Color.parseColor("#FFEE96"))
+            }else if (stat.place in 11..100){
+                binding.place.visibility = View.VISIBLE
+                binding.placeImage.visibility = View.GONE
+                binding.place.text = stat.place.toString()
+                binding.ownStatAdd.setBackgroundColor(Color.parseColor("#A2DCFF"))
+            }else if (stat.place in 101..1000){
+                binding.place.visibility = View.VISIBLE
+                binding.placeImage.visibility = View.GONE
+                binding.place.text = stat.place.toString()
+                binding.ownStatAdd.setBackgroundColor(Color.WHITE)
+            }else if(stat.place>1000){
+                binding.place.visibility = View.VISIBLE
+                binding.placeImage.visibility = View.GONE
+                binding.place.text = "  "
+                binding.ownStatAdd.setBackgroundColor(Color.WHITE)
+            }
 
-        binding.name.text = stat.short_name.toString()
-        binding.newPoints.text = stat.newPoints.absoluteValue.toString()
-        binding.points.text = stat.points.toString()
-        binding.lastEntry.text = stat.lastEntry
+            binding.name.text = stat.short_name.toString()
+            binding.newPoints.text = stat.newPoints.absoluteValue.toString()
+            binding.points.text = stat.points.toString()
+            binding.lastEntry.text = stat.lastEntry
 
-        if (stat.newPoints<0){
-            binding.arrow.visibility = View.VISIBLE
-            binding.arrow.setImageResource(android.R.drawable.arrow_down_float)
-            binding.arrow.setColorFilter(Color.RED)
-            binding.newPoints.setTextColor(Color.RED)
-        } else if (stat.newPoints ==0){
-            binding.arrow.visibility = View.INVISIBLE
-            binding.newPoints.visibility = View.INVISIBLE
-        }else if (stat.newPoints>0){
-            binding.arrow.visibility = View.VISIBLE
-            binding.arrow.setImageResource(android.R.drawable.arrow_up_float)
-            binding.arrow.setColorFilter(Color.GREEN)
-            binding.newPoints.setTextColor(Color.GREEN)
+            if (stat.newPoints<0){
+                binding.arrow.visibility = View.VISIBLE
+                binding.arrow.setImageResource(android.R.drawable.arrow_down_float)
+                binding.arrow.setColorFilter(Color.RED)
+                binding.newPoints.setTextColor(Color.RED)
+            } else if (stat.newPoints ==0){
+                binding.arrow.visibility = View.INVISIBLE
+                binding.newPoints.visibility = View.INVISIBLE
+            }else if (stat.newPoints>0){
+                binding.arrow.visibility = View.VISIBLE
+                binding.arrow.setImageResource(android.R.drawable.arrow_up_float)
+                binding.arrow.setColorFilter(Color.parseColor("#36750E"))
+                binding.newPoints.setTextColor(Color.parseColor("#36750E"))
+            }
+        } else {
+            binding.ownAddPlace.visibility = View.GONE
+            binding.bottomEmptyStatAdd.visibility = View.GONE
+            binding.topEmptyStatAdd.visibility = View.GONE
         }
     }
 
