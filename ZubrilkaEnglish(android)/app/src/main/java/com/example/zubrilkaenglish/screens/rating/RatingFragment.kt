@@ -194,6 +194,7 @@ class RatingFragment : Fragment() {
 
             if (stat.newPoints<0){
                 binding.arrow.visibility = View.VISIBLE
+                binding.newPoints.visibility = View.VISIBLE
                 binding.arrow.setImageResource(android.R.drawable.arrow_down_float)
                 binding.arrow.setColorFilter(Color.RED)
                 binding.newPoints.setTextColor(Color.RED)
@@ -202,6 +203,7 @@ class RatingFragment : Fragment() {
                 binding.newPoints.visibility = View.INVISIBLE
             }else if (stat.newPoints>0){
                 binding.arrow.visibility = View.VISIBLE
+                binding.newPoints.visibility = View.VISIBLE
                 binding.arrow.setImageResource(android.R.drawable.arrow_up_float)
                 binding.arrow.setColorFilter(Color.parseColor("#36750E"))
                 binding.newPoints.setTextColor(Color.parseColor("#36750E"))

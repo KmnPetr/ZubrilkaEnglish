@@ -5,8 +5,9 @@ import com.example.zeapp.models.StatisticsDTO;
 import com.example.zeapp.repositories.CustomQueryRepository;
 import com.example.zeapp.repositories.PersonRepository;
 import com.example.zeapp.repositories.StatisticsRepository;
-import org.flywaydb.core.internal.util.JsonUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -16,18 +17,17 @@ import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Сервис занимается обработкой данных по статистике пользователей
  */
 @Service
+@Slf4j
 @Transactional(readOnly = true)
 public class StatisticsServise {
+
     private final StatisticsRepository statisticsRepository;
 //    private final PersonRepository personRepository; //TODO временно
 //    private final PasswordEncoder passwordEncoder; //TODO временно
@@ -44,6 +44,48 @@ public class StatisticsServise {
 //        Mono.just("").delayElement(Duration.ofSeconds(30)).subscribe(it->generateTestList());
 
         Flux.interval(Duration.ZERO, Duration.ofMinutes(1)).onBackpressureBuffer(1).doOnNext(tick -> replaceCacheMap()).subscribe();
+        Flux.interval(Duration.ofHours(1)).onBackpressureBuffer(1).doOnNext(tick -> scheduleTask()).subscribe();
+    }
+
+    /**
+     * таска запускается раз в день
+     * уменьшает на определенный процент поле statistics.points
+     * если пользователь не обновлял статистику последние определенное количество дней
+     * в пределах 8-14 дня уменьшаем на 5%
+     * в пределах 15-21 дня уменьшаем на 2%
+     * в пределах 22-100 дня уменьшаем на 1%
+     * свыше 100 дней обнуляем
+     */
+    @Scheduled(cron = "0 0 4 * * *")
+    public void scheduleTask2() {
+        //логика расчета времени будет реализована в sql коде
+        customQueryRepository
+                .reducePoints(8,14,0.95)
+                .subscribe(updatedRows -> log.info("ежедневное обновление поля statistics.points: изменено {} строк.",updatedRows));
+        customQueryRepository
+                .reducePoints(15,21,0.98)
+                .subscribe(updatedRows -> log.info("ежедневное обновление поля statistics.points: изменено {} строк.",updatedRows));
+        customQueryRepository
+                .reducePoints(22,100,0.99)
+                .subscribe(updatedRows -> log.info("ежедневное обновление поля statistics.points: изменено {} строк.",updatedRows));
+        customQueryRepository
+                .clearPoints(100)
+                .subscribe(updatedRows -> log.info("ежедневная очистка поля statistics.points: обнулено {} строк.",updatedRows));
+    }
+
+    /**
+     * таска запускается каждый час
+     * проверяет статистику пользователей
+     * если пользователь не заходил 8 часов, она обнуляет поле statistics.last_entry в БД у пользователя
+     */
+    private void scheduleTask() {
+        //логика расчета времени будет реализована в sql коде
+        customQueryRepository
+                .checkNewPointsToClear(8)
+                .subscribe(
+                        updatedRows -> log.info("scheduleTask: Successfully updated rows: {}",updatedRows)
+                        , error -> log.info("scheduleTask: Failed to update rows: {}",error.getMessage())
+                );
     }
 
     /**
