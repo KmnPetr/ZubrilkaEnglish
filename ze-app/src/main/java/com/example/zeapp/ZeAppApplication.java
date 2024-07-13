@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.r2dbc.connection.R2dbcTransactionManager;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.ReactiveTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.reactive.TransactionalOperator;
@@ -20,13 +21,14 @@ import java.net.UnknownHostException;
 
 @SpringBootApplication
 @EnableAsync
+@EnableScheduling
 @Slf4j
 //@EnableTransactionManagement
 public class ZeAppApplication {
 	public static ConfigurableApplicationContext context;
 	public static String[] savedArgs;
 
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) {
 		savedArgs = args;
 		context = SpringApplication.run(ZeAppApplication.class, args);
 
@@ -44,18 +46,4 @@ public class ZeAppApplication {
 	}
 
 
-//	@Bean
-//	public R2dbcEntityTemplate r2dbcEntityTemplate(@Qualifier("connectionFactory") ConnectionFactory connectionFactory) {
-//		return new R2dbcEntityTemplate(connectionFactory);
-//	}
-//
-//	@Bean
-//	public ReactiveTransactionManager transactionManager(@Qualifier("connectionFactory") ConnectionFactory connectionFactory) {
-//		return new R2dbcTransactionManager(connectionFactory);
-//	}
-//
-//	@Bean
-//	public TransactionalOperator transactionalOperator(ReactiveTransactionManager transactionManager) {
-//		return TransactionalOperator.create(transactionManager);
-//	}
 }

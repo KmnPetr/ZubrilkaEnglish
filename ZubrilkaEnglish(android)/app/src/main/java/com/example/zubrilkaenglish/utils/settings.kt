@@ -7,7 +7,7 @@ import com.example.zubrilkaenglish.screens.training.Modes
 //const val URL:String="https://zubrilka-english.com:8443"
 const val test_url = "http://192.168.222.182:28700"
 const val prod_url:String="https://zubrilka-english.com:8443"
-const val URL:String= test_url
+const val URL:String= prod_url
 
 
 var numAnsForSleep:Int = 5
