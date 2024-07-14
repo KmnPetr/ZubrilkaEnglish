@@ -28,6 +28,19 @@ public class Duel {
     private Long timeToNextWord; //время в будущем когда можно будет разослать следующее слово игрокам, чтобы рассылка была с небольшой задержкой
 
     /**
+     * метод установит, что на текущее слово уже дали правильный ответ
+     */
+    public void alreadyAnsweredRight() {
+        duelsListWords.get(curWordPos).setFirstRightAnsw(true);
+    }
+    /**
+     * проверит, ответил ли кто первым правильно на текущее слово
+     */
+    public boolean isFirstRightAnsw() {
+        return duelsListWords.get(curWordPos).isFirstRightAnsw();
+    }
+
+    /**
      * проверит, является ли текущее слово последним в списке
      */
     public boolean isWordsEnded() {
@@ -198,4 +211,5 @@ public class Duel {
     public FinishInfo getFinishInfo() {
         return new FinishInfo();
     }
+
 }
