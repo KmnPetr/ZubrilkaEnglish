@@ -45,7 +45,6 @@ class CardsRepository private constructor(){
     private val roomService = RoomService()
     private val retrofitService= RetrofitService()
     private val memoRepository = MemoRepository.instance
-    private val propRepository = PropRepository.instance
 
     var countActiveCards: AtomicInteger = AtomicInteger(0) //обновляемые сведения о количестве активных карточек
 
@@ -103,7 +102,11 @@ class CardsRepository private constructor(){
                 }
             }
             CrEvEnum.RESET_PROGRESS -> {
-                if (compareDate(event.wordCard.progressWord?.sleepTime) || checkLimitActiveCards(event)){
+                println("RESET_PROGRESS: ${event.wordCard.word.foreignWord}")
+                if (
+                    (compareDate(event.wordCard.progressWord?.sleepTime)&&event.wordCard.progressWord?.statProgress!=StatProgress.LEARNED.value)
+                    || checkLimitActiveCards(event)
+                    ){
                     event.wordCard = resetProgressCard(event.wordCard)
                     event.properties.putAll(NotifProp.resetProgress.pair) //apiNotification надо знать что мы изменили в карточке
                     notifyChangeCard(event)
@@ -458,6 +461,7 @@ class CardsRepository private constructor(){
      * функция вернет false, если входящая в параметры дата еще не наступила
      */
     private fun compareDate(sleepTime: String?): Boolean{
+        println("compareDate: $sleepTime")
         try {
             if (sleepTime==null){
                 return true

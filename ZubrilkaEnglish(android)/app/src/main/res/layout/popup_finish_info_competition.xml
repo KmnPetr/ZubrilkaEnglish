@@ -29,16 +29,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:gravity="left"
                 android:orientation="vertical"
                 android:padding="5dp">
 
@@ -49,14 +45,6 @@
                     android:layout_gravity="right"
                     android:text="Own Name"
                     android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/ownPoints"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="+100"
-                    android:textStyle="bold"
-                    android:layout_gravity="right"/>
 
             </LinearLayout>
 
@@ -73,7 +61,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:gravity="right"
                 android:orientation="vertical"
                 android:padding="5dp">
 
@@ -85,15 +72,30 @@
                     android:text="Opponent Name"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/opponentPoints"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="+100"
-                    android:textStyle="bold"
-                    android:layout_gravity="left"/>
-
             </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/ownPoints"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="30dp"
+                android:text="+100"
+                android:textStyle="bold"
+                android:layout_gravity="right"/>
+
+            <TextView
+                android:id="@+id/opponentPoints"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+100"
+                android:textStyle="bold"
+                android:layout_gravity="left"/>
         </LinearLayout>
 
         <LinearLayout
@@ -106,46 +108,49 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="2dp"
-                android:orientation="horizontal"
-                android:layout_gravity="center">
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="3dp"
-                    android:textSize="12sp"
-                    android:text="Правильных ответов: "/>
+                    android:text="Правильных ответов: "
+                    android:textSize="12sp" />
+
                 <TextView
                     android:id="@+id/numCorrAnsv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="20dp"
                     android:text="99"
-                    android:textStyle="bold"
+                    android:textColor="@color/green"
                     android:textSize="16sp"
-                    android:textColor="@color/green"/>
+                    android:textStyle="bold" />
 
                 <com.example.zubrilkaenglish.utils.ui.CustButton
                     android:id="@+id/buttonLookCorrectAnsw"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:paddingTop="16dp"
-                    android:paddingBottom="16dp"
                     android:paddingLeft="24dp"
+                    android:paddingTop="16dp"
                     android:paddingRight="24dp"
+                    android:paddingBottom="16dp"
                     app:backgroundColor="@color/white"
-                    app:cornerRadius="7dp"
-                    app:borderWidth="1dp"
                     app:borderColor="@color/myGray"
+                    app:borderWidth="1dp"
+                    app:cornerRadius="7dp"
+                    app:fontFamily="sans-serif"
+                    app:text="посмотреть"
                     app:textColor="@color/black"
                     app:textSize="12sp"
-                    app:text="посмотреть"
-                    app:textStyle="italic"
-                    app:fontFamily="sans-serif"/>
+                    app:textStyle="italic" />
 
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
