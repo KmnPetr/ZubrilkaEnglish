@@ -27,7 +27,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @Transactional(readOnly = true)
 public class StatisticsServise {
-
     private final StatisticsRepository statisticsRepository;
 //    private final PersonRepository personRepository; //TODO временно
 //    private final PasswordEncoder passwordEncoder; //TODO временно
@@ -48,7 +47,7 @@ public class StatisticsServise {
     }
 
     /**
-     * таска запускается раз в день
+     * Таска запускается раз в день
      * уменьшает на определенный процент поле statistics.points
      * если пользователь не обновлял статистику последние определенное количество дней
      * в пределах 8-14 дня уменьшаем на 5%
@@ -57,7 +56,7 @@ public class StatisticsServise {
      * свыше 100 дней обнуляем
      */
     @Scheduled(cron = "0 0 4 * * *")
-    public void scheduleTask2() {
+    public Mono<Object> scheduleTask2() {
         //логика расчета времени будет реализована в sql коде
         customQueryRepository
                 .reducePoints(8,14,0.95)
@@ -71,10 +70,12 @@ public class StatisticsServise {
         customQueryRepository
                 .clearPoints(100)
                 .subscribe(updatedRows -> log.info("ежедневная очистка поля statistics.points: обнулено {} строк.",updatedRows));
+
+        return Mono.empty(); //необходим реактивный тип возврата
     }
 
     /**
-     * таска запускается каждый час
+     * Таска запускается каждый час,
      * проверяет статистику пользователей
      * если пользователь не заходил 8 часов, она обнуляет поле statistics.last_entry в БД у пользователя
      */
@@ -83,8 +84,8 @@ public class StatisticsServise {
         customQueryRepository
                 .checkNewPointsToClear(8)
                 .subscribe(
-                        updatedRows -> log.info("scheduleTask: Successfully updated rows: {}",updatedRows)
-                        , error -> log.info("scheduleTask: Failed to update rows: {}",error.getMessage())
+                        /*updatedRows -> log.info("scheduleTask: Successfully updated rows: {}",updatedRows)
+                        , error -> log.info("scheduleTask: Failed to update rows: {}",error.getMessage())*/
                 );
     }
 
@@ -108,8 +109,7 @@ public class StatisticsServise {
         if (ownId == null) return Flux.fromIterable(cacheStats.values());
         return customQueryRepository
                 .getStatisticByPersonId(ownId)
-                .flatMapMany(ownStatPerson->
-                        {
+                .flatMapMany(ownStatPerson-> {
                                 cacheStats.put(ownStatPerson.getPersonId(),ownStatPerson);
                                 return Flux.fromIterable(cacheStats.values());
                         }

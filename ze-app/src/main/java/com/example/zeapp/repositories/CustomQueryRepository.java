@@ -57,7 +57,7 @@ public class CustomQueryRepository{
                         "statistics.new_points " +
                         "FROM person JOIN statistics " +
                         "ON person.id = statistics.person_id " +
-                        "WHERE statistics.person_id = 1600")
+                        "WHERE statistics.person_id = "+ownId)
                 .map((row, rowMetadata) -> new StatisticsDTO(
                         row.get("name",String.class),
                         null,

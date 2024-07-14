@@ -21,4 +21,5 @@ public class ComplexWord {
     private ArrayList<String> listAnswers; //строки возможные переводы слова включая один верный
     private int rightAnswer; //позиция правильного ответа
     private AtomicInteger countReplies = new AtomicInteger(0); //посчитает количество ответивших игроков, чтобы приступить к следующему слову
+    private boolean firstRightAnsw = false; //выставляется true когда первый игрок ответил правильно, этому игроку положены начисления очков
 }

@@ -44,7 +44,6 @@ public class CompetitionManager {
         this.wordListBuilder = wordListBuilder;
         this.statisticsServise = statisticsServise;
 
-
         Flux.interval(Duration.ofSeconds(1)).onBackpressureBuffer(1).doOnNext(tick -> duelPicker()).subscribe();
         Flux.interval(Duration.ofMillis(500)).onBackpressureBuffer(1).doOnNext(tick -> readinessChecker()).subscribe();
         Flux.interval(Duration.ofMillis(500)).onBackpressureBuffer(1).doOnNext(tick -> checkAppNextWord()).subscribe();
@@ -315,7 +314,7 @@ public class CompetitionManager {
                     int rightPos = duel.getRightAnswer();
                     boolean isRight = (rightPos == posChoice);
                     Integer wrongPos = isRight ? null : posChoice;
-                    int newHealth = changeHealthByAnswer(isRight,player);
+                    int newHealth = changeHealthByAnswer(isRight,player,duel);
 
                     player.recordResult(duel.getCurWordId(),isRight);
 
@@ -348,12 +347,16 @@ public class CompetitionManager {
      * за правильный начисляется 5
      * здоровье не выходит за рамки от 0 до 100 едениц
      */
-    private int changeHealthByAnswer(boolean isRight, Player player) {
+    private int changeHealthByAnswer(boolean isRight, Player player, Duel duel) {
         int health = player.getHealth();
 
-        if (isRight){
+
+        if (isRight && !duel.isFirstRightAnsw()){
+            duel.alreadyAnsweredRight();
             health += 5;
-        } else health -=10;
+        } else if (isRight){
+            //просто правильно ответил без бонусов
+        }else health -=10;
         if (health<0) health = 0;
         if (health>100) health = 100;
 
