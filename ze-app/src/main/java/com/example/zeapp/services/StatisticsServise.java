@@ -1,7 +1,9 @@
 package com.example.zeapp.services;
 
+import com.example.zeapp.models.Person;
 import com.example.zeapp.models.Statistics;
 import com.example.zeapp.models.StatisticsDTO;
+import com.example.zeapp.models.UserRole;
 import com.example.zeapp.repositories.CustomQueryRepository;
 import com.example.zeapp.repositories.PersonRepository;
 import com.example.zeapp.repositories.StatisticsRepository;
@@ -15,9 +17,12 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -28,22 +33,66 @@ import java.util.concurrent.ConcurrentHashMap;
 @Transactional(readOnly = true)
 public class StatisticsServise {
     private final StatisticsRepository statisticsRepository;
-//    private final PersonRepository personRepository; //TODO временно
+    private final PersonRepository personRepository;
 //    private final PasswordEncoder passwordEncoder; //TODO временно
     private final CustomQueryRepository customQueryRepository;
     private Map<Long,StatisticsDTO> cacheStats = new ConcurrentHashMap<>();
+    private final Integer limitOfflinePoints = 1000; //дневной лимит очков заработанных в офлайн режимах учебы, сбрасывается через 8 неактивных часов
 
     @Autowired
     public StatisticsServise(StatisticsRepository statisticsRepository, PersonRepository personRepository, PasswordEncoder passwordEncoder, CustomQueryRepository customQueryRepository) {
         this.statisticsRepository = statisticsRepository;
         this.customQueryRepository = customQueryRepository;
-//        this.personRepository = personRepository;
+        this.personRepository = personRepository;
 //        this.passwordEncoder = passwordEncoder;
 
 //        Mono.just("").delayElement(Duration.ofSeconds(30)).subscribe(it->generateTestList());
 
         Flux.interval(Duration.ZERO, Duration.ofMinutes(1)).onBackpressureBuffer(1).doOnNext(tick -> replaceCacheMap()).subscribe();
         Flux.interval(Duration.ofHours(1)).onBackpressureBuffer(1).doOnNext(tick -> scheduleTask()).subscribe();
+    }
+
+    /**
+     * Функция сохранит в БД очки, заработанные пользователями в офлайн режимах
+     * проверит, чтобы заработанные очки не привышали ежедневный лимит(защита от читеров)
+     * создаст новую запись статистики если до этого она отсутствовала в БД
+     */
+    @Transactional(isolation = Isolation.REPEATABLE_READ,readOnly = false)
+    public Mono<Statistics> saveOfflinePoints(int offlinePoints, String userName) {
+        return statisticsRepository
+                .findByPersonUsername(userName)
+                        .flatMap(statistics -> {
+                            if ((statistics.getOfflinePoints()+offlinePoints)<=limitOfflinePoints){
+                                statistics.setPoints(statistics.getPoints()+(long)offlinePoints);
+                                statistics.setNewPoints(statistics.getNewPoints()+offlinePoints);
+                                statistics.setOfflinePoints(statistics.getOfflinePoints()+offlinePoints);
+                            } else {
+                                statistics.setPoints(statistics.getPoints()+(long)(limitOfflinePoints-statistics.getOfflinePoints()));
+                                statistics.setNewPoints(statistics.getNewPoints()+limitOfflinePoints-statistics.getOfflinePoints());
+                                statistics.setOfflinePoints(limitOfflinePoints);
+                            }
+                            statistics.setLastEntry(LocalDateTime.now());
+                            return statisticsRepository.save(statistics);
+                        })
+                .switchIfEmpty(Mono.defer(() ->
+                    // Запись не существует, создаем новую запись
+                    personRepository
+                            .findByEmail(userName)
+                            .flatMap(person -> {
+                                Statistics newStatistics = new Statistics();
+                                newStatistics.setPersonId((long)person.getId());
+                                if ((newStatistics.getOfflinePoints()+offlinePoints)<=limitOfflinePoints){
+                                    newStatistics.setPoints(newStatistics.getPoints()+(long)offlinePoints);
+                                    newStatistics.setNewPoints(newStatistics.getNewPoints()+offlinePoints);
+                                    newStatistics.setOfflinePoints(newStatistics.getOfflinePoints()+offlinePoints);
+                                } else {
+                                    newStatistics.setPoints(newStatistics.getPoints()+(long)(limitOfflinePoints-newStatistics.getOfflinePoints()));
+                                    newStatistics.setNewPoints(newStatistics.getNewPoints()+limitOfflinePoints-newStatistics.getOfflinePoints());
+                                    newStatistics.setOfflinePoints(limitOfflinePoints);
+                                }
+                                newStatistics.setLastEntry(LocalDateTime.now());
+                                return statisticsRepository.save(newStatistics);
+                            })));
     }
 
     /**
@@ -125,6 +174,7 @@ public class StatisticsServise {
     public Mono<StatisticsDTO> getStatisticByPersonId(Long ownId){
         return customQueryRepository.getStatisticByPersonId(ownId);
     }
+
 //    /**
 //     * Создаст тестовый список статистик пользователей
 //     */
@@ -135,18 +185,18 @@ public class StatisticsServise {
 //
 //
 //        ArrayList<Person> listTestPersons = new ArrayList<>(size);
-//        for (int i = 0; i < size; i++) {
-//            listTestPersons.add(new Person(
-//                    null,
-//                    "Guest_"+i+"@t.t",
-//                    passwordEncoder.encode("password"+i),
-//                    "TestGuest_"+i,
-//                    UserRole.ROLE_USER,
-//                    new Timestamp(System.currentTimeMillis())
-//            ));
-//
-//            if (i%100 == 0) System.out.println(i);
-//        }
+////        for (int i = 0; i < size; i++) {
+////            listTestPersons.add(new Person(
+////                    null,
+////                    "Guest_"+i+"@t.t",
+////                    passwordEncoder.encode("password"+i),
+////                    "TestGuest_"+i,
+////                    UserRole.ROLE_USER,
+////                    new Timestamp(System.currentTimeMillis())
+////            ));
+////
+////            if (i%100 == 0) System.out.println(i);
+////        }
 //        System.out.println("22222222222222222222222222222222222222222222222222222222222");
 //
 //        personRepository.saveAll(Flux.fromIterable(listTestPersons))
@@ -161,7 +211,8 @@ public class StatisticsServise {
 //                            (long) person.getId(),
 //                            (long) new Random().nextInt(10001),
 //                            LocalDateTime.now(),
-//                            new Random().nextInt(-1000, 1001)
+//                            new Random().nextInt(-1000, 1001),
+//                            0
 //                    );
 //                    return statisticsRepository.save(statistics);
 //                })

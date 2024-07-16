@@ -1,8 +1,13 @@
 package com.example.zubrilkaenglish.repositories.retrofit
 
+import com.example.zubrilkaenglish.models.Profile
 import com.example.zubrilkaenglish.models.StatisticsDTO
 import retrofit2.Response
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface StatisticsApi {
@@ -14,4 +19,13 @@ interface StatisticsApi {
      */
     @GET("/stat/first1500users_rating")
     suspend fun getStatFirst1500(@Query("ownId") ownId: Long?): Response<List<StatisticsDTO>>
+
+    /**
+     * отправит на сервер количество очков заработанных в офлайн режимах тренировки
+     */
+    @POST("/stat/save_offline_points")
+    suspend fun sendOfflinePoints(
+        @Header("Authorization") accessToken: String?,
+        @Query("offlinePoints") offlinePoints: Int
+    ): Response<Any?>
 }

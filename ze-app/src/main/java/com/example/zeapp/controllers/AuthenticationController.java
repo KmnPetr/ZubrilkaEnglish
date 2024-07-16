@@ -50,7 +50,6 @@ public class AuthenticationController {
                                                 "accessToken",
                                                 jwtUtil.generateAccessToken((Person) person)
                                         )
-
         ));
     }
 

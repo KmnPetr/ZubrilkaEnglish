@@ -461,7 +461,6 @@ class CardsRepository private constructor(){
      * функция вернет false, если входящая в параметры дата еще не наступила
      */
     private fun compareDate(sleepTime: String?): Boolean{
-        println("compareDate: $sleepTime")
         try {
             if (sleepTime==null){
                 return true

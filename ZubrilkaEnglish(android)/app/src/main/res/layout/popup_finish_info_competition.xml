@@ -237,24 +237,40 @@
             android:layout_marginTop="10dp"
             android:gravity="center">
 
-            <com.example.zubrilkaenglish.utils.ui.CustButton
-                android:id="@+id/buttonBack"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="24dp"
-                android:paddingTop="16dp"
-                android:paddingBottom="16dp"
-                android:paddingLeft="24dp"
-                android:paddingRight="24dp"
-                app:backgroundColor="@color/myGray"
-                app:cornerRadius="7dp"
-                app:borderWidth="1dp"
-                app:borderColor="#686868"
-                app:textColor="@color/white"
-                app:textSize="14sp"
-                app:text="Назад"
-                app:textStyle="bold_italic"
-                app:fontFamily="sans-serif"/>
+                <com.example.zubrilkaenglish.utils.ui.CustButton
+                    android:id="@+id/buttonBack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="20dp"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:paddingLeft="24dp"
+                    android:paddingRight="24dp"
+                    app:backgroundColor="@color/myGray"
+                    app:cornerRadius="7dp"
+                    app:borderWidth="1dp"
+                    app:borderColor="#686868"
+                    app:textColor="@color/white"
+                    app:textSize="12sp"
+                    app:text="Назад"
+                    app:textStyle="bold_italic"
+                    app:fontFamily="sans-serif"/>
+
+                <com.example.zubrilkaenglish.utils.ui.CustButton
+                    android:id="@+id/tableLeaders"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="20dp"
+                    android:padding="16dp"
+                    app:backgroundColor="#80510ACC"
+                    app:cornerRadius="7dp"
+                    app:borderWidth="1dp"
+                    app:borderColor="#33691E"
+                    app:textColor="@color/white"
+                    app:textSize="10sp"
+                    app:text="Рейтинг"
+                    app:textStyle="bold_italic"
+                    app:fontFamily="sans-serif"/>
 
             <com.example.zubrilkaenglish.utils.ui.CustButton
                 android:id="@+id/buttonNextRound"
@@ -266,7 +282,7 @@
                 app:borderWidth="1dp"
                 app:borderColor="#33691E"
                 app:textColor="@color/white"
-                app:textSize="14sp"
+                app:textSize="12sp"
                 app:text="Продолжить!"
                 app:textStyle="bold_italic"
                 app:fontFamily="sans-serif"/>

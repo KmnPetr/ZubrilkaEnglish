@@ -21,6 +21,8 @@ import com.example.zubrilkaenglish.events.CardEvent
 import com.example.zubrilkaenglish.events.CrEvEnum
 import com.example.zubrilkaenglish.events.PrEvEnum
 import com.example.zubrilkaenglish.events.PropEvent
+import com.example.zubrilkaenglish.events.StatEvEnum
+import com.example.zubrilkaenglish.events.StatisticsEvent
 import com.example.zubrilkaenglish.events.VcEvEnum
 import com.example.zubrilkaenglish.events.VoiceEvent
 import com.example.zubrilkaenglish.models.PropModel
@@ -153,6 +155,14 @@ class TrainingFragment() : Fragment(), CardAdapter.Listener {
     override fun onStart() {
         super.onStart()
         EventBus.getDefault().register(this)
+        //перезапустим счетчики поинтов
+        EventBus.getDefault().post(StatisticsEvent(StatEvEnum.START_TRAINING))
+    }
+
+    override fun onPause() {
+        super.onPause()
+        //отправим на сервер поинты
+        EventBus.getDefault().post(StatisticsEvent(StatEvEnum.STOP_TRAINING))
     }
 
     override fun onStop() {
@@ -212,6 +222,7 @@ class TrainingFragment() : Fragment(), CardAdapter.Listener {
         wordCard.cardHasChanged=true
         VibrationHandler.instance.vibratePositive()
         EventBus.getDefault().post(CardEvent(CrEvEnum.INCREASE_PROGRESS,wordCard, mutableMapOf("positionAdapter" to position)))
+        EventBus.getDefault().post(StatisticsEvent(StatEvEnum.POINTS_INCR))
     }
 
     /**
@@ -223,6 +234,7 @@ class TrainingFragment() : Fragment(), CardAdapter.Listener {
         VibrationHandler.instance.vibrateNegative()
         //отправим запрос на сброс значения numCorrAnsv
         EventBus.getDefault().post(CardEvent(CrEvEnum.RESET_numCorrAnsv, wordCard, mutableMapOf("positionAdapter" to position)))
+        EventBus.getDefault().post(StatisticsEvent(StatEvEnum.POINTS_INCR))
     }
 
     /**
@@ -239,7 +251,6 @@ class TrainingFragment() : Fragment(), CardAdapter.Listener {
     override fun onClickOptionsButton(wordCard: WordCard, position: Int) {
         PopupOptions(requireActivity(),wordCard,position).show()
     }
-
 
     /**
      *  метод инициирует озвучку карточки
@@ -277,12 +288,6 @@ class TrainingFragment() : Fragment(), CardAdapter.Listener {
                 }
                 else -> { throw IllegalArgumentException("LearningMode is invalid") }
             }
-
-
-
-
-
-
 
             if (viewModel.userScrolls !=0) {
                 viewModel.userScrolls =0
@@ -324,8 +329,6 @@ class TrainingFragment() : Fragment(), CardAdapter.Listener {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
 
-                Log.d(LOG, "Page position: " + position)
-
                 //вызываем voice на первой странице
                 if (position == 0 && adapter.isWordCard(position)){
                     GlobalScope.launch {
@@ -340,7 +343,6 @@ class TrainingFragment() : Fragment(), CardAdapter.Listener {
                 super.onPageScrollStateChanged(state)
 
                 val position = viewPager2.currentItem
-                Log.d(LOG, "Page position: " + position)
 
                 //вызываем voice если это учебная карточка
                 if (state == 0 && adapter.isWordCard(position) && position != 0){
@@ -349,7 +351,9 @@ class TrainingFragment() : Fragment(), CardAdapter.Listener {
 
                 //покажем рекламу если это последняя карточка
                 if (state == 0 && position == ((viewPager2.adapter?.itemCount ?: 0) - 1)){
-
+                    //отправим поинты на сервер
+                    EventBus.getDefault().post(StatisticsEvent(StatEvEnum.STOP_TRAINING))
+                    //покажем рекламу
                     GlobalScope.launch {
                         delay(350) //небольшая задержка чтоб прогрузилось все и не сразу выпригивала реклама
                         withContext(Dispatchers.Main){
@@ -376,6 +380,9 @@ class TrainingFragment() : Fragment(), CardAdapter.Listener {
     override fun restartTraining() {
         viewModel.overwriteList()
         binding.viewPager2.currentItem = 0
+        //отправим поинты на сервер, перезапустим счетчики поинтов
+        EventBus.getDefault().post(StatisticsEvent(StatEvEnum.STOP_TRAINING))
+        EventBus.getDefault().post(StatisticsEvent(StatEvEnum.START_TRAINING))
     }
 }
 

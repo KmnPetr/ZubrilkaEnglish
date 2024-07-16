@@ -1,10 +1,14 @@
 package com.example.zubrilkaenglish.repositories
 
+import com.example.zubrilkaenglish.events.StatEvEnum
+import com.example.zubrilkaenglish.events.StatisticsEvent
 import com.example.zubrilkaenglish.models.StatisticsDTO
 import com.example.zubrilkaenglish.repositories.retrofit.RetrofitService
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 
 /**
  * репозиторий предоставляет и обрабатывает информацию по статистике пользователя
@@ -18,6 +22,47 @@ class StatisticsRepository private constructor(){
     val listStats: MutableStateFlow<ArrayList<StatisticsDTO>?> = MutableStateFlow(null)
     var ownStatsPosition: Int? = null
     var ownStats: StatisticsDTO? = null
+
+    var offlinePoints:Int = 0 //собирает поинты при офлайн тренировке
+    init {
+        EventBus.getDefault().register(this)
+    }
+
+    /**
+     * метод используется библиотечкой EventBus
+     * для прослушивания запросов от различных view
+     */
+    @Subscribe
+    fun subscribeOnStatisticsEvent(event: StatisticsEvent){
+        when(event.typeEvent){
+            StatEvEnum.POINTS_INCR -> incrementStatisticsPoints()
+            StatEvEnum.START_TRAINING -> prepareCounterPoints()
+            StatEvEnum.STOP_TRAINING -> sendPoints()
+            else -> {}
+        }
+    }
+
+    /**
+     * отправит посчитанные очки на сервер
+     */
+    private fun sendPoints() {
+        retrofitService.sendOfflinePoints(offlinePoints)
+    }
+
+    /**
+     * подготовит офлайн счетчик очков
+     */
+    private fun prepareCounterPoints() {
+        offlinePoints = 0
+    }
+
+    /**
+     * метод инкрементирует поинты статистики рейтинга при офлайн тренировке игрока в обычных режимах
+     * складывает поинты в переменную offlinePoints
+     */
+    private fun incrementStatisticsPoints() {
+        offlinePoints++
+    }
 
     /**
      * запросит список статистики рейтинга первых 1500 пользователей набравших найбольшее количество очков
