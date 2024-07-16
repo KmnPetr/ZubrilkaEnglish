@@ -193,6 +193,12 @@ class PopupFinishInfo(
             tabLayout.getTabAt(1)?.select()
             viewPager2.currentItem = 1
             showListWords() }
+        binding.tableLeaders.setOnClickListener {
+            this.dismiss()
+            viewModel.lockShowStartPopup = false
+            EventBus.getDefault().post(CompetitionEvent(CmpEvEnum.CLOSE_SESSION))
+            EventBus.getDefault().post(NotificationEvent("",NfEvEnum.GO_TO_RATING))
+        }
     }
 
     /**

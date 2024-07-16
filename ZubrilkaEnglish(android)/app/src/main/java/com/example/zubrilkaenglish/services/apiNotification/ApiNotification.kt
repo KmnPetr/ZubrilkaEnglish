@@ -37,6 +37,7 @@ class ApiNotification private constructor() {
             NfEvEnum.GO_TO_CATALOG -> activity.goToCatalog()
             NfEvEnum.GO_TO_MEMOS -> activity.goToMemos()
             NfEvEnum.GO_TO_UPSTACK -> activity.popBackStack()
+            NfEvEnum.GO_TO_RATING -> activity.goToRating()
         }
     }
 

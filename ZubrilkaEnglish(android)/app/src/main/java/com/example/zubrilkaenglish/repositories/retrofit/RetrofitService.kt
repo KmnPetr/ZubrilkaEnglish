@@ -1,10 +1,16 @@
 package com.example.zubrilkaenglish.repositories.retrofit
 
+import android.util.Log
 import android.widget.Toast
 import com.example.zubrilkaenglish.models.Profile
+import com.example.zubrilkaenglish.models.PropModel
 import com.example.zubrilkaenglish.models.Voice
 import com.example.zubrilkaenglish.models.Word
+import com.example.zubrilkaenglish.repositories.ProfileRepository
+import com.example.zubrilkaenglish.utils.LOG
 import com.example.zubrilkaenglish.utils.MyApplication
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
 import retrofit2.Response
 
@@ -54,4 +60,22 @@ class RetrofitService {
     fun getProfileApi() = RetrofitInstance.profileApi
     //выдаст все методы statisticsApi
     fun getStatisticsApi() = RetrofitInstance.statisticsApi
+
+    /**
+     * отправит поинты на сервер заработанные в офлайн режимах тренировки
+     * метод требует авторизации
+     * создания новой учетной записи в случае отсутствия или обновления access токена
+     */
+    fun sendOfflinePoints(offlinePoints: Int) {
+        GlobalScope.launch {
+            val profile:Profile? = ProfileRepository.instance.profile.value
+            if (profile != null){
+                val response = ProfileRepository.instance.authRequest { jwtToken: String -> getStatisticsApi().sendOfflinePoints(jwtToken,offlinePoints) }
+            } else {
+                val accessToken:String? = ProfileRepository.instance.getTemporaryProfile()?.accessToken
+                getStatisticsApi().sendOfflinePoints("Bearer $accessToken",offlinePoints)
+            }
+        }
+    }
+
 }

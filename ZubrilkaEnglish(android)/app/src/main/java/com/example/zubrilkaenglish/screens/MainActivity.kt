@@ -16,6 +16,7 @@ import com.example.zubrilkaenglish.events.iEvent
 import com.example.zubrilkaenglish.repositories.CardsRepository
 import com.example.zubrilkaenglish.repositories.MemoRepository
 import com.example.zubrilkaenglish.repositories.ProfileRepository
+import com.example.zubrilkaenglish.repositories.StatisticsRepository
 import com.example.zubrilkaenglish.repositories.VoiceRepository
 import com.example.zubrilkaenglish.services.ads.YandexAds
 import com.example.zubrilkaenglish.utils.APP_EMAIL
@@ -37,6 +38,7 @@ class MainActivity : AppCompatActivity() {
     private val voiceRepository = VoiceRepository.instance
     private val memoRepository = MemoRepository.instance
     private val profileRepository = ProfileRepository.instance
+    private val statisticsRepository = StatisticsRepository.instance
 
     private val apiNotification = ApiNotification.instance
 
@@ -194,9 +196,17 @@ class MainActivity : AppCompatActivity() {
         navController.navigate(R.id.action_menuFragment_to_memoFragment)
     }
     /**
+     * переключит в фрагмент таблицы рейтинга
+     */
+    fun goToRating() {
+        navController.popBackStack(navController.graph.startDestinationId, false)
+        navController.navigate(R.id.action_menuFragment_to_ratingFragment)
+    }
+    /**
      * переключит наверх фрагментов по стеку
      */
     fun popBackStack() {
         navController.popBackStack(navController.graph.startDestinationId, false)
     }
+
 }

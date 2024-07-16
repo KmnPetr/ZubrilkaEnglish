@@ -56,7 +56,8 @@ public class SecurityConfig {
                             "/auth/getAccessToken",
                             "/test-auth/user",
                             "/profile/**",
-                            "/competition"
+                            "/competition",
+                            "/stat/save_offline_points"
                     ).hasAnyRole("USER","ADMIN");
 
                     auth.pathMatchers(

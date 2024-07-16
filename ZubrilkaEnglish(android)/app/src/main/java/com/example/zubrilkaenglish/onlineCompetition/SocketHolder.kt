@@ -34,7 +34,7 @@ class SocketHolder private constructor(){
         println(token.toString())
 
         if (token==null){
-            val profile: Profile? = profileRepository.getTemporaryProfile();
+            val profile: Profile? = profileRepository.getTemporaryProfile()
             token = profile?.refreshToken
         }
 

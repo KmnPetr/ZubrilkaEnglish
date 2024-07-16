@@ -27,4 +27,6 @@ public class Statistics {
     private LocalDateTime lastEntry; //последний вход пользователя
     @Column("new_points")
     private Integer newPoints; //заработанные очки за последние сутки
+    @Column("offline_points")
+    private Integer offlinePoints; //заработанные очки за последние сутки в офлайн режимах, чтобы нельзя было заработать на офлайн режимах читерно много очков
 }

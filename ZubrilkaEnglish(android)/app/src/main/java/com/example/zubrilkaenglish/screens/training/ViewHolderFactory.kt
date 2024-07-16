@@ -15,6 +15,8 @@ import com.example.zubrilkaenglish.events.CardEvent
 import com.example.zubrilkaenglish.events.CrEvEnum
 import com.example.zubrilkaenglish.events.NfEvEnum
 import com.example.zubrilkaenglish.events.NotificationEvent
+import com.example.zubrilkaenglish.events.StatEvEnum
+import com.example.zubrilkaenglish.events.StatisticsEvent
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.screens.training.additionalCards.FewCards
 import com.example.zubrilkaenglish.screens.training.additionalCards.NoMemosCard
@@ -209,6 +211,7 @@ class ViewHolderFactory {
                 wordCard.cardHasChanged=true
                 EventBus.getDefault().post(CardEvent(CrEvEnum.RESET_numCorrAnsv, wordCard, mutableMapOf("positionAdapter" to position))) //отправим запрос на сброс значения numCorrAnsv
             }
+            EventBus.getDefault().post(StatisticsEvent(StatEvEnum.POINTS_INCR))
         }
     }
 
