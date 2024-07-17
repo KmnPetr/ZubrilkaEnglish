@@ -75,7 +75,7 @@ public class CustomQueryRepository{
     public Mono<Long> checkNewPointsToClear(int hours) {
         return databaseClient.sql(
                 "UPDATE statistics " +
-                "SET new_points = 0 " +
+                "SET new_points = 0, offline_points = 0 " +
                 "WHERE last_entry < NOW() - INTERVAL '"+hours+" hours';"
         )
                 .fetch()

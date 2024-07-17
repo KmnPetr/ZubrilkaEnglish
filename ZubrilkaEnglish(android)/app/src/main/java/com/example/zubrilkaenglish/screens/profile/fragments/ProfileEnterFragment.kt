@@ -6,11 +6,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
 import com.example.zubrilkaenglish.databinding.FragmentProfileEnterBinding
+import com.example.zubrilkaenglish.events.NfEvEnum
+import com.example.zubrilkaenglish.events.NotificationEvent
 import com.example.zubrilkaenglish.models.Profile
 import com.example.zubrilkaenglish.repositories.ProfileRepository
+import com.example.zubrilkaenglish.screens.catalogCards.fragments.FragmentItem
 import com.example.zubrilkaenglish.screens.profile.ProfileViewModel
+import org.greenrobot.eventbus.EventBus
 
 class ProfileEnterFragment : Fragment() {
 
@@ -31,6 +36,7 @@ class ProfileEnterFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
 
         setListeners()
+        overrideClickBack()
     }
 
     /**
@@ -76,5 +82,19 @@ class ProfileEnterFragment : Fragment() {
      */
     private fun enterLinkClick(it: View?) {
         findNavController().popBackStack()
+    }
+
+
+    /**
+     * переопределяет поведение системой кнопки "Back"
+     */
+    private fun overrideClickBack() {
+        requireActivity()
+            .onBackPressedDispatcher
+            .addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    EventBus.getDefault().post(NotificationEvent("",NfEvEnum.GO_TO_UPSTACK))
+                }
+            })
     }
 }
