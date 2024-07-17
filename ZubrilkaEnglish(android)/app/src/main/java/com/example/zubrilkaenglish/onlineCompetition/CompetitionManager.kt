@@ -172,7 +172,6 @@ class CompetitionManager private constructor(){
      * отошлет на сервер соощение о том что пользователь сделал свой выбор ответа
      */
     private fun sendClickAnswer(event: CompetitionEvent) {
-        println("sendClickAnswer(event: CompetitionEvent)")
         socketHolder.sendSocketMessage(
             SocketMessage(
                 SockMessType.CLICK_ANSWER,
@@ -186,7 +185,6 @@ class CompetitionManager private constructor(){
      * вызывается при получении следующего слова при поединке с сокета
      */
     private fun nextWord(message: SocketMessage) {
-        println("private fun nextWord(message: SocketMessage)")
         val nextWord: NextWord? = NextWord.fromJson(message.map["nextWord"])
         println(nextWord)
         GlobalScope.launch {
