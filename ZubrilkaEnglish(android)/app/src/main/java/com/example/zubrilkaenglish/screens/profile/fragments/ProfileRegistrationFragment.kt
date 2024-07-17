@@ -8,13 +8,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.FragmentProfileRegistrationBinding
+import com.example.zubrilkaenglish.events.NfEvEnum
+import com.example.zubrilkaenglish.events.NotificationEvent
 import com.example.zubrilkaenglish.models.Profile
 import com.example.zubrilkaenglish.repositories.ProfileRepository
 import com.example.zubrilkaenglish.screens.profile.ProfileViewModel
+import org.greenrobot.eventbus.EventBus
 
 /**
  * в этом фрагменте будет происходить регистрация пользователя
@@ -42,6 +46,7 @@ class ProfileRegistrationFragment : Fragment() {
         binding.repeatPassword.setText(viewModel.regSecondPassword.value)
 
         setListeners()
+        overrideClickBack()
     }
 
     /**
@@ -155,5 +160,17 @@ class ProfileRegistrationFragment : Fragment() {
      */
     private fun enterLinkClick(it: View?) {
         findNavController().navigate(R.id.action_profileRegistrationFragment_to_profileEnterFragment)
+    }
+    /**
+     * переопределяет поведение системой кнопки "Back"
+     */
+    private fun overrideClickBack() {
+        requireActivity()
+            .onBackPressedDispatcher
+            .addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    EventBus.getDefault().post(NotificationEvent("", NfEvEnum.GO_TO_UPSTACK))
+                }
+            })
     }
 }
