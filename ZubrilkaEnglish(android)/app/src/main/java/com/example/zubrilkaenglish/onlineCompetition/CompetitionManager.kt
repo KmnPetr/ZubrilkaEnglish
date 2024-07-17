@@ -86,7 +86,6 @@ class CompetitionManager private constructor(){
      * кто знает можт он уже играет просто соединение моргнуло или вышел на пару секунд
      */
     private fun requestStatusInfo() {
-        println("requestStatusInfo()")
         socketHolder.sendSocketMessage(SocketMessage(SockMessType.REQUEST_STATUS_INFO, mapOf()))
     }
 
@@ -173,7 +172,6 @@ class CompetitionManager private constructor(){
      * отошлет на сервер соощение о том что пользователь сделал свой выбор ответа
      */
     private fun sendClickAnswer(event: CompetitionEvent) {
-        println("sendClickAnswer(event: CompetitionEvent)")
         socketHolder.sendSocketMessage(
             SocketMessage(
                 SockMessType.CLICK_ANSWER,
@@ -187,12 +185,11 @@ class CompetitionManager private constructor(){
      * вызывается при получении следующего слова при поединке с сокета
      */
     private fun nextWord(message: SocketMessage) {
-        println("private fun nextWord(message: SocketMessage)")
         val nextWord: NextWord? = NextWord.fromJson(message.map["nextWord"])
+        println(nextWord)
         GlobalScope.launch {
             val word: Word? = cardsRepository.getWordFromDbById(nextWord?.idWord)
 
-            println("GlobalScope")
             nextWord?.word=word //сразу выберем из бд дополнительную инфу, так как с бэка она не приходит
             this@CompetitionManager.nextWord.value = nextWord
         }
