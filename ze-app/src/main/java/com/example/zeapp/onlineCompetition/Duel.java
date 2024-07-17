@@ -66,6 +66,24 @@ public class Duel {
     }
 
     /**
+     * выдаст текущее слово без инкрементации позиции в списке слов
+     * например если юзер временно вышел а потом опять зашел
+     */
+    public NextWord getCurrentWord() {
+        NextWord nextWord = null;
+        if (curWordPos>=0){
+            try{
+                nextWord = new NextWord(
+                        (long) duelsListWords.get(curWordPos).getWord().getId(),
+                        curWordPos,
+                        duelsListWords.size(),
+                        duelsListWords.get(curWordPos).getListAnswers()
+                );
+            }catch (Exception e){e.printStackTrace();}
+        }
+        return nextWord;
+    }
+    /**
      * установит время в будущее когда можно будет разослать следующее слово игрокам
      */
     public void setNewTimeNextWord(){
@@ -210,6 +228,21 @@ public class Duel {
      */
     public FinishInfo getFinishInfo() {
         return new FinishInfo();
+    }
+
+    /**
+     * выдаст duelInfo для одного игрока
+     * например после временного выхода из игры чтобы ему обновить данные
+     */
+    public DuelInfo getDuelInfoForOnePlayer(Long id) {
+        DuelInfo duelInfo = new DuelInfo(this);
+        for (int i = 0; i < players.size(); i++) {
+            if (players.get(i).getId()==id){
+                duelInfo.setOwnId(players.get(i).getId());
+                duelInfo.setOwnPosition(i);
+            }
+        }
+        return duelInfo;
     }
 
 }

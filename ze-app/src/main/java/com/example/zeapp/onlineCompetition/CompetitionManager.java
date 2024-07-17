@@ -144,8 +144,19 @@ public class CompetitionManager {
         Player player = playerHolder.getPlayer(personId);
         StatusInfo statusInfo = new StatusInfo();
         statusInfo.setStatusPlayer(player.getStatusPlayer());
+        HashMap<String,String> map = new HashMap<>();
+        map.put("statusInfo", statusInfo.toJson());
 
-        player.sendMessage(new SocketMessage(SockMessType.STATUS_INFO,Map.of("statusInfo", statusInfo.toJson())));
+        if (statusInfo.getStatusPlayer().equals(StatusPlayer.PLAYING) && player.getCurrentDuelId()!=null){
+            Duel duel = duelHolder.getDuelById(player.getCurrentDuelId());
+            DuelInfo duelInfo = duel.getDuelInfoForOnePlayer(player.getId());
+            map.put("duelInfo", duelInfo.toJson());
+
+            NextWord nextWord = duel.getCurrentWord();
+            if (nextWord!=null) player.sendMessage(new SocketMessage(SockMessType.NEXT_WORD,Map.of("nextWord", nextWord.toJson())));
+        }
+        player.sendMessage(new SocketMessage(SockMessType.STATUS_INFO,map));
+
     }
 
     /**

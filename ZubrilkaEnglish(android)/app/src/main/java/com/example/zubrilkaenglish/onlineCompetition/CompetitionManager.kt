@@ -86,7 +86,6 @@ class CompetitionManager private constructor(){
      * кто знает можт он уже играет просто соединение моргнуло или вышел на пару секунд
      */
     private fun requestStatusInfo() {
-        println("requestStatusInfo()")
         socketHolder.sendSocketMessage(SocketMessage(SockMessType.REQUEST_STATUS_INFO, mapOf()))
     }
 
@@ -189,10 +188,10 @@ class CompetitionManager private constructor(){
     private fun nextWord(message: SocketMessage) {
         println("private fun nextWord(message: SocketMessage)")
         val nextWord: NextWord? = NextWord.fromJson(message.map["nextWord"])
+        println(nextWord)
         GlobalScope.launch {
             val word: Word? = cardsRepository.getWordFromDbById(nextWord?.idWord)
 
-            println("GlobalScope")
             nextWord?.word=word //сразу выберем из бд дополнительную инфу, так как с бэка она не приходит
             this@CompetitionManager.nextWord.value = nextWord
         }

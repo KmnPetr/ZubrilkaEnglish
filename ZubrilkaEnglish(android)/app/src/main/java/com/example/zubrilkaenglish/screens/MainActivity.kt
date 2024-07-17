@@ -12,6 +12,8 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.ActivityMainBinding
+import com.example.zubrilkaenglish.events.NfEvEnum
+import com.example.zubrilkaenglish.events.NotificationEvent
 import com.example.zubrilkaenglish.events.iEvent
 import com.example.zubrilkaenglish.repositories.CardsRepository
 import com.example.zubrilkaenglish.repositories.MemoRepository
@@ -84,6 +86,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.profile -> {
                     println("Вызван пункт меню: R.id.profile")
                     binding.drawerLayout.closeDrawer(GravityCompat.START)
+                    EventBus.getDefault().post(NotificationEvent("",NfEvEnum.GO_TO_UPSTACK))
                     GlobalScope.launch {
                         delay(150)
                         withContext(Dispatchers.Main){
@@ -97,17 +100,20 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_server -> {
                     println("Вызван пункт меню: R.id.nav_server")
                     binding.drawerLayout.closeDrawer(GravityCompat.START)
+                    EventBus.getDefault().post(NotificationEvent("",NfEvEnum.GO_TO_UPSTACK))
 
                     false
                 }
                 R.id.nav_settings -> {
                     println("Вызван пункт меню: R.id.nav_settings")
                     binding.drawerLayout.closeDrawer(GravityCompat.START)
+                    EventBus.getDefault().post(NotificationEvent("",NfEvEnum.GO_TO_UPSTACK))
                     false
                 }
                 R.id.nav_memos -> {
                     println("Вызван пункт меню: R.id.nav_memos")
                     binding.drawerLayout.closeDrawer(GravityCompat.START)
+                    EventBus.getDefault().post(NotificationEvent("",NfEvEnum.GO_TO_UPSTACK))
                     GlobalScope.launch {
                         delay(150)
                         withContext(Dispatchers.Main){
