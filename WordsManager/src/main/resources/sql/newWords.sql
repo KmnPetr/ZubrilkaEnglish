@@ -574,6 +574,11 @@ VALUES
 ('move out of','','съехать с(напр. квартиры)','',null,'','Фразовые глаголы',null),
 ('have to','','нужно, прийдется','',null,'','Фразовые глаголы',null),
 ('get used to','','привыкнуть к','',null,'','Фразовые глаголы',null),
+('cope up','','справиться','',null,'','Фразовые глаголы',null),
+('had a great time','','прекрасно провести время','',null,'','Фразовые глаголы',null),
+('had a good time','','хорошо провести время','',null,'','Фразовые глаголы',null),
+('check into','','заселиться в','',null,'','Фразовые глаголы',null),
+('fond of','','обожать','',null,'','Фразовые глаголы',null),
 
 
 
@@ -608,6 +613,30 @@ VALUES
 ('for hours','','делать что-то часами','',null,'','',null),
 ('once again','','еще один раз','',null,'','',null),
 ('money transfer','','перевод денег','',null,'','',null),
+('a sense of responsibility','','чувство ответственности','',null,'','',null),
+('a sense of humor','','чувство юмора','',null,'','',null),
+('take into account','','брать во внимание','',null,'','',null),
+('to put to work','','нанять, поставить работать, заставить работать','',null,'','',null),
+('for example','','например','',null,'','',null),
+('as you know','','как ты знаешь','',null,'','',null),
+('as I remember','','как я помню','',null,'','',null),
+('get in touch with','','связаться с','',null,'','',null),
+('the same','','тоже самое','',null,'','',null),
+('Do you accept credit cards/ cash?','','Вы принимаете наличные, кредитки?','',null,'','',null),
+('If you don''t mind','','Если ты не возражаешь','',null,'','',null),
+('You look gorgeous','','Ты выглядишь великолепно','',null,'','',null),
+('by the way','','кстати, между прочим','',null,'','',null),
+('whether you want it or not','','хочешь ты этого или нет','',null,'','',null),
+('I''ll do my best.','','Я сделаю все возможное.','',null,'','',null),
+('as soon as possible','','как можно скорее','',null,'','',null)
+('at all','','вовсе, вообще','',null,'','',null),
+('with great pleasure','','с огромным удовольствием','',null,'','',null),
+('step by step','','шаг за шагом','',null,'','',null),
+('bitterly disappointed','','горько разочарован','',null,'','',null),
+('one more time','','еще один раз','',null,'','',null),
+('fink it over','','обдумать это','',null,'','',null),
+('each of as','','каждый из нас','',null,'','',null),
+('pay attention','','обращать внимание','',null,'','',null),
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -700,473 +729,97 @@ VALUES
 ('masterpiece','[ˈmɑːstəpiːs]','шедевр','',null,'','',null),
 ('nowadays','[ˈnaʊədeɪz]','настоящее время','',null,'','',null),
 ('courageously','[kəˈreɪʤəslɪ]','отважно','',null,'','',null),
-
-('','','','',null,'','',null),
-appearance внешность, появление
-('','','','',null,'','',null),
-favor одолжение
-('','','','',null,'','',null),
-===redo(redid,redone) переделывать
-('','','','',null,'','',null),
-===overcome(overcame, overcome)преодолевать
-('','','','',null,'','',null),
-===pregnant беременная
-('','','','',null,'','',null),
-===a sense of humor чувство юмора
-('','','','',null,'','',null),
-===a sense of responsibility чувство
- ответственности
-('','','','',null,'','',null),
-jewelry драгоценности
-('','','','',null,'','',null),
-===below zero ниже нуля
-('','','','',null,'','',null),
-conversation разговор
-('','','','',null,'','',null),
-accidentally случайно
-('','','','',null,'','',null),
-by chance случайно
-('','','','',null,'','',null),
-capital столица
-('','','','',null,'','',null),
-thoughtful задумчивый
-('','','','',null,'','',null),
-duty долг(обязанность)
-('','','','',null,'','',null),
-===responsibility обязанность
-('','','','',null,'','',null),
-amazed поражен
-('','','','',null,'','',null),
-===abroad за границей
-('','','','',null,'','',null),
-anniversary годовщина
-('','','','',null,'','',null),
-cousin двоюродный брат
-('','','','',null,'','',null),
-insurance страховка
-('','','','',null,'','',null),
-crime преступление
-('','','','',null,'','',null),
-fence забор
-('','','','',null,'','',null),
-require требовать
-('','','','',null,'','',null),
-===hurry up поторапливаться
-('','','','',null,'','',null),
-invitation приглашение
-('','','','',null,'','',null),
-thick толстый
-('','','','',null,'','',null),
-statement утверждение
-('','','','',null,'','',null),
-society общество
-('','','','',null,'','',null),
-recover выздоравливать
-('','','','',null,'','',null),
-remain friends оставаться друзьями
-('','','','',null,'','',null),
-tax налог
-('','','','',null,'','',null),
-Illness болезнь
-('','','','',null,'','',null),
-Take into account брать во внимание
-('','','','',null,'','',null),
-Take into consideration брать во внимание (на рассмотрение)
-('','','','',null,'','',null),
-Measure мера\измерять
-('','','','',null,'','',null),
-Pond пруд
-('','','','',null,'','',null),
-Disturb мешать отвлекать
-('','','','',null,'','',null),
-Acquaintance знакомый
-('','','','',null,'','',null),
-As for что касается(чего-то)
-('','','','',null,'','',null),
-Count on me расчитывать на меня
-('','','','',null,'','',null),
-to put to work нанять, поставить работать, заставить работать
-('','','','',null,'','',null),
-for example например
-('','','','',null,'','',null),
-===By myself/on my own самостоятельно
-('','','','',null,'','',null),
-Instead вместо
-('','','','',null,'','',null),
-income доход
-('','','','',null,'','',null),
-Quite довольно, вполне
-('','','','',null,'','',null),
-consider учитывать
-('','','','',null,'','',null),
-Various разнообразные
-('','','','',null,'','',null),
-Rarely/seldom редко
-('','','','',null,'','',null),
-Threw it away выбросить это
-('','','','',null,'','',null),
-Low низко
-('','','','',null,'','',null),
-Put on надевать (одежду)
-('','','','',null,'','',null),
-Warm coat теплое пальто
-('','','','',null,'','',null),
-Disapprove неодобрять
-('','','','',null,'','',null),
-Supplyer поставщик
-('','','','',null,'','',null),
-As you know.. как ты знаешь
-('','','','',null,'','',null),
-As I remember.. как я помню
-('','','','',null,'','',null),
-Government правительсво
-('','','','',null,'','',null),
-Almost болше чем
-('','','','',null,'','',null),
-Cope справляться
-('','','','',null,'','',null),
-Cope up справиться
-('','','','',null,'','',null),
-Towards к, по направлению к
-('','','','',null,'','',null),
-Something else чтото ещё
-('','','','',null,'','',null),
-Had a great time прекрасно провести время
-('','','','',null,'','',null),
-Had a good time хорошо провести время
-('','','','',null,'','',null),
-Postpone / put off откладывать
-('','','','',null,'','',null),
-Wash up the dishes мыть посуду
-('','','','',null,'','',null),
-Parcel посылка
-('','','','',null,'','',null),
-Thief вор (фиф)
-('','','','',null,'','',null),
-Get in touch with  связаться с кем-то
-('','','','',null,'','',null),
-On foot пешком
-('','','','',null,'','',null),
-===Tore рвать (бумагу)
-('','','','',null,'','',null),
-===Quietly тихо
-('','','','',null,'','',null),
-===Participate / take part принимать
-('','','','',null,'','',null),
-===A couple of questions пара вопросов
-('','','','',null,'','',null),
-===The same тоже самое
-('','','','',null,'','',null),
-===Finish заканчивать
-('','','','',null,'','',null),
-===The following (..) следующие (что-то)
-('','','','',null,'','',null),
-
-
-
-
-Knock at/on the door постучаться в дверь
-('','','','',null,'','',null),
-Check into заселиться в
-('','','','',null,'','',null),
-Check out съехать
-('','','','',null,'','',null),
-introduce представлять кого-то кому-то
-('','','','',null,'','',null),
-===Notice замечать, уведомление
-('','','','',null,'','',null),
-appearance внешность, появление
-('','','','',null,'','',null),
-Disappearanse исчезновение
-('','','','',null,'','',null),
-Share делиться
-('','','','',null,'','',null),
-Opportunity возможность
-('','','','',null,'','',null),
-Remain оставаться
-('','','','',null,'','',null),
-Effort усилие
-('','','','',null,'','',null),
-Suddenly вдруг, внезапно
-('','','','',null,'','',null),
-Calm спокойный
-('','','','',null,'','',null),
-Require требовать
-('','','','',null,'','',null),
-consider учитывать, считать
-('','','','',null,'','',null),
-revised повторил
-('','','','',null,'','',null),
-Disadvanteges недостаток
-('','','','',null,'','',null),
-Well put together симпатичный, опрятный
-('','','','',null,'','',null),
-Do you accept credit cards/ cash? Вы принимаете наличные, кредитки?
-('','','','',null,'','',null),
-If you do not mind если ты не возражаешь
-('','','','',null,'','',null),
-reply отвечать
-('','','','',null,'','',null),
-restrict ограничивать
-('','','','',null,'','',null),
-cope справляться (кьоуп)
-('','','','',null,'','',null),
-Reduce сократить
-('','','','',null,'','',null),
-You look gorgeous ты выглядишь великолепно
-('','','','',null,'','',null),
-Gorgeous view великолепный вид
-('','','','',null,'','',null),
-Booze бухло
-('','','','',null,'','',null),
-Plastic surgery пластическая операция
-('','','','',null,'','',null),
-Afterward после, впоследствии
-('','','','',null,'','',null),
-To french целоваться в засос
-('','','','',null,'','',null),
-We have no choice у нас нет выбора
-('','','','',null,'','',null),
-subway метро
-('','','','',null,'','',null),
-hurmful вредный
-('','','','',null,'','',null),
-consequences are inevitable последствия неизбежны
-('','','','',null,'','',null),
-betray предавать
-('','','','',null,'','',null),
-Way of thinking образ мышления
-('','','','',null,'','',null),
-Treasure сокровище
-('','','','',null,'','',null),
-By the way кстати, между прочим
-('','','','',null,'','',null),
-dеѕtіnаtіоn пункт назначения
-('','','','',null,'','',null),
-Performance представление
-('','','','',null,'','',null),
-Fed up достало, сыт по горло
-('','','','',null,'','',null),
-Whether you want it or not хочешь ты этого или нет
-('','','','',null,'','',null),
-Resemble напоминать, быть похожим на кого-то
-('','','','',null,'','',null),
-further дальше, (дальнейшая информация)
-('','','','',null,'','',null),
-rest of остаток, оставшаяся часть чего-то
-('','','','',null,'','',null),
-persuading убеждение
-('','','','',null,'','',null),
-Would you mind if I....
-('','','','',null,'','',null),
-Sail плыть(на корабле)
-('','','','',null,'','',null),
-yet another очередной, еще один
-('','','','',null,'','',null),
-other (другие) another (только с ед.числ. +дополнительное время вещь или др.) the other(s) (остальные, из огранич.круга)
-('','','','',null,'','',null),
-balloon шарик
-('','','','',null,'','',null),
-do my best сделать все возможное
-('','','','',null,'','',null),
-traffic jam дорожная пробка
-('','','','',null,'','',null),
-vomit рвота
-('','','','',null,'','',null),
-tangle запутывать
-('','','','',null,'','',null),
-one of us один из нас
-('','','','',null,'','',null),
-Gotta
-('','','','',null,'','',null),
-Wanna
-('','','','',null,'','',null),
-Gonna
-('','','','',null,'','',null),
-peach персик
-('','','','',null,'','',null),
-Cheers! Пока! До скорого! Ваше здоровье! Будем! За нас!
-('','','','',null,'','',null),
-Arrow стрелка
-('','','','',null,'','',null),
-
-
-
-
-
-
-
-
-
-
-
-('as soon as possible','','как можно скорее','',null,'','Фразы','90064')
-('','','','',null,'','',null),
- -
-At all вовсе
-('','','','',null,'','',null),
-With great pleasure с огромным удовольствием
-('','','','',null,'','',null),
-Disappointed разочарован
-('','','','',null,'','',null),
-Bitterly disappointed горько разочарован
-('','','','',null,'','',null),
-Business trip командировка
-('','','','',null,'','',null),
-Point of view точка зрения
-('','','','',null,'','',null),
-Overpay переплачивать
-('','','','',null,'','',null),
-elder brother старший брат
-('','','','',null,'','',null),
-Step by step шаг за шагом
-('','','','',null,'','',null),
-subscribe подписаться(на канал)
-('','','','',null,'','',null),
-At last наконец то
-('','','','',null,'','',null),
-Pronunciation произношение
-('','','','',null,'','',null),
-Separatly раздельно
-('','','','',null,'','',null),
-One more time еще один раз
-('','','','',null,'','',null),
-Spacious просторный
-('','','','',null,'','',null),
-Improve улучшать
-('','','','',null,'','',null),
-Look for искать
-('','','','',null,'','',null),
-Waste потеря(денег напр.)
-('','','','',null,'','',null),
-Natural естественный, природный
-('','','','',null,'','',null),
-Salary зарплата
-('','','','',null,'','',null),
-Ahead впереди
-('','','','',null,'','',null),
-On time вовремя
-('','','','',null,'','',null),
-Miss the bus - пропускать автобус
-('','','','',null,'','',null),
-For the second time второй раз
-('','','','',null,'','',null),
-Convenient удобно
-('','','','',null,'','',null),
-Inconvenient неудобный
-('','','','',null,'','',null),
-Unexpectedly неожиданно
-('','','','',null,'','',null),
-Promise обещать
-('','','','',null,'','',null),
-Prepare подготовиться
-('','','','',null,'','',null),
-Unusual необычный
-('','','','',null,'','',null),
-Catch ловить
-('','','','',null,'','',null),
-Automatically
-('','','','',null,'','',null),
-Fink it over - обдумывать
-('','','','',null,'','',null),
-Each of as каждый из нас
-('','','','',null,'','',null),
-Younger младший
-('','','','',null,'','',null),
-Much много (с неисчисляемыми сущ. Чаще в отрицательном контексте)
-('','','','',null,'','',null),
-Many много (с исчисляемыми сущ. Чаще в отрицательном контексте)
-('','','','',null,'','',null),
-Little немного (с неисчисляемыми сущ.)
-('','','','',null,'','',null),
-Few немного, несколько (с исчисляемыми сущ.)
-('','','','',null,'','',null),
-A few совсем немного
-('','','','',null,'','',null),
-A lot of
-('','','','',null,'','',null),
-Lots of
-('','','','',null,'','',null),
-Conditions условия
-('','','','',null,'','',null),
-Express выражать
-('','','','',null,'','',null),
-Native speaker носитель язык
-('','','','',null,'','',null),
-Confuse путать
-('','','','',null,'','',null),
-Look ... Up посмотреть в каком то источнике
-('','','','',null,'','',null),
-Look ... At посмотреть на чтото
-('','','','',null,'','',null),
-===Sign report подписать отчет
-('','','','',null,'','',null),
-===Considerably/significantly значительно
-('','','','',null,'','',null),
-===Trust доверять
-('','','','',null,'','',null),
-===Crazy/mad сумасшедший
-('','','','',null,'','',null),
-===Advertising реклама
-('','','','',null,'','',null),
-===Write it down записывать
-('','','','',null,'','',null),
-===Satisfied удовлетворен
-('','','','',null,'','',null),
-===Enjoy/ fond of обожать
-('','','','',null,'','',null),
-===Realize осознавать
-('','','','',null,'','',null),
-===Educated образованный
-('','','','',null,'','',null),
-===Divorced разведен
-('','','','',null,'','',null),
-===Tasty/ delicious вкусный
-('','','','',null,'','',null),
-===protein - белок (и остальные элементы)
-('','','','',null,'','',null),
-===Pay attention обращать внимание
-('','','','',null,'','',null),
-===I''ll do my best сделаю все возможное(местоимение заменяется в зависимости от контекста)
-('','','','',null,'','',null),
-===Disagree несогласен
-('','','','',null,'','',null),
-===Several несколько
-('','','','',null,'','',null),
-===The day before esterday позавчера
-('','','','',null,'','',null),
-===The day after tomorrow послезавтра
-('','','','',null,'','',null),
-===In a Couple of menutes через пару минут
-('','','','',null,'','',null),
-===Look for искать
-('','','','',null,'','',null),
-===Reinwent the wheel изобретать заново колесо
-('','','','',null,'','',null),
-===authorities власти
-('','','','',null,'','',null),
-===interrupt перебивать, прерывать
-('','','','',null,'','',null),
-===Be out отсутствовать, выйти, нет дома
-('','','','',null,'','',null),
-===Sink тонуть
-('','','','',null,'','',null),
-===Scientific research научное исследование
-('','','','',null,'','',null),
-===Despite/in spite не смотря на
-('','','','',null,'','',null),
-===Belong принадлежать
-('','','','',null,'','',null),
-===Fluently (говорить) свободно
-('','','','',null,'','',null),
-===Expression выражение
-('','','','',null,'','',null),
-===Trip поездка
-('','','','',null,'','',null),
-===Inspire вдохновлять
-('','','','',null,'','',null),
-===Opinion мнение
-('','','','',null,'','',null),
-===Each other друг друга
-('','','','',null,'','',null),
-===Elder старший
+('appearance','[əˈpɪərəns]','внешность, появление','',null,'','',null),
+('jewelry','','ювелирные украшения','',null,'','',null),
+('accidentally','[æksɪˈdentəlɪ]','случайно','',null,'','',null),
+('by chance','','случайно','',null,'','',null),
+('thoughtful','[ˈθɔːtf(ə)l]','задумчивый','',null,'','',null),
+('amazed','[əˈmeɪzd]','поражен, изумлен','',null,'','',null),
+('abroad','[əˈbrɔːd]','за границей','',null,'','',null),
+('anniversary','[ænɪˈvɜːsərɪ]','годовщина','',null,'','',null),
+('cousin','[kʌzn]','двоюродный брат','',null,'','',null),
+('invitation','[ɪnvɪˈteɪʃn]','приглашение','',null,'','',null),
+('take into consideration','','брать во внимание, ,брать на рассмотрение','',null,'','',null),
+('measure','','мера, измерять','',null,'','',null),
+('pond','[pɒnd]','пруд','',null,'','',null),
+('acquaintance','[əˈkweɪntəns]','знакомый','',null,'','',null),
+('seldom','[ˈseldəm]','редко, изредка','',null,'','',null),
+('warm coat','','теплое пальто','',null,'','',null),
+('disapprove','[dɪsəˈpruːv]','неодобрять','',null,'','',null),
+('supplyer','[səˈplaɪə]','поставщик','',null,'','',null),
+('cope','[kəʊp]','справляться','',null,'','',null),
+('towards','[təˈwɔːdz]','в направлении','',null,'','',null)
+('parcel','[pɑːsl]','посылка','',null,'','',null),
+('thief','[θiːf]','вор','',null,'','',null),
+('on foot','','пешком','',null,'','',null),
+('participate','[pɑːˈtɪsɪpeɪt]','принимать участие','',null,'','',null),
+('take part','','принять участие','',null,'','',null),
+('couple','[kʌpl]','пара, двое','',null,'','',null),
+('disappearance','[dɪsəˈpɪərəns]','исчезновение','',null,'','',null),
+('opportunity','[ɒpəˈtjuːnɪtɪ]','возможность','',null,'','',null),
+('calm','[kɑːm]','спокойный','',null,'','',null),
+('revise','','повторил, пересматривать, повторять','',null,'','',null),
+('disadvantages','[dɪsədˈvɑːntɪʤɪz]','недостатки','',null,'','',null),
+('well put together','','симпатичный, опрятный','',null,'','',null),
+('restrict','[rɪsˈtrɪkt]','ограничивать','',null,'','',null),
+('reduce','[rɪˈdjuːs]','сократить, снизить','',null,'','',null),
+('gorgeous view','','великолепный вид','',null,'','',null),
+('booze','','выпивка, алкоголь','',null,'','',null),
+('afterward','','после, впоследствии','',null,'','',null),
+('hurmful','','вредный','',null,'','',null),
+('betray','[bɪˈtreɪ]','предавать','',null,'','',null),
+('way of thinking','','образ мышления','',null,'','',null),
+('treasure','[ˈtreʒə]','сокровище','',null,'','',null),
+('dеѕtіnаtіоn','','пункт назначения','',null,'','',null),
+('resemble','','иметь сходство, быть похожим на кого-то','',null,'','',null),
+('further','','дальше, дальнейшая информация','',null,'','',null),
+('rest of','','остаток от, оставшаяся часть от','',null,'','',null),
+('persuading','','убеждение','',null,'','',null),
+('Would you mind if I..','','Вы не будете возражать, если я....','',null,'','',null),
+('sail','[seɪl]','плыть на корабле','',null,'','',null),
+('yet another','','очередной, еще один','',null,'','',null),
+('another','[əˈnʌðə]','еще один, очередной','',null,'','',null),
+('balloon','[bəˈluːn]','шарик','',null,'','',null),
+('traffic jam','','дорожная пробка','',null,'','',null),
+('vomit','[ˈvɒmɪt]','рвота','',null,'','',null),
+('tangle','[tæŋgl]','запутывать','',null,'','',null),
+('gotta','','"got to" - должен, нужно','',null,'','',null),
+('wanna','','"want to" - хотеть','',null,'','',null),
+('gonna','','"going to" - собираться сделать что-то','',null,'','',null),
+('peach','[piːʧ]','персик','',null,'','',null),
+('Cheers!','','Пока! До скорого! Ваше здоровье! Будем! За нас!','',null,'','',null),
+('arrow','[ˈærəʊ]','стрелка','',null,'','',null),
+('disappointed','[dɪsəˈpɔɪntɪd]','разочарован','',null,'','',null),
+('business trip','','командировка','',null,'','',null),
+('point of view','','точка зрения','',null,'','',null),
+('elder brother','','старший брат','',null,'','',null),
+('subscribe','[səbˈskraɪb]','подписаться, присоедениться','',null,'','',null),
+('at last','','наконец-то','',null,'','',null),
+('pronunciation','[prənʌnsɪˈeɪʃn]','произношение','',null,'','',null),
+('separately','[ˈsep(ə)rɪtlɪ]','раздельно','',null,'','',null),
+('spacious','[ˈspeɪʃəs]','просторный','',null,'','',null),
+('on time','','вовремя','',null,'','',null),
+('inconvenient','[ɪnkənˈviːnɪənt]','неудобный','',null,'','',null),
+('unexpectedly','[ʌnɪkˈspektɪdlɪ]','неожиданно','',null,'','',null),
+('automatically','[ɔːtəˈmætɪklɪ]','автоматически','',null,'','',null),
+('younger','[ˈjʌngə]','младший','',null,'','',null),
+('few','','немного, несколько','',null,'','',null),
+('a lot of','','много','',null,'','',null),
+('lots of','','много','',null,'','',null),
+('conditions','[kənˈdɪʃnz]','условия','',null,'','',null),
+('native speaker','','носитель язык','',null,'','',null),
+('considerably','[kənˈsɪdərəblɪ]','значительно','',null,'','',null),
+('advertising','[ˈædvətaɪzɪŋ]','реклама','',null,'','',null),
+('educated','[ˈedjʊkeɪtɪd]','образованный','',null,'','',null),
+('tasty','[ˈteɪstɪ]','вкусный','',null,'','',null),
+('delicious','[dɪˈlɪʃəs]','вкусный, восхитительный','',null,'','',null),
+('protein','[ˈprəʊtiːn]','белок','',null,'','',null),
+('several','[ˈsevrəl]','несколько','',null,'','',null),
+('the day before esterday','','позавчера','',null,'','',null),
+('the day after tomorrow','','послезавтра','',null,'','',null),
+('authorities','[ɔːˈθɒrɪtɪz]','власти','',null,'','',null),
+('interrupt','[ɪntəˈrʌpt]','перебивать, прерывать','',null,'','',null),
+('scientific research','','научное исследование','',null,'','',null),
+('fluently','','(говорить) свободно','',null,'','',null),
+('each other','','друг друга','',null,'','',null),
+('elder','[ˈeldə]','старший','',null,'','',null),
