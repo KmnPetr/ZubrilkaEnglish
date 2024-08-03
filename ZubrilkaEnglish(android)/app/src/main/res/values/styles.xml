@@ -7,10 +7,20 @@
     </style>
     <style name="AppModalStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:windowIsFloating">false</item>
-        <item name="android:background">@drawable/sbp_rounded_dialog</item>
     </style>
     <style name="DialogAnimation">
         <item name="android:windowEnterAnimation">@anim/dialog_enter_anim</item>
         <!-- Дополнительные анимации могут быть указаны здесь, если требуется -->
     </style>
+
+
+
+
+
+
+    <!-- Theme overlay for the Toolbar -->
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
 </resources>

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.FragmentCompetitionBinding
 import com.example.zubrilkaenglish.events.CmpEvEnum
 import com.example.zubrilkaenglish.events.CompetitionEvent
@@ -59,7 +60,9 @@ class CompetitionFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        EventBus.getDefault().register(this) //отписываемся от EventBus
+        EventBus.getDefault().register(this)
+        //смена фона
+        EventBus.getDefault().post(NotificationEvent(R.drawable.bac32.toString(), NfEvEnum.CHANGE_BACKGROUND))
         GlobalScope.launch {
             socketHolder.socketConnect()
         }

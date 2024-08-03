@@ -6,4 +6,8 @@
     <color name="red">#D50000</color>
     <color name="myGray">#BDBCBC</color>
     <color name="backDayOfWeakDisable">#FFFFFF</color>
+
+
+    <color name="myColorPrimary">#96A471</color>
+
 </resources>

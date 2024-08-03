@@ -42,7 +42,7 @@ class YandexAds private constructor(){
      * инициализирует яндекс рекламу
      */
     fun initYandexAds(context: Context) {
-
+        return //TODO временно отключим рекламу
         //чтото непонятное типа нельзя собирать данные и показывать их детям
 //        MobileAds.setUserConsent(true)
 //        MobileAds.setAgeRestrictedUser(true)
@@ -94,6 +94,7 @@ class YandexAds private constructor(){
      * подгрузка яндекс рекламы с вознаграждением
      */
     private fun loadRewardedAd() {
+        return //TODO временно отключим рекламу
         val adRequestConfiguration = AdRequestConfiguration.Builder(rewardedAdUnitId).build()
         rewardedAdLoader?.loadAd(adRequestConfiguration)
     }
@@ -102,10 +103,12 @@ class YandexAds private constructor(){
      * подгрузка яндекс рекламы
      */
     private fun loadInterstitialAd() {
+        return //TODO временно отключим рекламу
         val adRequestConfiguration = AdRequestConfiguration.Builder(interstitialAdUnitId).build()
         interstitialAdLoader?.loadAd(adRequestConfiguration)
     }
     fun <T : Enum<T>, E : iEvent<T>> showRewardedAd(activity: Activity, failedEvent: E) {
+        return //TODO временно отключим рекламу
         rewardedAd?.apply {
             setAdEventListener(object : RewardedAdEventListener {
                 override fun onAdShown() {
@@ -161,6 +164,7 @@ class YandexAds private constructor(){
      * покажет межстраничную рекламу
      */
     fun showAd(activity: Activity) {
+        return //TODO временно отключим рекламу
         interstitialAd?.apply {
             setAdEventListener(object : InterstitialAdEventListener {
                 override fun onAdShown() {
@@ -204,6 +208,7 @@ class YandexAds private constructor(){
      * необходимо вызывать при закрытии активити
      */
     fun destroyYandexAds(){
+        return //TODO временно отключим рекламу
         interstitialAdLoader?.setAdLoadListener(null)
         interstitialAdLoader = null
 
@@ -216,6 +221,7 @@ class YandexAds private constructor(){
         destroyRewardedAd()
     }
     private fun destroyRewardedAd() {
+        return //TODO временно отключим рекламу
         rewardedAd?.setAdEventListener(null)
         rewardedAd = null
     }

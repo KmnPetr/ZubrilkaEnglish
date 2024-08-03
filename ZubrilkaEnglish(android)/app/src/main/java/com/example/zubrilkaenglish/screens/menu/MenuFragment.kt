@@ -9,7 +9,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.FragmentMenuBinding
+import com.example.zubrilkaenglish.events.NfEvEnum
+import com.example.zubrilkaenglish.events.NotificationEvent
 import com.example.zubrilkaenglish.utils.customizeBackground
+import org.greenrobot.eventbus.EventBus
 
 class MenuFragment : Fragment() {
     private lateinit var viewModel: MenuViewModel
@@ -28,7 +31,6 @@ class MenuFragment : Fragment() {
 
         viewModel=ViewModelProvider(this).get(MenuViewModel::class.java)
 
-        customizeBackground(binding.background,resources,R.drawable.london03)
         initButton()
     }
     private fun initButton(){
@@ -38,14 +40,16 @@ class MenuFragment : Fragment() {
         binding.catalogCards.setOnClickListener {
             findNavController().navigate(R.id.action_menuFragment_to_catalogCardsFragment)
         }
-        binding.buttonPayFragment.setOnClickListener {
-            findNavController().navigate(R.id.action_menuFragment_to_paymentsFragment)
-        }
         binding.competitionFragment.setOnClickListener {
             findNavController().navigate(R.id.action_menuFragment_to_competitionFragment)
         }
         binding.rating.setOnClickListener {
             findNavController().navigate(R.id.action_menuFragment_to_ratingFragment)
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().post(NotificationEvent(R.drawable.bac21.toString(),NfEvEnum.CHANGE_BACKGROUND))
     }
 }

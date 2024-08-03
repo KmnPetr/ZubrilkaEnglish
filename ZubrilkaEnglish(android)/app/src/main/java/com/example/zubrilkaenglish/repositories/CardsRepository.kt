@@ -104,7 +104,7 @@ class CardsRepository private constructor(){
             CrEvEnum.RESET_PROGRESS -> {
                 println("RESET_PROGRESS: ${event.wordCard.word.foreignWord}")
                 if (
-                    (compareDate(event.wordCard.progressWord?.sleepTime)&&event.wordCard.progressWord?.statProgress!=StatProgress.LEARNED.value)
+                    (compareDate(event.wordCard.progressWord?.sleepTime) && event.wordCard.progressWord?.statProgress!=StatProgress.LEARNED.value)
                     || checkLimitActiveCards(event)
                     ){
                     event.wordCard = resetProgressCard(event.wordCard)
@@ -125,6 +125,7 @@ class CardsRepository private constructor(){
      * проверит, количество находящихся в обучении карточек и сверит с тарифным лимитом
      */
     private fun checkLimitActiveCards(failedEvent: CardEvent): Boolean {
+        return true //TODO отключим лимит временно
         return if (countActiveCards.get() >= LIMIT_ACTIVE_CARDS){
             if(failedEvent.properties["approvedCard"] == true) return true
             else {

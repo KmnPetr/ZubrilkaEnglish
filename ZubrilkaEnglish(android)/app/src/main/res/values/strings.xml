@@ -7,10 +7,6 @@
     <string name="navigation_drawer_close">Close</string>
 
 
-    <!--    СБП-->
-    <string name="sbp_lbl_complete_payment_in_bank_app">Выберите банк\nдля подтверждения оплаты</string>
-    <string name="sbp_hint_completePayment_in_bank_app" formatted="true">Выбрав банк, Вы перейдете в мобильное\nприложение для завершения оплаты.</string>
-    <string name="sbp_lbl_no_bank_apps" formatted="true">Отсутствует банковское\nприложение</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

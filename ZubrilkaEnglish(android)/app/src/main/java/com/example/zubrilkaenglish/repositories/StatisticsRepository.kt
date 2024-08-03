@@ -1,14 +1,18 @@
 package com.example.zubrilkaenglish.repositories
 
+import com.example.zubrilkaenglish.events.NfEvEnum
+import com.example.zubrilkaenglish.events.NotificationEvent
 import com.example.zubrilkaenglish.events.StatEvEnum
 import com.example.zubrilkaenglish.events.StatisticsEvent
 import com.example.zubrilkaenglish.models.StatisticsDTO
 import com.example.zubrilkaenglish.repositories.retrofit.RetrofitService
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
+import java.net.SocketTimeoutException
 
 /**
  * репозиторий предоставляет и обрабатывает информацию по статистике пользователя
@@ -73,7 +77,10 @@ class StatisticsRepository private constructor(){
     fun getStatFirst1500() {
         GlobalScope.launch {
             val ownId:Long? = profileRepository.profile.value?.id
-            val listStats: ArrayList<StatisticsDTO>? = retrofitService.getStatisticsApi().getStatFirst1500(ownId).body() as ArrayList<StatisticsDTO>?
+            var listStats: ArrayList<StatisticsDTO>? = null
+
+                listStats = retrofitService.getStatFirst1500(ownId) as ArrayList<StatisticsDTO>?
+
             if (listStats != null) {
 
                 listStats.sortByDescending { it.points }

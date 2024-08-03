@@ -8,9 +8,6 @@ import com.example.zubrilkaenglish.events.NotificationEvent
 import com.example.zubrilkaenglish.events.iEvent
 import com.example.zubrilkaenglish.screens.MainActivity
 import android.view.View
-import androidx.navigation.Navigation.findNavController
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import com.example.zubrilkaenglish.utils.LOG
 import com.google.android.material.snackbar.Snackbar
 
@@ -38,7 +35,13 @@ class ApiNotification private constructor() {
             NfEvEnum.GO_TO_MEMOS -> activity.goToMemos()
             NfEvEnum.GO_TO_UPSTACK -> activity.popBackStack()
             NfEvEnum.GO_TO_RATING -> activity.goToRating()
+            NfEvEnum.CHANGE_BACKGROUND -> activity.changeBackground(event as NotificationEvent)
+            NfEvEnum.CONNECTION_LOST -> connectionLost(event as NotificationEvent,activity)
         }
+    }
+    //покажет уведомление при потере соединения с сервером
+    private fun connectionLost(event: NotificationEvent, activity: MainActivity) {
+        ConnectionLost(event,activity).show()
     }
 
 
