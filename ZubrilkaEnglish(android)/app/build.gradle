@@ -68,8 +68,8 @@ dependencies {
     
     //SQLite
     implementation'androidx.room:room-runtime:2.5.1'
-    annotationProcessor'androidx.room:room-compiler:2.5.1'
-    kapt'androidx.room:room-compiler:2.5.1'
+//    annotationProcessor'androidx.room:room-compiler:2.5.1' // Для Java
+    kapt'androidx.room:room-compiler:2.5.1' // Для Kotlin
     implementation'androidx.room:room-ktx:2.5.1'
 
 

@@ -19,4 +19,13 @@ public class WordsController {
     public Flux<Word> getAllWords(){
         return wordsService.getAllWords();
     }
+
+    /**
+     * выдаст список слов для первоначальной установки их в качестве учебных
+     * вызывается фронтом при первоначальной установке приложения
+     */
+    @GetMapping("/initialTrainingList")
+    public Flux<Word> initialTrainingList(){
+        return wordsService.getInitialTrainingList();
+    }
 }

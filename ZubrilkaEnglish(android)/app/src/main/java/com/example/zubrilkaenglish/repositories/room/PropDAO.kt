@@ -40,5 +40,7 @@ enum class PropKey(val key: String) {
 
     isUserHasOwnMemos("isUserHasOwnMemos"), //содержит "true" если пользователь раньше уже создавал memo напоминания
 
-    learningMode("learningMode") //режим обучения, например на честность или многовариантный выбор
+    learningMode("learningMode"), //режим обучения, например на честность или многовариантный выбор
+
+    IS_FIRST_ENTRY("IS_FIRST_ENTRY") //укажет что юзер вошел первый раз в приложение
 }
