@@ -2,16 +2,22 @@ package com.example.zubrilkaenglish.repositories
 
 import android.annotation.SuppressLint
 import android.util.Log
+import com.example.zubrilkaenglish.events.NfEvEnum
+import com.example.zubrilkaenglish.events.NotificationEvent
 import com.example.zubrilkaenglish.models.Profile
 import com.example.zubrilkaenglish.models.PropModel
 import com.example.zubrilkaenglish.repositories.retrofit.RetrofitService
 import com.example.zubrilkaenglish.repositories.room.RoomService
 import com.example.zubrilkaenglish.utils.LOG
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import org.greenrobot.eventbus.EventBus
 import org.json.JSONArray
 import retrofit2.Response
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 /**
  * занимается аутентификацией пользователя
@@ -42,11 +48,10 @@ class ProfileRepository private constructor() {
      * сохранит его в БД
      */
     suspend fun getTemporaryProfile(): Profile? {
-        val response = retrofitService.getProfileApi().requestTemporaryProfile()
-        val profile: Profile? = response.body()
+        val profile: Profile? = retrofitService.requestTemporaryProfile()
         if (profile != null) { updateProfile(profile) }
         this.profile.value = profile
-        return response.body()
+        return profile
     }
 
     /**
@@ -107,6 +112,10 @@ class ProfileRepository private constructor() {
                     }
                 }
 
+            }catch (e: SocketTimeoutException){
+                GlobalScope.launch(Dispatchers.Main) { EventBus.getDefault().post(NotificationEvent("", NfEvEnum.CONNECTION_LOST)) }
+            } catch (e: UnknownHostException) {
+                GlobalScope.launch(Dispatchers.Main) { EventBus.getDefault().post(NotificationEvent("", NfEvEnum.CONNECTION_LOST)) }
             } catch (e: Exception){
                 Log.d(LOG,"Ops...  "+ e.message)
                 e.printStackTrace()
@@ -126,6 +135,10 @@ class ProfileRepository private constructor() {
                 } else {
                     onReceiveErrors(response.errorBody()?.string())
                 }
+            } catch (e: SocketTimeoutException){
+                GlobalScope.launch(Dispatchers.Main) { EventBus.getDefault().post(NotificationEvent("", NfEvEnum.CONNECTION_LOST)) }
+            } catch (e: UnknownHostException) {
+                GlobalScope.launch(Dispatchers.Main) { EventBus.getDefault().post(NotificationEvent("", NfEvEnum.CONNECTION_LOST)) }
             } catch (e: Exception){
                 Log.d(LOG,"Ops...  "+ e.message)
                 e.printStackTrace()
@@ -150,6 +163,10 @@ class ProfileRepository private constructor() {
                 } else {
                     onReceiveErrors(response.errorBody()?.string())
                 }
+            } catch (e: SocketTimeoutException){
+                GlobalScope.launch(Dispatchers.Main) { EventBus.getDefault().post(NotificationEvent("", NfEvEnum.CONNECTION_LOST)) }
+            } catch (e: UnknownHostException) {
+                GlobalScope.launch(Dispatchers.Main) { EventBus.getDefault().post(NotificationEvent("", NfEvEnum.CONNECTION_LOST)) }
             } catch (e: Exception){
                 Log.d(LOG,"Ops...  "+ e.message)
                 e.printStackTrace()

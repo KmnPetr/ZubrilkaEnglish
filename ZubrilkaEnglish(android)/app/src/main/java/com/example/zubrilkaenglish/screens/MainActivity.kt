@@ -5,6 +5,7 @@ import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -36,15 +37,13 @@ import org.greenrobot.eventbus.Subscribe
 class MainActivity : AppCompatActivity() {
 
     //инициализируем синглетоны в первый раз они регестрируются в EventBus
-    private val cardsRepository = CardsRepository.instance
-    private val voiceRepository = VoiceRepository.instance
-    private val memoRepository = MemoRepository.instance
-    private val profileRepository = ProfileRepository.instance
-    private val statisticsRepository = StatisticsRepository.instance
-
-    private val apiNotification = ApiNotification.instance
-
-    private val yandexAds = YandexAds.instanse
+    private lateinit var apiNotification:ApiNotification
+    private lateinit var cardsRepository:CardsRepository
+    private lateinit var voiceRepository:VoiceRepository
+    private lateinit var memoRepository:MemoRepository
+    private lateinit var profileRepository:ProfileRepository
+    private lateinit var statisticsRepository:StatisticsRepository
+    private lateinit var yandexAds:YandexAds
 
     private lateinit var binding:ActivityMainBinding
     private lateinit var mainViewModel: MainViewModel
@@ -54,7 +53,12 @@ class MainActivity : AppCompatActivity() {
     //lateinit var navController: NavController//TODO ???
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        // Устанавливаем принудительно дневную тему
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
         super.onCreate(savedInstanceState)
+
 
         binding= ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -62,12 +66,12 @@ class MainActivity : AppCompatActivity() {
         mainViewModel=ViewModelProvider(this).get(MainViewModel::class.java)
 
         //первоначальная инициализация и подгрузка рекламы
-        yandexAds.initYandexAds(this)
+//            yandexAds.initYandexAds(this) TODO временное отключение яндекс рекламы
 
         // Получаем NavHostFragment и NavController
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
         navController = navHostFragment.navController
-        //navController=Navigation.findNavController(this, R.id.nav_host_fragment_activity_main)//TODO ???
+
 
         // Создание ActionBarDrawerToggle для управления выдвижной шторкой
         val toggle = ActionBarDrawerToggle(
@@ -80,7 +84,31 @@ class MainActivity : AppCompatActivity() {
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
-        // Установка слушателя для элементов меню в NavigationView
+        listenNavigationView()
+        initRepositories()
+    }
+
+
+    /**
+     * инициализирует репозитории
+     */
+    private fun initRepositories() {
+        GlobalScope.launch{
+            //инициализируем синглетоны в первый раз они регестрируются в EventBus
+            apiNotification = ApiNotification.instance
+            cardsRepository = CardsRepository.instance
+            voiceRepository = VoiceRepository.instance
+            memoRepository = MemoRepository.instance
+            profileRepository = ProfileRepository.instance
+            statisticsRepository = StatisticsRepository.instance
+            yandexAds = YandexAds.instanse
+        }
+    }
+
+    /**
+     * прослушивает кнопки с навигейшен вью
+     */
+    private fun listenNavigationView() {
         binding.navView.setNavigationItemSelectedListener {menuItem ->
             when (menuItem.itemId) {
                 R.id.profile -> {
@@ -97,19 +125,19 @@ class MainActivity : AppCompatActivity() {
                     }
                     false
                 }
-                R.id.nav_server -> {
-                    println("Вызван пункт меню: R.id.nav_server")
-                    binding.drawerLayout.closeDrawer(GravityCompat.START)
-                    EventBus.getDefault().post(NotificationEvent("",NfEvEnum.GO_TO_UPSTACK))
-
-                    false
-                }
-                R.id.nav_settings -> {
-                    println("Вызван пункт меню: R.id.nav_settings")
-                    binding.drawerLayout.closeDrawer(GravityCompat.START)
-                    EventBus.getDefault().post(NotificationEvent("",NfEvEnum.GO_TO_UPSTACK))
-                    false
-                }
+//                R.id.nav_server -> {
+//                    println("Вызван пункт меню: R.id.nav_server")
+//                    binding.drawerLayout.closeDrawer(GravityCompat.START)
+//                    EventBus.getDefault().post(NotificationEvent("",NfEvEnum.GO_TO_UPSTACK))
+//
+//                    false
+//                }
+//                R.id.nav_settings -> {
+//                    println("Вызван пункт меню: R.id.nav_settings")
+//                    binding.drawerLayout.closeDrawer(GravityCompat.START)
+//                    EventBus.getDefault().post(NotificationEvent("",NfEvEnum.GO_TO_UPSTACK))
+//                    false
+//                }
                 R.id.nav_memos -> {
                     println("Вызван пункт меню: R.id.nav_memos")
                     binding.drawerLayout.closeDrawer(GravityCompat.START)
@@ -127,8 +155,15 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
+    }
 
-        setEmailAndName()
+    /**
+     * будет изменять фон в соответствии с изменениями фрагментов
+     * в функцию onStart фрагмента нужно поместить код пример: "EventBus.getDefault().post(NotificationEvent(R.drawable.bac25.toString(),NfEvEnum.CHANGE_BACKGROUND))"
+     * также на первоначальную загрузку вонового изображения влияет изображение в activity_main.xml в элементе background
+     */
+    fun changeBackground(event: NotificationEvent) {
+        binding.background.setImageResource(event.message.toInt())
     }
 
     /**
@@ -185,7 +220,7 @@ class MainActivity : AppCompatActivity() {
 
     @Subscribe
     fun <T : Enum<T>, E : iEvent<T>> notificationApi(event: E){
-        apiNotification.handleEvent(event,this) //передадим евент здесь потомучто для его показа нужен контекст
+        ApiNotification.instance.handleEvent(event,this) //передадим евент здесь потомучто для его показа нужен контекст
     }
     /**
      * переключит в фрагмент каталога из любого другого фрагмента

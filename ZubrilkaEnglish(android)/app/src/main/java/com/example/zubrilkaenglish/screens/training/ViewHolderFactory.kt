@@ -151,10 +151,10 @@ class ViewHolderFactory {
                 root.requestLayout()
 
                 if (wordCard.cardHasChanged && wordCard.userAnswer!= null){
-                    root.setCardBackgroundColor(Color.parseColor("#E1E1E1"))
+//                    root.setCardBackgroundColor(Color.parseColor("#E1E1E1"))
                     changeViewButtons(listButtons, false, wordCard, position)
                 } else{
-                    root.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+//                    root.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
                     changeViewButtons(listButtons, true, wordCard,position)
                 }
 
@@ -187,7 +187,7 @@ class ViewHolderFactory {
             }else{
                 listButtons.forEachIndexed { index, it ->
                     it.isEnabled = isEnable
-                    it.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+                    it.setBackgroundColor(Color.parseColor("#85FFFFFF"))
                     it.visibility = View.VISIBLE
                     it.setOnClickListener {
                         clickVariant(index,wordCard,adapterPosition)

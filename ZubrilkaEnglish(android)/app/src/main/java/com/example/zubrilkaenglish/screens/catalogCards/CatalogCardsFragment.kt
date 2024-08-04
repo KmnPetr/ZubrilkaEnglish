@@ -13,6 +13,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.FragmentCatalogCardsBinding
+import com.example.zubrilkaenglish.events.NfEvEnum
+import com.example.zubrilkaenglish.events.NotificationEvent
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.screens.catalogCards.fragments.CatalogItemFragment
 import com.example.zubrilkaenglish.screens.catalogCards.fragments.FragmentItem
@@ -20,6 +22,7 @@ import com.example.zubrilkaenglish.screens.catalogCards.fragments.PopupWordCard
 import com.example.zubrilkaenglish.screens.catalogCards.fragments.searchCardFragment.SearchCardFragment
 import com.example.zubrilkaenglish.utils.SearchObject
 import com.google.android.material.tabs.TabLayout
+import org.greenrobot.eventbus.EventBus
 
 /**
  * основной фрагмент во вкладке каталога карт
@@ -190,4 +193,9 @@ class CatalogCardsFragment : Fragment() {
         })
     }
 
+    override fun onStart() {
+        super.onStart()
+        //смена фона
+        EventBus.getDefault().post(NotificationEvent(R.drawable.bac33.toString(), NfEvEnum.CHANGE_BACKGROUND))
+    }
 }

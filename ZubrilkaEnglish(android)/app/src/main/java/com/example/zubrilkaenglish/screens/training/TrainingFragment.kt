@@ -19,6 +19,8 @@ import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.FragmentTrainingBinding
 import com.example.zubrilkaenglish.events.CardEvent
 import com.example.zubrilkaenglish.events.CrEvEnum
+import com.example.zubrilkaenglish.events.NfEvEnum
+import com.example.zubrilkaenglish.events.NotificationEvent
 import com.example.zubrilkaenglish.events.PrEvEnum
 import com.example.zubrilkaenglish.events.PropEvent
 import com.example.zubrilkaenglish.events.StatEvEnum
@@ -155,6 +157,8 @@ class TrainingFragment() : Fragment(), CardAdapter.Listener {
     override fun onStart() {
         super.onStart()
         EventBus.getDefault().register(this)
+        //смена фона
+        EventBus.getDefault().post(NotificationEvent(R.drawable.bac40.toString(), NfEvEnum.CHANGE_BACKGROUND))
         //перезапустим счетчики поинтов
         EventBus.getDefault().post(StatisticsEvent(StatEvEnum.START_TRAINING))
     }

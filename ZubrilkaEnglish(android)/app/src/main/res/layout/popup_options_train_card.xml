@@ -3,81 +3,82 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white"
     app:cardCornerRadius="@dimen/popupCornerRadius"
+    android:backgroundTint="#ECEBE9"
     android:layout_marginHorizontal="2dp">
 
-
-    <LinearLayout
-        android:gravity="start"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        >
-
-        <!--        кнопка markLearned-->
-        <com.example.zubrilkaenglish.utils.ui.CustImgTxtButton
-            android:id="@+id/markLearned"
+        <LinearLayout
+            android:id="@+id/linearLayout4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="3dp"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            app:backgroundColor="#EFEFEF"
-            app:cornerRadius="5dp"
-            app:borderWidth="1dp"
-            app:borderColor="@color/myGray"
-            app:textColor="#4E4E4E"
-            app:textSize="14sp"
-            app:text="Пометить выученной"
-            app:drawable = "@drawable/check_mark2"
-            app:textStyle="normal"
-            app:fontFamily="sans-serif"
-            app:imageSize="40dp"/>
+            android:orientation="vertical"
+            android:padding="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!--        кнопка markLearned-->
+            <com.example.zubrilkaenglish.utils.ui.CustImgTxtButton
+                android:id="@+id/markLearned"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                app:backgroundColor="#90FFFFFF"
+                app:borderColor="@color/myGray"
+                app:borderWidth="1dp"
+                app:cornerRadius="5dp"
+                app:drawable="@drawable/check_mark2"
+                app:fontFamily="sans-serif"
+                app:imageSize="40dp"
+                app:text="Пометить выученной"
+                app:textColor="#4E4E4E"
+                app:textSize="14sp"
+                app:textStyle="normal" />
 
 
-        <!--        кнопка resetProgress-->
-        <com.example.zubrilkaenglish.utils.ui.CustImgTxtButton
-            android:id="@+id/resetProgress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="3dp"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            app:backgroundColor="#EFEFEF"
-            app:cornerRadius="5dp"
-            app:borderWidth="1dp"
-            app:borderColor="@color/myGray"
-            app:textColor="#4E4E4E"
-            app:textSize="14sp"
-            app:text="Сбросить прогресс"
-            app:drawable = "@drawable/reset_button"
-            app:textStyle="normal"
-            app:fontFamily="sans-serif"
-            app:imageSize="40dp"/>
+            <!--        кнопка resetProgress-->
+            <com.example.zubrilkaenglish.utils.ui.CustImgTxtButton
+                android:id="@+id/resetProgress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                app:backgroundColor="#90FFFFFF"
+                app:borderColor="@color/myGray"
+                app:borderWidth="1dp"
+                app:cornerRadius="5dp"
+                app:drawable="@drawable/reset_button"
+                app:fontFamily="sans-serif"
+                app:imageSize="40dp"
+                app:text="Сбросить прогресс"
+                app:textColor="#4E4E4E"
+                app:textSize="14sp"
+                app:textStyle="normal" />
 
-        <!--        кнопка deleteCard-->
-        <com.example.zubrilkaenglish.utils.ui.CustImgTxtButton
-            android:id="@+id/deleteCard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="3dp"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            app:backgroundColor="#EFEFEF"
-            app:cornerRadius="5dp"
-            app:borderWidth="1dp"
-            app:borderColor="@color/myGray"
-            app:textColor="#4E4E4E"
-            app:textSize="14sp"
-            app:text="Удалить карточку"
-            app:drawable = "@drawable/urn_button"
-            app:textStyle="normal"
-            app:fontFamily="sans-serif"
-            app:imageSize="40dp"/>
+            <!--        кнопка deleteCard-->
+            <com.example.zubrilkaenglish.utils.ui.CustImgTxtButton
+                android:id="@+id/deleteCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                app:backgroundColor="#90FFFFFF"
+                app:borderColor="@color/myGray"
+                app:borderWidth="1dp"
+                app:cornerRadius="5dp"
+                app:drawable="@drawable/urn_button"
+                app:fontFamily="sans-serif"
+                app:imageSize="40dp"
+                app:text="Удалить карточку"
+                app:textColor="#4E4E4E"
+                app:textSize="14sp"
+                app:textStyle="normal" />
 
 
-    </LinearLayout>
+        </LinearLayout>
 
 </androidx.cardview.widget.CardView>

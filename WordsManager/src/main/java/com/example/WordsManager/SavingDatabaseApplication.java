@@ -42,9 +42,9 @@ public class SavingDatabaseApplication {
         //сохранит или обновит Words в БД
         thisClass.wordsService.saveOrUpdateWords();
         //просто поменяет версию словаря без подсчета всех слов
-        thisClass.increaseDictionaryVersion();
+//        thisClass.increaseDictionaryVersion();
         //пересчитает все слова
-//        countAllWords(context);
+        countAllWords(context);
 
 
         //забэкапим новое состояние словаря

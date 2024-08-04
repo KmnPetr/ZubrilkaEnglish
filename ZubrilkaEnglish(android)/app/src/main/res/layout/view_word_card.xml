@@ -8,10 +8,20 @@
     app:cardElevation="5dp"
     android:visibility="visible">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/bac26card"
+        android:scaleType="fitXY"
+        />
+
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="15dp">
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -76,13 +86,12 @@
                 android:visibility="invisible"/>
         </LinearLayout>
 
-        <!--дополнительный LinearLayout чтобы текст не подскакивал при появлении диалогового окошка-->
-        <LinearLayout
-            android:layout_width="match_parent"
+        <!--распорочка-->
+        <View
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            android:orientation="vertical"
-            android:layout_weight="1"
-            android:gravity="bottom">
+            android:layout_weight="0.5"/>
+        <!--дополнительный LinearLayout чтобы текст не подскакивал при появлении диалогового окошка-->
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/sleepDialog"
@@ -90,6 +99,7 @@
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="5dp"
                 android:layout_margin="5dp"
+                android:backgroundTint="#40BDBCBC"
                 android:layout_marginHorizontal="2dp">
                 <LinearLayout
                     android:gravity="center"
@@ -131,7 +141,7 @@
                             app:borderWidth="1dp"
                             app:borderColor="#7E7E7E"
                             app:textColor="@color/white"
-                            app:textSize="12sp"
+                            app:textSize="10sp"
                             app:text="Cansel"
                             app:textStyle="bold_italic"
                             app:fontFamily="sans-serif"/>
@@ -147,15 +157,13 @@
                             app:borderWidth="1dp"
                             app:borderColor="#7E7E7E"
                             app:textColor="@color/white"
-                            app:textSize="12sp"
+                            app:textSize="10sp"
                             app:text="Yes"
                             app:textStyle="bold_italic"
                             app:fontFamily="sans-serif"/>
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-        </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -169,7 +177,7 @@
                 android:layout_height="40dp"
                 android:layout_margin="3dp"
                 android:padding="0dp"
-                app:backgroundColor="#99FFFFFF"
+                app:backgroundColor="#00FFFFFF"
                 app:cornerRadius="10dp"
                 app:borderWidth="1dp"
                 app:borderColor="@color/myGray"
@@ -188,7 +196,7 @@
                 android:layout_height="40dp"
                 android:layout_margin="3dp"
                 android:padding="0dp"
-                app:backgroundColor="#99FFFFFF"
+                app:backgroundColor="#00FFFFFF"
                 app:cornerRadius="10dp"
                 app:borderWidth="1dp"
                 app:borderColor="@color/myGray"
@@ -200,7 +208,7 @@
                 android:layout_height="40dp"
                 android:layout_margin="3dp"
                 android:padding="0dp"
-                app:backgroundColor="#99FFFFFF"
+                app:backgroundColor="#00FFFFFF"
                 app:cornerRadius="10dp"
                 app:borderWidth="1dp"
                 app:borderColor="@color/myGray"
@@ -212,11 +220,11 @@
                 android:layout_height="40dp"
                 android:layout_margin="3dp"
                 android:padding="0dp"
-                app:backgroundColor="#99FFFFFF"
+                app:backgroundColor="#00FFFFFF"
                 app:cornerRadius="10dp"
                 app:borderWidth="1dp"
                 app:borderColor="@color/myGray"
-                app:drawable="@drawable/check_mark3_small"
+                app:drawable="@drawable/check_mark4_small"
                 app:imageSize="30dp" />
         </LinearLayout>
 

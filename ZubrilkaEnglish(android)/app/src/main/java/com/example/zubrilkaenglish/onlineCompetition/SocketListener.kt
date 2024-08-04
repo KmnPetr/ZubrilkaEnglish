@@ -1,14 +1,20 @@
 package com.example.zubrilkaenglish.onlineCompetition
 
+import com.example.zubrilkaenglish.events.NfEvEnum
+import com.example.zubrilkaenglish.events.NotificationEvent
 import com.example.zubrilkaenglish.models.Profile
 import com.example.zubrilkaenglish.models.SocketMessage
 import com.example.zubrilkaenglish.repositories.ProfileRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import okio.ByteString
+import org.greenrobot.eventbus.EventBus
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 class SocketListener: WebSocketListener() {
     private val competitionManager = CompetitionManager.instance
@@ -39,7 +45,9 @@ class SocketListener: WebSocketListener() {
     }
     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
         super.onFailure(webSocket, t, response)
-        t.printStackTrace()
+        if(t is SocketTimeoutException||t is UnknownHostException){
+            GlobalScope.launch(Dispatchers.Main) { EventBus.getDefault().post(NotificationEvent("", NfEvEnum.CONNECTION_LOST)) }
+        }
         competitionManager.onCloseConection()
         response?.let {
             if (it.code == 401) {

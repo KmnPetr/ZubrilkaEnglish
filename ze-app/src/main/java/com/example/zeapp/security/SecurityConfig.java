@@ -48,6 +48,7 @@ public class SecurityConfig {
                             "/sys/reload", //TODO
                             "/voice/**",
                             "/words",
+                            "/words/initialTrainingList",
                             "/profile/getTemporaryProfile",
                             "/stat/first1500users_rating"
                     ).permitAll();

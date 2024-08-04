@@ -30,6 +30,15 @@ public class WordsService {
     }
 
     /**
+     * выдаст список слов для первоначальной установки их в качестве учебных
+     * вызывается фронтом при первоначальной установке приложения
+     */
+    public Flux<Word> getInitialTrainingList() {
+        //список id получен при помощи вызова sql команды SELECT string_agg(id::text, ',') AS ids FROM word WHERE foreign_word = ANY (ARRAY['car','drive','door','flower','book','write','read','guitar','house','ice','juice','jump','orange','pencil','river','swim','tree','window','sing']);
+        return wordsRepository.findAllById(List.of(80,94,109,148,235,329,641,644,713,718,1088,1210,1239,1243,1803,1882,1883,1888,1980,2591));
+    }
+
+    /**
      * метод возвращает флакс на запрос списка всех Words из DB
      */
     public Flux<Word> getAllWords(){
@@ -54,4 +63,5 @@ public class WordsService {
 
         }
     }
+
 }
