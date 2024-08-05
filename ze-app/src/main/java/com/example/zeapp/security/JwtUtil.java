@@ -83,4 +83,11 @@ public class JwtUtil {
     public String generateRefreshToken(Person person) {
         return generateToken(person,timeExpirationRefresh);
     }
+
+    /**
+     * extracts the user id from the token
+     */
+    public long getUserIdFromToken(String jwtToken) {
+        return Long.parseLong(getClaimsFromToken(jwtToken).get("personId"));
+    }
 }

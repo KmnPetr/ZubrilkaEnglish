@@ -50,7 +50,6 @@ public class PlayerHolder {
                 .map(tick->{
                     if (player.getSink() == null){
                         playersMap.remove(personId);
-                        System.out.println("Player with id="+personId+" was deleted.");
                     }
                     return tick;
         }).subscribe();

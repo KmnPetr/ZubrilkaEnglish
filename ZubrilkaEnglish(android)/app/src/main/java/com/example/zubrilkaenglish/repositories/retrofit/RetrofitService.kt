@@ -131,4 +131,23 @@ class RetrofitService {
         }
     }
 
+    /**
+     * запросит у сервера список слов для первоначальной установки их в качестве учебных
+     * вызывается при первом запуске приложения
+     */
+    suspend fun getInitialTrainingList(): List<Word>? {
+        try{
+            return RetrofitInstance.wordApi.getInitialTrainingList().body()
+        }catch (e: SocketTimeoutException){
+            GlobalScope.launch(Dispatchers.Main) { EventBus.getDefault().post(NotificationEvent("",NfEvEnum.CONNECTION_LOST)) }
+            return null
+        } catch (e: UnknownHostException) {
+            GlobalScope.launch(Dispatchers.Main) { EventBus.getDefault().post(NotificationEvent("",NfEvEnum.CONNECTION_LOST)) }
+            return null
+        } catch (e:Exception){
+            e.printStackTrace()
+            return null
+        }
+    }
+
 }

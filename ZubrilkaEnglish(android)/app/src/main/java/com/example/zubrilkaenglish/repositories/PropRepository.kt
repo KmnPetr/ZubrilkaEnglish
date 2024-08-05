@@ -1,18 +1,21 @@
 package com.example.zubrilkaenglish.repositories
 
+import android.util.Log
 import com.example.zubrilkaenglish.events.PrEvEnum
 import com.example.zubrilkaenglish.events.PropEvent
-import com.example.zubrilkaenglish.models.Profile
 import com.example.zubrilkaenglish.models.PropModel
+import com.example.zubrilkaenglish.models.Word
+import com.example.zubrilkaenglish.repositories.retrofit.RetrofitService
+import com.example.zubrilkaenglish.repositories.room.PropKey
 import com.example.zubrilkaenglish.repositories.room.RoomService
-import com.example.zubrilkaenglish.screens.training.Modes
-import com.example.zubrilkaenglish.utils.defaultMode
+import com.example.zubrilkaenglish.utils.LOG
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 
@@ -24,6 +27,7 @@ class PropRepository private constructor(){
         val instance: PropRepository by lazy { PropRepository() }
     }
     private val roomService: RoomService = RoomService()
+    private val retrofitService: RetrofitService = RetrofitService()
     private val USERS_LAST_ENTER_key = "USERS_LAST_ENTER"
     private val IS_DEFAULT_MEMO_WAS_DELETED_key = "IS_DEFAULT_MEMO_WAS_DELETED"
 
@@ -41,6 +45,27 @@ class PropRepository private constructor(){
         GlobalScope.launch {
             getAllProperties().collect{
                 properties.value = it
+                GlobalScope.launch {
+                    isFirtEntryInApp()
+                }
+            }
+        }
+    }
+
+    /**
+     * вызывает некоторый код при первой згрузке приложения
+     * запрашивает с бека первые несколько слов для обучения пользователя
+     */
+    private val mutex = Mutex()
+    private suspend fun isFirtEntryInApp() {
+        mutex.withLock {
+            if (properties.value[PropKey.IS_FIRST_ENTRY.key] == true.toString()){
+                Log.d(LOG,"PropKey.IS_FIRST_ENTRY.key == ${properties.value[PropKey.IS_FIRST_ENTRY.key]}")
+
+                if (CardsRepository.instance.setInitialTrainingWords()){
+                    //тут как бы при неудачной попытке получить с сервера список значение в проперти типа это не первый вход в приложение не установиться в fulse
+                    roomService.getPropDAO().insertNewProp(PropModel(PropKey.IS_FIRST_ENTRY.key,false.toString()))
+                }
             }
         }
     }
