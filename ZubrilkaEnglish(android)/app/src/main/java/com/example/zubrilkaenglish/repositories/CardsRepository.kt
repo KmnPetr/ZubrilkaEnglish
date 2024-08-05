@@ -512,4 +512,19 @@ class CardsRepository private constructor(){
             roomService.getWordDAO().getListWordCardsBiId(listId)
         }
     }
+
+    /**
+     * запрашивает с бека первые несколько слов для обучения пользователя
+     * устанавливает их в тренировочный список
+     */
+    suspend fun setInitialTrainingWords(): Boolean {
+        val wordsForTraining:List<Word>? = retrofitService.getInitialTrainingList()
+        if (wordsForTraining!=null){
+            roomService.insertListWords(wordsForTraining)
+            wordsForTraining.forEach {
+                addWordToTraining(WordCard(it,null))
+            }
+            return true
+        }else return false
+    }
 }

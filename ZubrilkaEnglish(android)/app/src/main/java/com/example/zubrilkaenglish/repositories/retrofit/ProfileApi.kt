@@ -19,9 +19,8 @@ interface ProfileApi {
     @FormUrlEncoded
     suspend fun loginRequest(@Field("username") username: String, @Field("password") password: String): Response<Profile?>
 
-    @PATCH("/profile/update-field/{id}")
-    suspend fun changeName(@Path("id") userId: Long,
-                           @Header("Authorization") accessToken: String,
+    @PATCH("/profile/update-field")
+    suspend fun changeName(@Header("Authorization") accessToken: String,
                            @Body propWithNewName: PropModel): Response<Profile?>
 
     @GET("/auth/getAccessToken")

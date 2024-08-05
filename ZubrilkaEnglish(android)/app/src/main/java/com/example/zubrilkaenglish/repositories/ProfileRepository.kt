@@ -99,7 +99,6 @@ class ProfileRepository private constructor() {
                 if (profile!=null){
                     val response: Response<Profile?> = authRequest { jwtToken ->
                         retrofitService.getProfileApi().changeName(
-                            profile.id,
                             jwtToken,
                             PropModel(typeField,newValueField))
                     }
