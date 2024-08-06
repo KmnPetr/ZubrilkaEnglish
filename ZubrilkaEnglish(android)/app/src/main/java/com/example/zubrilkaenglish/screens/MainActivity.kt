@@ -1,11 +1,16 @@
 package com.example.zubrilkaenglish.screens
 
+import android.annotation.SuppressLint
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -59,7 +64,6 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
 
-
         binding= ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -73,19 +77,57 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
 
 
-        // Создание ActionBarDrawerToggle для управления выдвижной шторкой
-        val toggle = ActionBarDrawerToggle(
-            this,
-            binding.drawerLayout,
-            binding.toolbar,
-            R.string.navigation_drawer_open,
-            R.string.navigation_drawer_close
-        )
-        binding.drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
-
+        setupToggle()
         listenNavigationView()
         initRepositories()
+    }
+
+    /**
+     * the function will set up toggle
+     */
+    private fun setupToggle() {
+        val toolbar: Toolbar = binding.toolbar
+
+        setSupportActionBar(toolbar)
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+
+//        val toggle = ActionBarDrawerToggle(
+//            this,
+//            binding.drawerLayout,
+//            binding.toolbar,
+//            R.string.navigation_drawer_open,
+//            R.string.navigation_drawer_close
+//        )
+        // Включаем кнопку "Назад"
+//        supportActionBar?.setHomeAsUpIndicator(com.google.android.material.R.drawable)
+//        binding.drawerLayout.addDrawerListener(toggle)
+//        toggle.syncState()
+    }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.toolbar_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                Log.d(LOG,"pressed HOME")
+                onBackPressed()
+                true
+            }
+            R.id.action_info -> {
+                Log.d(LOG,"pressed action_info")
+
+                true
+            }
+            R.id.action_hamburger -> {
+                binding.drawerLayout.open()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
 
