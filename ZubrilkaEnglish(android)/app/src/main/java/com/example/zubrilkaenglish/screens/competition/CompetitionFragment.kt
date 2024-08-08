@@ -16,6 +16,7 @@ import com.example.zubrilkaenglish.events.NfEvEnum
 import com.example.zubrilkaenglish.events.NotificationEvent
 import com.example.zubrilkaenglish.events.VcEvEnum
 import com.example.zubrilkaenglish.events.VoiceEvent
+import com.example.zubrilkaenglish.events.iEvent
 import com.example.zubrilkaenglish.models.Profile
 import com.example.zubrilkaenglish.models.Voice
 import com.example.zubrilkaenglish.models.socketDto.ClickResult
@@ -24,6 +25,7 @@ import com.example.zubrilkaenglish.models.socketDto.NextWord
 import com.example.zubrilkaenglish.models.socketDto.StatusInfo
 import com.example.zubrilkaenglish.models.socketDto.StatusPlayer
 import com.example.zubrilkaenglish.onlineCompetition.SocketHolder
+import com.example.zubrilkaenglish.screens.PopupInfo
 import com.example.zubrilkaenglish.screens.competition.popup.PopupSearchOpponent
 import com.example.zubrilkaenglish.screens.training.popup.PopupFinishInfo
 import com.example.zubrilkaenglish.services.VibrationHandler
@@ -63,6 +65,7 @@ class CompetitionFragment : Fragment() {
         EventBus.getDefault().register(this)
         //смена фона
         EventBus.getDefault().post(NotificationEvent(R.drawable.bac32.toString(), NfEvEnum.CHANGE_BACKGROUND))
+        EventBus.getDefault().post(NotificationEvent("Online", NfEvEnum.CHANGE_TITLE)) //смена титла на тулбаре
         GlobalScope.launch {
             socketHolder.socketConnect()
         }
@@ -79,10 +82,20 @@ class CompetitionFragment : Fragment() {
      * при публикации кем-то события CompetitionEvent
      */
     @Subscribe
-    fun competitionEvent(event: CompetitionEvent){
-        when(event.typeEvent){
-            CmpEvEnum.CLICK_RESULT -> receiveClickResult(event.properties["clickResult"] as ClickResult)
-            else -> {}
+    fun <T : Enum<T>, E : iEvent<T>> receiveEvent(event: E){
+        when(event){
+            is CompetitionEvent -> {
+                when(event.typeEvent){
+                    CmpEvEnum.CLICK_RESULT -> receiveClickResult(event.properties["clickResult"] as ClickResult)
+                    else -> {}
+                }
+            }
+            is NotificationEvent -> {
+                when(event.typeEvent){
+                    NfEvEnum.POPUP_INFO -> PopupInfo(requireContext(),R.string.information_online).show()
+                    else -> {}
+                }
+            }
         }
     }
 

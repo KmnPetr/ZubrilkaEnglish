@@ -37,6 +37,7 @@ class ApiNotification private constructor() {
             NfEvEnum.GO_TO_RATING -> activity.goToRating()
             NfEvEnum.CHANGE_BACKGROUND -> activity.changeBackground(event as NotificationEvent)
             NfEvEnum.CONNECTION_LOST -> connectionLost(event as NotificationEvent,activity)
+            NfEvEnum.CHANGE_TITLE -> activity.changeTitle(event as NotificationEvent)
         }
     }
     //покажет уведомление при потере соединения с сервером

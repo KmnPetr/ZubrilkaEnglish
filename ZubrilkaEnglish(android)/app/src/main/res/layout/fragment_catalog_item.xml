@@ -16,44 +16,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/wordsSmallMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="35dp"
-        android:layout_marginBottom="35dp"
-        android:padding="3dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <com.example.zubrilkaenglish.utils.ui.CustImageButton
-            android:id="@+id/rollBack"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_margin="1dp"
-            android:padding="0dp"
-            app:backgroundColor="#99FFFFFF"
-            app:borderColor="@color/myGray"
-            app:borderWidth="1dp"
-            app:cornerRadius="10dp"
-            app:drawable="@android:drawable/ic_menu_revert"
-            app:imageSize="40dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <com.example.zubrilkaenglish.utils.ui.CustImageButton
-            android:id="@+id/wordsOptions"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_margin="1dp"
-            android:padding="0dp"
-            app:backgroundColor="#99FFFFFF"
-            app:cornerRadius="10dp"
-            app:borderWidth="1dp"
-            app:borderColor="@color/myGray"
-            app:drawable="@drawable/three_dots"
-            app:imageSize="30dp" />
-
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

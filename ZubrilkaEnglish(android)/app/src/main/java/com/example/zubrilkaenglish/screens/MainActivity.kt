@@ -1,9 +1,12 @@
 package com.example.zubrilkaenglish.screens
 
 import android.annotation.SuppressLint
+import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
+import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
@@ -93,6 +96,13 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
+        val titleTextView:TextView = toolbar.getChildAt(0) as TextView
+        if (titleTextView != null) {
+            titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20F)
+//            titleTextView.setTypeface(titleTextView.typeface, Typeface.BOLD)
+            titleTextView.gravity = Gravity.CENTER
+        }
+
 //        val toggle = ActionBarDrawerToggle(
 //            this,
 //            binding.drawerLayout,
@@ -113,13 +123,11 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
-                Log.d(LOG,"pressed HOME")
                 onBackPressed()
                 true
             }
             R.id.action_info -> {
-                Log.d(LOG,"pressed action_info")
-
+                EventBus.getDefault().post(NotificationEvent("",NfEvEnum.POPUP_INFO))
                 true
             }
             R.id.action_hamburger -> {
@@ -292,4 +300,10 @@ class MainActivity : AppCompatActivity() {
         navController.popBackStack(navController.graph.startDestinationId, false)
     }
 
+    /**
+     * сменит титл на тулбаре по просьбе фрагментов
+     */
+    fun changeTitle(event: NotificationEvent) {
+        binding.toolbar.setTitle(event.message)
+    }
 }

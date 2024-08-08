@@ -20,15 +20,13 @@
             android:id="@+id/hideLearned"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Скрыть выученные"
-            android:buttonTint="@color/black"/>
+            android:text="Скрыть выученные"/>
 
         <CheckBox
             android:id="@+id/hideSleepingAndActive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Скрыть спящие и активные"
-            android:buttonTint="@color/black" />
+            android:text="Скрыть спящие и активные" />
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

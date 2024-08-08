@@ -10,10 +10,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.FragmentProfileInfoBinding
+import com.example.zubrilkaenglish.events.NfEvEnum
+import com.example.zubrilkaenglish.events.NotificationEvent
 import com.example.zubrilkaenglish.models.Profile
 import com.example.zubrilkaenglish.repositories.ProfileRepository
+import com.example.zubrilkaenglish.screens.PopupInfo
 import com.example.zubrilkaenglish.screens.profile.ProfileViewModel
 import com.example.zubrilkaenglish.utils.LOG
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 
 /**
  * покажет всю доступную информацию по профилю
@@ -73,5 +78,26 @@ class ProfileInfoFragment : Fragment() {
         binding.name.setText(profile.name)
         binding.email.setText(profile.email)
 //        binding.dateOfCreation.setText(profile.created_at.toString())
+    }
+
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().post(NotificationEvent("Профиль", NfEvEnum.CHANGE_TITLE)) //смена титла на тулбаре
+        EventBus.getDefault().register(this)
+    }
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
+    }
+    /**
+     * метод используется библиотечкой green robot
+     * при публикации кем-то события CompetitionEvent
+     */
+    @Subscribe
+    fun receiveEvent(event: NotificationEvent){
+        when(event.typeEvent){
+            NfEvEnum.POPUP_INFO -> PopupInfo(requireContext(), R.string.information_profile).show()
+            else -> {}
+        }
     }
 }

@@ -17,8 +17,10 @@ import com.example.zubrilkaenglish.events.NfEvEnum
 import com.example.zubrilkaenglish.events.NotificationEvent
 import com.example.zubrilkaenglish.models.Profile
 import com.example.zubrilkaenglish.repositories.ProfileRepository
+import com.example.zubrilkaenglish.screens.PopupInfo
 import com.example.zubrilkaenglish.screens.profile.ProfileViewModel
 import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 
 /**
  * в этом фрагменте будет происходить регистрация пользователя
@@ -172,5 +174,25 @@ class ProfileRegistrationFragment : Fragment() {
                     EventBus.getDefault().post(NotificationEvent("", NfEvEnum.GO_TO_UPSTACK))
                 }
             })
+    }
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().post(NotificationEvent("Профиль", NfEvEnum.CHANGE_TITLE)) //смена титла на тулбаре
+        EventBus.getDefault().register(this)
+    }
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
+    }
+    /**
+     * метод используется библиотечкой green robot
+     * при публикации кем-то события CompetitionEvent
+     */
+    @Subscribe
+    fun receiveEvent(event: NotificationEvent){
+        when(event.typeEvent){
+            NfEvEnum.POPUP_INFO -> PopupInfo(requireContext(), R.string.information_profile).show()
+            else -> {}
+        }
     }
 }

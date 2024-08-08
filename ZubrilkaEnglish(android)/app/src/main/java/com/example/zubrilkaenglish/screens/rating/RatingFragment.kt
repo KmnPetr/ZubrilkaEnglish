@@ -14,9 +14,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.FragmentRatingBinding
+import com.example.zubrilkaenglish.events.NfEvEnum
+import com.example.zubrilkaenglish.events.NotificationEvent
 import com.example.zubrilkaenglish.models.StatisticsDTO
 import com.example.zubrilkaenglish.repositories.StatisticsRepository
+import com.example.zubrilkaenglish.screens.PopupInfo
 import com.example.zubrilkaenglish.utils.LOG
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 import kotlin.math.absoluteValue
 
 class RatingFragment : Fragment() {
@@ -52,11 +57,25 @@ class RatingFragment : Fragment() {
     override fun onStart() {
         StatisticsRepository.instance.getStatFirst1500()
         super.onStart()
+        EventBus.getDefault().post(NotificationEvent("Рейтинг", NfEvEnum.CHANGE_TITLE)) //смена титла на тулбаре
+        EventBus.getDefault().register(this)
     }
 
     override fun onStop() {
         StatisticsRepository.instance.clearStatList()
+        EventBus.getDefault().unregister(this)
         super.onStop()
+    }
+    /**
+     * метод используется библиотечкой green robot
+     * при публикации кем-то события CompetitionEvent
+     */
+    @Subscribe
+    fun receiveEvent(event: NotificationEvent){
+        when(event.typeEvent){
+            NfEvEnum.POPUP_INFO -> PopupInfo(requireContext(), R.string.information_rating).show()
+            else -> {}
+        }
     }
 
     /**

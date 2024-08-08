@@ -13,16 +13,23 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.FragmentCatalogCardsBinding
+import com.example.zubrilkaenglish.events.CmpEvEnum
+import com.example.zubrilkaenglish.events.CompetitionEvent
 import com.example.zubrilkaenglish.events.NfEvEnum
 import com.example.zubrilkaenglish.events.NotificationEvent
+import com.example.zubrilkaenglish.events.iEvent
 import com.example.zubrilkaenglish.models.WordCard
+import com.example.zubrilkaenglish.models.socketDto.ClickResult
+import com.example.zubrilkaenglish.screens.PopupInfo
 import com.example.zubrilkaenglish.screens.catalogCards.fragments.CatalogItemFragment
 import com.example.zubrilkaenglish.screens.catalogCards.fragments.FragmentItem
 import com.example.zubrilkaenglish.screens.catalogCards.fragments.PopupWordCard
+import com.example.zubrilkaenglish.screens.catalogCards.fragments.PopupWordsOptions
 import com.example.zubrilkaenglish.screens.catalogCards.fragments.searchCardFragment.SearchCardFragment
 import com.example.zubrilkaenglish.utils.SearchObject
 import com.google.android.material.tabs.TabLayout
 import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 
 /**
  * основной фрагмент во вкладке каталога карт
@@ -64,6 +71,14 @@ class CatalogCardsFragment : Fragment() {
         viewPager2Listener()
         searchListener()
         overrideClickBack()
+        setOtherListeners()
+    }
+
+    /**
+     * listeners on various buttons
+     */
+    private fun setOtherListeners() {
+        binding.wordsOptions.setOnClickListener { PopupWordsOptions(requireActivity(),viewModel).show() }
     }
 
     /**
@@ -187,6 +202,9 @@ class CatalogCardsFragment : Fragment() {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 viewPager2.currentItem = tab.position
                 if (tab.position!=2) viewModel.lastPositionTablayout = tab.position
+                //скроем wordsOptions так как он работает только со списком всех слов
+                if (tab.position==0) binding.wordsOptions.visibility = View.VISIBLE
+                else binding.wordsOptions.visibility = View.GONE
             }
             override fun onTabUnselected(tab: TabLayout.Tab) {/*Выполняется, когда выбор снят с вкладки*/ }
             override fun onTabReselected(tab: TabLayout.Tab) {/*Выполняется, когда выбирается уже выбранная вкладка*/ }
@@ -197,5 +215,25 @@ class CatalogCardsFragment : Fragment() {
         super.onStart()
         //смена фона
         EventBus.getDefault().post(NotificationEvent(R.drawable.bac33.toString(), NfEvEnum.CHANGE_BACKGROUND))
+        EventBus.getDefault().post(NotificationEvent("Каталог слов", NfEvEnum.CHANGE_TITLE)) //смена титла на тулбаре
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
+    }
+
+
+    /**
+     * метод используется библиотечкой green robot
+     * при публикации кем-то события CompetitionEvent
+     */
+    @Subscribe
+    fun receiveEvent(event: NotificationEvent){
+        when(event.typeEvent){
+            NfEvEnum.POPUP_INFO -> PopupInfo(requireContext(),R.string.information_catalog).show()
+            else -> {}
+        }
     }
 }

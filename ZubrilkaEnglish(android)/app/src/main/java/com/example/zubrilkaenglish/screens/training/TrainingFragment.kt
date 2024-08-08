@@ -27,10 +27,12 @@ import com.example.zubrilkaenglish.events.StatEvEnum
 import com.example.zubrilkaenglish.events.StatisticsEvent
 import com.example.zubrilkaenglish.events.VcEvEnum
 import com.example.zubrilkaenglish.events.VoiceEvent
+import com.example.zubrilkaenglish.events.iEvent
 import com.example.zubrilkaenglish.models.PropModel
 import com.example.zubrilkaenglish.models.Voice
 import com.example.zubrilkaenglish.models.WordCard
 import com.example.zubrilkaenglish.repositories.room.PropKey
+import com.example.zubrilkaenglish.screens.PopupInfo
 import com.example.zubrilkaenglish.screens.training.popup.PopupOptions
 import com.example.zubrilkaenglish.services.VibrationHandler
 import com.example.zubrilkaenglish.services.ads.YandexAds
@@ -157,8 +159,9 @@ class TrainingFragment() : Fragment(), CardAdapter.Listener {
     override fun onStart() {
         super.onStart()
         EventBus.getDefault().register(this)
-        //смена фона
-        EventBus.getDefault().post(NotificationEvent(R.drawable.bac40.toString(), NfEvEnum.CHANGE_BACKGROUND))
+
+        EventBus.getDefault().post(NotificationEvent(R.drawable.bac40.toString(), NfEvEnum.CHANGE_BACKGROUND))  //смена фона
+        EventBus.getDefault().post(NotificationEvent("Обучение", NfEvEnum.CHANGE_TITLE)) //смена титла на тулбаре
         //перезапустим счетчики поинтов
         EventBus.getDefault().post(StatisticsEvent(StatEvEnum.START_TRAINING))
     }
@@ -179,42 +182,52 @@ class TrainingFragment() : Fragment(), CardAdapter.Listener {
      * при публикации кем-то события Event_Changed
      */
     @Subscribe
-    fun event_CardChanged(event: CardEvent){
-        when(event.typeEvent){
-            CrEvEnum.CARD_CHANGED -> {
-                adapter.notifyItemChanged(event.properties.get("positionAdapter") as Int)
+    fun <T : Enum<T>, E : iEvent<T>> receiveEvent(event: E){
+        when(event){
+            is CardEvent -> {
+                when(event.typeEvent){
+                    CrEvEnum.CARD_CHANGED -> {
+                        adapter.notifyItemChanged(event.properties.get("positionAdapter") as Int)
 
-                flippingCard(event.wordCard)
-            }
-            CrEvEnum.SLEEP_EVENT -> {
-                if (viewModel.learningMode.value == Modes.ofHonesty){
-                    //отменим перелистывание
-                    viewModel.userScrolls = 0
-                    //покажем вьюшку с предложением усыпить карточку
-                    event.wordCard.sleepEvent = true
-                    adapter.notifyItemChanged(event.properties.get("positionAdapter") as Int)
-                } else {
-                    //просто отправим интент на усыпление,
-                    // в режиме многовариантного выбора диалог по поводу количества дней спячки не предусмотрен
-                    var countDay = 0
-                    when(event.wordCard.progressWord?.statProgress){
-                        StatProgress.NEW.value -> countDay = 5
-                        StatProgress.PARTIALLY_LEARNED.value -> countDay = 9
-                        StatProgress.ALMOST_LEARNED.value ->countDay = 0
+                        flippingCard(event.wordCard)
                     }
-                    EventBus.getDefault().post(
-                        CardEvent(
-                            CrEvEnum.INTENT_SLEEP,
-                            event.wordCard,
-                            mutableMapOf(
-                                "countDay" to countDay,
-                                "positionAdapter" to event.properties.get("positionAdapter") as Int
+                    CrEvEnum.SLEEP_EVENT -> {
+                        if (viewModel.learningMode.value == Modes.ofHonesty){
+                            //отменим перелистывание
+                            viewModel.userScrolls = 0
+                            //покажем вьюшку с предложением усыпить карточку
+                            event.wordCard.sleepEvent = true
+                            adapter.notifyItemChanged(event.properties.get("positionAdapter") as Int)
+                        } else {
+                            //просто отправим интент на усыпление,
+                            // в режиме многовариантного выбора диалог по поводу количества дней спячки не предусмотрен
+                            var countDay = 0
+                            when(event.wordCard.progressWord?.statProgress){
+                                StatProgress.NEW.value -> countDay = 5
+                                StatProgress.PARTIALLY_LEARNED.value -> countDay = 9
+                                StatProgress.ALMOST_LEARNED.value ->countDay = 0
+                            }
+                            EventBus.getDefault().post(
+                                CardEvent(
+                                    CrEvEnum.INTENT_SLEEP,
+                                    event.wordCard,
+                                    mutableMapOf(
+                                        "countDay" to countDay,
+                                        "positionAdapter" to event.properties.get("positionAdapter") as Int
+                                    )
+                                )
                             )
-                        )
-                    )
+                        }
+                    }
+                    else -> {}
                 }
             }
-            else -> {}
+            is NotificationEvent -> {
+                when(event.typeEvent){
+                    NfEvEnum.POPUP_INFO -> PopupInfo(requireContext(), R.string.information_training).show()
+                    else -> {}
+                }
+            }
         }
     }
 

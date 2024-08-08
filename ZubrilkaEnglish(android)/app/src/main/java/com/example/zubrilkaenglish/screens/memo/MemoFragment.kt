@@ -7,8 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
+import com.example.zubrilkaenglish.R
 import com.example.zubrilkaenglish.databinding.FragmentMemoBinding
+import com.example.zubrilkaenglish.events.NfEvEnum
+import com.example.zubrilkaenglish.events.NotificationEvent
+import com.example.zubrilkaenglish.screens.PopupInfo
 import com.example.zubrilkaenglish.utils.buttonAnimationClick
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 
 class MemoFragment : Fragment() {
 
@@ -46,6 +52,27 @@ class MemoFragment : Fragment() {
         binding.buttonAddMemo.setOnClickListener {
             buttonAnimationClick(it)
             PopupCreateMemo(requireActivity()).show()
+        }
+    }
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().post(NotificationEvent("Напоминания", NfEvEnum.CHANGE_TITLE)) //смена титла на тулбаре
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
+    }
+    /**
+     * метод используется библиотечкой green robot
+     * при публикации кем-то события CompetitionEvent
+     */
+    @Subscribe
+    fun receiveEvent(event: NotificationEvent){
+        when(event.typeEvent){
+            NfEvEnum.POPUP_INFO -> PopupInfo(requireContext(), R.string.information_memo).show()
+            else -> {}
         }
     }
 }

@@ -53,30 +53,11 @@ class CatalogItemFragment(
         namesFolders.observe(viewLifecycleOwner){list->
             val modifiedList = list.map { it+"   (слов: "+ (mapFoldersCards.value?.get(it)?.size ?: "null") + ")"}
             folderAdapter.setList(modifiedList)
-            hideOptionsButton()
         }
 
-        binding.wordsSmallMenu.visibility = View.GONE
-        binding.rollBack.isEnabled = false
-        binding.wordsOptions.isEnabled = false
-        binding.rollBack.setOnClickListener {
-//            buttonAnimationClick(it)
-            rollBackRecycler()
-        }
-        binding.wordsOptions.setOnClickListener { PopupWordsOptions(requireActivity(),viewModel_CC).show() }
 
     }
 
-    //если это фрагмент со списком пользовательских карточек то опциональное окошко с возможностью скрыть выученные и другие карточки не к чему
-    private fun hideOptionsButton(){
-        if(namesFolders.value!=null){
-            if (namesFolders.value!!.contains("активные") && namesFolders.value!!.contains("активные")&& namesFolders.value!!.contains("активные")){
-                binding.wordsOptions.visibility = View.GONE
-                binding.wordsOptions.isEnabled = false
-            }
-        }
-
-    }
 
     override fun onResume() {
         super.onResume()
@@ -113,10 +94,6 @@ class CatalogItemFragment(
      */
     override fun onClickFolder(positionFolder: Int) {
 
-        binding.wordsSmallMenu.visibility = View.VISIBLE
-        binding.rollBack.isEnabled = true
-        binding.wordsOptions.isEnabled = true
-
         recyclerView.adapter = cardAdapter
 
         viewModel_CC.isRecyclerChanged.value?.set(positionInPager,true)
@@ -137,9 +114,5 @@ class CatalogItemFragment(
     override fun rollBackRecycler() {
         viewModel_CC.isRecyclerChanged.value?.set(positionInPager,false)
         recyclerView.adapter = folderAdapter
-
-        binding.wordsSmallMenu.visibility = View.GONE
-        binding.rollBack.isEnabled = false
-        binding.wordsOptions.isEnabled = false
     }
 }

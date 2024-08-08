@@ -65,7 +65,7 @@ class SearchObject private constructor(){
             listAllWordCard.forEach {
                 if (word == it.word.foreignWord) {
                     firstList.add(it)
-                } else if (comparisonByRoot(word, it.word.foreignWord!!, englishStemmer)) {
+                } else if (comparisonByRoot(word, it.word.foreignWord!!)) {
                     secondList.add(it)
                 } else if (levenshteinDistance(word, it.word.foreignWord)) {
                     thirdList.add(it)
@@ -77,7 +77,7 @@ class SearchObject private constructor(){
             listAllWordCard.forEach {
                 if (word == it.word.translation) {
                     firstList.add(it)
-                } else if (comparisonByRoot(word, it.word.translation!!, russianStemmer)) {
+                } else if (comparisonByRoot(word, it.word.translation!!)) {
                     secondList.add(it)
                 } else if (levenshteinDistance(word, it.word.translation)) {
                     thirdList.add(it)
@@ -106,22 +106,24 @@ class SearchObject private constructor(){
         return false
     }
 
-    private fun comparisonByRoot(word: String,word2: String, stemmer: SnowballProgram): Boolean {
-        englishStemmer.current = word
-        //приводим к корню
-        //иногда надо несколько раз приводить к корню если приставок несколько
-        englishStemmer.stem()
-        englishStemmer.stem()
-        englishStemmer.stem()
-        val firstStemm: String = englishStemmer.current
+    private fun comparisonByRoot(word: String,word2: String): Boolean {
+        try {
+            englishStemmer.current = word
+            //приводим к корню
+            //иногда надо несколько раз приводить к корню если приставок несколько
+            englishStemmer.stem()
+            englishStemmer.stem()
+            englishStemmer.stem()
+            val firstStemm: String = englishStemmer.current
 
-        englishStemmer.current = word2
-        englishStemmer.stem()
-        englishStemmer.stem()
-        englishStemmer.stem()
-        val secondStemm: String = englishStemmer.current
+            englishStemmer.current = word2
+            englishStemmer.stem()
+            englishStemmer.stem()
+            englishStemmer.stem()
+            val secondStemm: String = englishStemmer.current
 
-        if (firstStemm==secondStemm)return true
+            if (firstStemm==secondStemm)return true
+        } catch (e:Exception){return false} //иногда при быстром вводе выводе строки падает StringIndexOutOfBoundsException
         return false
     }
 
