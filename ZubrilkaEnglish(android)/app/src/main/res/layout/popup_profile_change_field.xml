@@ -45,7 +45,7 @@
                     android:backgroundTint="@android:color/transparent" />
             </androidx.cardview.widget.CardView>
 
-            <com.example.zubrilkaenglish.utils.ui.CustButton
+            <com.zubrilka.zubrilkaenglish.utils.ui.CustButton
                 android:id="@+id/buttonChange"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"

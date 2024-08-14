@@ -30,7 +30,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textNewsCard">
 
-        <com.example.zubrilkaenglish.utils.ui.CustButton
+        <com.zubrilka.zubrilkaenglish.utils.ui.CustButton
             android:id="@+id/btnYes"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -49,7 +49,7 @@
             app:textSize="12sp"
             app:textStyle="bold_italic" />
 
-        <com.example.zubrilkaenglish.utils.ui.CustButton
+        <com.zubrilka.zubrilkaenglish.utils.ui.CustButton
             android:id="@+id/btnNo"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

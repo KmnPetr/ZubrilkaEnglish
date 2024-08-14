@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/menuFragment"
-        android:name="com.example.zubrilkaenglish.screens.menu.MenuFragment"
+        android:name="com.zubrilka.zubrilkaenglish.screens.menu.MenuFragment"
         android:label="fragment_menu"
         tools:layout="@layout/fragment_menu" >
         <action
@@ -31,27 +31,27 @@
     </fragment>
     <fragment
         android:id="@+id/trainingFragment"
-        android:name="com.example.zubrilkaenglish.screens.training.TrainingFragment"
+        android:name="com.zubrilka.zubrilkaenglish.screens.training.TrainingFragment"
         android:label="fragment_training"
         tools:layout="@layout/fragment_training" />
     <fragment
         android:id="@+id/catalogCardsFragment"
-        android:name="com.example.zubrilkaenglish.screens.catalogCards.CatalogCardsFragment"
+        android:name="com.zubrilka.zubrilkaenglish.screens.catalogCards.CatalogCardsFragment"
         android:label="fragment_catalog_cards"
         tools:layout="@layout/fragment_catalog_cards" />
     <fragment
         android:id="@+id/memoFragment"
-        android:name="com.example.zubrilkaenglish.screens.memo.MemoFragment"
+        android:name="com.zubrilka.zubrilkaenglish.screens.memo.MemoFragment"
         android:label="fragment_memo"
         tools:layout="@layout/fragment_memo" />
     <fragment
         android:id="@+id/profileEnterFragment"
-        android:name="com.example.zubrilkaenglish.screens.profile.fragments.ProfileEnterFragment"
+        android:name="com.zubrilka.zubrilkaenglish.screens.profile.fragments.ProfileEnterFragment"
         android:label="fragment_profile_enter"
         tools:layout="@layout/fragment_profile_enter" />
     <fragment
         android:id="@+id/profileRegistrationFragment"
-        android:name="com.example.zubrilkaenglish.screens.profile.fragments.ProfileRegistrationFragment"
+        android:name="com.zubrilka.zubrilkaenglish.screens.profile.fragments.ProfileRegistrationFragment"
         android:label="fragment_profile_registration"
         tools:layout="@layout/fragment_profile_registration" >
         <action
@@ -60,7 +60,7 @@
     </fragment>
     <fragment
         android:id="@+id/profileInfoFragment"
-        android:name="com.example.zubrilkaenglish.screens.profile.fragments.ProfileInfoFragment"
+        android:name="com.zubrilka.zubrilkaenglish.screens.profile.fragments.ProfileInfoFragment"
         android:label="fragment_profile_info"
         tools:layout="@layout/fragment_profile_info" >
         <action
@@ -69,12 +69,12 @@
     </fragment>
     <fragment
         android:id="@+id/competitionFragment"
-        android:name="com.example.zubrilkaenglish.screens.competition.CompetitionFragment"
+        android:name="com.zubrilka.zubrilkaenglish.screens.competition.CompetitionFragment"
         android:label="fragment_competition"
         tools:layout="@layout/fragment_competition" />
     <fragment
         android:id="@+id/ratingFragment"
-        android:name="com.example.zubrilkaenglish.screens.rating.RatingFragment"
+        android:name="com.zubrilka.zubrilkaenglish.screens.rating.RatingFragment"
         android:label="fragment_rating"
         tools:layout="@layout/fragment_rating" />
 </navigation>

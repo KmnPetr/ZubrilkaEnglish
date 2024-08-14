@@ -40,7 +40,12 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay"/>
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:navigationIcon="?attr/homeAsUpIndicator"
+            app:menu="@menu/toolbar_menu"
+            app:title="Zubrilka English"
+            app:titleTextColor="#373935"
+            />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -64,13 +69,43 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        android:visibility="visible"
         android:background="@drawable/bac34"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer"/>
+        app:menu="@menu/activity_main_drawer">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="bottom">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="100dp"
+                android:background="#858585"/>
+
+            <com.zubrilka.zubrilkaenglish.utils.ui.CustImgTxtButton
+                android:id="@+id/btn_exit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="15dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                app:backgroundColor="#00FFFFFF"
+                app:borderColor="#00FFFFFF"
+                app:borderWidth="1dp"
+                app:cornerRadius="10dp"
+                app:drawable="@drawable/exit"
+                app:fontFamily="sans-serif"
+                app:imageSize="20dp"
+                app:text="Выход"
+                app:textColor="#49454F"
+                app:textSize="14sp"
+                app:textStyle="normal" />
+        </LinearLayout>
+    </com.google.android.material.navigation.NavigationView>
 
 </androidx.drawerlayout.widget.DrawerLayout>
-

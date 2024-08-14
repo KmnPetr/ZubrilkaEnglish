@@ -18,7 +18,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <!--        кнопка markLearned-->
-            <com.example.zubrilkaenglish.utils.ui.CustImgTxtButton
+            <com.zubrilka.zubrilkaenglish.utils.ui.CustImgTxtButton
                 android:id="@+id/markLearned"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
 
 
             <!--        кнопка resetProgress-->
-            <com.example.zubrilkaenglish.utils.ui.CustImgTxtButton
+            <com.zubrilka.zubrilkaenglish.utils.ui.CustImgTxtButton
                 android:id="@+id/resetProgress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
                 app:textStyle="normal" />
 
             <!--        кнопка deleteCard-->
-            <com.example.zubrilkaenglish.utils.ui.CustImgTxtButton
+            <com.zubrilka.zubrilkaenglish.utils.ui.CustImgTxtButton
                 android:id="@+id/deleteCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

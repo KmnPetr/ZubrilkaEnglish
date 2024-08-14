@@ -340,6 +340,8 @@
                         android:background="@android:color/darker_gray" />
                 </LinearLayout>
 
+                <!--разделительная линия-->
+
                 <TextView
                     android:id="@+id/name"
                     android:layout_width="0dp"
@@ -351,7 +353,6 @@
                     android:textSize="14sp"
                     android:textStyle="italic" />
 
-                <!--разделительная линия-->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
