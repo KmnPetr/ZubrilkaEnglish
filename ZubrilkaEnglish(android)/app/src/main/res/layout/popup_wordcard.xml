@@ -58,7 +58,7 @@
             android:gravity="right"
             android:paddingTop="15dp">
 
-            <com.example.zubrilkaenglish.utils.ui.CustImageButton
+            <com.zubrilka.zubrilkaenglish.utils.ui.CustImageButton
                 android:id="@+id/deleteCard"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
@@ -71,7 +71,7 @@
                 app:drawable="@drawable/urn_button"
                 app:imageSize="30dp" />
 
-            <com.example.zubrilkaenglish.utils.ui.CustImageButton
+            <com.zubrilka.zubrilkaenglish.utils.ui.CustImageButton
                 android:id="@+id/resetProgress"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
@@ -84,7 +84,7 @@
                 app:drawable="@drawable/reset_button"
                 app:imageSize="30dp" />
 
-            <com.example.zubrilkaenglish.utils.ui.CustImageButton
+            <com.zubrilka.zubrilkaenglish.utils.ui.CustImageButton
                 android:id="@+id/markLearned"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
@@ -97,7 +97,7 @@
                 app:drawable="@drawable/check_mark2"
                 app:imageSize="30dp" />
 
-            <com.example.zubrilkaenglish.utils.ui.CustImageButton
+            <com.zubrilka.zubrilkaenglish.utils.ui.CustImageButton
                 android:id="@+id/addToTrain"
                 android:layout_width="40dp"
                 android:layout_height="40dp"

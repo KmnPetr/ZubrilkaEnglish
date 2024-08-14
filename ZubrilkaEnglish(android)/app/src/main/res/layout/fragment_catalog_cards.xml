@@ -68,7 +68,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView">
 
-        <com.example.zubrilkaenglish.utils.ui.CustImageButton
+        <com.zubrilka.zubrilkaenglish.utils.ui.CustImageButton
             android:id="@+id/wordsOptions"
             android:layout_width="30dp"
             android:layout_height="match_parent"

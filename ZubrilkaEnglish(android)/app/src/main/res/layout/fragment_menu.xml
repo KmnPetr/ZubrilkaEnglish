@@ -7,7 +7,7 @@
     tools:context=".screens.menu.MenuFragment">
 
 
-    <com.example.zubrilkaenglish.utils.ui.CustImgTxtButton
+    <com.zubrilka.zubrilkaenglish.utils.ui.CustImgTxtButton
         android:id="@+id/buttonGo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
         app:textSize="24sp"
         app:textStyle="italic" />
 
-    <com.example.zubrilkaenglish.utils.ui.CustImgTxtButton
+    <com.zubrilka.zubrilkaenglish.utils.ui.CustImgTxtButton
         android:id="@+id/catalogCards"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
         app:textSize="20sp"
         app:textStyle="italic" />
 
-    <com.example.zubrilkaenglish.utils.ui.CustImgTxtButton
+    <com.zubrilka.zubrilkaenglish.utils.ui.CustImgTxtButton
         android:id="@+id/rating"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -76,7 +76,7 @@
         app:textSize="20sp"
         app:textStyle="italic" />
 
-    <com.example.zubrilkaenglish.utils.ui.CustImgTxtButton
+    <com.zubrilka.zubrilkaenglish.utils.ui.CustImgTxtButton
         android:id="@+id/competitionFragment"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

@@ -50,7 +50,9 @@ public class SecurityConfig {
                             "/words",
                             "/words/initialTrainingList",
                             "/profile/getTemporaryProfile",
-                            "/stat/first1500users_rating"
+                            "/stat/first1500users_rating",
+                            "/privacy",
+                            "/privacy.html"
                     ).permitAll();
 
                     auth.pathMatchers(

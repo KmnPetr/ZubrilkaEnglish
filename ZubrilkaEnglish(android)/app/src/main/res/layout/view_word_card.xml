@@ -58,15 +58,34 @@
             android:orientation="vertical"
             android:layout_margin="5dp"
             android:gravity="center">
-            <TextView
-                android:id="@+id/foreignWord"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:layout_margin="5dp"
-                android:text="Foreign Word"
-                android:gravity="center"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                android:gravity="center">
+                <TextView
+                    android:id="@+id/foreignWord"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:text="Foreign Word"
+                    android:gravity="center"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+                <com.zubrilka.zubrilkaenglish.utils.ui.CustImageButton
+                    android:id="@+id/soundButton"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="3dp"
+                    android:padding="0dp"
+                    app:backgroundColor="#00FFFFFF"
+                    app:cornerRadius="10dp"
+                    app:borderWidth="1dp"
+                    app:borderColor="@color/borderSoundButton"
+                    app:drawable="@drawable/sound"
+                    app:imageSize="15dp" />
+            </LinearLayout>
             <TextView
                 android:id="@+id/transcription"
                 android:layout_width="wrap_content"
@@ -129,7 +148,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="end"
                         android:orientation="horizontal">
-                        <com.example.zubrilkaenglish.utils.ui.CustButton
+                        <com.zubrilka.zubrilkaenglish.utils.ui.CustButton
                             android:id="@+id/btnCansel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -145,7 +164,7 @@
                             app:text="Cansel"
                             app:textStyle="bold_italic"
                             app:fontFamily="sans-serif"/>
-                        <com.example.zubrilkaenglish.utils.ui.CustButton
+                        <com.zubrilka.zubrilkaenglish.utils.ui.CustButton
                             android:id="@+id/btnYes"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -171,7 +190,7 @@
             android:orientation="horizontal"
             android:layout_margin="5dp">
 
-            <com.example.zubrilkaenglish.utils.ui.CustImageButton
+            <com.zubrilka.zubrilkaenglish.utils.ui.CustImageButton
                 android:id="@+id/optionsButton"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
@@ -190,7 +209,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"/>
 
-            <com.example.zubrilkaenglish.utils.ui.CustImageButton
+            <com.zubrilka.zubrilkaenglish.utils.ui.CustImageButton
                 android:id="@+id/lookButton"
                 android:layout_width="50dp"
                 android:layout_height="40dp"
@@ -202,7 +221,7 @@
                 app:borderColor="@color/myGray"
                 app:drawable="@drawable/eye_small"
                 app:imageSize="35dp" />
-            <com.example.zubrilkaenglish.utils.ui.CustImageButton
+            <com.zubrilka.zubrilkaenglish.utils.ui.CustImageButton
                 android:id="@+id/noButton"
                 android:layout_width="50dp"
                 android:layout_height="40dp"
@@ -214,7 +233,7 @@
                 app:borderColor="@color/myGray"
                 app:drawable="@drawable/red_cross_button_small"
                 app:imageSize="30dp" />
-            <com.example.zubrilkaenglish.utils.ui.CustImageButton
+            <com.zubrilka.zubrilkaenglish.utils.ui.CustImageButton
                 android:id="@+id/yesButton"
                 android:layout_width="50dp"
                 android:layout_height="40dp"

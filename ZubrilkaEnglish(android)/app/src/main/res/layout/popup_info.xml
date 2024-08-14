@@ -58,7 +58,7 @@
 
         </ScrollView>
 
-        <com.example.zubrilkaenglish.utils.ui.CustButton
+        <com.zubrilka.zubrilkaenglish.utils.ui.CustButton
             android:id="@+id/closeButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -72,7 +72,7 @@
             app:cornerRadius="7dp"
             app:fontFamily="sans-serif"
             app:text="Закрыть"
-            app:textColor="@color/myGray"
+            app:textColor="#818181"
             app:textSize="12sp"
             app:textStyle="bold_italic" />
 

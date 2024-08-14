@@ -10,4 +10,7 @@
 
     <color name="myColorPrimary">#96A471</color>
 
+
+    <color name="borderSoundButton">#EDEDED</color>
+
 </resources>

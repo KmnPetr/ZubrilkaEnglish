@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.zubrilkaenglish'
+    namespace 'com.zubrilka.zubrilkaenglish'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.zubrilkaenglish"
+        applicationId "com.zubrilka.zubrilkaenglish"
         minSdk 24
         targetSdk 33
         versionCode 1
@@ -84,5 +84,5 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.2.0'
 
     //яндекс реклама
-    implementation 'com.yandex.android:mobileads:7.2.0'
+    implementation 'com.yandex.android:mobileads:7.3.0'
 }
