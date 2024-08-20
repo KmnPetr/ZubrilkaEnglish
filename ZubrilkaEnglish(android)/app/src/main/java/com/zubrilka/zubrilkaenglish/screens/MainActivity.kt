@@ -1,8 +1,5 @@
 package com.zubrilka.zubrilkaenglish.screens
 
-import android.annotation.SuppressLint
-import android.graphics.Typeface
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
@@ -10,7 +7,6 @@ import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
@@ -29,10 +25,9 @@ import com.zubrilka.zubrilkaenglish.repositories.MemoRepository
 import com.zubrilka.zubrilkaenglish.repositories.ProfileRepository
 import com.zubrilka.zubrilkaenglish.repositories.StatisticsRepository
 import com.zubrilka.zubrilkaenglish.repositories.VoiceRepository
-import com.zubrilka.zubrilkaenglish.services.ads.YandexAds
+import com.zubrilka.zubrilkaenglish.services.apiNotification.ApiNotification
 import com.zubrilka.zubrilkaenglish.utils.APP_EMAIL
 import com.zubrilka.zubrilkaenglish.utils.APP_NAME
-import com.zubrilka.zubrilkaenglish.services.apiNotification.ApiNotification
 import com.zubrilka.zubrilkaenglish.utils.LOG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -51,7 +46,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var memoRepository:MemoRepository
     private lateinit var profileRepository:ProfileRepository
     private lateinit var statisticsRepository:StatisticsRepository
-    private lateinit var yandexAds:YandexAds
+//    private lateinit var yandexAds:YandexAds
 
     private lateinit var binding:ActivityMainBinding
     private lateinit var mainViewModel: MainViewModel
@@ -84,6 +79,7 @@ class MainActivity : AppCompatActivity() {
         listenNavigationView()
         initRepositories()
         setListeners()
+
     }
 
     /**
@@ -159,7 +155,7 @@ class MainActivity : AppCompatActivity() {
             memoRepository = MemoRepository.instance
             profileRepository = ProfileRepository.instance
             statisticsRepository = StatisticsRepository.instance
-            yandexAds = YandexAds.instanse
+//            yandexAds = YandexAds.instanse
         }
     }
 
@@ -246,7 +242,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        yandexAds.destroyYandexAds()
+//        yandexAds.destroyYandexAds()
     }
 
     override fun onStart() {

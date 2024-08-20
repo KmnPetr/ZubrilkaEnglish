@@ -1,20 +1,21 @@
 package com.zubrilka.zubrilkaenglish.screens.profile.fragments
 
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.util.Log
+import android.net.Uri
 import android.view.View
 import android.view.Window
 import com.zubrilka.zubrilkaenglish.databinding.PopupProfileChangeFieldBinding
 import com.zubrilka.zubrilkaenglish.repositories.ProfileRepository
-import com.zubrilka.zubrilkaenglish.utils.LOG
+import com.zubrilka.zubrilkaenglish.repositories.PropRepository
+import com.zubrilka.zubrilkaenglish.repositories.room.PropKey
+import com.zubrilka.zubrilkaenglish.utils.privacy_url
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -24,8 +25,10 @@ class PopupChangeProfileField(
 ): Dialog(context) {
     private val binding = PopupProfileChangeFieldBinding.inflate(layoutInflater)
     private val profileRepository = ProfileRepository.instance
+    private val propRepository = PropRepository.instance
     private lateinit var job: Job
     private var job2: Job
+    private var isNeedAgreePrivacy:Boolean = true
     init {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setCancelable(true)
@@ -36,7 +39,15 @@ class PopupChangeProfileField(
         val screenWidth = displayMetrics.widthPixels
         binding.root.layoutParams.width = (screenWidth*0.90).toInt()
 
+        if(propRepository.properties.value[PropKey.IS_AGREE_PRIVACY.key].toBoolean()){
+            isNeedAgreePrivacy = false
+            binding.agreementField.visibility = View.GONE
+        }else{
+            isNeedAgreePrivacy = true
+            binding.agreementField.visibility = View.VISIBLE
+        }
 
+        profileRepository.clearValidationErrors()
 
         when(typeField){
             "name"->{
@@ -65,7 +76,16 @@ class PopupChangeProfileField(
             }
         }
 
-        binding.buttonChange.setOnClickListener { sendRequest() }
+        binding.buttonChange.setOnClickListener {
+            if (!isNeedAgreePrivacy){
+            }else{
+                if (binding.isAgreePrivacy.isChecked){
+                    propRepository.userIsAgreedPrivacy()
+                    sendRequest()
+                }
+            }
+        }
+        binding.privacyPolicy.setOnClickListener { showPrivacyPolicy() }
 
         job2 = GlobalScope.launch {
             profileRepository.validationErrors.collect{ withContext(Dispatchers.Main){showErrors(it)} }
@@ -87,6 +107,17 @@ class PopupChangeProfileField(
         it?.forEach {
             binding.errorText.append(it+"\n")
         }
+    }
+
+    /**
+     * покажет текст политики конфиденциальности
+     * точнее переведет на сайт с этой политикой
+     */
+    private fun showPrivacyPolicy() {
+        val url = privacy_url
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse(url)
+        context.startActivity(intent)
     }
 
     override fun dismiss() {

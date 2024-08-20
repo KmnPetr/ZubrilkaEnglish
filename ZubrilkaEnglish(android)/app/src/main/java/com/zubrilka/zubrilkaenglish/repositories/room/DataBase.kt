@@ -20,7 +20,7 @@ import com.zubrilka.zubrilkaenglish.utils.MyApplication
     ProgressWord::class,
     Voice::class,
     Memo::class],
-    version = 2
+    version = 3
 )
 @TypeConverters(Converters::class)
 abstract class DataBase:RoomDatabase(){
@@ -42,9 +42,11 @@ abstract class DataBase:RoomDatabase(){
                 override fun onCreate(db: SupportSQLiteDatabase) {
                     super.onCreate(db)
                     migration1to2(db) //добавили некоторые данные в проперти таблицу без изменения схемы таблиц
+                    migration2to3(db) //добавили некоторые данные в проперти таблицу без изменения схемы таблиц
+                    migration3to4(db) //добавили некоторые данные в проперти таблицу без изменения схемы таблиц
                 }
             })
-            .addMigrations(MIGRATION_1_2)
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
             .build()
         }
 

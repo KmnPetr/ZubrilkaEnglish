@@ -37,7 +37,7 @@ public class SavingDatabaseApplication {
         ApplicationContext context = SpringApplication.run(SavingDatabaseApplication.class,args);
         SavingDatabaseApplication thisClass = context.getBean(SavingDatabaseApplication.class);
 
-        //сохранит новые файлы voice  в БД
+        //сохранит новые файлы voice в БД
         thisClass.voiceFileService.saveNewVoicesToDB();
         //сохранит или обновит Words в БД
         thisClass.wordsService.saveOrUpdateWords();
@@ -89,6 +89,9 @@ public class SavingDatabaseApplication {
 
         //еще раз переводим count из мапы в список из БД
         wordSorter.setCount();
+
+        //пересчитаем частоупотребимость неправильных глаголов
+        wordSorter.countIrregularVerbs();
 
         //выводим на экран оставшиеся редкоупотребляемые слова
         wordSorter.printAllWordsWithCountBelowX(50);

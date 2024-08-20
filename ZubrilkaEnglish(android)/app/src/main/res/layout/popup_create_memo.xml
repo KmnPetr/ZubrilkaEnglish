@@ -16,32 +16,26 @@
         android:padding="10dp">
 
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
 
             <TextView
-                android:id="@+id/header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Новое напоминание.."
-                android:textSize="16sp"
-                android:textColor="@color/material_dynamic_neutral40"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textColor="#484B4C"
+                android:textSize="16sp" />
 
                 <TimePicker
                     android:id="@+id/timePicker"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:timePickerMode="spinner"
-                    app:layout_constraintTop_toBottomOf="@+id/header"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    android:timePickerMode="spinner" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
 
 <!--        кнопки по дням недели-->
@@ -184,7 +178,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
-                android:backgroundTint="@color/material_dynamic_neutral80"
+                android:backgroundTint="#C2C4C6"
                 android:text="Отмена"
                 android:textStyle="italic"/>
             <Button
@@ -193,7 +187,7 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="#E8F5E9"
                 android:text="Добавить"
-                android:textColor="@color/material_dynamic_neutral40"
+                android:textColor="#646768"
                 android:textStyle="italic"/>
         </LinearLayout>
     </LinearLayout>

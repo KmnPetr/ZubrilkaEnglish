@@ -12,7 +12,6 @@ import com.zubrilka.zubrilkaenglish.events.CardEvent
 import com.zubrilka.zubrilkaenglish.events.NotificationEvent
 import com.zubrilka.zubrilkaenglish.events.iEvent
 import com.zubrilka.zubrilkaenglish.screens.MainActivity
-import com.zubrilka.zubrilkaenglish.services.ads.YandexAds
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -57,7 +56,7 @@ class PopupLimitActiveCards(event: NotificationEvent,
     }
     //клик по рекламе
     private fun <T : Enum<T>, E : iEvent<T>> clickAd(activity: MainActivity, failedEvent: E) {
-        YandexAds.instanse.showRewardedAd(activity,failedEvent)
+//        YandexAds.instanse.showRewardedAd(activity,failedEvent)
     }
 
     private fun callDismiss() {

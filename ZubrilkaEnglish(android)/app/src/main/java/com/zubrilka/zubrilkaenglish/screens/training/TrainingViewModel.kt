@@ -44,6 +44,7 @@ class TrainingViewModel : ViewModel() {
     private fun setupModes() {
         learningMode.value = propRepository.properties.value[PropKey.learningMode.key]?.let { Modes.valueOf(it) //сразу установим значение, чтобы лишний раз не перезагружать view адаптера
         }
+        if (learningMode.value==null) learningMode.value = defaultMode //поставим а то иногда ошибки появляются
         viewModelScope.launch {
             learningMode.value = propRepository.getPropModelByKey(PropKey.learningMode.key)?.let { Modes.valueOf(it.value) }
             propRepository.properties.collect{

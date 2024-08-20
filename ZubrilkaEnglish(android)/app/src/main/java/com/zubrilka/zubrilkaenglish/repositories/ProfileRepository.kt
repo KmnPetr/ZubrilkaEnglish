@@ -44,7 +44,7 @@ class ProfileRepository private constructor() {
     }
 
     /**
-     * запросит у ссервера временный профиль
+     * запросит у сервера временный профиль
      * сохранит его в БД
      */
     suspend fun getTemporaryProfile(): Profile? {
@@ -215,6 +215,13 @@ class ProfileRepository private constructor() {
     }
     private suspend fun updateProfile(profile: Profile){
         roomService.getPropDAO().insertNewProp(PropModel("profile",profile.toJson()))
+    }
+
+    /**
+     * очистиит поле ошибок по просьбе вьюшек
+     */
+    fun clearValidationErrors() {
+        validationErrors.value = null
     }
 
 

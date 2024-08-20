@@ -37,10 +37,8 @@ interface PropDAO {
 enum class PropKey(val key: String) {
     catalogFilter_hideLearned("catalogFilter_hideLearned"),//пользовательская фильтровка слов в каталоге хранит boolean
     catalogFilter_hideSleepingAndActive("catalogFilter_hideSleepingAndActive"),//пользовательская фильтровка слов в каталоге хранит boolean
-
     isUserHasOwnMemos("isUserHasOwnMemos"), //содержит "true" если пользователь раньше уже создавал memo напоминания
-
     learningMode("learningMode"), //режим обучения, например на честность или многовариантный выбор
-
-    IS_FIRST_ENTRY("IS_FIRST_ENTRY") //укажет что юзер вошел первый раз в приложение
+    IS_FIRST_ENTRY("IS_FIRST_ENTRY"), //укажет что юзер вошел первый раз в приложение
+    IS_AGREE_PRIVACY("IS_AGREE_PRIVACY") //укажет, что человек уже соглашался с политикой конфеденциальности
 }

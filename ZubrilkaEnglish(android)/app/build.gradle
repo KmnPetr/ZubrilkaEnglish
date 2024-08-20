@@ -13,8 +13,8 @@ android {
         applicationId "com.zubrilka.zubrilkaenglish"
         minSdk 24
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
+        versionCode 19
+        versionName "1.19"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -82,7 +82,4 @@ dependencies {
 
     //для использования Event Bus от компании Green Robot
     implementation 'org.greenrobot:eventbus:3.2.0'
-
-    //яндекс реклама
-    implementation 'com.yandex.android:mobileads:7.3.0'
 }
