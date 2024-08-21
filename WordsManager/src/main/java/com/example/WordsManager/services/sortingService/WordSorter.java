@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 public class WordSorter {
@@ -28,6 +29,40 @@ public class WordSorter {
         this.wordsRepository = wordsRepository;
 
         mapStrings = booksBody.getMapStrings();
+    }
+
+    /**
+     * в общем списке слов отыщет фразовые глаголы по типу "begin/began/begun" они разделены чертами
+     * посчитает среднее количество их употреблений в текстах
+     * если встречается чтото типа "abide/(abode,abided)/(abode,abided)" посчитает каждое отдельно взятое слово и выведет их среднее значение по частоупотребимости
+     */
+    public void countIrregularVerbs() {
+        if (wordList.isEmpty()) throw new IllegalArgumentException("wordList isEmpty");
+        AtomicInteger countVerbs = new AtomicInteger(); //для статистики
+
+        wordList.forEach(word -> {
+            if (word.getForeignWord().contains("/")){
+                String newStr = word.getForeignWord();
+                countVerbs.getAndIncrement();
+                //заменяем знаки на пробелы
+                newStr = newStr.replaceAll("[/,()]", " ");
+                // Разделяем строку на слова по пробелам
+                String[] irregularVerbs = newStr.trim().split("\\s+");
+
+                int count = 0;
+
+                for (int i = 0; i < irregularVerbs.length; i++) {
+                    if (irregularVerbs[i].isEmpty()) throw new IllegalArgumentException("Один неправильный глагол оказался пустой строкой");
+
+                    if (mapStrings.containsKey(irregularVerbs[i]))
+                        count += mapStrings.get(irregularVerbs[i]).getCount();
+                    else System.out.println("Не найдено похожих для глагола: "+irregularVerbs[i]+ " id = "+word.getId());
+                }
+                count = count / irregularVerbs.length;
+                word.setSorting_value(count);
+            }
+        });
+        System.out.println("Было пересчитано "+countVerbs.get()+" неправильных глаголов.");
     }
 
     /**
@@ -163,4 +198,5 @@ public class WordSorter {
     public void increaseDictionaryVersion() {
         propService.increaseDictionaryVersion().block();
     }
+
 }

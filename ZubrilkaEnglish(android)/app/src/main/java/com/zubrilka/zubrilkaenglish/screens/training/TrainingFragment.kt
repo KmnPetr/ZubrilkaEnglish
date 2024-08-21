@@ -35,7 +35,6 @@ import com.zubrilka.zubrilkaenglish.repositories.room.PropKey
 import com.zubrilka.zubrilkaenglish.screens.PopupInfo
 import com.zubrilka.zubrilkaenglish.screens.training.popup.PopupOptions
 import com.zubrilka.zubrilkaenglish.services.VibrationHandler
-import com.zubrilka.zubrilkaenglish.services.ads.YandexAds
 import com.zubrilka.zubrilkaenglish.utils.LOG
 import com.zubrilka.zubrilkaenglish.utils.StatProgress
 import com.zubrilka.zubrilkaenglish.utils.defaultMode
@@ -284,7 +283,7 @@ class TrainingFragment() : Fragment(), CardAdapter.Listener {
     fun showYandexAds() {
         if (!viewModel.yandexAdWasShown){
             viewModel.yandexAdWasShown = true
-            YandexAds.instanse.showAd(requireActivity())
+//            YandexAds.instanse.showAd(requireActivity())
         }
     }
 
@@ -303,7 +302,7 @@ class TrainingFragment() : Fragment(), CardAdapter.Listener {
                         delay(delayFlipping_3) //при удачном откадывании карточки быстро перелистываем
                     } else delay(delayFlipping_1) //при неудачном отгадывании даем юзеру время на посмотреть подумать
                 }
-                else -> { throw IllegalArgumentException("LearningMode is invalid") }
+                else -> {  }
             }
 
             if (viewModel.userScrolls !=0) {

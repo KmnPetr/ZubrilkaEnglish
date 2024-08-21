@@ -14,6 +14,7 @@ import com.zubrilka.zubrilkaenglish.events.NotificationEvent
 import com.zubrilka.zubrilkaenglish.screens.PopupInfo
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
+import java.lang.RuntimeException
 
 class MenuFragment : Fragment() {
     private lateinit var viewModel: MenuViewModel

@@ -133,4 +133,13 @@ class PropRepository private constructor(){
      * вернет проперти из БД по ключу
      */
     suspend fun getPropModelByKey(key: String): PropModel? = roomService.getPropDAO().getPropByKey(key)
+
+    /**
+     * пользователь согласился с политикой конфеденциальности
+     */
+    fun userIsAgreedPrivacy() {
+        GlobalScope.launch {
+            roomService.getPropDAO().insertNewProp(PropModel(PropKey.IS_AGREE_PRIVACY.key,true.toString()))
+        }
+    }
 }

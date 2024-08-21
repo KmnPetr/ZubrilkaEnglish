@@ -85,21 +85,23 @@
             android:layout_below="@id/errorField"
             android:layout_marginTop="16dp"
             android:gravity="center">
-            <androidx.cardview.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/buttonEnter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@android:color/holo_green_dark"
-                app:cardCornerRadius="7dp">
-                <TextView
+                <com.zubrilka.zubrilkaenglish.utils.ui.CustButton
+                    android:id="@+id/buttonEnter"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:text="Войти"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-            </androidx.cardview.widget.CardView>
+                    android:layout_height="match_parent"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingRight="18dp"
+                    android:paddingLeft="18dp"
+                    app:backgroundColor="@android:color/holo_green_dark"
+                    app:borderColor="#7E7E7E"
+                    app:borderWidth="1dp"
+                    app:cornerRadius="7dp"
+                    app:fontFamily="sans-serif"
+                    app:text="Войти"
+                    app:textColor="@color/white"
+                    app:textSize="20sp"
+                    app:textStyle="bold_italic" />
         </LinearLayout>
 
         <LinearLayout

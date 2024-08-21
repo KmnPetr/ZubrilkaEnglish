@@ -19,6 +19,7 @@ import com.zubrilka.zubrilkaenglish.events.NfEvEnum
 import com.zubrilka.zubrilkaenglish.events.NotificationEvent
 import com.zubrilka.zubrilkaenglish.models.Profile
 import com.zubrilka.zubrilkaenglish.repositories.ProfileRepository
+import com.zubrilka.zubrilkaenglish.repositories.PropRepository
 import com.zubrilka.zubrilkaenglish.screens.PopupInfo
 import com.zubrilka.zubrilkaenglish.screens.profile.ProfileViewModel
 import com.zubrilka.zubrilkaenglish.utils.privacy_url
@@ -156,20 +157,22 @@ class ProfileRegistrationFragment : Fragment() {
      * сформирует запрос для отправки на сервер на регистрацию
      */
     private fun requestCreateProfile() {
-        if (!viewModel.isPasswordsMatch) {
-            ProfileRepository.instance.passwordMismatchError()
-            return
+        if (binding.isAgreePrivacy.isChecked){
+            if (!viewModel.isPasswordsMatch) {
+                ProfileRepository.instance.passwordMismatchError()
+                return
+            }
+            val newProfile = Profile(
+                -1,
+                viewModel.regEmail,
+                viewModel.regPassword.value!!,
+                viewModel.regName,
+                null,
+                null
+            )
+            PropRepository.instance.userIsAgreedPrivacy() //типа он согласился с политиками сохраним это в БД
+            ProfileRepository.instance.registrationRequest(newProfile)
         }
-        val newProfile = Profile(
-            -1,
-            viewModel.regEmail,
-            viewModel.regPassword.value!!,
-            viewModel.regName,
-            null,
-            null,
-//            null
-        )
-        ProfileRepository.instance.registrationRequest(newProfile)
     }
 
     /**
