@@ -5,7 +5,7 @@ import com.zubrilka.zubrilkaenglish.models.Memo
 import com.zubrilka.zubrilkaenglish.screens.training.Modes
 
 //const val URL:String="https://zubrilka-english.com:8443"
-const val test_url = "http://192.168.209.182:28700"
+const val test_url = "http://192.168.101.182:28700"
 const val prod_url:String="https://zubrilka-english.com:8443"
 const val privacy_url:String="https://zubrilka-english.com:8443/privacy" //адрес сайта с политикой конфиденциальности
 const val URL:String= prod_url
