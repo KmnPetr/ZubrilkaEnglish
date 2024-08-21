@@ -9,6 +9,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.security.Principal;
+import java.time.Duration;
 import java.util.Optional;
 
 @RestController
@@ -27,7 +28,9 @@ public class StatisticsController {
      */
     @GetMapping("/first1500users_rating")
     public Flux<StatisticsDTO> getFirst1500(@RequestParam(name = "ownId") Optional<Long> ownId){
-        return statisticsServise.getFirst1500users_rating(ownId.orElse(null));
+        return statisticsServise.getFirst1500users_rating(ownId.orElse(null))
+                .timeout(Duration.ofSeconds(10))
+                .retry(3);
     }
 
 
