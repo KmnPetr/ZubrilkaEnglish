@@ -45,12 +45,20 @@ public class WordListBuilder {
         List<Long> finalList = new ArrayList<>(sizeDuelList);
 
         usersListWords.forEach(list->{
-            if (list.size()<=countUserWords){//если список юзера меньше требуемого или пустой - просто перепишем список юзера
-                finalList.addAll(list);
-            }else {//выберем из списка несколько случайных элементов
-                List<Long> copy = new ArrayList<>(list);
-                Collections.shuffle(copy);
-                finalList.addAll(copy.subList(0, countUserWords));
+            List<Long> copy = new ArrayList<>(list);
+            Collections.shuffle(copy);
+
+            int countAdded = 0;//количество добавленных от одного юзера
+            boolean d; //будет false если слово уже встречалось у предыдущего игрока
+            for (int i = 0; i < copy.size()&&countAdded<countUserWords; i++) { //проверим циклами чтобы каждое новое слово не встречалось у предыдущих добавленных слов
+                d = true;
+                for (int j = 0; j < finalList.size(); j++) {
+                    if (Objects.equals(copy.get(i), finalList.get(j))) d = false;
+                }
+                if (d) {
+                    finalList.add(copy.get(i));
+                    countAdded++;
+                }
             }
         });
         finishFinalList(finalList);
