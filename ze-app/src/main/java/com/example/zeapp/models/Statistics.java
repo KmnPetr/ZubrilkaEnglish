@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @Table("statistics")
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 public class Statistics {
     @Id
     private Long id;

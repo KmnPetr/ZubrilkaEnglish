@@ -238,7 +238,6 @@ public class StatisticsServise {
 
         if (personId<0) return Mono.empty(); //отсеим ботов с отрицательным id
 
-        System.out.println("updatePoints(Long personId,Long earnedPoints) "+personId+" "+ earnedPoints);
 
         return statisticsRepository
                 .findByPersonId(personId)
@@ -248,8 +247,13 @@ public class StatisticsServise {
                 })
                 .switchIfEmpty(Mono.defer(() -> {
                     // Запись не существует, создаем новую запись
-                    Statistics newStatistics = new Statistics();
-                    newStatistics.setPersonId(personId);
+                    Statistics newStatistics = new Statistics(
+                            null,
+                            personId,
+                            0L,
+                            null,
+                            0,
+                            0);
                     return statisticsRepository.save(addPointsAndRefreshData(newStatistics,earnedPoints));
                 }));
     }
