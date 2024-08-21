@@ -42,7 +42,7 @@ public class PersonService implements ReactiveUserDetailsService {
      */
     public Mono<ProfileDTO> getTemporaryProfile() {
         return generateAndRegisterProfile()
-                .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(1))
+                .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(10))
                         .filter(throwable -> throwable instanceof ValidationException
                                 && throwable.getMessage().equals("This email is already in use.")));
     }
@@ -61,9 +61,8 @@ public class PersonService implements ReactiveUserDetailsService {
                 null,
                 null
         );
-        Mono<ProfileDTO> response = registerPerson(Mono.just(person));
 
-        return response;
+        return registerPerson(Mono.just(person));
     }
 
     /**
