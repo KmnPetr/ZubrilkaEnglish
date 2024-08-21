@@ -79,8 +79,13 @@ public class StatisticsServise {
                     personRepository
                             .findByEmail(userName)
                             .flatMap(person -> {
-                                Statistics newStatistics = new Statistics();
-                                newStatistics.setPersonId((long)person.getId());
+                                Statistics newStatistics = new Statistics(
+                                        null,
+                                        (long)person.getId(),
+                                        0L,
+                                        null,
+                                        0,
+                                        0);
                                 if ((newStatistics.getOfflinePoints()+offlinePoints)<=limitOfflinePoints){
                                     newStatistics.setPoints(newStatistics.getPoints()+(long)offlinePoints);
                                     newStatistics.setNewPoints(newStatistics.getNewPoints()+offlinePoints);
