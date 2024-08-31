@@ -6,12 +6,12 @@ import reactor.core.publisher.Mono;
 
 import java.util.Optional;
 
-public interface PersonRepository extends ReactiveCrudRepository<Person,Integer> {
+public interface PersonRepository extends ReactiveCrudRepository<Person,Long> {
     Mono<Person> findByEmail(String email);
     Mono<Boolean> existsByEmail(String email);
 
     default Mono<Person> updateUserName(Long id, String newName) {
-        return findById(Math.toIntExact(id))
+        return findById(id)
                 .map(person -> {
                     person.setShort_name(newName);
                     return person;
@@ -20,7 +20,7 @@ public interface PersonRepository extends ReactiveCrudRepository<Person,Integer>
     }
 
     default Mono<Person> updateUserEmail(long id, String newEmail) {
-        return findById(Math.toIntExact(id))
+        return findById(id)
                 .map(person -> {
                     person.setEmail(newEmail);
                     return person;

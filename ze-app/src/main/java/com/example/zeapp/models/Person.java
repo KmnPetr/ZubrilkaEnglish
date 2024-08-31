@@ -22,18 +22,20 @@ import java.util.List;
 public class Person implements UserDetails {
     @Id
     @Column("id")
-    Integer id; //TODO надо поменять на лонг, надо флайвей переделывать
+    private Long id;
     @Column("email")
-    String email;
+    private String email;
     @JsonIgnore
     @Column("password")
-    String password;
+    private String password;
     @Column("short_name")
-    String short_name;
+    private String short_name;
     @Column("role")
-    UserRole role;
+    private UserRole role;
     @Column("created_at")
-    Timestamp created_at;
+    private Timestamp created_at;
+    @Column("is_temp_prof")
+    private Boolean isTempProf;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

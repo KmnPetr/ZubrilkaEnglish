@@ -71,7 +71,8 @@ public class AuthenticationController {
                             profileDTO.getRequestPassword(),
                             profileDTO.getName(),
                             null,
-                            null
+                            null,
+                            false
                     );
                 }
         ));

@@ -37,6 +37,26 @@ public class PersonService implements ReactiveUserDetailsService {
     }
 
     /**
+     * Осуществит замену пороля по просьбе юзера
+     */
+    public Mono<ProfileDTO> changePassword(long userId, String oldPassword, String newPassword) {
+        if (newPassword.isEmpty()) return Mono.error(new ValidationException("RequestPassword is blank."));
+        if (newPassword.length()<7) return Mono.error(new ValidationException("The password is shorter than 7 characters."));
+        if (newPassword.length()>100) return Mono.error(new ValidationException("The password is too long."));
+        return personRepository
+                .findById(userId)
+                .flatMap(person -> {
+            if (passwordEncoder.matches(oldPassword, person.getPassword())) {
+                // Пароли совпадают
+                System.out.println("Пароли совпадают");
+            } else {
+                // Пароли не совпадают
+                return Mono.error(new ValidationException("The old password was entered incorrectly."));
+            }
+            return convertToProfileDTO(person);
+        });
+    }
+    /**
      * метод попытается сгенерировать нового временного пользователя а также
      * в случае уже существующего пользователя повторит генерацию
      */
@@ -56,10 +76,11 @@ public class PersonService implements ReactiveUserDetailsService {
         Person person = new Person(
                 null,
                 email,
-                password,
+                passwordEncoder.encode(password),
                 name,
-                null,
-                null
+                UserRole.ROLE_USER,
+                new Timestamp(System.currentTimeMillis()),
+                true
         );
 
         return registerPerson(Mono.just(person));
@@ -95,6 +116,7 @@ public class PersonService implements ReactiveUserDetailsService {
                                     rPerson.setRole(UserRole.ROLE_USER);
                                     rPerson.setCreated_at(new Timestamp(System.currentTimeMillis()));
                                     rPerson.setPassword(passwordEncoder.encode(rPerson.getPassword()));
+                                    rPerson.setIsTempProf(false);
                                     return personRepository.save(rPerson).flatMap(this::convertToProfileDTO);
 //                                            .map(this::convertToProfileDTO);
                                 } else {
@@ -136,7 +158,8 @@ public class PersonService implements ReactiveUserDetailsService {
                 person.getShort_name(),
                 jwtUtil.generateAccessToken(person),
                 jwtUtil.generateRefreshToken(person),
-                person.getCreated_at()
+                person.getCreated_at(),
+                person.getIsTempProf()
         ));
     }
 
@@ -189,7 +212,7 @@ public class PersonService implements ReactiveUserDetailsService {
      * Вернет Mono<Person> из БД по id
      */
     public Mono<Person> findPersonById(Long personId) {
-        return personRepository.findById(personId.intValue());
+        return personRepository.findById(personId);
     }
 
 }

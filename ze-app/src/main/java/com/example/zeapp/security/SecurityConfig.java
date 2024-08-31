@@ -58,6 +58,7 @@ public class SecurityConfig {
                     auth.pathMatchers(
                             "/auth/getAccessToken",
                             "/test-auth/user",
+                            "/profile/change-password",
                             "/profile/**",
                             "/competition",
                             "/stat/save_offline_points"
