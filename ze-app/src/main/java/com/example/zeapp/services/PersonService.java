@@ -19,6 +19,7 @@ import reactor.util.retry.Retry;
 
 import java.security.SecureRandom;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.regex.Pattern;
 
@@ -46,14 +47,16 @@ public class PersonService implements ReactiveUserDetailsService {
         return personRepository
                 .findById(userId)
                 .flatMap(person -> {
-            if (passwordEncoder.matches(oldPassword, person.getPassword())) {
-                // Пароли совпадают
-                System.out.println("Пароли совпадают");
-            } else {
-                // Пароли не совпадают
-                return Mono.error(new ValidationException("The old password was entered incorrectly."));
-            }
-            return convertToProfileDTO(person);
+                    if (person.getIsTempProf()){
+                        person.setPassword(passwordEncoder.encode(newPassword));
+                        return personRepository.updateUserPassword(userId, person.getPassword()).flatMap(this::convertToProfileDTO);
+                    } else if (passwordEncoder.matches(oldPassword, person.getPassword())) {
+                        // Пароли совпадают
+                        return personRepository.updateUserPassword(userId, person.getPassword()).flatMap(this::convertToProfileDTO);
+                    }else {
+                        // Пароли не совпадают
+                        return Mono.error(new ValidationException("The old password was entered incorrectly."));
+                    }
         });
     }
     /**
@@ -83,7 +86,7 @@ public class PersonService implements ReactiveUserDetailsService {
                 true
         );
 
-        return registerPerson(Mono.just(person));
+        return registerPerson(Mono.just(person),true);
     }
 
     /**
@@ -106,7 +109,7 @@ public class PersonService implements ReactiveUserDetailsService {
     }
 
     @AssertTrue
-    public Mono<ProfileDTO> registerPerson(Mono<Person> requestedPerson){
+    public Mono<ProfileDTO> registerPerson(Mono<Person> requestedPerson,Boolean isTempProf){
         return requestedPerson
                 .flatMap(rPerson ->{
                     return personRepository
@@ -116,7 +119,7 @@ public class PersonService implements ReactiveUserDetailsService {
                                     rPerson.setRole(UserRole.ROLE_USER);
                                     rPerson.setCreated_at(new Timestamp(System.currentTimeMillis()));
                                     rPerson.setPassword(passwordEncoder.encode(rPerson.getPassword()));
-                                    rPerson.setIsTempProf(false);
+                                    rPerson.setIsTempProf(isTempProf);
                                     return personRepository.save(rPerson).flatMap(this::convertToProfileDTO);
 //                                            .map(this::convertToProfileDTO);
                                 } else {
@@ -151,14 +154,17 @@ public class PersonService implements ReactiveUserDetailsService {
     }
     //конвертирует Person в ProfileDTO
     private Mono<ProfileDTO> convertToProfileDTO(Person person){
+        //переделаем в строку просто дату без времени а то на фронте появились проблемы с перевариванием таймстэмпа
+        String formattedDate = new SimpleDateFormat("dd-MM-yyyy").format(person.getCreated_at());
+
         return Mono.just(new ProfileDTO(
-                (long)person.getId(),
+                person.getId(),
                 person.getEmail(),
                 null,
                 person.getShort_name(),
                 jwtUtil.generateAccessToken(person),
                 jwtUtil.generateRefreshToken(person),
-                person.getCreated_at(),
+                formattedDate,
                 person.getIsTempProf()
         ));
     }
