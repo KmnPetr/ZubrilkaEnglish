@@ -11,6 +11,8 @@ import java.sql.Timestamp;
 @Data
 @ToString
 @AllArgsConstructor
+@Getter
+@Setter
 public class ProfileDTO {
     private Long id;
         @NotBlank(message = "Email is blank.")
@@ -26,6 +28,6 @@ public class ProfileDTO {
     private String name;
     private String accessToken;
     private String refreshToken;
-    private Timestamp created_at;
+    private String created_at;
     private Boolean isTempProf;
 }

@@ -4,8 +4,6 @@ import com.example.zeapp.models.Person;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Mono;
 
-import java.util.Optional;
-
 public interface PersonRepository extends ReactiveCrudRepository<Person,Long> {
     Mono<Person> findByEmail(String email);
     Mono<Boolean> existsByEmail(String email);
@@ -23,6 +21,16 @@ public interface PersonRepository extends ReactiveCrudRepository<Person,Long> {
         return findById(id)
                 .map(person -> {
                     person.setEmail(newEmail);
+                    return person;
+                })
+                .flatMap(this::save);
+    }
+
+    default Mono<Person> updateUserPassword(long id, String password) {
+        return findById(id)
+                .map(person -> {
+                    person.setPassword(password);
+                    person.setIsTempProf(false);
                     return person;
                 })
                 .flatMap(this::save);
