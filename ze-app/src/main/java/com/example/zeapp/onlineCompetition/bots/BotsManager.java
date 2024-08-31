@@ -159,12 +159,13 @@ public class BotsManager {
         bots.put(-1L,new Player(
                 -1L,
                 new Person(
-                        -1,
+                        -1L,
                         "bot1@bot.bot",
                         "tochnoBot",
                         "Tochno_Bot [Bot]",
                         UserRole.BOT,
-                        new Timestamp(System.currentTimeMillis())
+                        new Timestamp(System.currentTimeMillis()),
+                        false
                 ),
                 Sinks.many().unicast().onBackpressureBuffer(),
                 new ArrayList<>(),
@@ -182,12 +183,13 @@ public class BotsManager {
         bots.put(-2L,new Player(
                 -2L,
                 new Person(
-                        -2,
+                        -2L,
                         "bot2@bot.bot",
                         "tochnoBot",
                         "Bip-Bop [Bot]",
                         UserRole.BOT,
-                        new Timestamp(System.currentTimeMillis())
+                        new Timestamp(System.currentTimeMillis()),
+                        false
                 ),
                 Sinks.many().unicast().onBackpressureBuffer(),
                 new ArrayList<>(),
@@ -205,12 +207,13 @@ public class BotsManager {
         bots.put(-3L,new Player(
                 -3L,
                 new Person(
-                        -3,
+                        -3L,
                         "bot3@bot.bot",
                         "tochnoBot",
                         "Hyperdrive [Bot]",
                         UserRole.BOT,
-                        new Timestamp(System.currentTimeMillis())
+                        new Timestamp(System.currentTimeMillis()),
+                        false
                 ),
                 Sinks.many().unicast().onBackpressureBuffer(),
                 new ArrayList<>(),
@@ -228,12 +231,13 @@ public class BotsManager {
         bots.put(-4L,new Player(
                 -4L,
                 new Person(
-                        -4,
+                        -4L,
                         "bot4@bot.bot",
                         "tochnoBot",
                         "TurboByte [Bot]",
                         UserRole.BOT,
-                        new Timestamp(System.currentTimeMillis())
+                        new Timestamp(System.currentTimeMillis()),
+                        false
                 ),
                 Sinks.many().unicast().onBackpressureBuffer(),
                 new ArrayList<>(),
@@ -251,12 +255,13 @@ public class BotsManager {
         bots.put(-5L,new Player(
                 -5L,
                 new Person(
-                        -5,
+                        -5L,
                         "bot5@bot.bot",
                         "tochnoBot",
                         "A bot from America [Bot]",
                         UserRole.BOT,
-                        new Timestamp(System.currentTimeMillis())
+                        new Timestamp(System.currentTimeMillis()),
+                        false
                 ),
                 Sinks.many().unicast().onBackpressureBuffer(),
                 new ArrayList<>(),

@@ -6,8 +6,12 @@ import com.example.zeapp.security.JwtUtil;
 import com.example.zeapp.services.PersonService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
+
+import java.util.Map;
 
 
 @RestController
@@ -23,7 +27,21 @@ public class ProfileController {
     }
 
     /**
-     * выдаст нового пользователя со случайно сгенерированным именем
+     * метод принимает запрос на смену пароля
+     * в теле должна содержаться мапа в json формате с параметрами "oldPassword" и "newPassword"
+     */
+    @PostMapping("/change-password")
+    public Mono<ProfileDTO> changePassword(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken,
+            @RequestBody Map<String, String> params) {
+        String newPassword = params.get("newPassword");
+        String oldPassword = params.get("oldPassword");
+        long userId = jwtUtil.getUserIdFromToken(accessToken.substring(7));
+
+        return personService.changePassword(userId,oldPassword,newPassword);
+    }
+    /**
+     * Выдаст нового пользователя со случайно сгенерированным именем
      */
     @GetMapping("/getTemporaryProfile")
     public Mono<ProfileDTO> getTemporaryProfile(){

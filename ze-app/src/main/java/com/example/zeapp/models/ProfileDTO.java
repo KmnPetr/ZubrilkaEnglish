@@ -27,4 +27,5 @@ public class ProfileDTO {
     private String accessToken;
     private String refreshToken;
     private Timestamp created_at;
+    private Boolean isTempProf;
 }
