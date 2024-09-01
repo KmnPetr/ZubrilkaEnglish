@@ -46,6 +46,8 @@ public class PlayerHolder {
     public void onCloseSession(Long personId) {
         Player player = playersMap.get(personId);
         player.setSink(null);
+        player.setStatusPlayer(StatusPlayer.BUSY);
+        player.setLoyalToBots(false);
         Mono.delay(Duration.ofSeconds(60))
                 .map(tick->{
                     if (player.getSink() == null){
