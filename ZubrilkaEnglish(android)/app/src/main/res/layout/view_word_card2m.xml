@@ -61,27 +61,33 @@
                 android:orientation="horizontal"
                 android:layout_margin="5dp"
                 android:gravity="center">
-                <TextView
-                    android:id="@+id/foreignWord"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
-                    android:text="Foreign Word"
-                    android:gravity="center"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
-                <com.zubrilka.zubrilkaenglish.utils.ui.CustImageButton
-                    android:id="@+id/soundButton"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_margin="3dp"
-                    android:padding="0dp"
-                    app:backgroundColor="#00FFFFFF"
-                    app:cornerRadius="10dp"
-                    app:borderWidth="1dp"
-                    app:borderColor="@color/borderSoundButton"
-                    app:drawable="@drawable/sound"
-                    app:imageSize="15dp" />
+                    <TextView
+                        android:id="@+id/foreignWord"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="3dp"
+                        android:text="Foreign Word"
+                        android:gravity="center"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:autoSizeTextType="uniform"
+                        android:autoSizeMinTextSize="10sp"
+                        android:autoSizeMaxTextSize="20sp"
+                        android:autoSizeStepGranularity="2sp"/>
+
+                    <com.zubrilka.zubrilkaenglish.utils.ui.CustImageButton
+                        android:id="@+id/soundButton"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_margin="3dp"
+                        android:padding="0dp"
+                        app:backgroundColor="#00FFFFFF"
+                        app:cornerRadius="10dp"
+                        app:borderWidth="1dp"
+                        app:borderColor="@color/borderSoundButton"
+                        app:drawable="@drawable/sound"
+                        app:imageSize="15dp" />
             </LinearLayout>
             <TextView
                 android:id="@+id/transcription"
@@ -89,7 +95,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:gravity="center"
-                android:text="[transcription]"/>
+                android:text="[transcription]"
+                android:textSize="12sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -113,7 +120,7 @@
                 app:cornerRadius="7dp"
                 app:borderWidth="1dp"
                 app:borderColor="#7E7E7E"
-                app:textSize="14sp"
+                app:textSize="12sp"
                 app:text="variant0"
                 app:textStyle="italic"
                 app:fontFamily="sans-serif"/>
@@ -130,7 +137,7 @@
                 app:cornerRadius="7dp"
                 app:borderWidth="1dp"
                 app:borderColor="#7E7E7E"
-                app:textSize="14sp"
+                app:textSize="12sp"
                 app:text="variant1"
                 app:textStyle="italic"
                 app:fontFamily="sans-serif"/>
@@ -147,7 +154,7 @@
                 app:cornerRadius="7dp"
                 app:borderWidth="1dp"
                 app:borderColor="#7E7E7E"
-                app:textSize="14sp"
+                app:textSize="12sp"
                 app:text="variant2"
                 app:textStyle="italic"
                 app:fontFamily="sans-serif"/>
@@ -164,7 +171,7 @@
                 app:cornerRadius="7dp"
                 app:borderWidth="1dp"
                 app:borderColor="#7E7E7E"
-                app:textSize="14sp"
+                app:textSize="12sp"
                 app:text="variant3"
                 app:textStyle="italic"
                 app:fontFamily="sans-serif"/>

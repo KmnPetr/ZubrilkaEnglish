@@ -111,9 +111,8 @@ class CustImgTxtButton @JvmOverloads constructor(
 
 
     @SuppressLint("DrawAllocation")
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        if (canvas == null) return
 
         //значения зазора между фигурой и краем канваса
         val widthGap = (width-(width-borderWidth)*reduction)/2

@@ -76,7 +76,6 @@ public class SecurityConfig {
                                     Mono.fromRunnable(
                                             () -> swe.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED)
                                     )
-
                             );
                             it.accessDeniedHandler((swe,e) ->
                                     Mono.fromRunnable(

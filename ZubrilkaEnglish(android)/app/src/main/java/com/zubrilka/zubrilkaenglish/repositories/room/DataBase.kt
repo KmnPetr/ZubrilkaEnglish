@@ -20,7 +20,7 @@ import com.zubrilka.zubrilkaenglish.utils.MyApplication
     ProgressWord::class,
     Voice::class,
     Memo::class],
-    version = 3
+    version = 4
 )
 @TypeConverters(Converters::class)
 abstract class DataBase:RoomDatabase(){

@@ -12,6 +12,10 @@ import retrofit2.http.PATCH
 import retrofit2.http.POST
 
 interface ProfileApi {
+    @POST("/profile/change-password")
+    suspend fun changePassword(
+        @Header("Authorization") accessToken: String,
+        @Body params: Map<String,String>): Response<Profile?>
     @POST("/auth/registration")
     suspend fun registration(@Body profile: Profile): Response<Profile?>
     @POST("/auth/login")

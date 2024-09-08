@@ -3,6 +3,7 @@ package com.example.ze_adminandroid.screens.editWord.popupStorage
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Environment
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
@@ -70,6 +71,7 @@ class FileManager private constructor(){
      * удалит использованный файл
      */
     fun deleteUsedFile(){
+        println("deleteUsedFile() file = $usedFile")
         usedFile?.delete()
         usedFile = null
     }

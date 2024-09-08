@@ -1,12 +1,15 @@
 package com.zubrilka.zubrilkaenglish.repositories.retrofit
 
+import android.util.Log
 import com.zubrilka.zubrilkaenglish.events.NfEvEnum
 import com.zubrilka.zubrilkaenglish.events.NotificationEvent
 import com.zubrilka.zubrilkaenglish.models.Profile
+import com.zubrilka.zubrilkaenglish.models.PropModel
 import com.zubrilka.zubrilkaenglish.models.StatisticsDTO
 import com.zubrilka.zubrilkaenglish.models.Voice
 import com.zubrilka.zubrilkaenglish.models.Word
 import com.zubrilka.zubrilkaenglish.repositories.ProfileRepository
+import com.zubrilka.zubrilkaenglish.utils.LOG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -17,6 +20,33 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
 class RetrofitService {
+    /**
+     * выдаст все методы profileApi
+     */
+    fun getProfileApi() = RetrofitInstance.profileApi
+    //выдаст все методы statisticsApi
+    fun getStatisticsApi() = RetrofitInstance.statisticsApi
+    /**
+     * запросит у сервера смену пароля
+     * если это временный аккаунт сервер сам разберется проверять ли старый пароль
+     */
+    suspend fun requestChangePassword(newPassword: String, oldPassword: String): Response<Profile?>? {
+        try{
+            val response: Response<Profile?> = authRequest { jwtToken ->
+                getProfileApi().changePassword(jwtToken, mapOf("newPassword" to newPassword,"oldPassword" to oldPassword))
+            }
+            return response
+        }catch (e: SocketTimeoutException){
+            GlobalScope.launch(Dispatchers.Main) { EventBus.getDefault().post(NotificationEvent("Не удалось изменить пароль",NfEvEnum.CONNECTION_LOST)) }
+            return null
+        } catch (e: UnknownHostException) {
+            GlobalScope.launch(Dispatchers.Main) { EventBus.getDefault().post(NotificationEvent("Не удалось изменить пароль",NfEvEnum.CONNECTION_LOST)) }
+            return null
+        } catch (e:Exception){
+            e.printStackTrace()
+            return null
+        }
+    }
     suspend fun getAllWords(): List<Word>? {
         try{
             return RetrofitInstance.wordApi.getAllWords().body()//TODO там приходит response его нужно обработать здесь
@@ -71,12 +101,6 @@ class RetrofitService {
         return null
     }
 
-    /**
-     * выдаст все методы profileApi
-     */
-    fun getProfileApi() = RetrofitInstance.profileApi
-    //выдаст все методы statisticsApi
-    fun getStatisticsApi() = RetrofitInstance.statisticsApi
 
     /**
      * отправит поинты на сервер заработанные в офлайн режимах тренировки
@@ -150,4 +174,38 @@ class RetrofitService {
         }
     }
 
+
+    /**
+     * выполнит вызов к серверу вместе с обработкой ситуации когда истечет срок действия accesToken, refreshToken
+     * в параметры принимается лямбда, в которую вбивается запрос к серверу, который требует токен-менеджмента
+     */
+    suspend fun <T> authRequest(request: suspend (jwtToken: String) -> Response<T?>): Response<T?> {
+        val response: Response<T?> = request("Bearer " + ProfileRepository.instance.profile.value?.accessToken.toString())
+        if (response.isSuccessful) {//получил 200 с первого раза
+            return response
+        } else if (response.code() == 401) {//accessToken протух
+            val refreshTokenResponce: Response<PropModel?> = getProfileApi()
+                .refreshAccessToken("Bearer " + ProfileRepository.instance.profile.value?.refreshToken.toString())
+            if (refreshTokenResponce.isSuccessful) {//получил refreshToken
+                val newAccessToken = refreshTokenResponce.body()?.value
+                Log.d(LOG, "Получен newAccessToken: $newAccessToken")
+
+                val profile: Profile? = ProfileRepository.instance.profile.value
+                if (profile !== null) {
+                    profile.accessToken = newAccessToken
+                    ProfileRepository.instance.updateProfile(profile)//сохранили в БД профиль с новым accessToken
+                }
+
+                return request("Bearer " + newAccessToken)//повторили пользовательский запрос
+            } else if (refreshTokenResponce.code() == 401) {//refreshToken протух
+                Log.d(LOG, "Походу refreshToken протух или еще чтото")
+                ProfileRepository.instance.logOut()
+                return Response.error(401, okhttp3.ResponseBody.create(null, "Unauthorized"))
+            }
+            return Response.error(refreshTokenResponce.code(), ResponseBody.create(null, refreshTokenResponce.message()))
+        } else {
+            Log.d(LOG, "Something else: ${response.message()}")
+            return response
+        }
+    }
 }

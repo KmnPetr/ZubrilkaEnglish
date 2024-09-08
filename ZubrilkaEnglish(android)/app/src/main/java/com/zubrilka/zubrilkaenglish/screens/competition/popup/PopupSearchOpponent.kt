@@ -78,6 +78,11 @@ class PopupSearchOpponent(
         binding.buttonNextRound.setOnClickListener {
             EventBus.getDefault().post(CompetitionEvent(CmpEvEnum.SET_WAITING_STATUS))
         }
+        binding.btnExit.setOnClickListener {
+            EventBus.getDefault().post(CompetitionEvent(CmpEvEnum.CLOSE_SESSION))
+            EventBus.getDefault().post(NotificationEvent("",NfEvEnum.GO_TO_UPSTACK))
+            dismiss()
+        }
         viewModel.info_4.observe(viewLifecycleOwner){
             if (it!=null){
                 if ((viewModel.statusInfo.value?.statusPlayer ?: false) == StatusPlayer.WAITING){

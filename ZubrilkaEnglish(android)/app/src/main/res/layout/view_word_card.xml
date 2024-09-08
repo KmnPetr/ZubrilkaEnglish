@@ -66,13 +66,18 @@
                 android:gravity="center">
                 <TextView
                     android:id="@+id/foreignWord"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="3dp"
                     android:text="Foreign Word"
                     android:gravity="center"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="10sp"
+                    android:autoSizeMaxTextSize="20sp"
+                    android:autoSizeStepGranularity="2sp"/>
                 <com.zubrilka.zubrilkaenglish.utils.ui.CustImageButton
                     android:id="@+id/soundButton"
                     android:layout_width="30dp"
@@ -92,7 +97,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:gravity="center"
-                android:text="[transcription]"/>
+                android:text="[transcription]"
+                android:textSize="12sp"/>
             <TextView
                 android:id="@+id/translation"
                 android:layout_width="wrap_content"
@@ -101,7 +107,7 @@
                 android:text="перевод"
                 android:gravity="center"
                 android:textStyle="italic"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:visibility="invisible"/>
         </LinearLayout>
 

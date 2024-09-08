@@ -14,6 +14,8 @@ interface EditedWordDAO {
 
     @Query("SELECT*FROM editable_words")
     fun getAllEditedWords(): Flow<List<Word>>
+    @Query("SELECT*FROM editable_words")
+    suspend fun getAllAsList(): List<Word>
 
     @Query("SELECT*FROM editable_words WHERE editable_words.is_ready = :isReady")
     suspend fun getNotReadyWords(isReady:Boolean):List<Word>?

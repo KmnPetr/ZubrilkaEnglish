@@ -168,7 +168,9 @@ class ProfileRegistrationFragment : Fragment() {
                 viewModel.regPassword.value!!,
                 viewModel.regName,
                 null,
-                null
+                null,
+                null,
+                false
             )
             PropRepository.instance.userIsAgreedPrivacy() //типа он согласился с политиками сохраним это в БД
             ProfileRepository.instance.registrationRequest(newProfile)

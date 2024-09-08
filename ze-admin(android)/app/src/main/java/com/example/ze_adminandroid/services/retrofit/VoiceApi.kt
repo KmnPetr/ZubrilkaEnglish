@@ -6,6 +6,6 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface VoiceApi {
-    @GET("/ze-app/voice/byte/{name}")
+    @GET("/voice/byte/{name}")
     suspend fun getVoiceByName(@Path("name") name: String): Response<ResponseBody>
 }

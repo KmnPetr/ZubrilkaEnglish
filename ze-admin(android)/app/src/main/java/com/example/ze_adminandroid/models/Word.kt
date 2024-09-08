@@ -30,7 +30,7 @@ data class Word(
     @ColumnInfo(name = "topic")
     val topic:String,
     @ColumnInfo(name = "link_voice")
-    val link_voice: String?,
+    var link_voice: String?,
     @ColumnInfo(name = "link_image")
     val link_image: String?,
     @ColumnInfo(name = "sorting_value")
@@ -46,5 +46,4 @@ data class Word(
     //поле указывает, что у данного слова voice был проверен перед отправкой
     @ColumnInfo(name = "voiceVerified")
     var voiceVerified: Boolean = false
-){
-}
+)
