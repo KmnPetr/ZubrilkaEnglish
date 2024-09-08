@@ -13,7 +13,7 @@ interface PropDAO {
     suspend fun getDictionaryVersion(): PropModel?
     @Query("UPDATE prop_table SET value=:newDictionaryVersion WHERE prop_table.`key` ='dictionary_version'")
     suspend fun updateDictionaryVersion(newDictionaryVersion: String?)
-    @Query("INSERT INTO prop_table ('key', value) VALUES ('dictionary_version', :newDictionaryVersion)")
+    @Query("INSERT OR REPLACE INTO prop_table ('key', value) VALUES ('dictionary_version', :newDictionaryVersion)")
     suspend fun insertNewDictionaryVersion(newDictionaryVersion: String?)
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNewProp(propModel: PropModel)

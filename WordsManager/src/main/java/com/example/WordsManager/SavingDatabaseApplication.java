@@ -14,7 +14,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 
 /**
- * эта точка входа, предоставляет функционал по сохранению обьектов Voice и Word из локального хранилища в БД
+ * Эта точка входа, предоставляет функционал по сохранению обьектов Voice и Word из локального хранилища в БД
  * перед сохранением ведется просчет поля sorting_value у обьектов Word
  */
 @SpringBootApplication
@@ -42,9 +42,9 @@ public class SavingDatabaseApplication {
         //сохранит или обновит Words в БД
         thisClass.wordsService.saveOrUpdateWords();
         //просто поменяет версию словаря без подсчета всех слов
-//        thisClass.increaseDictionaryVersion();
+        thisClass.increaseDictionaryVersion();
         //пересчитает все слова
-        countAllWords(context);
+//        countAllWords(context);
 
 
         //забэкапим новое состояние словаря

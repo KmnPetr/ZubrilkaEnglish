@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 class Voice(
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "name")
-    val voiceName: String,
+    var voiceName: String,
     @ColumnInfo(name = "data")
     var voiceData: ByteArray?
 ) {

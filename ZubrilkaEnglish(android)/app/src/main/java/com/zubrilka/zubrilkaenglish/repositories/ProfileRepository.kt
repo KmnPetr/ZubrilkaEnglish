@@ -9,6 +9,7 @@ import com.zubrilka.zubrilkaenglish.models.PropModel
 import com.zubrilka.zubrilkaenglish.repositories.retrofit.RetrofitService
 import com.zubrilka.zubrilkaenglish.repositories.room.RoomService
 import com.zubrilka.zubrilkaenglish.utils.LOG
+import com.zubrilka.zubrilkaenglish.utils.test_url
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -43,6 +44,25 @@ class ProfileRepository private constructor() {
         }
     }
 
+    /**
+     * запросит смену пароля
+     * если старый пароль не требуется в связи с владением временным аккаунтом,
+     * то отправиться пустой текст сервер сам разбереться проверять его или нет
+     * если запрос на изменение пароля был успешен то метод вернет true
+     */
+    suspend fun changePassword(newPassword: String, oldPassword: String):Boolean {
+            val response: Response<Profile?>? = retrofitService.requestChangePassword(newPassword,oldPassword)
+            if (response!=null){
+                if (response.isSuccessful) {
+                    // Обработка успешного ответа
+                    onReceiveProfile(response.body())
+                    return true
+                } else {
+                    onReceiveErrors(response.errorBody()?.string())
+                    return false
+                }
+            }else return false
+    }
     /**
      * запросит у сервера временный профиль
      * сохранит его в БД
@@ -213,7 +233,7 @@ class ProfileRepository private constructor() {
             roomService.getPropDAO().deletePropByKey("profile")
         }
     }
-    private suspend fun updateProfile(profile: Profile){
+    suspend fun updateProfile(profile: Profile){
         roomService.getPropDAO().insertNewProp(PropModel("profile",profile.toJson()))
     }
 
@@ -223,6 +243,7 @@ class ProfileRepository private constructor() {
     fun clearValidationErrors() {
         validationErrors.value = null
     }
+
 
 
     /**
@@ -245,6 +266,7 @@ class ProfileRepository private constructor() {
                     "Invalid login or password." -> "Неправильный логин или пароль."
                     "Field value is blank." -> "Поле не должно быть пустым."
                     "This Email is already used."  -> "Email уже занят."
+                    "The old password was entered incorrectly." -> "Неверно введён старый пароль."
                     else -> "Unknown error."
                 })
             }

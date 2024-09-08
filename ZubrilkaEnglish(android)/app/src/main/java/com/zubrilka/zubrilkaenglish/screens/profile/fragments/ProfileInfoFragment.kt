@@ -51,6 +51,7 @@ class ProfileInfoFragment : Fragment() {
         binding.logOut.setOnClickListener { logOut() }
         binding.changeName.setOnClickListener { PopupChangeProfileField("name",requireContext()).show() }
         binding.changeEmail.setOnClickListener { PopupChangeProfileField("email",requireContext()).show() }
+        binding.changePassword.setOnClickListener { PopupChangePassword(requireContext()).show() }
     }
 
     /**
@@ -77,7 +78,30 @@ class ProfileInfoFragment : Fragment() {
     private fun showProfileInfo(profile: Profile) {
         binding.name.setText(profile.name)
         binding.email.setText(profile.email)
-//        binding.dateOfCreation.setText(profile.created_at.toString())
+        if (profile.created_at!=null)binding.dateOfCreation.setText("Аккаунт создан: "+dateView(profile.created_at))else binding.dateOfCreation.setText("")
+    }
+
+    /**
+     * немного поменяет формат даты
+     */
+    private fun dateView(createdAt: String): String {
+        val date:List<String> = createdAt.split("-")
+        val mounth:String = when(date.get(1).toInt()){
+            1 -> "янв."
+            2 -> "фев."
+            3 -> "мар."
+            4 -> "апр."
+            5 -> "май."
+            6 -> "июн."
+            7 -> "июл."
+            8 -> "авг."
+            9 -> "сен."
+            10 -> "окт."
+            11 -> "ноя."
+            12 -> "дек."
+            else -> {date.get(1)}
+        }
+        return date.get(0)+" "+mounth+" "+date.get(2)
     }
 
     override fun onStart() {

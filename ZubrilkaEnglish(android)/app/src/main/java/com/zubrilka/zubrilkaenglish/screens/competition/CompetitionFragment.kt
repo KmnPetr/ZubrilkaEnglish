@@ -74,7 +74,7 @@ class CompetitionFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         EventBus.getDefault().post(CompetitionEvent(CmpEvEnum.CLOSE_SESSION))
-        EventBus.getDefault().unregister(this) //подписываемся на EventBus
+        EventBus.getDefault().unregister(this)
     }
 
     /**

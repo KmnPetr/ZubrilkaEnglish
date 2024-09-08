@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -26,21 +27,28 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
         </RelativeLayout>
-        <TextView
+        <com.zubrilka.zubrilkaenglish.utils.ui.CustButton
             android:id="@+id/change_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
-            android:text="Изменить имя"
-            android:textSize="10sp"
-            android:textColor="#42A5F5"
-            android:textStyle="italic"/>
+            android:layout_margin="3dp"
+            android:padding="6dp"
+            android:paddingEnd="35dp"
+            app:backgroundColor="#00B6B6B6"
+            app:borderColor="#7E7E7E"
+            app:borderWidth="1dp"
+            app:cornerRadius="7dp"
+            app:fontFamily="sans-serif"
+            app:text="Изменить имя"
+            app:textColor="#42A5F5"
+            app:textSize="10sp"
+            app:textStyle="italic" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:padding="10dp">
             <TextView
                 android:id="@+id/email"
@@ -52,24 +60,62 @@
                 android:textSize="20sp"/>
 
         </RelativeLayout>
-        <TextView
+        <com.zubrilka.zubrilkaenglish.utils.ui.CustButton
             android:id="@+id/change_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:layout_marginEnd="20dp"
-            android:text="Изменить email"
-            android:textSize="10sp"
-            android:textColor="#42A5F5"
-            android:textStyle="italic"/>
-<!--        <TextView-->
-<!--            android:id="@+id/dateOfCreation"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="20dp"-->
-<!--            android:text="Date of creation"-->
-<!--            android:textStyle="italic"-->
-<!--            android:textSize="16sp"/>-->
+            android:layout_margin="3dp"
+            android:padding="6dp"
+            android:paddingEnd="35dp"
+            app:backgroundColor="#00B6B6B6"
+            app:borderColor="#7E7E7E"
+            app:borderWidth="1dp"
+            app:cornerRadius="7dp"
+            app:fontFamily="sans-serif"
+            app:text="Изменить email"
+            app:textColor="#42A5F5"
+            app:textSize="10sp"
+            app:textStyle="italic" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+            <TextView
+                android:id="@+id/password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Пароль: *******"
+                android:textStyle="italic"
+                android:textSize="16sp"/>
+
+        </RelativeLayout>
+        <com.zubrilka.zubrilkaenglish.utils.ui.CustButton
+            android:id="@+id/change_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_margin="3dp"
+            android:padding="6dp"
+            android:paddingEnd="35dp"
+            app:backgroundColor="#00B6B6B6"
+            app:borderColor="#7E7E7E"
+            app:borderWidth="1dp"
+            app:cornerRadius="7dp"
+            app:fontFamily="sans-serif"
+            app:text="Изменить пароль"
+            app:textColor="#42A5F5"
+            app:textSize="10sp"
+            app:textStyle="italic" />
+        <TextView
+            android:id="@+id/dateOfCreation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Date of creation"
+            android:textStyle="italic"
+            android:textSize="16sp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -79,14 +125,23 @@
         android:padding="8dp"
         android:gravity="end"
         android:layout_gravity="bottom">
-        <TextView
+        <com.zubrilka.zubrilkaenglish.utils.ui.CustButton
             android:id="@+id/logOut"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Выйти из аккаунта"
-            android:textStyle="italic"
-            android:textColor="#42A5F5"
-            android:textSize="16sp"/>
+            android:layout_gravity="right"
+            android:layout_margin="3dp"
+            android:padding="6dp"
+            android:paddingEnd="35dp"
+            app:backgroundColor="#00B6B6B6"
+            app:borderColor="#7E7E7E"
+            app:borderWidth="1dp"
+            app:cornerRadius="7dp"
+            app:fontFamily="sans-serif"
+            app:text="Выйти из аккаунта"
+            app:textColor="#42A5F5"
+            app:textSize="16sp"
+            app:textStyle="italic" />
     </LinearLayout>
 
 </FrameLayout>

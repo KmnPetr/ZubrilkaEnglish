@@ -5,11 +5,14 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 
 object RetrofitInstance {
     val interceptor: HttpLoggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-    val okHttpClient: OkHttpClient = OkHttpClient.Builder().addInterceptor(interceptor).build()
+    val okHttpClient: OkHttpClient = OkHttpClient
+        .Builder()
+//        .addInterceptor(interceptor)
+        .addInterceptor(RetryInterceptor(maxRetry = 2)) // Количество повторных попыток
+        .build()
 
 
     private val jsonRetrofit by lazy{

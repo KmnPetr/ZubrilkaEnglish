@@ -134,7 +134,7 @@ class CatalogItemFragment(
     override fun onClickButtonPlay(word: Word) {
         if (word.link_voice != null){
             //отправим запрос на воспроизведение звука
-            EventBus.getDefault().post(VoiceEvent(VcEvEnum.PLAY_VOICE, Voice(word.link_voice,null)))
+            EventBus.getDefault().post(VoiceEvent(VcEvEnum.PLAY_VOICE, Voice(word.link_voice!!,null)))
             word.voiceVerified = true
             cardAdapter.notifyDataSetChanged()
             EventBus.getDefault().post(WordEvent(WrEvEnum.SET_VOICE_VERIFIED,word))
@@ -147,7 +147,7 @@ class CatalogItemFragment(
     override fun onClickButtonDelete(word: Word) {
         EventBus.getDefault().post(WordEvent(WrEvEnum.DELETE_FROM_DATABASE,word))
         if (word.link_voice!=null&&!word.link_voice.equals("")){
-            EventBus.getDefault().post(VoiceEvent(VcEvEnum.DELETE_FROM_DATABASE,Voice(word.link_voice,null)))
+            EventBus.getDefault().post(VoiceEvent(VcEvEnum.DELETE_FROM_DATABASE,Voice(word.link_voice!!,null)))
         }
     }
 

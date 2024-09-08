@@ -62,16 +62,17 @@ class WordRepository private constructor(){
         //в случае изменения сета айдишников заставим перефильтровать список
         GlobalScope.launch {
             setEditedWordId.collect{set->
-                filterList(listWords.value,set)
+                filterAndSortList(listWords.value,set)
             }
         }
         //в случае изменения списка всех слов заставим перефильтровать список
         GlobalScope.launch {
             listWords.collect{listWords->
-                filterList(listWords,setEditedWordId.value)
+                filterAndSortList(listWords,setEditedWordId.value)
             }
         }
     }
+
 
     /**
      * метод используется библиотечкой EventBus
@@ -98,8 +99,9 @@ class WordRepository private constructor(){
      * отфильтрует список слов,
      * чтобы в нем не попадались word c id уже редактированных слов,
      * а также слов имеющих значение в поле link_voice
+     * отсортирует список по частоупотребимости
      */
-    private fun filterList(listAllWords: List<Word>, setId: HashSet<Int>) {
+    private fun filterAndSortList(listAllWords: List<Word>, setId: HashSet<Int>) {
         val filteredList: MutableList<Word> = mutableListOf()
         listAllWords.forEach {
             if(it.link_voice == null || it.link_voice.equals("")){
@@ -108,7 +110,7 @@ class WordRepository private constructor(){
                 }
             }
         }
-        filteredListAllWords.value = filteredList
+        filteredListAllWords.value = ArrayList(filteredList.sortedByDescending { it.sorting_value })
     }
 
 

@@ -3,6 +3,7 @@ package com.example.ze_adminandroid.services
 import com.example.ze_adminandroid.models.PropModel
 import com.example.ze_adminandroid.models.Voice
 import com.example.ze_adminandroid.models.Word
+import com.example.ze_adminandroid.services.room.CreatedVoiceDAO
 import com.example.ze_adminandroid.services.room.DataBase
 import com.example.ze_adminandroid.services.room.EditedWordDAO
 import kotlinx.coroutines.GlobalScope
@@ -18,6 +19,9 @@ class RoomService {
      */
     fun getEditedWordDAO(): EditedWordDAO {
         return dataBase.getEditedWordDAO()
+    }
+    fun getVoiceDAO(): CreatedVoiceDAO {
+        return dataBase.getCreatedVoiceDAO()
     }
     suspend fun saveEditableWord(word: Word) {
         dataBase.getEditedWordDAO().saveEditableWord(word)

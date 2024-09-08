@@ -15,7 +15,8 @@ data class Profile(
     val name:String,
     var accessToken:String?,
     val refreshToken: String?,
-//    val created_at: Timestamp?
+    val created_at: String?,
+    val isTempProf: Boolean? //укажет если это временный аккаунт автоматически сгенерированный
 ){
     fun toJson(): String {
         val gson = Gson()

@@ -24,4 +24,6 @@ interface CreatedVoiceDAO {
     suspend fun getFirstVoice(): Voice?
     @Query("DELETE FROM voice_table WHERE voice_table.name = :name")
     suspend fun deleteVoice(name: String?)
+    @Query("SELECT*FROM voice_table")
+    suspend fun getAll():List<Voice>?
 }

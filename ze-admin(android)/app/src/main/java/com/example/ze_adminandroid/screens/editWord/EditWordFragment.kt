@@ -25,6 +25,7 @@ import com.example.ze_adminandroid.screens.editWord.popupStorage.PopUpStorage
 import com.example.ze_adminandroid.screens.editWord.popupTopics.PopUpTopics
 import com.example.ze_adminandroid.utils.MYEFE_SWITCH
 import com.example.ze_adminandroid.utils.myBundle
+import com.example.ze_adminandroid.utils.web_view_link
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -169,7 +170,7 @@ class EditWordFragment : Fragment() {
      */
     private fun setLinkVoice() {
         val str:String = binding.foreignWord.text.toString()
-        val str2:String = str.replace(" ", "_")
+        val str2:String = str.replace(" ", "_").replace("/","_")
 
         val prefix:String = binding.prefix.text.toString()
 
@@ -215,9 +216,7 @@ class EditWordFragment : Fragment() {
      * откроет страницу в браузере
      */
     private fun openBrowser() {
-//        val url = "https://myefe.ru/anglijskaya-transkriptsiya.html"
-        val url = "https://zvukogram.com/speech/tts-english/"
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(web_view_link))
         startActivity(intent)
 
 //        temporarySavingWord()
@@ -228,7 +227,7 @@ class EditWordFragment : Fragment() {
      */
     private fun clipText(foreignWord: String?) {
         val clipboardManager = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clip = ClipData.newPlainText("Text", foreignWord)
+        val clip = ClipData.newPlainText("Text", foreignWord?.replace("/",", "))
         clipboardManager.setPrimaryClip(clip)
         // Выводим уведомление об успешном копировании
         Toast.makeText(requireActivity(), "Скопировано в буфер обмена: " + foreignWord, Toast.LENGTH_SHORT).show()

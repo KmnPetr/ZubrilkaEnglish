@@ -78,6 +78,7 @@ class PopupChangeProfileField(
 
         binding.buttonChange.setOnClickListener {
             if (!isNeedAgreePrivacy){
+                sendRequest()
             }else{
                 if (binding.isAgreePrivacy.isChecked){
                     propRepository.userIsAgreedPrivacy()

@@ -14,7 +14,7 @@ val MIGRATION_1_2 = object : Migration(1,2){
 //надо положить некоторые данные в бд не касающиеся изменения схемы
 //функция должна вызваться в двух местах как в миграциях так и при создании бд с нуля в случае которого миграции не выполняются
 fun migration1to2(database: SupportSQLiteDatabase){
-    database.execSQL("INSERT INTO prop_table (key, value) VALUES ('${PropKey.IS_FIRST_ENTRY.key}', 'true')")
+    database.execSQL("INSERT OR REPLACE INTO prop_table (key, value) VALUES ('${PropKey.IS_FIRST_ENTRY.key}', 'true')")
 }
 
 val MIGRATION_2_3 = object : Migration(2,3){
@@ -25,10 +25,10 @@ val MIGRATION_2_3 = object : Migration(2,3){
 //надо положить некоторые данные в бд не касающиеся изменения схемы
 //функция должна вызваться в двух местах как в миграциях так и при создании бд с нуля в случае которого миграции не выполняются
 fun migration2to3(database: SupportSQLiteDatabase){
-    database.execSQL("INSERT INTO prop_table (key, value) VALUES ('${PropKey.IS_AGREE_PRIVACY.key}', 'false')")
+    database.execSQL("INSERT OR REPLACE INTO prop_table (key, value) VALUES ('${PropKey.IS_AGREE_PRIVACY.key}', 'false')")
 }
 
-val MIGRATION_3_4 = object : Migration(2,3){
+val MIGRATION_3_4 = object : Migration(3,4){
     override fun migrate(database: SupportSQLiteDatabase) {
         migration3to4(database)
     }
@@ -36,5 +36,5 @@ val MIGRATION_3_4 = object : Migration(2,3){
 //надо положить некоторые данные в бд не касающиеся изменения схемы
 //функция должна вызваться в двух местах как в миграциях так и при создании бд с нуля в случае которого миграции не выполняются
 fun migration3to4(database: SupportSQLiteDatabase){
-    database.execSQL("INSERT INTO prop_table (key, value) VALUES ('${PropKey.learningMode.key}', '$defaultMode')")
+    database.execSQL("INSERT OR REPLACE INTO prop_table (key, value) VALUES ('${PropKey.learningMode.key}', '$defaultMode')")
 }

@@ -103,7 +103,7 @@ class SearchWordFragment(
     override fun onClickButtonPlay(word: Word) {
         if (word.link_voice != null){
             //отправим запрос на воспроизведение звука
-            EventBus.getDefault().post(VoiceEvent(VcEvEnum.PLAY_VOICE, Voice(word.link_voice,null)))
+            EventBus.getDefault().post(VoiceEvent(VcEvEnum.PLAY_VOICE, Voice(word.link_voice!!,null)))
         }
 
     }

@@ -48,6 +48,7 @@ class ListCardsAdapter(val listener: FragmentItem) : RecyclerView.Adapter<ListCa
             idWord = word.id
             binding.foreignWord.text=word.foreignWord
             binding.translation.text=word.translation
+            binding.sortingValue.text = "sv: "+word.sorting_value.toString()
 
             if (!word.voiceVerified) binding.linearLayout.setCardBackgroundColor(setUpBackground(word))
             else binding.linearLayout.setCardBackgroundColor(Color.parseColor("#CCFFCC"))

@@ -101,25 +101,31 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_gravity="start">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Боты: "/>
+                    android:text="Боты: "
+                    android:textSize="10sp"/>
 
                 <TextView
                     android:id="@+id/countBots"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginEnd="5dp"
                     android:text=""
+                    android:textSize="12sp"
                     android:textStyle="bold"/>
                 <CheckBox
                     android:id="@+id/loyalToBots"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
-                    android:text="играть с ботом" />
+                    android:text="играть с ботом"
+                    android:textSize="10sp"
+                    android:scaleX="0.8"
+                    android:scaleY="0.8" />
             </LinearLayout>
 
 
@@ -133,16 +139,31 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center">
+            <com.zubrilka.zubrilkaenglish.utils.ui.CustButton
+                android:id="@+id/btn_exit"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:padding="16dp"
+                app:backgroundColor="#D8D8D8"
+                app:cornerRadius="7dp"
+                app:borderWidth="0.5dp"
+                app:borderColor="#000000"
+                app:textColor="@color/white"
+                app:textSize="14sp"
+                app:text="Назад"
+                app:textStyle="bold_italic"
+                app:fontFamily="sans-serif"/>
 
             <com.zubrilka.zubrilkaenglish.utils.ui.CustButton
                 android:id="@+id/buttonNextRound"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="40dp"
                 android:padding="16dp"
                 app:backgroundColor="#81C100"
                 app:cornerRadius="7dp"
-                app:borderWidth="1dp"
-                app:borderColor="#33691E"
+                app:borderWidth="0.5dp"
+                app:borderColor="#000000"
                 app:textColor="@color/white"
                 app:textSize="14sp"
                 app:text="Начать!"

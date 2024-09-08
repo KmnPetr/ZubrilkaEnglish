@@ -19,22 +19,41 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:padding="3dp">
 
-            <TextView
-                android:id="@+id/foreignWord"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="foreignWord"
-                android:textColor="#000000" />
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/foreignWord"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="foreignWord"
+                    android:textColor="#000000" />
 
-            <TextView
-                android:id="@+id/translation"
+                <TextView
+                    android:id="@+id/translation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="translation"
+                    android:textColor="#000000" />
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="translation"
-                android:textColor="#000000" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/sorting_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="sorting_value"
+                    android:textColor="#000000" />
+            </LinearLayout>
+
 
         </androidx.appcompat.widget.LinearLayoutCompat>
         <ImageButton
