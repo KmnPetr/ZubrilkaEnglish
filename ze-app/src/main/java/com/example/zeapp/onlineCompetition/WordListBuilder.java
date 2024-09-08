@@ -20,7 +20,7 @@ public class WordListBuilder {
     private Boolean isServiceReady = false;
     public static final int sizeDuelList = 25; //количество слов для списка в поединке
     private int countUserWords = 0; //максимальное количество слов взятые у одного игрока требуемые для общего списка, вычисляется позже
-    private double shareUsersWords = 0.80; //доля слов взятых у игроков в конечном списке, остальные будут забиты другими случайными словами из глобального списка
+    private double shareUsersWords = 0.50; //доля слов взятых у игроков в конечном списке, остальные будут забиты другими случайными словами из глобального списка
 
     @Autowired
     public WordListBuilder(WordsRepository wordsRepository) {
