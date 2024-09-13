@@ -1,26 +1,21 @@
 package com.zubrilka.VideoManager.security;
 
+
 import com.zubrilka.VideoManager.models.Person;
 import com.zubrilka.VideoManager.models.UserRole;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.security.core.token.TokenService;
+import org.springframework.test.util.ReflectionTestUtils;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.sql.Timestamp;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class JwtUtilTest {
 
-    private static Person testPerson;
+    private Person testPerson;
+    private JwtUtil jwtUtil;
 
     @BeforeEach
     void setUp() {
@@ -32,8 +27,11 @@ class JwtUtilTest {
                 UserRole.ROLE_USER,
                 new Timestamp(System.currentTimeMillis())
         );
+        jwtUtil = new JwtUtil();
+        ReflectionTestUtils.setField(jwtUtil, "secret", "TestSecret");
+        ReflectionTestUtils.setField(jwtUtil, "timeExpirationAccess", "3600");
+        ReflectionTestUtils.setField(jwtUtil, "timeExpirationRefresh", "7200");
     }
-
 
     @Test
     void validateToken() {
@@ -44,35 +42,15 @@ class JwtUtilTest {
     }
 
     @Test
-    void generateAccessToken() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, NoSuchFieldException {
-//        // Создаем spy объект JwtUtil
-//        JwtUtil jwtUtil = Mockito.spy(new JwtUtil());
-//
-//        // Установка значения переменной timeExpirationAccess через рефлексию
-//        Field timeExpirationAccessField = JwtUtil.class.getDeclaredField("timeExpirationAccess");
-//        timeExpirationAccessField.setAccessible(true);
-//        timeExpirationAccessField.set(jwtUtil, "3600");
-//
-//        // Параметр времени истечения токена (можно заменить на реальный или замокировать)
-//        String timeExpirationAccess = "10045634624";
-//
-//        // Ожидаемое значение токена
-//        String expectedToken = "mocked_token";
-//
-//        // Получение приватного метода generateToken с помощью рефлексии
-//        Method privateGenerateToken = JwtUtil.class.getDeclaredMethod("generateToken", Person.class, String.class);
-//        privateGenerateToken.setAccessible(true);
-//
-//        // Мокирование результата приватного метода через рефлексию
-//        String mockedToken = (String) privateGenerateToken.invoke(jwtUtil, testPerson, timeExpirationAccess);
-//
-//        // Вызов публичного метода generateAccessToken
-//        String actualToken = jwtUtil.generateAccessToken(testPerson);
-//
-//        // Проверка того, что токены совпадают
-//        assertEquals(mockedToken, actualToken);
+    void generateAccessToken() {
 
-        //TODO там короче при использовании приватного метода generateToken каждый раз устанавливается новое значение времени и токен получается разный каждый раз
+        String token = jwtUtil.generateAccessToken(testPerson);
+
+        assertTrue(jwtUtil.validateToken(token));
+
+        assertEquals(jwtUtil.getUserIdFromToken(token),testPerson.getId());
+        assertEquals(jwtUtil.getClaimsFromToken(token).get("email"),testPerson.getEmail());
+        assertEquals(jwtUtil.getClaimsFromToken(token).get("role"),testPerson.getRole().toString());
     }
 
     @Test

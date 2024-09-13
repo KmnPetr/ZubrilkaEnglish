@@ -53,6 +53,6 @@ public class Person implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return short_name;
     }
 }
