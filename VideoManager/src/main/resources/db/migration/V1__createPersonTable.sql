@@ -1,8 +1,7 @@
 CREATE TABLE Person(
-    id BIGSERIAL PRIMARY KEY,
-    email varchar(100) UNIQUE NOT NULL,
+    uuid UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     password varchar NOT NULL,
-    short_name varchar(100),
+    username varchar(100) UNIQUE NOT NULL,
     role varchar(100) NOT NULL,
     created_at timestamp
 );

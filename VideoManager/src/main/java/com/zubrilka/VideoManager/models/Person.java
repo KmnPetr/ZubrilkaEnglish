@@ -1,6 +1,7 @@
 package com.zubrilka.VideoManager.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,9 +11,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * учетная запись пользователя
@@ -23,23 +26,25 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Person implements UserDetails {
+public class Person implements UserDetails, Serializable {
     @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(name = "email")
-    private String email;
+    @Column(name = "uuid", unique = true, nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID uuid;
     @JsonIgnore
     @Column(name = "password")
     private String password;
-    @Column(name = "short_name")
-    private String short_name;
+    @Column(name = "username")
+    private String username;
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private UserRole role;
     @Column(name = "created_at")
     private Timestamp created_at;
+
+    @OneToMany(mappedBy = "translator", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<VideoInfo> listVideoInfo;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -53,6 +58,6 @@ public class Person implements UserDetails {
 
     @Override
     public String getUsername() {
-        return short_name;
+        return username;
     }
 }

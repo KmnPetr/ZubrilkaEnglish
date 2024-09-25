@@ -20,31 +20,23 @@ class PersonRepositoryTest {
     void setUp() {
         // Инициализация тестовых данных
         Person person1 = new Person();
-        person1.setEmail("test1@example.com");
-        person1.setShort_name("user1");
+        person1.setUsername("user1");
         person1.setPassword("password");
-        person1.setRole(UserRole.ROLE_USER);
+        person1.setRole(UserRole.ROLE_TRANSLATOR);
         personRepository.save(person1);
 
         Person person2 = new Person();
-        person2.setEmail("test2@example.com");
-        person2.setShort_name("user2");
+        person2.setUsername("user2");
         person2.setPassword("password");
-        person2.setRole(UserRole.ROLE_USER);
+        person2.setRole(UserRole.ROLE_TRANSLATOR);
         personRepository.save(person2);
     }
 
     @Test
-    void testFindByEmail() {
-        Person foundPerson = personRepository.findByEmail("test1@example.com");
+    void testFindByUsername() {
+        Person foundPerson = personRepository.findByUsername("user1").orElse(null);
         assertThat(foundPerson).isNotNull();
-        assertThat(foundPerson.getEmail()).isEqualTo("test1@example.com");
+        assertThat(foundPerson.getUsername()).isEqualTo("user1");
     }
 
-    @Test
-    void testFindByName() {
-        Person foundPerson = personRepository.findByName("user1");
-        assertThat(foundPerson).isNotNull();
-        assertThat(foundPerson.getShort_name()).isEqualTo("user1");
-    }
 }

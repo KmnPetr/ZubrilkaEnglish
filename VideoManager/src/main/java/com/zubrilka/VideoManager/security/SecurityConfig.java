@@ -3,58 +3,53 @@ package com.zubrilka.VideoManager.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
-
-import java.util.List;
-
-import static org.springframework.security.config.Customizer.withDefaults;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * основная конфигурация секьюрити
  */
 @Configuration
 //@EnableWebSecurity(debug = false)
+//@CrossOrigin(origins = "http://localhost:3000")
 public class SecurityConfig {
 
-    private final JwtAuthenticationProvider jwtAuthenticationProvider;
-    private final UserDetailsService userDetailsService;
+    private final JwtAuthenticationFilter jwtAuthFilter;
+    private final JwtSecurityConfigurer jwtSecurityConfigurer;
+
+    //Точка входа, вызывается в случае если нужно вернуть ошибку
+    //напр. authEntryPoint.comence(..param..)
+    private AuthenticationEntryPoint authEntryPoint = ((request, response, authException) -> {
+        response.addHeader(HttpHeaders.WWW_AUTHENTICATE, "Bearer realm=\"Access to protected resource\"");
+        response.sendError(HttpStatus.UNAUTHORIZED.value(),"Error message");
+    });
 
     @Autowired
-    public SecurityConfig(JwtAuthenticationProvider jwtAuthenticationProvider, UserDetailsService userDetailsService) {
-        this.jwtAuthenticationProvider = jwtAuthenticationProvider;
-        this.userDetailsService = userDetailsService;
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthFilter, JwtSecurityConfigurer jwtSecurityConfigurer) {
+        this.jwtAuthFilter = jwtAuthFilter;
+        this.jwtSecurityConfigurer = jwtSecurityConfigurer;
     }
 
-
-    @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService);
-        provider.setPasswordEncoder(passwordEncoder());
-        return provider;
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager() {
-        return new ProviderManager(List.of(daoAuthenticationProvider(), jwtAuthenticationProvider));
-    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity
+        httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
-//                .sessionManagement(sessionManagement-> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))//отключает сохранение сессии
-                .httpBasic(withDefaults()) // Включаем базовую аутентификацию
+//                .cors(cors->corsConfigurer())
                 .authorizeHttpRequests(authorize ->
                         authorize.anyRequest().permitAll()
 //                        authorize
@@ -65,20 +60,25 @@ public class SecurityConfig {
 //                                .anyRequest().denyAll()
                 )
 //                .exceptionHandling(exceptionHandling ->
-//                        exceptionHandling
-//                                .authenticationEntryPoint(customAuthenticationEntryPoint()) // Точка входа для перенаправления
+//                        // Точка входа для перенаправления в случае возникновения ошибок
+//                        exceptionHandling.authenticationEntryPoint(authEntryPoint)
 //                )
+//                .httpBasic(withDefaults()) // Включаем базовую аутентификацию
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .sessionManagement(sm->sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
-                .rememberMe(Customizer.withDefaults())
+                .apply(jwtSecurityConfigurer);
 
-                .build();
+
+        return httpSecurity.build();
     }
+
 
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
+//        return NoOpPasswordEncoder.getInstance();
     }
 
 
@@ -87,4 +87,21 @@ public class SecurityConfig {
 //    private AuthenticationEntryPoint customAuthenticationEntryPoint() {
 //        return new LoginUrlAuthenticationEntryPoint("/custom-login");
 //    }
+
+
+    // Настройка CORS
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("http://localhost:3000")  // Разрешаем запросы с фронтенда
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")  // Указываем допустимые методы
+                        .allowedHeaders("*")
+                        .allowCredentials(true)
+                        .exposedHeaders("UUID", "X-Filename", "Authorization", "Content-Type", "Location", "X-Total-Count","Access-Control-Allow-Origin");
+            }
+        };
+    }
 }

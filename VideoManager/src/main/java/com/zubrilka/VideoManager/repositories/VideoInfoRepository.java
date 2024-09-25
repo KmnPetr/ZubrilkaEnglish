@@ -1,17 +1,16 @@
 package com.zubrilka.VideoManager.repositories;
 
-import com.zubrilka.VideoManager.models.Person;
+import com.zubrilka.VideoManager.models.VideoInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface PersonRepository extends JpaRepository<Person, UUID> {
-
-    @Query("SELECT p FROM Person p WHERE p.username = :username")
-    Optional<Person> findByUsername(@Param("username") String username);
+public interface VideoInfoRepository extends JpaRepository<VideoInfo, UUID> {
+    Optional<VideoInfo> findByUuid(UUID uuid);
 }
