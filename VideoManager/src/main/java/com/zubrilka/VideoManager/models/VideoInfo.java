@@ -31,7 +31,7 @@ public class VideoInfo {
     private UUID translator_uuid;
     @Transient
     private String translator_name; //for the convenience of sending over the network
-    @Column(name = "video_uuid")
+    @Column(name = "video_uuid",insertable=false, updatable=false)
     private UUID video_uuid;
     @Column(name = "translation_uuid",insertable=false, updatable=false)
     private UUID translation_uuid;
@@ -45,4 +45,9 @@ public class VideoInfo {
     @JoinColumn(name = "translation_uuid", referencedColumnName = "uuid")
     @JsonBackReference
     private Translation translation;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "video_uuid", referencedColumnName = "uuid")
+    @JsonBackReference
+    private Video video;
 }

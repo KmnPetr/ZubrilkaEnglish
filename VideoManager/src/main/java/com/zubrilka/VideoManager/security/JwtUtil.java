@@ -90,11 +90,4 @@ public class JwtUtil {
     public long getUserIdFromToken(String jwtToken) {
         return Long.parseLong(getClaimsFromToken(jwtToken).get("personId"));
     }
-
-    /**
-     * достанет username из токена
-     */
-    public String extractUsername(String jwt) {
-        return getClaimsFromToken(jwt).get("username");
-    }
 }

@@ -1,14 +1,13 @@
 package com.zubrilka.VideoManager.controllers;
 
+import com.zubrilka.VideoManager.controllers.validation.NotFoundException;
 import com.zubrilka.VideoManager.models.Video;
 import com.zubrilka.VideoManager.models.VideoInfo;
-import com.zubrilka.VideoManager.repositories.VideoRepository;
 import com.zubrilka.VideoManager.services.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,7 +15,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -30,9 +28,14 @@ public class VideoController {
     }
 
     @PostMapping("/upload-new")
-    public void uploadNewVideo(@RequestParam("file") MultipartFile file) {
+    public void uploadNewVideo(
+            @RequestParam("videoInfo_uuid") String videoInfoUuid,
+            @RequestParam("file") MultipartFile file) throws NotFoundException {
 
-        // Проверьте, что файл не пустой
+        if (videoInfoUuid==null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Parameter videoInfo_uuid is null");
+        }
+
         if (file.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Файл не может быть пустым");
         }
@@ -42,12 +45,12 @@ public class VideoController {
 
         Video video = null;
         try {
-            video = new Video(null,fileName,null, file.getBytes());
+            video = new Video(null,fileName, file.getBytes());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        videoService.saveVideo(video);
+        videoService.saveVideo(video, UUID.fromString(videoInfoUuid));
     }
     @GetMapping("/{uuid}")
     public ResponseEntity<byte[]> getVideoById(@PathVariable UUID uuid) {

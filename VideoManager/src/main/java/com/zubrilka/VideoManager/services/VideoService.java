@@ -1,5 +1,6 @@
 package com.zubrilka.VideoManager.services;
 
+import com.zubrilka.VideoManager.controllers.validation.NotFoundException;
 import com.zubrilka.VideoManager.models.Person;
 import com.zubrilka.VideoManager.models.Video;
 import com.zubrilka.VideoManager.models.VideoInfo;
@@ -26,10 +27,21 @@ public class VideoService {
         this.personService = personService;
     }
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public void saveVideo(Video video) {
+    public VideoInfo saveVideo(Video video, UUID videoInfoUuid) throws NotFoundException {
         if (video==null||video.getBytes()==null) throw new IllegalArgumentException("Video is null");
-        video.setUuid(UUID.randomUUID());
-        videoRepository.save(video);
+
+        VideoInfo videoInfo = videoInfoRepository.findByUuid(videoInfoUuid).orElseThrow(()->new NotFoundException("VideoInfo with uuid %s not found".formatted(videoInfoUuid)));
+
+        if (videoInfo.getVideo_uuid()!=null){
+            //will delete the old video if the request came for update
+            videoRepository.deleteById(videoInfo.getVideo_uuid());
+        }
+
+        Video savedVideo = videoRepository.save(video);
+
+        videoInfo.setVideo(savedVideo);
+
+        return videoInfoRepository.save(videoInfo);
     }
 
     public Video getVideoByUUID(UUID uuid) {

@@ -1,55 +1,60 @@
 package com.zubrilka.VideoManager.security;
 
+import com.nimbusds.jose.crypto.DirectDecrypter;
+import com.nimbusds.jose.crypto.DirectEncrypter;
+import com.nimbusds.jose.jwk.OctetSequenceKey;
+import com.zubrilka.VideoManager.security.jwtWeb.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * основная конфигурация секьюрити
+ * Основная конфигурация секьюрити
  */
 @Configuration
-//@EnableWebSecurity(debug = false)
-//@CrossOrigin(origins = "http://localhost:3000")
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
-    private final JwtSecurityConfigurer jwtSecurityConfigurer;
-
-    //Точка входа, вызывается в случае если нужно вернуть ошибку
-    //напр. authEntryPoint.comence(..param..)
-    private AuthenticationEntryPoint authEntryPoint = ((request, response, authException) -> {
-        response.addHeader(HttpHeaders.WWW_AUTHENTICATE, "Bearer realm=\"Access to protected resource\"");
-        response.sendError(HttpStatus.UNAUTHORIZED.value(),"Error message");
-    });
 
     @Autowired
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthFilter, JwtSecurityConfigurer jwtSecurityConfigurer) {
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthFilter) {
         this.jwtAuthFilter = jwtAuthFilter;
-        this.jwtSecurityConfigurer = jwtSecurityConfigurer;
     }
 
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity httpSecurity,
+            TokenCookieJweStringSerializer tokenCookieJweStringSerializer,
+            TokenCookieAuthenticationConfigurer tokenCookieAuthenticationConfigurer
+    ) throws Exception {
+
+
+        var tokenCookieSessionAuthenticationStrategy = new TokenCookieSessionAuthenticationStrategy();
+        tokenCookieSessionAuthenticationStrategy.setTokenStringSerializer(tokenCookieJweStringSerializer);
+
+        httpSecurity.apply(tokenCookieAuthenticationConfigurer);
         httpSecurity
-                .csrf(AbstractHttpConfigurer::disable)
-//                .cors(cors->corsConfigurer())
+                .addFilterAfter(new GetCsrfTokenFilter(), ExceptionTranslationFilter.class) //csrf token receive filter
+                .authorizeHttpRequests(authorizeHttpRequests ->
+                        authorizeHttpRequests
+                                .requestMatchers("/manager.html", "/manager").hasRole("MANAGER")
+                                .requestMatchers("/error", "index.html").permitAll()
+                                .anyRequest().authenticated())
                 .authorizeHttpRequests(authorize ->
                         authorize.anyRequest().permitAll()
 //                        authorize
@@ -59,35 +64,23 @@ public class SecurityConfig {
 //                                ).hasAnyAuthority(UserRole.ROLE_ADMIN.name(),UserRole.ROLE_USER.name())
 //                                .anyRequest().denyAll()
                 )
-//                .exceptionHandling(exceptionHandling ->
-//                        // Точка входа для перенаправления в случае возникновения ошибок
-//                        exceptionHandling.authenticationEntryPoint(authEntryPoint)
-//                )
-//                .httpBasic(withDefaults()) // Включаем базовую аутентификацию
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .sessionManagement(sm->sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
-                .apply(jwtSecurityConfigurer);
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class) //this is my class
+                .sessionManagement(sessionManagement -> sessionManagement
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        .sessionAuthenticationStrategy(tokenCookieSessionAuthenticationStrategy))
+                .csrf(csrf -> csrf.csrfTokenRepository(new CookieCsrfTokenRepository()) //спринг по умолчанию использует сессии, поэтому нужно поменять на CookieCsrfTokenRepository
+                        .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()) //по умолчанию стоит что-то другое, подробнее надо узнавать про дополнительные алгоритмы офускации scrf токена, а в данном примере он будет передаваться клиенту в чистом виде
+                        .sessionAuthenticationStrategy((authentication, request, response) -> {})) //нужно чтобы при каждой новой куки аутентификации не создавался новый scrf токен
 
+                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll);
 
         return httpSecurity.build();
     }
 
-
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-//        return NoOpPasswordEncoder.getInstance();
     }
-
-
-//    // Кастомная точка входа вызывается в случае проваленной аутентификации
-//    //при переопределении интерфейса AuthenticationEntryPoint можно более гипко настроить ответ пользователю
-//    private AuthenticationEntryPoint customAuthenticationEntryPoint() {
-//        return new LoginUrlAuthenticationEntryPoint("/custom-login");
-//    }
-
 
     // Настройка CORS
     @Bean
@@ -103,5 +96,30 @@ public class SecurityConfig {
                         .exposedHeaders("UUID", "X-Filename", "Authorization", "Content-Type", "Location", "X-Total-Count","Access-Control-Allow-Origin");
             }
         };
+    }
+
+
+    @Bean
+    public TokenCookieJweStringSerializer tokenCookieJweStringSerializer(
+            @Value("${jwt.cookie-token-key}") String cookieTokenKey
+    ) throws Exception {
+        return new TokenCookieJweStringSerializer(new DirectEncrypter(
+                OctetSequenceKey.parse(cookieTokenKey)
+        ));
+    }
+
+
+    @Bean
+    public TokenCookieAuthenticationConfigurer tokenCookieAuthenticationConfigurer(
+            @Value("${jwt.cookie-token-key}") String cookieTokenKey,
+            JdbcTemplate jdbcTemplate
+    ) throws Exception {
+        return new TokenCookieAuthenticationConfigurer()
+                .tokenCookieStringDeserializer(new TokenCookieJweStringDeserializer(
+                        new DirectDecrypter(
+                                OctetSequenceKey.parse(cookieTokenKey)
+                        )
+                ))
+                .jdbcTemplate(jdbcTemplate);
     }
 }

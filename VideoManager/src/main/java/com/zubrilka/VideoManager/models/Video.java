@@ -20,14 +20,12 @@ import java.util.UUID;
 public class Video {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "uuid", unique = true, nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID uuid;
 
     @Column(name = "file_name", nullable = false)
     private String fileName;
-
-    @Column(unique = true, nullable = false)
-    private UUID uuid;
 
     @Column(name = "bytes", nullable = false)
     private byte[] bytes;
