@@ -8,10 +8,14 @@ import org.springframework.web.bind.annotation.GetMapping;
  * TODO удалить контроллер после настройки куки аутентификации
  */
 @Controller
-public class ManagerController {
+public class CheckController {
 
     @GetMapping("manager")
     public String getManagerPage() {
         return "manager";
+    }
+    @GetMapping("ppp")
+    public String getPppMPage() {
+        return "ppp";
     }
 }

@@ -26,18 +26,6 @@ public class GetCsrfTokenFilter extends OncePerRequestFilter {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public void setRequestMatcher(RequestMatcher requestMatcher) {
-        this.requestMatcher = requestMatcher;
-    }
-
-    public void setCsrfTokenRepository(CsrfTokenRepository csrfTokenRepository) {
-        this.csrfTokenRepository = csrfTokenRepository;
-    }
-
-    public void setObjectMapper(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         if (this.requestMatcher.matches(request)) {

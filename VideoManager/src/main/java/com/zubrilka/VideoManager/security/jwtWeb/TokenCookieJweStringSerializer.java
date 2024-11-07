@@ -1,32 +1,31 @@
 package com.zubrilka.VideoManager.security.jwtWeb;
 
 import com.nimbusds.jose.*;
+import com.nimbusds.jose.crypto.DirectEncrypter;
+import com.nimbusds.jose.jwk.OctetSequenceKey;
 import com.nimbusds.jwt.EncryptedJWT;
 import com.nimbusds.jwt.JWTClaimsSet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.function.Function;
 
+/**
+ * converts from a token class to a token string
+ */
+@Component
+@Slf4j
 public class TokenCookieJweStringSerializer implements Function<Token, String> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TokenCookieJweStringSerializer.class);
-
     private final JWEEncrypter jweEncrypter;
-
     private JWEAlgorithm jweAlgorithm = JWEAlgorithm.DIR;
-
     private EncryptionMethod encryptionMethod = EncryptionMethod.A128GCM;
 
-    public TokenCookieJweStringSerializer(JWEEncrypter jweEncrypter) {
-        this.jweEncrypter = jweEncrypter;
-    }
-
-    public TokenCookieJweStringSerializer(JWEEncrypter jweEncrypter, JWEAlgorithm jweAlgorithm, EncryptionMethod encryptionMethod) {
-        this.jweEncrypter = jweEncrypter;
-        this.jweAlgorithm = jweAlgorithm;
-        this.encryptionMethod = encryptionMethod;
+    public TokenCookieJweStringSerializer(@Value("${jwt.cookie-token-key}") String cookieTokenKey) throws ParseException, KeyLengthException {
+        jweEncrypter = new DirectEncrypter(OctetSequenceKey.parse(cookieTokenKey));
     }
 
     @Override
@@ -47,17 +46,9 @@ public class TokenCookieJweStringSerializer implements Function<Token, String> {
 
             return encryptedJWT.serialize();
         } catch (JOSEException exception) {
-            LOGGER.error(exception.getMessage(), exception);
+            log.error(exception.getMessage(), exception);
         }
 
         return null;
-    }
-
-    public void setJweAlgorithm(JWEAlgorithm jweAlgorithm) {
-        this.jweAlgorithm = jweAlgorithm;
-    }
-
-    public void setEncryptionMethod(EncryptionMethod encryptionMethod) {
-        this.encryptionMethod = encryptionMethod;
     }
 }
