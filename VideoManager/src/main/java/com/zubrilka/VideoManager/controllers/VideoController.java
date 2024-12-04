@@ -19,7 +19,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/video")
+@RequestMapping("/api/video")
 public class VideoController {
     private final VideoService videoService;
     @Autowired

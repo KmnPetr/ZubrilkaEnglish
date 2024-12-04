@@ -2,9 +2,9 @@ package com.zubrilka.VideoManager.security;
 
 import com.zubrilka.VideoManager.security.jwtWeb.GetCsrfTokenFilter;
 import com.zubrilka.VideoManager.security.jwtWeb.TokenCookieAuthenticationConfigurer;
-import com.zubrilka.VideoManager.security.jwtWeb.TokenCookieJweStringSerializer;
 import com.zubrilka.VideoManager.security.jwtWeb.TokenCookieSessionAuthenticationStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -16,8 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * Основная конфигурация секьюрити
@@ -26,6 +24,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
+
+
+    @Value("${spring.profiles.active:default}") // Получение текущего профиля
+    private String profile;
 
     @Autowired
     public SecurityConfig(JwtAuthenticationFilter jwtAuthFilter) {
@@ -36,29 +38,50 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity httpSecurity,
-            TokenCookieJweStringSerializer tokenCookieJweStringSerializer,
-            TokenCookieAuthenticationConfigurer tokenCookieAuthenticationConfigurer
+            TokenCookieAuthenticationConfigurer tokenCookieAuthenticationConfigurer,
+            TokenCookieSessionAuthenticationStrategy tokenCookieSessionAuthenticationStrategy,
+            CustAuthSuccessHandler successHandler
     ) throws Exception {
 
-        var tokenCookieSessionAuthenticationStrategy = new TokenCookieSessionAuthenticationStrategy();
-        tokenCookieSessionAuthenticationStrategy.setTokenStringSerializer(tokenCookieJweStringSerializer);
+        if ("local".equals(profile)){
+            tokenCookieSessionAuthenticationStrategy.setProfile(profile);
+        }
 
-        httpSecurity.apply(tokenCookieAuthenticationConfigurer);
-        httpSecurity.httpBasic(Customizer.withDefaults())
-                .formLogin(Customizer.withDefaults())
+        httpSecurity
+                .apply(tokenCookieAuthenticationConfigurer);
+        httpSecurity
+                .httpBasic(Customizer.withDefaults())
+//                .formLogin(Customizer.withDefaults())
+                .formLogin(fl ->
+                        fl.loginProcessingUrl("/api/login")
+                                .successHandler(successHandler)
+                                .permitAll()
+                    )
                 .addFilterAfter(new GetCsrfTokenFilter(), ExceptionTranslationFilter.class) //csrf token receive filter
                 .authorizeHttpRequests(authorizeHttpRequests ->
                         authorizeHttpRequests
                                 .requestMatchers(
-                                        "/manager.html", "/manager",
-                                        "/ppp.html","/ppp"
-                                ).hasRole("MANAGER")
+                                        "/api/test/admin"
+                                ).hasRole("ADMIN")
                                 .requestMatchers(
-                                        "/error",
-                                        "/auth/login",
-                                        "/video/list-video"
+                                        "/api/test/hello",
+                                        "/api/test/user",
+                                        "/api/video/**",
+                                        "/api/video-info/**",
+                                        "/api/translation/**"
+                                ).hasAnyRole("ADMIN","TRANSLATOR")
+                                .requestMatchers(
+                                        "/api/test/free",
+                                        "/api/error",
+                                        "/api/auth/login",
+                                        "/api/login",
+                                        "/index.html",
+                                        "/",
+                                        "/vite.svg",
+                                        "/assets/**",
+                                        "/favicon.ico"
                                 ).permitAll()
-                                .anyRequest().authenticated())
+                                /*.anyRequest().authenticated()*/)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class) //this is my class
                 .sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -69,27 +92,12 @@ public class SecurityConfig {
                 .csrf(csrf->csrf.disable())
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll);
 
+
         return httpSecurity.build();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    // Настройка CORS
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:3000")  // Разрешаем запросы с фронтенда
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")  // Указываем допустимые методы
-                        .allowedHeaders("*")
-                        .allowCredentials(true)
-                        .exposedHeaders("UUID", "X-Filename", "Authorization", "Content-Type", "Location", "X-Total-Count","Access-Control-Allow-Origin");
-            }
-        };
     }
 }

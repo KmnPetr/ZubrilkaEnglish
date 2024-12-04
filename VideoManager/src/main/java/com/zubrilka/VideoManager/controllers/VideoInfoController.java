@@ -18,7 +18,7 @@ import java.util.UUID;
  * to the object of translation and other
  */
 @RestController
-@RequestMapping("/video-info")
+@RequestMapping("/api/video-info")
 public class VideoInfoController {
     private final VideoInfoService videoInfoService;
     @Autowired

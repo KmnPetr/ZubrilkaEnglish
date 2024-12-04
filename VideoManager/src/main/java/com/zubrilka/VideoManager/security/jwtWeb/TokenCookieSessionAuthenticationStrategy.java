@@ -3,20 +3,32 @@ package com.zubrilka.VideoManager.security.jwtWeb;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.session.SessionAuthenticationException;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
+import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Objects;
 import java.util.function.Function;
 
+@Component
 public class TokenCookieSessionAuthenticationStrategy implements SessionAuthenticationStrategy {
 
     private Function<Authentication, Token> tokenCookieFactory = new DefaultTokenCookieFactory();
-    private Function<Token, String> tokenStringSerializer = Objects::toString;
+    private final Function<Token, String> tokenStringSerializer;
+    private String profile;
+
+    @Value("${cookie-name}")
+    String cookieName;
+
+    @Autowired
+    public TokenCookieSessionAuthenticationStrategy(TokenCookieJweStringSerializer tokenCookieJweStringSerializer) {
+        this.tokenStringSerializer = tokenCookieJweStringSerializer;
+    }
 
     @Override
     public void onAuthentication(Authentication authentication, HttpServletRequest request,
@@ -26,10 +38,10 @@ public class TokenCookieSessionAuthenticationStrategy implements SessionAuthenti
             var token = this.tokenCookieFactory.apply(authentication);
             var tokenString = this.tokenStringSerializer.apply(token);
 
-            var cookie = new Cookie("__Host-auth-token", tokenString);
+            var cookie = new Cookie(cookieName, tokenString);
             cookie.setPath("/");
             cookie.setDomain(null); //как этого требует префикс "Host"
-            cookie.setSecure(true); //TODO кука будет передаваться только по защищенному соединению
+            cookie.setSecure(true);
             cookie.setHttpOnly(true); //чтобы только сервер имел доступ к этой куке
             cookie.setMaxAge((int) ChronoUnit.SECONDS.between(Instant.now(), token.expiresAt()));
 
@@ -37,7 +49,7 @@ public class TokenCookieSessionAuthenticationStrategy implements SessionAuthenti
         }
     }
 
-    public void setTokenStringSerializer(Function<Token, String> tokenStringSerializer) {
-        this.tokenStringSerializer = tokenStringSerializer;
+    public void setProfile(String profile) {
+        this.profile = profile;
     }
 }

@@ -45,7 +45,7 @@ public class TestFillDataBase {
         translationRepository.deleteAll();
         videoRepository.deleteAll();
 
-        Person adminPerson = new Person(null,passwordEncoder.encode("password"),"admin", UserRole.ROLE_ADMIN,new Timestamp(System.currentTimeMillis()),null);
+        Person adminPerson = new Person(null,passwordEncoder.encode("111"),"111", UserRole.ROLE_ADMIN,new Timestamp(System.currentTimeMillis()),null);
 
         Person savedPerson = personRepository.save(adminPerson);
         System.out.println("Person uuid: %s".formatted(savedPerson.getUuid()));

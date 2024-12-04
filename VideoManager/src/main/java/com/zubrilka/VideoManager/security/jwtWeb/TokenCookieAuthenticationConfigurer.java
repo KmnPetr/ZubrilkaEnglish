@@ -3,6 +3,7 @@ package com.zubrilka.VideoManager.security.jwtWeb;
 import com.nimbusds.jose.KeyLengthException;
 import com.nimbusds.jose.crypto.DirectDecrypter;
 import com.nimbusds.jose.jwk.OctetSequenceKey;
+import com.zubrilka.VideoManager.services.PersonService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -29,19 +30,27 @@ import java.util.function.Function;
 public class TokenCookieAuthenticationConfigurer implements SecurityConfigurer<DefaultSecurityFilterChain, HttpSecurity> {
 
     private final Function<String, Token> tokenCookieStringDeserializer;
+    private final PersonService personService;
+    @Value("${cookie-name}")
+    String cookieName;
+
 
     private JdbcTemplate jdbcTemplate;
 
-    public TokenCookieAuthenticationConfigurer(@Value("${jwt.cookie-token-key}") String cookieTokenKey,JdbcTemplate jdbcTemplate) throws ParseException, KeyLengthException {
+    public TokenCookieAuthenticationConfigurer(
+            @Value("${jwt.cookie-token-key}") String cookieTokenKey,
+            JdbcTemplate jdbcTemplate, PersonService personService
+    ) throws ParseException, KeyLengthException {
         this.tokenCookieStringDeserializer = new TokenCookieJweStringDeserializer(
                 new DirectDecrypter(OctetSequenceKey.parse(cookieTokenKey))
         );
+        this.personService = personService;
     }
 
     @Override
     public void init(HttpSecurity builder) throws Exception {
         builder.logout(logout -> logout.addLogoutHandler(
-                new CookieClearingLogoutHandler("__Host-auth-token"))
+                new CookieClearingLogoutHandler(cookieName))
                 .addLogoutHandler((request, response, authentication) -> {
                     if (authentication != null &&
                             authentication.getPrincipal() instanceof TokenUser user) {
@@ -57,7 +66,7 @@ public class TokenCookieAuthenticationConfigurer implements SecurityConfigurer<D
     public void configure(HttpSecurity builder) throws Exception {
         var cookieAuthenticationFilter = new AuthenticationFilter(
                 builder.getSharedObject(AuthenticationManager.class),
-                new TokenCookieAuthenticationConverter(this.tokenCookieStringDeserializer));
+                new TokenCookieAuthenticationConverter(this.tokenCookieStringDeserializer,cookieName));
         cookieAuthenticationFilter.setSuccessHandler((request, response, authentication) -> {});
         cookieAuthenticationFilter.setFailureHandler(
                 new AuthenticationEntryPointFailureHandler(
@@ -66,8 +75,7 @@ public class TokenCookieAuthenticationConfigurer implements SecurityConfigurer<D
         );
 
         var authenticationProvider = new PreAuthenticatedAuthenticationProvider();
-//        authenticationProvider.setPreAuthenticatedUserDetailsService(
-//                new TokenAuthenticationUserDetailsService(this.jdbcTemplate));
+        authenticationProvider.setPreAuthenticatedUserDetailsService(personService);
 
         builder.addFilterAfter(cookieAuthenticationFilter, CsrfFilter.class)
                 .authenticationProvider(authenticationProvider);

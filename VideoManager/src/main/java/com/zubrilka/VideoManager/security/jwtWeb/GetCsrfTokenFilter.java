@@ -20,7 +20,7 @@ import java.io.IOException;
  */
 public class GetCsrfTokenFilter extends OncePerRequestFilter {
 
-    private RequestMatcher requestMatcher = new AntPathRequestMatcher("/csrf", HttpMethod.GET.name());
+    private RequestMatcher requestMatcher = new AntPathRequestMatcher("/api/csrf", HttpMethod.GET.name());
 
     private CsrfTokenRepository csrfTokenRepository = new CookieCsrfTokenRepository();
 

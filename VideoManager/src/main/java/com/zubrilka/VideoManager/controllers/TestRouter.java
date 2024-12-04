@@ -20,7 +20,7 @@ public class TestRouter {
     @Bean
     public RouterFunction<ServerResponse> routerFunction(){
         return RouterFunctions.route()
-                .GET("test-route/hello",request -> {
+                .GET("/api/test-route/hello",request -> {
                     UserDetails userDetails = request.principal().map(Authentication.class::cast)
                             .map(Authentication::getPrincipal)
                             .map(UserDetails.class::cast)

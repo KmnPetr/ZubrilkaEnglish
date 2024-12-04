@@ -1,0 +1,180 @@
+.phrase {
+    background: #575757;
+    border-radius: 5px;
+    min-width: 0;
+    box-sizing: border-box;
+    margin: 5px;
+    padding: 3px;
+    position: relative;
+}
+
+.listPhrases{
+    background-color: #393939;
+    width: 50%;
+    height: 100%;
+    float: left;
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+/*////////////////////////////////////////////////////////////////*/
+/*////////////////////////////////////////////////////////////////*/
+/*////////////////////////////////////////////////////////////////*/
+
+/* Стиль для всей области скроллбара */
+div::-webkit-scrollbar {
+    width: 0.5em;
+    background-color: #575757; /* Цвет фона скроллбара */
+}
+
+/* Стиль для трековой области скроллбара */
+div::-webkit-scrollbar-track {
+    background-color: #575757; /* Цвет трека скроллбара */
+}
+
+/* Стиль для ползунка скроллбара */
+div::-webkit-scrollbar-thumb {
+    background-color: #000000; /* Цвет ползунка скроллбара */
+    border-radius: 10px; /* Закругленные углы для ползунка */
+}
+
+/* Можно добавить стили для ползунка при наведении */
+div::-webkit-scrollbar-thumb:hover {
+    background-color: #333333; /* Цвет ползунка при наведении */
+}
+
+/*////////////////////////////////////////////////////////////////*/
+/*////////////////////////////////////////////////////////////////*/
+/*////////////////////////////////////////////////////////////////*/
+
+.add-phrase-button {
+    color: #5796ea;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin: 3px;
+}
+.add-phrase-button p {
+    cursor: pointer;
+    margin-left: 8px;
+    font-size: 14px;
+}
+.add-phrase-button:hover {
+    opacity: 0.5;
+}
+.add-phrase-button:active {
+    transform: scale(1.1);
+}
+
+.add-phrase-and-button{
+    color: #5796ea;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 20px;
+}
+.add-phrase-and-button p {
+    cursor: pointer;
+    margin-left: 8px;
+    font-size: 28px;
+}
+.add-phrase-and-button:hover {
+    opacity: 0.5;
+}
+.add-phrase-and-button:active {
+    transform: scale(1.1);
+}
+
+
+/*////////////////////////////////////////////////////////////////*/
+/*////////////////////////////////////////////////////////////////*/
+/*////////////////////////////////////////////////////////////////*/
+
+
+.phrase-header {
+    display: flex;
+    justify-content: space-between;
+    margin: 3px;
+}
+
+/*////////////////////////////////////////////////////////////////*/
+/*////////////////////////////////////////////////////////////////*/
+/*////////////////////////////////////////////////////////////////*/
+
+.overlay {
+    position: absolute; /* Позиционирование внутри родителя */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный фон */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dialog {
+    background-color: #292929;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+/*////////////////////////////////////////////////////////////////*/
+/*////////////////////////////////////////////////////////////////*/
+/*////////////////////////////////////////////////////////////////*/
+
+.str-phrase {
+    display: flex;
+    align-items: center;
+    margin: 3px;
+}
+.str-phrase p {
+    word-break: break-word;
+    margin-right: 5px;
+}
+.str-phrase .clickable {
+    flex-shrink: 0
+}
+.str-phrase input {
+    width: 400px;
+    padding: 5px;
+    color: #ffffff;
+    border: none;
+    outline: none;
+    background-color: #474747;
+    margin-right:15px;
+}
+
+/*////////////////////////////////////////////////////////////////*/
+/*////////////////////////////////////////////////////////////////*/
+/*////////////////////////////////////////////////////////////////*/
+
+.phrase-interval {
+    display: flex;
+    margin: 3px;
+    justify-content: center;
+    align-items: center;
+}
+.phrase-interval-play {
+    margin-left: 6px;
+    color: green;
+}
+
+.phrase-interval input {
+    width: 50px;
+    padding: 5px;
+    color: #ffffff;
+    border: none;
+    outline: none;
+    background-color: #474747;
+}
+
+
+

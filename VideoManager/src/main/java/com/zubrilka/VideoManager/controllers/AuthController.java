@@ -27,7 +27,7 @@ import java.util.function.Function;
  * контроллер аутентификации
  */
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 
     private final PersonService personService;
