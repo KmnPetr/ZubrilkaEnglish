@@ -44,7 +44,9 @@ const ListVideo = () => {
             <ul className="video-list">
                 {videos.map((video) => (
                     <li key={video.uuid} className="video-item">
-                        <h2>{video.name}</h2>
+                        <h2>{video.cnName}</h2>
+                        <h2>{video.enName}</h2>
+                        <h2>{video.ruName}</h2>
                         <p>Переводчик: {video.translator_name}</p>
                         <p>{video.description}</p>
                         <button className="view-button" onClick={() => handleVideoClick(video.uuid)}>

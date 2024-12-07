@@ -67,6 +67,7 @@ public class SecurityConfig {
                                         "/api/test/hello",
                                         "/api/test/user",
                                         "/api/video/**",
+                                        "/api/video-info",
                                         "/api/video-info/**",
                                         "/api/translation/**"
                                 ).hasAnyRole("ADMIN","TRANSLATOR")

@@ -6,9 +6,6 @@ import {getTranslation} from "../../../services/phrasesService";
 import {setTranslation} from "../../../store/reducers/translationReducer";
 import {phraseReducer, setListPhrases} from "../../../store/reducers/phraseReduser";
 
-/**
- * Компонент для отображения видео, над которым идет работа
- */
 const ListPhrases = ({ translation_uuid }) => {
     const dispatch = useDispatch();
     const phrases = useSelector(state => state.phraseReducer.phrases);

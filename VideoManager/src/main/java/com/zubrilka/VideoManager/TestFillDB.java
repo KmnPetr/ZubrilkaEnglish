@@ -1,15 +1,18 @@
-package com.zubrilka.VideoManager.util;
+package com.zubrilka.VideoManager;
 
 import com.zubrilka.VideoManager.models.*;
 import com.zubrilka.VideoManager.repositories.PersonRepository;
 import com.zubrilka.VideoManager.repositories.TranslationRepository;
 import com.zubrilka.VideoManager.repositories.VideoInfoRepository;
 import com.zubrilka.VideoManager.repositories.VideoRepository;
-import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.WebApplicationType;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -19,16 +22,18 @@ import java.util.List;
  * be careful
  * * you should not run the server on a prod with this class with the "local" profile
  */
-@Component
-@Profile("local")
-public class TestFillDataBase {
+@SpringBootApplication
+class TestFillDB {
+
+
     private final PersonRepository personRepository;
     private final PasswordEncoder passwordEncoder;
     private final VideoInfoRepository videoInfoRepository;
     private final TranslationRepository translationRepository;
     private final VideoRepository videoRepository;
+
     @Autowired
-    public TestFillDataBase(PersonRepository personRepository, PasswordEncoder passwordEncoder, VideoInfoRepository videoInfoRepository, TranslationRepository translationRepository, VideoRepository videoRepository) {
+    public TestFillDB(PersonRepository personRepository, PasswordEncoder passwordEncoder, VideoInfoRepository videoInfoRepository, TranslationRepository translationRepository, VideoRepository videoRepository) {
         this.personRepository = personRepository;
         this.passwordEncoder = passwordEncoder;
         this.videoInfoRepository = videoInfoRepository;
@@ -36,7 +41,18 @@ public class TestFillDataBase {
         this.videoRepository = videoRepository;
     }
 
-    @PostConstruct
+    public static void main(String[] args) {
+        System.setProperty("spring.profiles.active","local");
+        SpringApplication application = new SpringApplication(TestFillDB.class);
+//        application.setWebApplicationType(WebApplicationType.NONE);
+        ApplicationContext context = application.run(args);
+
+        TestFillDB testFillDB = context.getBean(TestFillDB.class);
+        testFillDB.init();
+
+        SpringApplication.exit(context);
+    }
+
     public void init() {
         System.err.println("Warning!!! init: TestFillDataBase");
 
@@ -72,10 +88,8 @@ public class TestFillDataBase {
         Translation savedTranslation = translationRepository.save(translation);
 
         List<VideoInfo> videoInfoList = List.of(
-                new VideoInfo(null,"testVideo_1",savedPerson.getUuid(), savedPerson.getUsername(), null,null,savedPerson,savedTranslation,null),
-                new VideoInfo(null,"testVideo_2",savedPerson.getUuid(), savedPerson.getUsername(), null, null,savedPerson,null,null),
-                new VideoInfo(null,"testVideo_3",savedPerson.getUuid(), savedPerson.getUsername(), null, null,savedPerson,null,null),
-                new VideoInfo(null,"testVideo_4",savedPerson.getUuid(), savedPerson.getUsername(), null, null,savedPerson,null,null)
+                new VideoInfo(null,null,null,"test video 1",null,savedPerson.getUuid(), savedPerson.getUsername(), null,null,savedPerson,savedTranslation,null),
+                new VideoInfo(null,null,null,"test video 2",null,savedPerson.getUuid(), savedPerson.getUsername(), null, null,savedPerson,null,null)
         );
 
 

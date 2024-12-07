@@ -3,11 +3,9 @@ package com.zubrilka.VideoManager.controllers;
 import com.zubrilka.VideoManager.controllers.validation.NotFoundException;
 import com.zubrilka.VideoManager.models.VideoInfo;
 import com.zubrilka.VideoManager.services.VideoInfoService;
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -29,5 +27,16 @@ public class VideoInfoController {
     @GetMapping("/{videoUuid}")
     public VideoInfo getVideoInfoByUuid(@PathVariable String videoUuid) throws NotFoundException {
         return videoInfoService.getVideoInfoByUuid(UUID.fromString(videoUuid));
+    }
+
+    /**
+     * request to update the video information field, for example, update the video name or description
+     */
+    @PatchMapping
+    public VideoInfo editVideoInfoField(
+            @PathParam("videoInfo_uuid") String videoInfo_uuid,
+            @PathParam("fieldName") String fieldName,
+            @PathParam("newValue") String newValue) throws NotFoundException {
+        return videoInfoService.editVideoInfoField(UUID.fromString(videoInfo_uuid),fieldName,newValue);
     }
 }

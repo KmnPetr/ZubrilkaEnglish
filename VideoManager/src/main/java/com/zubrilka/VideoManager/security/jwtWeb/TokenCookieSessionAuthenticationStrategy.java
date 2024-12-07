@@ -33,7 +33,6 @@ public class TokenCookieSessionAuthenticationStrategy implements SessionAuthenti
     @Override
     public void onAuthentication(Authentication authentication, HttpServletRequest request,
                                  HttpServletResponse response) throws SessionAuthenticationException {
-        System.err.println("TokenCookieSessionAuthenticationStrategy");
         if (authentication instanceof UsernamePasswordAuthenticationToken) { //чтобы новый токен не создавался на любую успешную аутентификацию
             var token = this.tokenCookieFactory.apply(authentication);
             var tokenString = this.tokenStringSerializer.apply(token);

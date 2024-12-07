@@ -25,8 +25,14 @@ public class VideoInfo {
     @Column(name = "uuid", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID uuid;
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Column(name = "cn_name")
+    private String cnName;
+    @Column(name = "en_name")
+    private String enName;
+    @Column(name = "ru_name")
+    private String ruName;
+    @Column(name = "link_original")
+    private String linkOriginal;
     @Column(name = "translator_uuid", insertable = false, updatable = false)
     private UUID translator_uuid;
     @Transient

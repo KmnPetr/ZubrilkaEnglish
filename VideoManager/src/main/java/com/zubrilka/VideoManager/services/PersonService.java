@@ -39,7 +39,6 @@ public class PersonService implements UserDetailsService, AuthenticationUserDeta
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        System.err.println("loadUserByUsername with username: "+ username);
         return personRepository
                 .findByUsername(username)
                 .orElseThrow(()-> new UsernameNotFoundException("Username not found: "+username));
@@ -81,7 +80,6 @@ public class PersonService implements UserDetailsService, AuthenticationUserDeta
     public UserDetails loadUserDetails(PreAuthenticatedAuthenticationToken authenticationToken)
             throws UsernameNotFoundException {
         if (authenticationToken.getPrincipal() instanceof Token token) {
-            System.err.println(token.subject());
             return new TokenUser(token.subject(), "nopassword", true, true,
                     true,
 //                    !this.jdbcTemplate.queryForObject("""

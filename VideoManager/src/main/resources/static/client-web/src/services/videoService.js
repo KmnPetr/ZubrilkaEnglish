@@ -100,9 +100,9 @@ export async function downloadListVideo() {
 
 
 //запросит у сервера информацию по видео
-export async function getVideoInfoByUuid(videoUuid) {
+export async function getVideoInfoByUuid(videoInfoUuid) {
     try {
-        const response = await api.get(`/api/video-info/${videoUuid}`, {
+        const response = await api.get(`/api/video-info/${videoInfoUuid}`, {
             headers: {
                 'Content-Type': 'application/json'
             },

@@ -21,7 +21,6 @@ public class TokenCookieAuthenticationConverter implements AuthenticationConvert
 
     @Override
     public Authentication convert(HttpServletRequest request) {
-        System.err.println("TokenCookieAuthenticationConverter");
         if (request.getCookies() != null) {
             return Stream.of(request.getCookies())
                     .filter(cookie -> cookie.getName().equals(cookieName))

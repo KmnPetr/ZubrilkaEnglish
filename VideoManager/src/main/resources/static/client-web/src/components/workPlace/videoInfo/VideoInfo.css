@@ -1,0 +1,26 @@
+
+.edited-field {
+    display: flex;
+    align-items: center;
+    margin: 3px;
+}
+.edited-fielde p {
+    margin-right: 5px;
+}
+.edited-field .clickable {
+    flex-shrink: 0
+}
+.edited-field input {
+    width: 400px;
+    padding: 5px;
+    color: #ffffff;
+    border: none;
+    outline: none;
+    background-color: #474747;
+    margin-right:15px;
+}
+.fieldNameAlias {
+    font-size: 12px;
+    margin-right: 10px;
+    
+}
