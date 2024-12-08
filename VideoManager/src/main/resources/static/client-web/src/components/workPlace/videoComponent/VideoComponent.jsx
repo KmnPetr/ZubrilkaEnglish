@@ -3,6 +3,7 @@ import SelectFileButton from "./SelectFileButton";
 import Video from "./Video";
 import {useDispatch, useSelector} from "react-redux";
 import {downloadVideoByUUID, uploadVideo} from "../../../services/videoService";
+import "./VideoComponent.css"
 
 /**
  * Компонент для отображения видео, над которым идет работа
@@ -26,7 +27,7 @@ const VideoComponent = ({video_uuid,videoInfo_uuid,reloadVideoInfo}) => {
         sendVideoToServer(videoURL);
     }
     return (
-        <div className="videoComponent" style={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
+        <div className="videoComponent">
 
             {!video_uuid ? (<div>
                 <p>The video has not been installed yet</p>
@@ -40,7 +41,7 @@ const VideoComponent = ({video_uuid,videoInfo_uuid,reloadVideoInfo}) => {
                             <p>Download video... {network.downloadVideoProgress}</p>
                         </div>
                     ) : (
-                        <div style={{display: "block"}}>
+                        <div>
                             <Video videoPath={video.videoUrl}/>
                         </div>
                     )}
@@ -49,8 +50,7 @@ const VideoComponent = ({video_uuid,videoInfo_uuid,reloadVideoInfo}) => {
 
 
         </div>
-    )
-        ;
+    );
 };
 
 export default VideoComponent;

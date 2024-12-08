@@ -46,16 +46,6 @@
 
 
 
-.videoComponent {
-    background-color: #181818;
-    width: 50%;
-    height: 100%;
-    float: right;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 
 
 * {

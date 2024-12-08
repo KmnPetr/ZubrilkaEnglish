@@ -28,7 +28,8 @@ const EditVideo = () => {
     }
 
 
-    return (<div className="name">
+    return (
+        <div className="name">
             {videoInfo === null ? (
                 <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
                     Загрузка...

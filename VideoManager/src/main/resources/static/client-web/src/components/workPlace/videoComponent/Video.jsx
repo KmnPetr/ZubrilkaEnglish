@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { setToPauseFalse, setToPlayFalse } from "../../../store/reducers/videoManagementReducer";
+import "./VideoComponent.css"
 
 const Video = ({ videoPath }) => {
     const dispatch = useDispatch();
@@ -8,6 +9,8 @@ const Video = ({ videoPath }) => {
     const videoRef = useRef(null); // Реф для видео
     const [currentTimeMs, setCurrentTimeMs] = useState(0); // Текущее время в миллисекундах
     const [isPlaying, setIsPlaying] = useState(false); // Состояние для управления воспроизведением
+    const [videoDurationMs, setVideoDurationMs] = useState(0); // Длительность видео в миллисекундах
+
 
     const playPhraseInterval = () => {
         const video = videoRef.current;
@@ -59,11 +62,11 @@ const Video = ({ videoPath }) => {
     };
 
     const handleSeek = (event) => {
-        const newTime = event.target.value;
+        const newTime = Number(event.target.value);
         const video = videoRef.current;
         if (video) {
             video.currentTime = newTime / 1000;
-            setCurrentTimeMs(newTime); // Обновляем время
+            setCurrentTimeMs(newTime);
         }
     };
 
@@ -81,15 +84,22 @@ const Video = ({ videoPath }) => {
         }
     };
 
+
+    // Обработчик события loadedmetadata
+    const handleMetadataLoaded = () => {
+        const video = videoRef.current;
+        if (video) {
+            setVideoDurationMs(video.duration * 1000); // Устанавливаем длительность видео
+        }
+    };
+
     return (
-        <div style={{ width: '600px', margin: '0 auto' }}>
+        <div>
             {/* Видео */}
             <video
                 ref={videoRef}
-
-                width="600"
                 onTimeUpdate={handleTimeUpdate}
-                style={{ cursor: 'pointer', display: 'block', marginBottom: '10px' }}
+                onLoadedMetadata={handleMetadataLoaded}
                 onClick={handlePlayPause} // Клик по видео запускает/останавливает
             >
                 <source src={videoPath} type="video/mp4" />
@@ -97,35 +107,26 @@ const Video = ({ videoPath }) => {
             </video>
 
             {/* Панель управления */}
-            <div
-                style={{
-                    background: 'rgba(0, 0, 0, 0.7)',
-                    color: 'white',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '10px',
-                    borderRadius: '5px',
-                }}
-            >
-                {/* Кнопка Play/Pause */}
-                <button onClick={handlePlayPause} style={{ background: 'none', border: 'none', color: 'white' }}>
-                    {isPlaying ? '❚❚ Pause' : '► Play'}
-                </button>
-
+            <div className='videoControlPanel'>
                 {/* Ползунок времени */}
                 <input
                     type="range"
                     min="0"
-                    max={videoRef.current?.duration * 1000 || 0}
+                    max={videoDurationMs || 0}
                     step="100"
                     value={currentTimeMs}
                     onChange={handleSeek}
-                    style={{ flex: 1, margin: '0 10px' }}
+                    className="timeSlider"
                 />
 
-                {/* Текущее время */}
-                <span>{currentTimeMs.toFixed(0)} ms</span>
+                <div className="controlRow">
+                    {/* Кнопка Play/Pause */}
+                    <button onClick={handlePlayPause} className="playPauseButton">
+                        {isPlaying ? '❚❚ Pause' : '► Play'}
+                    </button>
+                    {/* Текущее время */}
+                    <span className="timeDisplay">{Number(currentTimeMs || 0).toFixed(0)} ms</span>
+                </div>
             </div>
         </div>
     );

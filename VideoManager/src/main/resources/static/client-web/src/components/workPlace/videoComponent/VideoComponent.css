@@ -1,0 +1,106 @@
+.videoControlPanel {
+    margin: 0 auto; /* Центровка панели */
+    width: 90%; /* Или другая подходящая ширина */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    align-items: center; /* Центрирование элементов */
+    background: rgba(0, 0, 0, 0.85); /* Темный фон */
+    color: #ffffff; /* Белый текст */
+    padding: 16px; /* Увеличенные отступы */
+    border-radius: 8px; /* Закругленные края */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Добавление тени */
+    backdrop-filter: blur(4px); /* Эффект размытия */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Легкая граница */
+    gap: 12px; /* Пространство между строками */
+}
+
+.controlRow {
+    display: flex;
+    align-items: center; /* Выравнивание по вертикали */
+    justify-content: space-between; /* Равное расстояние между кнопкой и временем */
+    width: 100%; /* Занимает полную ширину контейнера */
+    gap: 12px; /* Промежуток между элементами */
+}
+
+.playPauseButton {
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 8px 12px;
+    transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.playPauseButton:hover {
+    color: #00ffcc; /* Акцент при наведении */
+    background-color: rgba(255, 255, 255, 0.1); /* Легкая подсветка */
+    border-radius: 4px;
+}
+
+.timeSlider {
+    width: 100%; /* Полная ширина */
+    appearance: none; /* Убираем стандартный стиль */
+    height: 6px; /* Высота дорожки */
+    background: #444; /* Цвет дорожки */
+    border-radius: 3px; /* Закругленные края */
+    outline: none;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.timeSlider::-webkit-slider-thumb {
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    background: #00ffcc;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.timeSlider::-webkit-slider-thumb:hover {
+    background: #00ddaa;
+    transform: scale(1.2);
+}
+
+.timeDisplay {
+    font-size: 14px; /* Размер текста */
+    font-weight: bold; /* Жирный текст */
+    white-space: nowrap; /* Отключение переноса */
+}
+
+
+/*/////////////////////////////////////////////////////////////////////////*/
+/*/////////////////////////////////////////////////////////////////////////*/
+/*/////////////////////////////////////////////////////////////////////////*/
+/*/////////////////////////////////////////////////////////////////////////*/
+/*/////////////////////////////////////////////////////////////////////////*/
+
+.videoComponent {
+    background-color: #181818;
+    width: 60%;
+    height: 100%;
+    float: right;
+    display: flex;
+    flex-direction: column; /* Вложенные элементы располагаются вертикально */
+    justify-content: center;
+    align-items: center;
+}
+
+
+.videoComponent video {
+    max-width: 100%;
+    height: auto; /* Сохраняет пропорции видео */
+    display: block; /* Убирает возможные дополнительные отступы */
+}
+
+.videoComponent > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
