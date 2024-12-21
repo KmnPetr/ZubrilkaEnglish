@@ -14,8 +14,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 
 /**
- * Эта точка входа, предоставляет функционал по сохранению обьектов Voice и Word из локального хранилища в БД
- * перед сохранением ведется просчет поля sorting_value у обьектов Word
+ * при запуске данного эндпоинта стартует процесс сохранения новых файлов voice на сервер в БД
+ * затем стартует сохранение обьектов word на сервер в БД из файла resources\serializableWords\listWords.bin
+ *
+ * опционально
+ * ведется просчет поля sorting_value у обьектов Word
+ *
+ * после сохранения необходимо вручную произвести commit в git репозиторий для сохранения новых voice и word,
+ * сохраненнных в файлах данного проекта
  */
 @SpringBootApplication
 @Slf4j
