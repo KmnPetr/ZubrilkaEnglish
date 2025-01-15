@@ -1,7 +1,6 @@
-package com.zubrilka.VideoManager.models;
+package com.zubrilka.VideoManager.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+import com.zubrilka.VideoManager.models.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

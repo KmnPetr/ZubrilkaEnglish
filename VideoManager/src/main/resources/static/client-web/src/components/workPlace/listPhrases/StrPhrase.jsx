@@ -28,18 +28,28 @@ const StrPhrase = ({str,idPhrase,language, isHover}) => {
         dispatch(editStrAction(idPhrase,language,inputValue))
         setIsEditable(false)
     }
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            onApplyChanges();
+        }
+    }
 
     return (
         <div>
             {isEditable ? (
                 <div className="str-phrase">
-                    <input type="text" value={inputValue} onChange={handleInputChange}/>
+                    <input
+                        type="text" 
+                        value={inputValue} 
+                        onChange={handleInputChange}
+                        onKeyDown={handleKeyDown}/>
                     <FiX onClick={onCancelEdit} style={{marginRight:'10px'}} className='clickable'/>
                     <FiCheck onClick={onApplyChanges} className='clickable'/>
                 </div>
             ) : (
                 isHover ? (
                     <div className="str-phrase">
+                        <p className="language-p">{language}:</p>
                         <p>{str}</p>
                         <TfiMarkerAlt onClick={clickEdit} className="clickable"/>
                     </div>

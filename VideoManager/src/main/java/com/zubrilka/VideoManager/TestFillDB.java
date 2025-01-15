@@ -56,44 +56,10 @@ class TestFillDB {
     public void init() {
         System.err.println("Warning!!! init: TestFillDataBase");
 
-        personRepository.deleteAll();
-        videoInfoRepository.deleteAll();
-        translationRepository.deleteAll();
-        videoRepository.deleteAll();
 
         Person adminPerson = new Person(null,passwordEncoder.encode("111"),"111", UserRole.ROLE_ADMIN,new Timestamp(System.currentTimeMillis()),null);
 
         Person savedPerson = personRepository.save(adminPerson);
         System.out.println("Person uuid: %s".formatted(savedPerson.getUuid()));
-
-        Translation translation = new Translation(
-                null,
-                0L,
-                List.of(
-                        new Phrase(4L,
-                                "这是一个测试短语...",
-                                "This is a test phrase...",
-                                "Это тестовая фраза...",
-                                6000L,
-                                7000L),
-                        new Phrase(5L,
-                                "一个非常大的短语。一个非常大的短语。一个非常大的短语。一个非常大的短语。一个非常大的短语。一个非常大的短语。一个非常大的短语。一个非常大的短语。一个非常大的短语。一个非常大的短语。",
-                                "A very big phrase. A very big phrase. A very big phrase. A very big phrase. A very big phrase. A very big phrase. A very big phrase. A very big phrase. A very big phrase. A very big phrase. ",
-                                "Очень большая фраза. Очень большая фраза. Очень большая фраза. Очень большая фраза. Очень большая фраза. Очень большая фраза. Очень большая фраза. Очень большая фраза. Очень большая фраза. Очень большая фраза. ",
-                                8000L,
-                                9000L)
-                )
-        );
-
-        Translation savedTranslation = translationRepository.save(translation);
-
-        List<VideoInfo> videoInfoList = List.of(
-                new VideoInfo(null,null,null,"test video 1",null,savedPerson.getUuid(), savedPerson.getUsername(), null,null,savedPerson,savedTranslation,null),
-                new VideoInfo(null,null,null,"test video 2",null,savedPerson.getUuid(), savedPerson.getUsername(), null, null,savedPerson,null,null)
-        );
-
-
-
-        videoInfoRepository.saveAll(videoInfoList);
     }
 }

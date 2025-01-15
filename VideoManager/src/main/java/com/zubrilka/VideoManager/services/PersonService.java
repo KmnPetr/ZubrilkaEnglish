@@ -2,8 +2,7 @@ package com.zubrilka.VideoManager.services;
 
 import com.zubrilka.VideoManager.controllers.validation.UnauthorizedException;
 import com.zubrilka.VideoManager.models.Person;
-import com.zubrilka.VideoManager.models.PersonDto;
-import com.zubrilka.VideoManager.models.UserRole;
+import com.zubrilka.VideoManager.dto.PersonDto;
 import com.zubrilka.VideoManager.repositories.PersonRepository;
 import com.zubrilka.VideoManager.security.JwtUtil;
 import com.zubrilka.VideoManager.security.jwtWeb.Token;
@@ -18,9 +17,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Service;
-
-import java.sql.Timestamp;
-import java.util.Optional;
 
 
 @Service
@@ -66,33 +62,31 @@ public class PersonService implements UserDetailsService, AuthenticationUserDeta
                 refreshToken
                 );
     }
-    private void saveTestUsers(){
-        Person admin = new Person(null,
-                passwordEncoder.encode("password"),
-                "admin",
-                UserRole.ROLE_ADMIN,
-                new Timestamp(System.currentTimeMillis()),
-                null);
-        personRepository.save(admin);
-    }
 
     @Override
     public UserDetails loadUserDetails(PreAuthenticatedAuthenticationToken authenticationToken)
             throws UsernameNotFoundException {
         if (authenticationToken.getPrincipal() instanceof Token token) {
-            return new TokenUser(token.subject(), "nopassword", true, true,
+            return new TokenUser(
+                    token.getSubject(),
+                    "nopassword",
+                    true,
+                    true,
                     true,
 //                    !this.jdbcTemplate.queryForObject("""
 //                            select exists(select id from t_deactivated_token where id = ?)
 //                            """, Boolean.class, token.id()) &&
 //                            token.expiresAt().isAfter(Instant.now()),//проверка на истечение срока действия токена, при корректной работе логаута информация о заблокированном токене содержится в БД
                     true,
-                    token.authorities().stream()
-                            .map(SimpleGrantedAuthority::new)
-                            .toList(), token);
+                    token.getAuthorities().stream().map(SimpleGrantedAuthority::new).toList(),
+                    token);
         }
 
         throw new UsernameNotFoundException("Principal must me of type Token");
+    }
+
+    public Person getPersonByName_v2(String username){
+       return personRepository.findByUsername(username).orElse(null);
     }
 
     /**

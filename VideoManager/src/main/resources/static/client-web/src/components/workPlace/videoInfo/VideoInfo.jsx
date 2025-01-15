@@ -3,12 +3,22 @@ import "../../../css/WorkPlace.css";
 import { getVideoInfoByUuid } from "../../../services/videoService";
 import EditInfo from "./EditInfo";
 import { updateVideoInfoField } from "../../../services/videoInfoService";
+import {downloadIcon} from "../../../services/iconService"
+import { useSelector } from "react-redux";
 
 const VideoInfo = ({ videoInfo_uuid }) => {
     const [videoInfo, setVideoInfo] = useState(null); // Состояние для хранения видеоинформации
     const [loading, setLoading] = useState(true); // Состояние для отображения загрузки
     const [error, setError] = useState(null); // Состояние для ошибок
     const [showJson, setShowJson] = useState(false); // Состояние для управления видимостью JSON
+    const [imageUrl, setImageUrl] = useState(null);
+    const isIconChanged = useSelector(state => state.networkReducer.network.isIconChanged);
+
+        useEffect(() => {
+            downloadIcon(videoInfo_uuid)
+            .then(imageUrl=>{setImageUrl(imageUrl)})
+            .catch(error => {});
+        }, [isIconChanged]);
 
     // Запрос данных при загрузке компонента или изменении videoInfo_uuid
     useEffect(() => {
@@ -56,10 +66,15 @@ const VideoInfo = ({ videoInfo_uuid }) => {
                     {error && <p style={{ color: 'red' }}>Ошибка: {error}</p>}
                     {videoInfo && (
                         <div>
-                            <EditInfo fieldName={'cnName'} fieldNameAlias={'Video cn_name'} fieldValue={videoInfo.cnName} onUpdateVideoInfoField={onUpdateVideoInfoField} />
-                            <EditInfo fieldName={'enName'} fieldNameAlias={'Video en_name'} fieldValue={videoInfo.enName} onUpdateVideoInfoField={onUpdateVideoInfoField} />
-                            <EditInfo fieldName={'ruName'} fieldNameAlias={'Video ru_name'} fieldValue={videoInfo.ruName} onUpdateVideoInfoField={onUpdateVideoInfoField} />
-                            <EditInfo fieldName={'linkOriginal'} fieldNameAlias={'Link to the original'} fieldValue={videoInfo.linkOriginal} onUpdateVideoInfoField={onUpdateVideoInfoField} />
+                            <div>
+                            {imageUrl && <img src={imageUrl} className="icon"/>}
+                            </div>
+                            <div>
+                                <EditInfo fieldName={'cnName'} fieldNameAlias={'Video cn_name'} fieldValue={videoInfo.cnName} onUpdateVideoInfoField={onUpdateVideoInfoField} />
+                                <EditInfo fieldName={'enName'} fieldNameAlias={'Video en_name'} fieldValue={videoInfo.enName} onUpdateVideoInfoField={onUpdateVideoInfoField} />
+                                <EditInfo fieldName={'ruName'} fieldNameAlias={'Video ru_name'} fieldValue={videoInfo.ruName} onUpdateVideoInfoField={onUpdateVideoInfoField} />
+                                <EditInfo fieldName={'linkOriginal'} fieldNameAlias={'Link to the original'} fieldValue={videoInfo.linkOriginal} onUpdateVideoInfoField={onUpdateVideoInfoField} />
+                            </div>
                             <h3 onClick={toggleJsonVisibility} style={{ cursor: 'pointer', textDecoration: 'underline', fontSize: '12px' }}>
                                 {showJson ? "Hide detailed video information" : "Show detailed video information"}
                             </h3>

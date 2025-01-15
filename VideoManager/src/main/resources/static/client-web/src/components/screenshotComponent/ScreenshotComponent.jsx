@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import html2canvas from 'html2canvas';
 import ScreenshotModal from './ScreenshotModal';
+import DeleteDialog from '../workPlace/listPhrases/DeleteDialog';
 
-const ScreenshotComponent = () => {
+const ScreenshotComponent = ({videoInfo_uuid}) => {
     const [pressedKeys, setPressedKeys] = useState({a: false, s:false});
   const [isSelecting, setIsSelecting] = useState(false);
   const [coordinatesStart, setCoordinatesStart] = useState(null);
@@ -134,7 +135,7 @@ const ScreenshotComponent = () => {
         }}
       ></div>
       {screenshot && (
-        <ScreenshotModal screenshot={screenshot} onClose={() => setScreenshot(null)} />
+        <ScreenshotModal screenshot={screenshot} onClose={() => setScreenshot(null)} videoInfo_uuid={videoInfo_uuid} />
       )}
     </div>
   );

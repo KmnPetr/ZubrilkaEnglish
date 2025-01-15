@@ -1,25 +1,20 @@
 package com.zubrilka.VideoManager.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.LazyToOne;
-import org.hibernate.annotations.LazyToOneOption;
-
 import java.util.UUID;
 
 /**
- * Хранит объект видео
+ * Хранит объект изображение иконку
  */
 @Entity
-@Table(name = "video")
+@Table(name = "icon")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Video {
-
+public class Icon {
     @Id
     @Column(name = "uuid", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,9 +22,6 @@ public class Video {
 
     @Column(name = "video_info_uuid", nullable = false)
     private UUID videoInfoUuid;
-
-    @Column(name = "file_name", nullable = false)
-    private String fileName;
 
     @Column(name = "bytes", nullable = false)
     private byte[] bytes;

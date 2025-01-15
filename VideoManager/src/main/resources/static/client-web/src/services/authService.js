@@ -13,17 +13,16 @@ export const login = async (username, password,dispatch) => {
         throw new Error(error.response?.data?.message || 'Login failed. Please try again.');
     }
 };
+
 // Функция для выполнения логина
 // Истользуется точка логина выдающая jwt-токен в виде куки
 export const login_v2 = async (username, password,dispatch) => {
 
-console.log('Функция login_v2')
 
     const formData = new URLSearchParams();
     formData.append('username', username);
     formData.append('password', password);
     
-console.log('Функция login_v2  шаг 2')
 
     try {
         const response = await api.post('/api/login', formData, {
@@ -31,8 +30,6 @@ console.log('Функция login_v2  шаг 2')
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
         });
-        
-console.log('Функция login_v2  шаг 3')
 
         dispatch(setUser(response.data))
     } catch (error) {

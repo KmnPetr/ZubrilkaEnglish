@@ -2,7 +2,7 @@ package com.zubrilka.VideoManager.security;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zubrilka.VideoManager.models.PersonDto;
+import com.zubrilka.VideoManager.dto.PersonDto;
 import com.zubrilka.VideoManager.services.PersonService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

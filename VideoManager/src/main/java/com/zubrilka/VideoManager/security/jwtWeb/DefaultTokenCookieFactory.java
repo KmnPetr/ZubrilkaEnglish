@@ -15,13 +15,12 @@ public class DefaultTokenCookieFactory implements Function<Authentication, Token
     @Override
     public Token apply(Authentication authentication) {
         var now = Instant.now();
-        return new Token(UUID.randomUUID(), authentication.getName(),
-                authentication.getAuthorities().stream()
-                        .map(GrantedAuthority::getAuthority).toList(),
-                now, now.plus(this.tokenTtl));
-    }
-
-    public void setTokenTtl(Duration tokenTtl) {
-        this.tokenTtl = tokenTtl;
+        return new Token(
+                UUID.randomUUID(),
+                authentication.getName(),
+                authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList(),
+                now,
+                now.plus(this.tokenTtl)
+        );
     }
 }

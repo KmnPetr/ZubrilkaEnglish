@@ -43,7 +43,7 @@ public class Person implements UserDetails, Serializable {
     private Timestamp created_at;
 
     @OneToMany(mappedBy = "translator", fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonIgnore
     private List<VideoInfo> listVideoInfo;
 
     @Override

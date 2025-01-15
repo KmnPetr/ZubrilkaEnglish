@@ -1,8 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/ListVideo.css';
-import {downloadListVideo} from "../services/videoService";
+import {downloadListVideoInfo} from "../services/videoInfoService";
 import {useSelector} from "react-redux";
+import CreateVideoButton from "../components/listVideo/CreateVideoButton"
+import VideoInfoItem from '../components/listVideo/VideoInfoItem';
+import {deleteVideoInfo} from "../services/videoInfoService"
 
 const ListVideo = () => {
     const navigate = useNavigate();
@@ -11,11 +14,8 @@ const ListVideo = () => {
     const [loading, setLoading] = useState(true); // Состояние для отображения загрузки
     const [error, setError] = useState(null); // Состояние для хранения ошибки
 
-
-
-    useEffect(() => {
-
-        downloadListVideo(user.refreshToken)
+    const downloadList =()=> {
+        downloadListVideoInfo()
             .then(response => {
                 setVideos(response);
                 setLoading(false); // Останавливаем индикацию загрузки
@@ -24,12 +24,34 @@ const ListVideo = () => {
                 setError(error.message); // Сохраняем ошибку, если запрос не удался
                 setLoading(false); // Останавливаем индикацию загрузки
             });
-    }, []); // Пустой массив зависимостей означает, что эффект сработает один раз при монтировании
+    }
 
     const handleVideoClick = (videoInfoUuid) => {
         // Переход на страницу обработки видео с параметром videoId
         navigate(`/editVideo/${videoInfoUuid}`);
     };
+
+    //вызывается после успешного создания нового видео
+    const onCreateNewVideo = () => {
+        downloadList();
+    }
+
+    //отправляет запрос на удаление видео
+    const onDeleteVideoInfo =(videoInfoUuid)=> {
+        console.log("onDeleteVideoInfo    " + videoInfoUuid)
+        deleteVideoInfo(videoInfoUuid)
+        .then(response => {
+            console.log("Удаление видео прошло успешно. Uuid: " + videoInfoUuid)
+            downloadList();
+        })
+        .catch(error => {
+            console.log("Ошибка при попытке удаления видео. Uuid: " + videoInfoUuid)
+        });
+    }
+
+    useEffect(() => {
+        downloadList();
+    }, []);
 
 
     if (loading) {
@@ -42,18 +64,10 @@ const ListVideo = () => {
         <div className="list-video-container">
             <h1 className="list-video-title">Video List</h1>
             <ul className="video-list">
-                {videos.map((video) => (
-                    <li key={video.uuid} className="video-item">
-                        <h2>{video.cnName}</h2>
-                        <h2>{video.enName}</h2>
-                        <h2>{video.ruName}</h2>
-                        <p>Переводчик: {video.translator_name}</p>
-                        <p>{video.description}</p>
-                        <button className="view-button" onClick={() => handleVideoClick(video.uuid)}>
-                            Edit Video
-                        </button>
-                    </li>
+                {videos.map((videoInfo) => (
+                    <VideoInfoItem videoInfo={videoInfo} key={videoInfo.uuid} handleVideoClick={handleVideoClick} onDelete={onDeleteVideoInfo}/>
                 ))}
+                <CreateVideoButton onCreateVideo={onCreateNewVideo}/>
             </ul>
         </div>
     );

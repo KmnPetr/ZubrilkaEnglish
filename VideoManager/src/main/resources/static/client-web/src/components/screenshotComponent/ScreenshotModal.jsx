@@ -1,7 +1,13 @@
 import React from 'react';
 import './Screenshot.css';
+import { FiX } from "react-icons/fi";
+import { sendIconToServer } from "../../services/iconService"
+import {useDispatch} from "react-redux";
+import {iconWasChanged} from "../../store/reducers/networkReducer"
 
-const ScreenshotModal = ({ screenshot, onClose }) => {
+const ScreenshotModal = ({ screenshot, onClose,videoInfo_uuid }) => {
+    const dispatch = useDispatch();
+
   const handleSaveImage = () => {
     const link = document.createElement('a');
     link.href = screenshot; // Указываем URL скриншота
@@ -16,35 +22,34 @@ const ScreenshotModal = ({ screenshot, onClose }) => {
     window.open('https://translate.google.com/?sl=zh-CN&tl=ru&op=images', '_blank');
   };
 
+  const handleOpenYandexTranslate = () => {
+    handleSaveImage()
+    // Открытие страницы Yandex Translate
+    window.open('https://translate.yandex.ru/ocr', '_blank');
+  };
+  const setAsIcon = () => {
+    console.log('setAsIcon()')
+    sendIconToServer(screenshot,videoInfo_uuid)
+      .then(()=>dispatch(iconWasChanged()))
+    onClose()
+  };
+
   return (
-    <div className="screenshot-modal" onClick={onClose}>
-      <div
-        className="screenshot-modal-content"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button className="screenshot-modal-close" onClick={onClose}>
-          &times;
-        </button>
-
-        <img
-          src={screenshot}
-          alt="Screenshot"
-          className="screenshot-modal-image"
-        />
+    <div className="overlay" onClick={onClose}>
+      <div className="dialog">
+        <div style={{display: 'flex', justifyContent:'end',fontSize: '30px'}}>
+          <FiX onClick={onClose} className='clickable'/>
+        </div>
+        <div>
+          <img src={screenshot} alt="Screenshot" className="screenshot-modal-image" />
+        </div>
+        <div className='custom-button-container'>
+          <button onClick={handleSaveImage}> Сохранить </button>
+          <button onClick={handleOpenGoogleTranslate} style={{backgroundColor:'#4c83b1'}}>Google Translate</button>
+          <button onClick={handleOpenYandexTranslate} style={{backgroundColor:'#b8a33c'}}>Yandex Translate</button>
+          <button onClick={setAsIcon}>Set as an icon</button>
+        </div>
       </div>
-
-      <div className="screenshot-modal-footer">
-        <button className="screenshot-modal-save" onClick={handleSaveImage}>
-          Сохранить
-        </button>
-      </div>
-
-      <button
-          className="screenshot-modal-save"
-          onClick={handleOpenGoogleTranslate}
-        >
-          Открыть Google Translate
-        </button>
     </div>
   );
 };

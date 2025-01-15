@@ -54,8 +54,11 @@ public class TokenCookieAuthenticationConfigurer implements SecurityConfigurer<D
                 .addLogoutHandler((request, response, authentication) -> {
                     if (authentication != null &&
                             authentication.getPrincipal() instanceof TokenUser user) {
-                        this.jdbcTemplate.update("insert into deactivated_token (id, keep_until) values (?, ?)",
-                                user.getToken().id(), Date.from(user.getToken().expiresAt()));
+                        this.jdbcTemplate.update(
+                                "insert into deactivated_token (id, keep_until) values (?, ?)",
+                                user.getToken().getId(),
+                                Date.from(user.getToken().getExpiresAt())
+                        );
 
                         response.setStatus(HttpServletResponse.SC_NO_CONTENT);
                     }

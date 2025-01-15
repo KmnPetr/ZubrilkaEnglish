@@ -31,8 +31,11 @@ public class TokenCookieSessionAuthenticationStrategy implements SessionAuthenti
     }
 
     @Override
-    public void onAuthentication(Authentication authentication, HttpServletRequest request,
-                                 HttpServletResponse response) throws SessionAuthenticationException {
+    public void onAuthentication(
+            Authentication authentication,
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws SessionAuthenticationException {
         if (authentication instanceof UsernamePasswordAuthenticationToken) { //чтобы новый токен не создавался на любую успешную аутентификацию
             var token = this.tokenCookieFactory.apply(authentication);
             var tokenString = this.tokenStringSerializer.apply(token);
@@ -42,7 +45,7 @@ public class TokenCookieSessionAuthenticationStrategy implements SessionAuthenti
             cookie.setDomain(null); //как этого требует префикс "Host"
             cookie.setSecure(true);
             cookie.setHttpOnly(true); //чтобы только сервер имел доступ к этой куке
-            cookie.setMaxAge((int) ChronoUnit.SECONDS.between(Instant.now(), token.expiresAt()));
+            cookie.setMaxAge((int) ChronoUnit.SECONDS.between(Instant.now(), token.getExpiresAt()));
 
             response.addCookie(cookie);
         }

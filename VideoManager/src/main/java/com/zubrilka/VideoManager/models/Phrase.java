@@ -1,9 +1,6 @@
 package com.zubrilka.VideoManager.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 /**
  * the object contains a single phrase from the video, a word or a replica of the hero of the video
@@ -13,6 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Phrase {
     //What "id" is created in a web application,
     //it is necessary only for the adequate operation of the react.js with the list,

@@ -7,6 +7,7 @@ import {videoReducer} from "./reducers/videoReducer";
 import {networkReducer} from "./reducers/networkReducer";
 import {authReducer} from "./reducers/authReducer";
 import {translationReducer} from "./reducers/translationReducer";
+import {phrasesMiddleware} from "./middlewares"
 
 
 
@@ -21,4 +22,4 @@ const rootReducer = combineReducers({
     translationReducer: translationReducer
 })
 
-export const store = createStore(rootReducer,composeWithDevTools(applyMiddleware(thunk)))
+export const store = createStore(rootReducer,composeWithDevTools(applyMiddleware(thunk,phrasesMiddleware)))

@@ -32,7 +32,6 @@ const LoginPage = () => {
 
     // Используем useEffect для отслеживания изменений user
     useEffect(() => {
-        console.log(`useEffect user = ${user}`)
         if (user) {
             navigate("/listVideo");
         }

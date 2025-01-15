@@ -22,3 +22,11 @@ summary {
     border-radius: 4px;
     background-color: #000000;
 }
+
+
+.icon{
+    max-width: 100px;
+    max-height: 100px;
+    float: left;
+    margin-right: 10px;
+}

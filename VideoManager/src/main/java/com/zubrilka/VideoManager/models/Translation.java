@@ -1,11 +1,14 @@
 package com.zubrilka.VideoManager.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zubrilka.VideoManager.models.converters.PhraseListConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,8 +28,10 @@ public class Translation {
     @Column(name = "uuid", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID uuid;
-    //the version number of the translation
-    // to compare the version of the translation in the database and in the web application
+
+    @Column(name = "video_info_uuid")
+    private UUID videoInfoUuid;
+
     @Column(name = "version")
     private Long version;
 

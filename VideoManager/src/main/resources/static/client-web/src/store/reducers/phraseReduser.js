@@ -3,12 +3,13 @@ const defaultState = {
     phrases: null
 }
 
-const REMOVE_PHRASE = 'REMOVE_PHRASE'
-const EDIT_STR = 'EDIT_STR'
-const ADD_TO_AND = 'ADD_TO_AND'
-const ADD_NEW = 'ADD_NEW'
-const EDIT_TIME = 'EDIT_TIME'
-const SET_LIST_PHRASES = 'SET_LIST_PHRASES'
+export const REMOVE_PHRASE = 'REMOVE_PHRASE'
+export const EDIT_STR = 'EDIT_STR'
+export const ADD_TO_AND = 'ADD_TO_AND'
+export const ADD_NEW = 'ADD_NEW'
+export const EDIT_TIME = 'EDIT_TIME'
+export const SET_LIST_PHRASES = 'SET_LIST_PHRASES'
+export const CLEAR = 'CLEAR'
 
 // используемые типы языков
 export const CN = 'cn'
@@ -52,8 +53,8 @@ export const phraseReducer = (state = defaultState, action) => {
                 {...phrase, [action.fieldName]: action.newValue }
                 :
                 phrase),};
-        case SET_LIST_PHRASES:
-            return {...state, phrases: action.phrases}
+        case SET_LIST_PHRASES: return {...state, phrases: action.phrases}
+        case CLEAR: return defaultState;
         default: return state;
     }
 }
@@ -68,7 +69,9 @@ export const addNewPhraseToEnd = () => {
     return (dispatch, getState) => {
         const phrases = getState().phraseReducer.phrases;
 
-        const lastElement = phrases.length > 0 ? phrases[phrases.length - 1] : null;
+        const lastElement = Array.isArray(phrases) && phrases.length > 0 
+        ? phrases[phrases.length - 1] 
+        : null;
 
         // Создаем новую фразу
         const newPhrase = {
@@ -79,7 +82,7 @@ export const addNewPhraseToEnd = () => {
             startTime: 0,
             endTime: 0
         };
-        //инициализируем  startTime и endTime они должны быть строго инициализированы потомучто логику их отсутствия лень обрабатывать
+
         if (lastElement===null){
             newPhrase.startTime = 0;
             newPhrase.endTime = newPhrase.startTime+1000
@@ -88,10 +91,7 @@ export const addNewPhraseToEnd = () => {
             newPhrase.endTime = newPhrase.startTime+1000
         }
 
-        dispatch({
-            type: ADD_TO_AND,
-            payload: newPhrase
-        });
+        dispatch({type: ADD_TO_AND,payload: newPhrase });
     };
 };
 /**
@@ -162,3 +162,5 @@ export const editTime = (idPhrase, newValue, fieldName) => {
     return {type: EDIT_TIME, idPhrase: idPhrase, newValue: newValue, fieldName: fieldName}
 }
 export const setListPhrases = (phrases) => ({type: SET_LIST_PHRASES, phrases: phrases})
+
+export const clearPhrases = () => ({type:CLEAR})

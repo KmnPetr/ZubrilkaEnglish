@@ -1,6 +1,7 @@
 import {downloadVideoProgress, uploadVideoProgress} from "../store/reducers/networkReducer";
-import {setVideo} from "../store/reducers/videoReducer";
+import {setVideo,setIsVideoExist} from "../store/reducers/videoReducer";
 import api from './api';
+import {clearVideoProgress} from "../store/reducers/networkReducer"
 
 /**
  * функция отправит фидеообьект на сервер
@@ -8,6 +9,7 @@ import api from './api';
  */
 export async function uploadVideo(blobUrl,videoInfo_uuid,dispatch) {
     try {
+        dispatch(clearVideoProgress())
         // Получаем Blob из ссылки
         const response = await fetch(blobUrl);
         const blob = await response.blob();
@@ -30,19 +32,18 @@ export async function uploadVideo(blobUrl,videoInfo_uuid,dispatch) {
         });
 
         dispatch(uploadVideoProgress(`Upload successful!`))
-        console.log('Upload successful:', uploadResponse.data);
+        dispatch(setIsVideoExist(true))
     } catch (error) {
         dispatch(uploadVideoProgress(`Upload failed!`))
-        console.error('Upload failed:', error);
         throw new Error(error.response?.data?.message || 'Ошибка при отсылке видео');
     }
 }
 
-
-export async function downloadVideoByUUID(uuid,dispatch) {
+export async function downloadVideoByUUID(videoInfoUuid,dispatch) {
     try {
+        dispatch(clearVideoProgress())
         // Отправляем GET-запрос на сервер
-        const response = await api.get(`/api/video/${uuid}`, {
+        const response = await api.get(`/api/video/${videoInfoUuid}`, {
             responseType: 'arraybuffer', // указываем, что ожидаем бинарный ответ
             onDownloadProgress: (progressEvent) => {
                 if (progressEvent.total) {
@@ -61,43 +62,26 @@ export async function downloadVideoByUUID(uuid,dispatch) {
             videoUrl: videoUrl,
             uuid: response.headers['UUID'],
             fileName: response.headers['X-Filename'],
+            isExist: true
         }))
 
         dispatch(downloadVideoProgress('Download successful!'))
     } catch (error) {
         dispatch(downloadVideoProgress('Error download video!'))
-        console.error('Error fetching video:', error);
 
         if (error.response && error.response.status === 404) {
             dispatch(downloadVideoProgress('Video not found!'))
-            console.error('Video not found');
+            
+        dispatch(setVideo({
+            videoUrl: null,
+            isExist: false
+        }))
         } else {
             console.error('Unknown error occurred');
         }
         return null;
     }
 }
-
-//запросит у сервера список видео
-export async function downloadListVideo() {
-    try {
-        const response = await api.get('/api/video/list-video', {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            onUploadProgress: (progressEvent) => {
-                // Можно обработать прогресс загрузки, если требуется
-            }
-        });
-
-        return response.data;
-    } catch (error) {
-        console.error('Error downloading video list:', error);
-        throw error;
-    }
-}
-
-
 
 //запросит у сервера информацию по видео
 export async function getVideoInfoByUuid(videoInfoUuid) {

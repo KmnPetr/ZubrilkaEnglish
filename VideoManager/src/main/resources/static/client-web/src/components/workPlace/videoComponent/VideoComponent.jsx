@@ -4,24 +4,37 @@ import Video from "./Video";
 import {useDispatch, useSelector} from "react-redux";
 import {downloadVideoByUUID, uploadVideo} from "../../../services/videoService";
 import "./VideoComponent.css"
+import {clearVideo} from "../../../store/reducers/videoReducer"
+import {clearVideoProgress} from "../../../store/reducers/networkReducer"
 
 /**
  * Компонент для отображения видео, над которым идет работа
  */
-const VideoComponent = ({video_uuid,videoInfo_uuid,reloadVideoInfo}) => {
+const VideoComponent = ({videoInfo_uuid,reloadVideoInfo}) => {
     const dispatch = useDispatch();
     const videoPath = useSelector(state => state.videoManagementReducer.videoManagement.videoPath);
     const network = useSelector(state => state.networkReducer.network);
     const video = useSelector(state => state.videoReducer.video);
+    const isVideoExist = useSelector(state => state.videoReducer.video.isExist);
+
+
+    useEffect(() => {
+        dispatch(clearVideo())//очистиит старые данные по видео из редакса
+        dispatch(clearVideoProgress())
+        return () => {
+            dispatch(clearVideo())//очистиит старые данные по видео при выходе
+            dispatch(clearVideoProgress())
+        };
+    }, []);
 
     const sendVideoToServer = (videoPath) => {
-        uploadVideo(videoPath, videoInfo_uuid, dispatch).then(r  =>reloadVideoInfo())
+        uploadVideo(videoPath, videoInfo_uuid, dispatch).then(r  => reloadVideoInfo())
     }
     useEffect(() => {
-        if (video_uuid!==null){
-            downloadVideoByUUID(video_uuid,dispatch)
+        if (videoInfo_uuid!==null&&isVideoExist){
+            downloadVideoByUUID(videoInfo_uuid,dispatch)
         }
-    },[video_uuid])
+    },[videoInfo_uuid,isVideoExist])
 
     const onSelectVideo = (videoURL) => {
         sendVideoToServer(videoURL);
@@ -29,14 +42,14 @@ const VideoComponent = ({video_uuid,videoInfo_uuid,reloadVideoInfo}) => {
     return (
         <div className="videoComponent">
 
-            {!video_uuid ? (<div>
+            {!video.isExist ? (<div>
                 <p>The video has not been installed yet</p>
                     <SelectFileButton onSelectVideo={onSelectVideo}/>
                     <p>{network.uploadVideoProgress}</p>
             </div>) : (
                 <div>
 
-                    {!video ? (
+                    {!video.videoUrl ? (
                         <div>
                             <p>Download video... {network.downloadVideoProgress}</p>
                         </div>

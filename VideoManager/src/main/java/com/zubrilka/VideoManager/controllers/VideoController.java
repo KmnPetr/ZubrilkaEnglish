@@ -45,16 +45,16 @@ public class VideoController {
 
         Video video = null;
         try {
-            video = new Video(null,fileName, file.getBytes());
+            video = new Video(null,UUID.fromString(videoInfoUuid),fileName, file.getBytes());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
         videoService.saveVideo(video, UUID.fromString(videoInfoUuid));
     }
-    @GetMapping("/{uuid}")
-    public ResponseEntity<byte[]> getVideoById(@PathVariable UUID uuid) {
-        Video video = videoService.getVideoByUUID(uuid);
+    @GetMapping("/{videoInfoUuid}")
+    public ResponseEntity<byte[]> getVideoById(@PathVariable UUID videoInfoUuid) {
+        Video video = videoService.getVideoByVideoInfoUUID(videoInfoUuid);
 
         if (video == null) {
             return ResponseEntity.notFound().build();
@@ -69,14 +69,4 @@ public class VideoController {
                 .body(video.getBytes());
     }
 
-    /**
-     * returns a list of information about the videos available in the database
-     */
-    @GetMapping("/list-video")
-    public ResponseEntity<List<VideoInfo>> getListVideo(@AuthenticationPrincipal UserDetails userDetails) throws InterruptedException {
-
-        String usernameTranslator = userDetails.getUsername();
-        List<VideoInfo> videoList = videoService.getListVideosByTranslator(usernameTranslator);
-        return ResponseEntity.ok(videoList);
-    }
 }

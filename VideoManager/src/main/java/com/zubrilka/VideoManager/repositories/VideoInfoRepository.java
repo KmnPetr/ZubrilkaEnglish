@@ -13,4 +13,8 @@ import java.util.UUID;
 @Repository
 public interface VideoInfoRepository extends JpaRepository<VideoInfo, UUID> {
     Optional<VideoInfo> findByUuid(UUID uuid);
+
+    @Query(value = "SELECT * FROM video_info WHERE translator_uuid = :translator_uuid", nativeQuery = true)
+    List<VideoInfo> findVideosByTranslatorUuid(@Param("translator_uuid") UUID translator_uuid);
+
 }

@@ -26,37 +26,36 @@ public class VideoService {
         this.videoInfoRepository = videoInfoRepository;
         this.personService = personService;
     }
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public VideoInfo saveVideo(Video video, UUID videoInfoUuid) throws NotFoundException {
+
+
+    @Transactional
+    public void saveVideo(Video video, UUID videoInfoUuid) throws NotFoundException {
         if (video==null||video.getBytes()==null) throw new IllegalArgumentException("Video is null");
 
         VideoInfo videoInfo = videoInfoRepository.findByUuid(videoInfoUuid).orElseThrow(()->new NotFoundException("VideoInfo with uuid %s not found".formatted(videoInfoUuid)));
 
-        if (videoInfo.getVideo_uuid()!=null){
-            //will delete the old video if the request came for update
-            videoRepository.deleteById(videoInfo.getVideo_uuid());
+        video.setVideoInfoUuid(videoInfo.getUuid());
+
+        UUID videoUuid = videoRepository.findUuidByVideoInfoUuidIfExists(videoInfoUuid);
+
+        if (videoUuid == null){
+            videoRepository.save(video);
+        } else {
+            video.setUuid(videoUuid);
+            videoRepository.save(video);
         }
-
-        Video savedVideo = videoRepository.save(video);
-
-        videoInfo.setVideo(savedVideo);
-
-        return videoInfoRepository.save(videoInfo);
     }
 
     public Video getVideoByUUID(UUID uuid) {
         return videoRepository.findByUuid(uuid);
     }
 
-    /**
-     * вернет выборки список по видео переводом которого занимался конкретный переводчик
-     */
-    public List<VideoInfo> getListVideosByTranslator(String usernameTranslator) {
-        Person person = (Person)personService.loadUserByUsername(usernameTranslator);
-        List<VideoInfo> videoInfoList = person.getListVideoInfo();
-        videoInfoList.forEach(it -> {
-            it.setTranslator_name(person.getUsername());
-        });
-        return videoInfoList;
+    @Transactional
+    public void deleteVideo(UUID uuid) {
+        if (uuid!=null) videoRepository.deleteById(uuid);
+    }
+
+    public Video getVideoByVideoInfoUUID(UUID videoInfoUuid) {
+        return videoRepository.findByVideoInfoUuid(videoInfoUuid).orElse(null);
     }
 }

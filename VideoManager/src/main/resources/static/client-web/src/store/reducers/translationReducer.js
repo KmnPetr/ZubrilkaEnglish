@@ -5,6 +5,7 @@ const defaultState = {
 }
 
 const SET_TRANSLATION = 'SET_TRANSLATION'
+const CLEAR = 'CLEAR'
 
 /**
  * this reduser stores information on video translation,
@@ -21,9 +22,11 @@ export const translationReducer = (state = defaultState, action) => {
                     phrases: null // always force phrases to be null
                 }
             };
+        case CLEAR: return defaultState;
         default:
             return state;
     }
 }
 
 export const setTranslation = (translation) => ({type:SET_TRANSLATION,translation:translation})
+export const clearTranslation = () => ({type:CLEAR})

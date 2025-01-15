@@ -69,7 +69,8 @@ public class SecurityConfig {
                                         "/api/video/**",
                                         "/api/video-info",
                                         "/api/video-info/**",
-                                        "/api/translation/**"
+                                        "/api/translation/**",
+                                        "/api/icon/**"
                                 ).hasAnyRole("ADMIN","TRANSLATOR")
                                 .requestMatchers(
                                         "/api/test/free",

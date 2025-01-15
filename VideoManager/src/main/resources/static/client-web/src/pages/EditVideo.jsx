@@ -7,24 +7,19 @@ import {getVideoInfoByUuid} from "../services/videoService";
  * the component is a workplace for video editing, more precisely, for the formation of its translation
  */
 const EditVideo = () => {
-    const { videoUuid } = useParams();
+    const { videoInfoUuid } = useParams();
     const [videoInfo, setVideoInfo] = useState(null);
+
 
     //make a request to the server and accept the VideoInfo object
     useEffect(() => {
-        if (videoInfo==null){
-            getVideoInfoByUuid(videoUuid)
-                .then(response => setVideoInfo(response))
-                .catch(error => console.log(error));
-        }
-    }, [videoUuid]);
+        reloadVideoInfo()
+    }, []);
 
-    const reloadVideoInfo = () => {getVideoInfoFServ(videoUuid)}
-
-    const getVideoInfoFServ = (videoUuid) => {
-            getVideoInfoByUuid(videoUuid)
-                .then(response => setVideoInfo(response))
-                .catch(error => console.log(error));
+    const reloadVideoInfo = () => {
+        getVideoInfoByUuid(videoInfoUuid)
+            .then(response => setVideoInfo(response))
+            .catch(error => console.log(error));
     }
 
 
@@ -36,8 +31,6 @@ const EditVideo = () => {
                 </div>
             ) : (
                 <WorkPlace
-                    translation_uuid={videoInfo.translation_uuid}
-                    video_uuid={videoInfo.video_uuid}
                     videoInfo_uuid={videoInfo.uuid}
                     reloadVideoInfo={reloadVideoInfo}/>
             )}

@@ -25,13 +25,22 @@ const EditInfo = ({fieldName,fieldNameAlias,fieldValue,onUpdateVideoInfoField}) 
         onUpdateVideoInfoField(fieldName,inputValue)
         setIsEditable(false)
     }
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            onApplyChanges();
+        }
+    }
 
     return (
         <div>
             {isEditable ? (
                 <div className="edited-field">
                     <p className="fieldNameAlias">{fieldNameAlias}:  </p>
-                    <input type="text" value={inputValue} onChange={handleInputChange}/>
+                    <input 
+                        type="text"
+                        value={inputValue}
+                        onChange={handleInputChange}
+                        onKeyDown={handleKeyDown}/>
                     <FiX onClick={onCancelEdit} style={{marginRight:'10px'}} className='clickable'/>
                     <FiCheck onClick={onApplyChanges} className='clickable'/>
                 </div>

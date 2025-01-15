@@ -53,7 +53,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 UUID uuid = UUID.fromString(claims.get("uuid"));
 
                 Authentication auth = new UsernamePasswordAuthenticationToken(
-                        new Person(uuid,null,username, UserRole.valueOf(role),null,null),
+                        new Person(
+                                uuid,
+                                null,
+                                username,
+                                UserRole.valueOf(role),
+                                null,
+                                null),
                         jwt,
                         Collections.singletonList(new SimpleGrantedAuthority(role)));
 
