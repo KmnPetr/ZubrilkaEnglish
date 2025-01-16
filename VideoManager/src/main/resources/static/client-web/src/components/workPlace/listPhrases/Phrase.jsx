@@ -8,6 +8,7 @@ import StrPhrase from "./StrPhrase";
 import PhraseInterval from "./PhraseInterval";
 import { RiOpenaiFill } from "react-icons/ri";
 import {openAiGptRequest} from "../../../utils/openAiGpt"
+import { TbIndentIncrease } from "react-icons/tb";
 
 const Phrase =({phrase})=> {
     const dispatch = useDispatch();
@@ -45,19 +46,24 @@ const Phrase =({phrase})=> {
         return phrase[nativeLang]
     }
 
+    const setJsonText =()=> {console.log()}
+
     return (
         <div style={{position: "relative"}} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
             <div>
                 {isHover && <AddNewPhrase id={phrase.id} position={"before"}/>}
                 <div className="phrase">
                     {(isHover || videoManagement.phraseInterval.idPhrase === phrase.id) && <PhraseInterval phrase={phrase} />}
-                    <div className="phrase-header">
-                        <div>
-                            <p style={{fontSize:'10px'}}>Id: {phrase.id}</p>
-                            <RiOpenaiFill className='clickable' onClick={gptRequest}/>
+                    {isHover && 
+                        <div className="phrase-header">
+                            <div>
+                                <p style={{fontSize:'10px'}}>Id: {phrase.id}</p>
+                                <RiOpenaiFill className='clickable' onClick={gptRequest}/>{/**кнопка перехода на страницу gpt */}
+                                <TbIndentIncrease className='clickable' onClick={setJsonText}/>{/**кнопка вставки json текста */}
+                            </div>
+                            <FiTrash2 className='clickable' onClick={showDialog}/>{/**кнопка удаления */}
                         </div>
-                        {isHover &&<FiTrash2 className='clickable' onClick={showDialog}/> } {/*кнопка удаления*/}
-                    </div>
+                    }
                     <StrPhrase str={phrase.cnStr} idPhrase={phrase.id} language={CN} isHover={isHover}/>
                     <StrPhrase str={phrase.enStr} idPhrase={phrase.id} language={EN} isHover={isHover}/>
                     <StrPhrase str={phrase.ruStr} idPhrase={phrase.id} language={RU} isHover={isHover}/>
