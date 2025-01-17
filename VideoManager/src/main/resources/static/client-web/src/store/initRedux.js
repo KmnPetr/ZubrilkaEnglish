@@ -8,6 +8,7 @@ import {networkReducer} from "./reducers/networkReducer";
 import {authReducer} from "./reducers/authReducer";
 import {translationReducer} from "./reducers/translationReducer";
 import {phrasesMiddleware} from "./middlewares"
+import {jsonEditorReducer} from "./reducers/jsonEditorReducer"
 
 
 
@@ -19,7 +20,8 @@ const rootReducer = combineReducers({
     networkReducer: networkReducer,
     authReducer: authReducer,
     phraseReducer: phraseReducer,
-    translationReducer: translationReducer
+    translationReducer: translationReducer,
+    jsonEditorReducer: jsonEditorReducer
 })
 
 export const store = createStore(rootReducer,composeWithDevTools(applyMiddleware(thunk,phrasesMiddleware)))

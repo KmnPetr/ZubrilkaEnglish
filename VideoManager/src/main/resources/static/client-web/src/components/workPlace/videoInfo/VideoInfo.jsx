@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import "../../../css/WorkPlace.css";
 import { getVideoInfoByUuid } from "../../../services/videoService";
 import EditInfo from "./EditInfo";
@@ -17,7 +17,7 @@ const VideoInfo = ({ videoInfo_uuid }) => {
         useEffect(() => {
             downloadIcon(videoInfo_uuid)
             .then(imageUrl=>{setImageUrl(imageUrl)})
-            .catch(error => {});
+            .catch(e => {});
         }, [isIconChanged]);
 
     // Запрос данных при загрузке компонента или изменении videoInfo_uuid

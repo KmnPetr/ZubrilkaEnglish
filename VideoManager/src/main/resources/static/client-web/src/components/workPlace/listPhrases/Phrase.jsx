@@ -9,6 +9,7 @@ import PhraseInterval from "./PhraseInterval";
 import { RiOpenaiFill } from "react-icons/ri";
 import {openAiGptRequest} from "../../../utils/openAiGpt"
 import { TbIndentIncrease } from "react-icons/tb";
+import {openJsonEditor} from '/src/store/reducers/jsonEditorReducer.js'
 
 const Phrase =({phrase})=> {
     const dispatch = useDispatch();
@@ -39,14 +40,13 @@ const Phrase =({phrase})=> {
     };
 
     const gptRequest =()=> {
-        console.log(getNativeStr())
         openAiGptRequest(getNativeStr(),CN)
     }
     const getNativeStr =()=> {
         return phrase[nativeLang]
     }
 
-    const setJsonText =()=> {console.log()}
+    const setJsonText =()=> {dispatch(openJsonEditor())}
 
     return (
         <div style={{position: "relative"}} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
