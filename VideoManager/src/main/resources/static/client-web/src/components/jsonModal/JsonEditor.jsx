@@ -5,46 +5,47 @@ import 'prismjs/themes/prism-okaidia.css'; // Тема подсветки син
 import 'prismjs/components/prism-json'; // Поддержка JSON
 import ModalWindow from '../ui/ModalWindow';
 import { useDispatch, useSelector } from 'react-redux';
-import { closeJsonEditor, setJsonCode } from '/src/store/reducers/jsonEditorReducer.js';
+import { closeJsonEditor, updateJsonText } from '/src/store/reducers/jsonEditorReducer.js';
+import './JsonEditor.css';
+import CButton from '../ui/CButton';
+import { PHRASE } from '../../store/reducers/jsonEditorReducer';
+import { updatePhrase } from '../../store/reducers/phraseReduser';
 
 const JsonEditor = () => {
   const dispatch = useDispatch();
-  const { isOpen, code } = useSelector((state) => state.jsonEditorReducer);
+  const { isOpen,jsonObject, editableJson,typeObject } = useSelector((state) => state.jsonEditorReducer);
 
-  const highlight = (code) => Prism.highlight(code, Prism.languages.json, 'json');
+  const highlight = (jsonText) => Prism.highlight(jsonText, Prism.languages.json, 'json');
 
   const onClose = () => dispatch(closeJsonEditor()); // Закрывает окно
-  const onCodeChange = (newCode) => dispatch(setJsonCode(newCode)); // Сохраняет изменения
+  const onCodeChange = (editableJson) => dispatch(updateJsonText(editableJson)); // Сохраняет изменения
+
+  const apply =()=>{
+    try {
+      switch (typeObject) {
+        case PHRASE:
+          dispatch(updatePhrase(convertJsonToPhrase(jsonObject,editableJson)))
+          onClose()
+          break;
+        default:console.error("Invalid typeObject")
+      }
+    } catch (error) {
+      console.error('Invalid JSON string:', error.message);
+    }
+  }
 
   return (
     <ModalWindow isOpen={isOpen} onClose={onClose} width="70%" height="70%">
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          height: '100%',
-        }}
-      >
-        <div
-          style={{
-            flex: 1,
-            overflow: 'auto', // Прокрутка для длинного содержимого
-            backgroundColor: '#282828',
-            border: '1px solid #303030',
-            borderRadius: '4px',
-          }}
-        >
+      <div className="json-editor-container">
+        <div className="button-container">
+          <CButton text={'Apply'} onClick={apply}/>
+        </div>
+        <div className="json-editor-wrapper">
           <Editor
-            value={code}
+            value={editableJson}
             onValueChange={onCodeChange}
             highlight={highlight}
-            padding={10}
-            style={{
-              minHeight: '100%',
-              fontFamily: 'monospace',
-              fontSize: '14px',
-              color: '#fff',
-            }}
+            className="json-editor-textarea"
           />
         </div>
       </div>
@@ -53,3 +54,12 @@ const JsonEditor = () => {
 };
 
 export default JsonEditor;
+
+const convertJsonToPhrase = (jsonObject, editableJson) => {
+  let updatedPhrase = jsonObject;
+  const editabledObject = JSON.parse(editableJson);
+
+  updatedPhrase = {...updatedPhrase,...editabledObject}
+
+  return updatedPhrase
+};

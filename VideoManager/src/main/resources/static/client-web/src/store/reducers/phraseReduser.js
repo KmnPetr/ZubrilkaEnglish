@@ -10,6 +10,7 @@ export const ADD_NEW = 'ADD_NEW'
 export const EDIT_TIME = 'EDIT_TIME'
 export const SET_LIST_PHRASES = 'SET_LIST_PHRASES'
 export const CLEAR = 'CLEAR'
+export const UPDATE_PHRASE = 'UPDATE_PHRASE'
 
 // используемые типы языков
 export const CN = 'cn'
@@ -55,6 +56,10 @@ export const phraseReducer = (state = defaultState, action) => {
                 phrase),};
         case SET_LIST_PHRASES: return {...state, phrases: action.phrases}
         case CLEAR: return defaultState;
+        case UPDATE_PHRASE: return {
+            ...state, 
+            phrases: state.phrases.map((phrase) => phrase.id === action.updatedPhrase.id ? action.updatedPhrase : phrase),
+        };
         default: return state;
     }
 }
@@ -164,3 +169,4 @@ export const editTime = (idPhrase, newValue, fieldName) => {
 export const setListPhrases = (phrases) => ({type: SET_LIST_PHRASES, phrases: phrases})
 
 export const clearPhrases = () => ({type:CLEAR})
+export const updatePhrase =(updatedPhrase)=> ({type:UPDATE_PHRASE,updatedPhrase})

@@ -10,6 +10,7 @@ import { RiOpenaiFill } from "react-icons/ri";
 import {openAiGptRequest} from "../../../utils/openAiGpt"
 import { TbIndentIncrease } from "react-icons/tb";
 import {openJsonEditor} from '/src/store/reducers/jsonEditorReducer.js'
+import { PHRASE } from "../../../store/reducers/jsonEditorReducer";
 
 const Phrase =({phrase})=> {
     const dispatch = useDispatch();
@@ -18,35 +19,27 @@ const Phrase =({phrase})=> {
     const [isDialogVisible, setIsDialogVisible] = useState(false);
     const nativeLang = `cnStr`
 
-    const handleMouseEnter =()=> {
-        setIsHover(true);
-    };
+    const handleMouseEnter =()=> setIsHover(true)
 
     const handleMouseLeave =()=> {
         setIsHover(false);
         setIsDialogVisible(false);
     };
 
-    const showDialog =()=> {
-        setIsDialogVisible(true);
-    };
+    const showDialog =()=> setIsDialogVisible(true)
 
-    const hideDialog =()=> {
-        setIsDialogVisible(false);
-    };
+    const hideDialog =()=> setIsDialogVisible(false)
+
     const deletePhrase =()=> {
         setIsDialogVisible(false);
         dispatch(removePhraseAction(phrase.id));
     };
 
-    const gptRequest =()=> {
-        openAiGptRequest(getNativeStr(),CN)
-    }
-    const getNativeStr =()=> {
-        return phrase[nativeLang]
-    }
+    const gptRequest =()=> openAiGptRequest(getNativeStr(),CN)
+    
+    const getNativeStr =()=> { return phrase[nativeLang] }
 
-    const setJsonText =()=> {dispatch(openJsonEditor())}
+    const setJsonText =()=> {dispatch(openJsonEditor(phrase,PHRASE))}
 
     return (
         <div style={{position: "relative"}} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>

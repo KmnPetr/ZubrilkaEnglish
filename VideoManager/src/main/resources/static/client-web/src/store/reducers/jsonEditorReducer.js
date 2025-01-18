@@ -3,26 +3,35 @@
  */
 const defaultState = {
         isOpen:false,
-        code: `{"name": "John","age": 30,"city": "New York"}`
+        jsonObject:{},
+        editableJson: '{}',
+        typeObject:null //"PHRASE" or "...."
     }
 
 const OPEN_JSON_EDITOR = 'OPEN_JSON_EDITOR'
 const CLOSE_JSON_EDITOR = 'CLOSE_JSON_EDITOR';
-const SET_JSON_CODE = 'SET_JSON_CODE';
+const UPDATE_JSON_TEXT = 'SET_JSON_TEXT';
 
+export const PHRASE = 'PHRASE'
 
 export const jsonEditorReducer = (state = defaultState, action) => {
     switch (action.type) {
         case OPEN_JSON_EDITOR:
-            return {...state, isOpen: true}
+            return {
+                ...state,
+                isOpen: true,
+                jsonObject: action.jsonObject,
+                editableJson: JSON.stringify(action.jsonObject, null, 2),
+                typeObject: action.typeObject
+            }
         case CLOSE_JSON_EDITOR:
             return defaultState;//закроет окно, удалит все изменения без сохранения
-        case SET_JSON_CODE:
-            return { ...state, code: action.payload };
+        case UPDATE_JSON_TEXT:
+            return { ...state, editableJson: action.payload };
         default: return state;
     }
 }
 
-export const openJsonEditor = () => ({type:OPEN_JSON_EDITOR})
+export const openJsonEditor = (jsonObject,typeObject) => ({type:OPEN_JSON_EDITOR,jsonObject,typeObject})
 export const closeJsonEditor = () => ({type:CLOSE_JSON_EDITOR})
-export const setJsonCode = (code) => ({ type: SET_JSON_CODE, payload: code })
+export const updateJsonText = (editableJson) => ({ type: UPDATE_JSON_TEXT, payload: editableJson })
