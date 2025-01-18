@@ -11,13 +11,14 @@ import {openAiGptRequest} from "../../../utils/openAiGpt"
 import { TbIndentIncrease } from "react-icons/tb";
 import {openJsonEditor} from '/src/store/reducers/jsonEditorReducer.js'
 import { PHRASE } from "../../../store/reducers/jsonEditorReducer";
+import WordsList from "./wordsList/WordsList";
 
 const Phrase =({phrase})=> {
     const dispatch = useDispatch();
     const videoManagement = useSelector(state => state.videoManagementReducer.videoManagement);
     const [isHover, setIsHover] = useState(false);
     const [isDialogVisible, setIsDialogVisible] = useState(false);
-    const nativeLang = `cnStr`
+    const nativeLang = `cn`
 
     const handleMouseEnter =()=> setIsHover(true)
 
@@ -35,11 +36,11 @@ const Phrase =({phrase})=> {
         dispatch(removePhraseAction(phrase.id));
     };
 
-    const gptRequest =()=> openAiGptRequest(getNativeStr(),CN)
+    const gptRequest =()=> openAiGptRequest(getNativeStr(),nativeLang)
     
-    const getNativeStr =()=> { return phrase[nativeLang] }
+    const getNativeStr =()=> { return phrase[nativeLang+'Str'] }
 
-    const setJsonText =()=> {dispatch(openJsonEditor(phrase,PHRASE))}
+    const setJsonText =()=> {dispatch(openJsonEditor(phrase,PHRASE,nativeLang))}
 
     return (
         <div style={{position: "relative"}} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
@@ -60,6 +61,7 @@ const Phrase =({phrase})=> {
                     <StrPhrase str={phrase.cnStr} idPhrase={phrase.id} language={CN} isHover={isHover}/>
                     <StrPhrase str={phrase.enStr} idPhrase={phrase.id} language={EN} isHover={isHover}/>
                     <StrPhrase str={phrase.ruStr} idPhrase={phrase.id} language={RU} isHover={isHover}/>
+                    <WordsList words={phrase.words} isPhraseHover={isHover}/>
                 </div>
                 {isHover && <AddNewPhrase id={phrase.id} position={"after"}/>}
             </div>

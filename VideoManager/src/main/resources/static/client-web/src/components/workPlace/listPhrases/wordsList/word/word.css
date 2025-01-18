@@ -1,0 +1,10 @@
+.language-p {
+    color: #5796ea;
+    font-size: 14px;
+}
+
+.str-word {
+    display: flex;
+    align-items: center;
+    margin: 3px;
+}

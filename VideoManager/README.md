@@ -17,14 +17,3 @@ npm run dev  запуск проекта реакт с vite, команда вв
 
 
 
-
-
-
-
-
-
-
-
-
-import { FaRegChartBar } from "react-icons/fa6"; просто строки
-import { MdOutlineDriveFileRenameOutline } from "react-icons/md"; ручка с одной чертой

@@ -2,6 +2,8 @@ package com.zubrilka.VideoManager.models;
 
 import lombok.*;
 
+import java.util.List;
+
 /**
  * the object contains a single phrase from the video, a word or a replica of the hero of the video
  * as well as its translation, links to the voiceover and the time of the beginning and end of the phrase playback in the video
@@ -21,4 +23,5 @@ public class Phrase {
     private String ruStr; //Russian translation
     private Long startTime; //the start time of the phrase in the video
     private Long endTime; //the end time of the phrase in the video
+    private List<Word> words;//the list of words that make up the phrase
 }

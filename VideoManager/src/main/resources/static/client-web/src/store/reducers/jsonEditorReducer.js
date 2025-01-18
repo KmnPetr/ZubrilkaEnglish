@@ -5,7 +5,8 @@ const defaultState = {
         isOpen:false,
         jsonObject:{},
         editableJson: '{}',
-        typeObject:null //"PHRASE" or "...."
+        typeObject:null, //"PHRASE" or "...."
+        nativeLang:null
     }
 
 const OPEN_JSON_EDITOR = 'OPEN_JSON_EDITOR'
@@ -22,7 +23,8 @@ export const jsonEditorReducer = (state = defaultState, action) => {
                 isOpen: true,
                 jsonObject: action.jsonObject,
                 editableJson: JSON.stringify(action.jsonObject, null, 2),
-                typeObject: action.typeObject
+                typeObject: action.typeObject,
+                nativeLang: action.nativeLang
             }
         case CLOSE_JSON_EDITOR:
             return defaultState;//закроет окно, удалит все изменения без сохранения
@@ -32,6 +34,6 @@ export const jsonEditorReducer = (state = defaultState, action) => {
     }
 }
 
-export const openJsonEditor = (jsonObject,typeObject) => ({type:OPEN_JSON_EDITOR,jsonObject,typeObject})
+export const openJsonEditor = (jsonObject,typeObject,nativeLang) => ({type:OPEN_JSON_EDITOR,jsonObject,typeObject,nativeLang})
 export const closeJsonEditor = () => ({type:CLOSE_JSON_EDITOR})
 export const updateJsonText = (editableJson) => ({ type: UPDATE_JSON_TEXT, payload: editableJson })

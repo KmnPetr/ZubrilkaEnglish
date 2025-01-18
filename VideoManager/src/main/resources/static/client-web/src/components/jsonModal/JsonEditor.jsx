@@ -13,7 +13,7 @@ import { updatePhrase } from '../../store/reducers/phraseReduser';
 
 const JsonEditor = () => {
   const dispatch = useDispatch();
-  const { isOpen,jsonObject, editableJson,typeObject } = useSelector((state) => state.jsonEditorReducer);
+  const { isOpen,jsonObject, editableJson,typeObject,nativeLang } = useSelector((state) => state.jsonEditorReducer);
 
   const highlight = (jsonText) => Prism.highlight(jsonText, Prism.languages.json, 'json');
 
@@ -24,7 +24,7 @@ const JsonEditor = () => {
     try {
       switch (typeObject) {
         case PHRASE:
-          dispatch(updatePhrase(convertJsonToPhrase(jsonObject,editableJson)))
+          dispatch(updatePhrase(convertJsonToPhrase(jsonObject,editableJson,nativeLang)))
           onClose()
           break;
         default:console.error("Invalid typeObject")
@@ -55,11 +55,29 @@ const JsonEditor = () => {
 
 export default JsonEditor;
 
-const convertJsonToPhrase = (jsonObject, editableJson) => {
+//перебираем обьект редактированный фильтруем ключи чтобы лишние ключи не попали в обьект
+const convertJsonToPhrase = (jsonObject, editableJson,nativeLang) => {
   let updatedPhrase = jsonObject;
   const editabledObject = JSON.parse(editableJson);
 
-  updatedPhrase = {...updatedPhrase,...editabledObject}
+  
+  if (editabledObject.cn !== undefined && editabledObject.cn !== null && editabledObject.cn !== '') updatedPhrase.cnStr = editabledObject.cn
+  if (editabledObject.en !== undefined && editabledObject.en !== null && editabledObject.en !== '') updatedPhrase.enStr = editabledObject.en
+  if (editabledObject.ru !== undefined && editabledObject.ru !== null && editabledObject.ru !== '') updatedPhrase.ruStr = editabledObject.ru
+
+  // Извлечение и обработка массива words
+  if (Array.isArray(editabledObject.words)) {
+    updatedPhrase.words = editabledObject.words.map(word => {
+      // Создаем новый объект только с непустыми ключами
+      let filteredWord = {};
+      if (word.cn !== undefined && word.cn !== null && word.cn !== '') filteredWord.cn = word.cn;
+      if (word.en !== undefined && word.en !== null && word.en !== '') filteredWord.en = word.en;
+      if (word.ru !== undefined && word.ru !== null && word.ru !== '') filteredWord.ru = word.ru;
+      return filteredWord;
+    }).filter(word => Object.keys(word).length > 0); // Исключаем пустые объекты
+  }
+  
 
   return updatedPhrase
 };
+

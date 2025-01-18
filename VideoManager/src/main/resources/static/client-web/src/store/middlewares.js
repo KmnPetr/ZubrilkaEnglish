@@ -1,4 +1,4 @@
-import { REMOVE_PHRASE, EDIT_STR, ADD_TO_AND, ADD_NEW, EDIT_TIME } from './reducers/phraseReduser';
+import { REMOVE_PHRASE, EDIT_STR, ADD_TO_AND, ADD_NEW, EDIT_TIME, UPDATE_PHRASE } from './reducers/phraseReduser';
 import {sendUpdateToServer} from "../services/phrasesService"
 
 
@@ -13,6 +13,7 @@ export const phrasesMiddleware = (store) => (next) => (action) => {
         ADD_TO_AND,
         ADD_NEW,
         EDIT_TIME,
+        UPDATE_PHRASE
     ];
 
     if (actionsToSync.includes(action.type)) {
