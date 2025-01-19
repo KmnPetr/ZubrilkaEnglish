@@ -3,7 +3,7 @@ import AddNewPhrase from "./AddNewPhrase";
 import { FiTrash2 } from "react-icons/fi";
 import DeleteDialog from "./DeleteDialog";
 import {useDispatch, useSelector} from "react-redux";
-import {CN, EN, removePhraseAction, RU} from "../../../store/reducers/phraseReduser";
+import {CN, EN, removePhraseAction, RU, updateWordsList} from "../../../store/reducers/phraseReduser";
 import StrPhrase from "./StrPhrase";
 import PhraseInterval from "./PhraseInterval";
 import { RiOpenaiFill } from "react-icons/ri";
@@ -42,6 +42,10 @@ const Phrase =({phrase})=> {
 
     const setJsonText =()=> {dispatch(openJsonEditor(phrase,PHRASE,nativeLang))}
 
+    const onChangeWordsList =(updatedWordsList)=>{
+        dispatch(updateWordsList(updatedWordsList,phrase.id));
+    }
+
     return (
         <div style={{position: "relative"}} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
             <div>
@@ -61,7 +65,7 @@ const Phrase =({phrase})=> {
                     <StrPhrase str={phrase.cnStr} idPhrase={phrase.id} language={CN} isHover={isHover}/>
                     <StrPhrase str={phrase.enStr} idPhrase={phrase.id} language={EN} isHover={isHover}/>
                     <StrPhrase str={phrase.ruStr} idPhrase={phrase.id} language={RU} isHover={isHover}/>
-                    <WordsList words={phrase.words} isPhraseHover={isHover}/>
+                    <WordsList words={phrase.words} isPhraseHover={isHover} onChangeWordsList={onChangeWordsList}/>
                 </div>
                 {isHover && <AddNewPhrase id={phrase.id} position={"after"}/>}
             </div>

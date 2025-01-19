@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import {useState} from "react";
 import { TfiMarkerAlt } from "react-icons/tfi";
 import {FiCheck, FiX} from "react-icons/fi";
 import {useDispatch} from "react-redux";

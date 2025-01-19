@@ -3,7 +3,7 @@ package com.zubrilka.VideoManager.models;
 import lombok.*;
 
 /**
- * более подробно о предназначении объекта в объекте {@code Phrase}
+ * более подробно о предназначении объекта в {@code Phrase}
  */
 @Getter
 @Setter

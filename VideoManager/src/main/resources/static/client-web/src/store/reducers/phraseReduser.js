@@ -11,6 +11,7 @@ export const EDIT_TIME = 'EDIT_TIME'
 export const SET_LIST_PHRASES = 'SET_LIST_PHRASES'
 export const CLEAR = 'CLEAR'
 export const UPDATE_PHRASE = 'UPDATE_PHRASE'
+export const UPDATE_WORDS = 'UPDATE_WORDS'
 
 // используемые типы языков
 export const CN = 'cn'
@@ -60,6 +61,13 @@ export const phraseReducer = (state = defaultState, action) => {
             ...state, 
             phrases: state.phrases.map((phrase) => phrase.id === action.updatedPhrase.id ? action.updatedPhrase : phrase),
         };
+        case UPDATE_WORDS: return {
+            ...state,
+            phrases: state.phrases.map(phrase=>phrase.id === action.phraseId ? {
+                ...phrase,
+                words: action.newWordsList
+            } : phrase)
+        }
         default: return state;
     }
 }
@@ -170,3 +178,4 @@ export const setListPhrases = (phrases) => ({type: SET_LIST_PHRASES, phrases: ph
 
 export const clearPhrases = () => ({type:CLEAR})
 export const updatePhrase =(updatedPhrase)=> ({type:UPDATE_PHRASE,updatedPhrase})
+export const updateWordsList =(newWordsList,phraseId)=> ({type:UPDATE_WORDS,newWordsList,phraseId})

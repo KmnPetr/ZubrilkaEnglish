@@ -1,0 +1,23 @@
+.editable_field {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.editable_field input {
+    flex: 1; /* Занимает доступное пространство */
+    min-width: 50px; /* Минимальная ширина */
+    max-width: 100%; /* Ограничение по ширине */
+    font-size: 16px; /* Размер текста */
+    border: none;
+    border-radius: 4px;
+    box-sizing: border-box;
+    overflow: hidden;
+    resize: none; /* Отключение возможности изменения размера вручную */
+    margin-right:5px;
+    outline: none;
+    background-color: #474747;
+    padding: 5px;
+    color: #ffffff;
+}
+
