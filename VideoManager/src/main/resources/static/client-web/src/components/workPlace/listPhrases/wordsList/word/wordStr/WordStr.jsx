@@ -11,7 +11,7 @@ const WordStr = ({str,language,isHover,onChangeStr}) => {
   return (
     <div className="str-word">
         {isHover && (<p className="language-p">{language}:</p>)}
-        {!str && <p style={{ color: '#82aaff', fontSize: '12px', fontFamily: 'Arial' }}>null</p>}
+        {!str && !isHover && <p style={{ color: '#82aaff', fontSize: '16px', fontFamily: 'Arial' }}>null</p>}
         <div style={{flex:'1'}}>
           <EditableField str={str} onChange={onChange} showMarker={isHover}/>
         </div>

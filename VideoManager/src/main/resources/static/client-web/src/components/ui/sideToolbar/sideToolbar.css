@@ -1,0 +1,23 @@
+.side_toolbar {
+    position: absolute;
+    left:50%;
+    transform: translateX(-50%);
+    background-color: #575757;
+    padding: 10px;
+    z-index: 9999;
+  }
+  
+  /* Верхняя панель */
+  .toolbar_top {
+    bottom: 100%; /* Расположение сверху */
+    border-radius: 10px 10px 0 0; /* Закругление сверху */
+    box-shadow: 0px -7px 7px rgba(0, 0, 0, 0.2); /* Тень сверху */
+  }
+  
+  /* Нижняя панель */
+  .toolbar_bottom {
+    top: 100%; /* Расположение снизу */
+    border-radius: 0 0 10px 10px; /* Закругление снизу */
+    box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.2); /* Тень снизу */
+  }
+  

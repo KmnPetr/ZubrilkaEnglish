@@ -55,6 +55,7 @@ const StrPhrase = ({str,idPhrase,language, isHover}) => {
                     </div>
                 ) : (
                     <div className="str-phrase">
+                        {!str && <p style={{ color: '#82aaff', fontSize: '16px', fontFamily: 'Arial' }}>null</p>}
                         <p>{str}</p>
                     </div>
                 )

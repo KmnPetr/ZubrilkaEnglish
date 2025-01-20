@@ -11,8 +11,7 @@ export const POSITION_END = 'POSITION_END'
 /**
  * Список слов/фраз с возможностью скрывать/показывать
  */
-const WordsList = ({ words,isPhraseHover,onChangeWordsList }) => {
-  const [isExpanded, setIsExpanded] = useState(false); // Состояние для управления видимостью списка
+const WordsList = ({ words,onChangeWordsList }) => {
 
   const onChangeWord = (updatedWord, index) => {
     const updatedWordsList = words.map((word, i) => 
@@ -47,35 +46,27 @@ const WordsList = ({ words,isPhraseHover,onChangeWordsList }) => {
     
         onChangeWordsList(updatedWordsList);
     };
+    
+    const onDeleteWord = (index) => {
+        const updatedWordsList = words.filter((_, i) => i !== index);
+        onChangeWordsList(updatedWordsList);
+    };
 
     return (
         <div>
-            {/* Кнопка со стрелочкой для управления видимостью списка */}
-            {isPhraseHover && (
-                <div
-                    className="toggle-button"
-                    onClick={() => setIsExpanded(!isExpanded)}
-                    style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
-                >
-                    <span style={{ marginRight: "8px" }}>
-                    {isExpanded ? "▼" : "▲"} {/* Стрелочка вниз/вверх */}
-                    </span>
-                    <span>list of words</span>
-                </div>
-            )}
             <div className="wordsList">
                 {/* Отображаем список только если isExpanded равно true */}
-                {isExpanded && words && (
+                {words && (
                     <ul>
                     {words.map((word, index) => (
                         <li key={index} style={{ marginBottom: "10px" }}>
-                            <Word word={word} index={index} onChangeWord={onChangeWord} addNewWord={addNewWord}/>
+                            <Word word={word} index={index} onChangeWord={onChangeWord} addNewWord={addNewWord} onDeleteWord={onDeleteWord}/>
                         </li>
                     ))}
                     </ul>
                 )}
                 {words && words.length === 0 && <AddWordButton onClick={addNewWord} position={POSITION_END}/> }
-                {!words && isExpanded && <AddWordButton onClick={addNewWord} position={POSITION_ONLY_ONE}/>}
+                {!words && <AddWordButton onClick={addNewWord} position={POSITION_ONLY_ONE}/>}
             </div>
         </div>
     );
