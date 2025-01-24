@@ -5,6 +5,7 @@ import VideoInfo from "./videoInfo/VideoInfo"
 import "../../css/WorkPlace.css";
 import ScreenshotComponent from "../screenshotComponent/ScreenshotComponent"
 import JsonEditor from '../jsonModal/JsonEditor';
+import VoiceEditor from '../voiceEditor/VoiceEditor';
 
 const WorkPlace = ({ videoInfo_uuid,reloadVideoInfo }) => {
     return (
@@ -18,6 +19,7 @@ const WorkPlace = ({ videoInfo_uuid,reloadVideoInfo }) => {
             </div>
             <ScreenshotComponent videoInfo_uuid={videoInfo_uuid}/>
             <JsonEditor/>
+            <VoiceEditor/>
         </div>
     );
 };

@@ -9,6 +9,7 @@ import {authReducer} from "./reducers/authReducer";
 import {translationReducer} from "./reducers/translationReducer";
 import {phrasesMiddleware} from "./middlewares"
 import {jsonEditorReducer} from "./reducers/jsonEditorReducer"
+import { voiceEditorReducer } from "./reducers/voiceEditorReducer";
 
 
 
@@ -21,7 +22,8 @@ const rootReducer = combineReducers({
     authReducer: authReducer,
     phraseReducer: phraseReducer,
     translationReducer: translationReducer,
-    jsonEditorReducer: jsonEditorReducer
+    jsonEditorReducer: jsonEditorReducer,
+    voiceEditorReducer: voiceEditorReducer
 })
 
 export const store = createStore(rootReducer,composeWithDevTools(applyMiddleware(thunk,phrasesMiddleware)))

@@ -3,6 +3,8 @@ import { TfiMarkerAlt } from "react-icons/tfi";
 import {FiCheck, FiX} from "react-icons/fi";
 import {useDispatch} from "react-redux";
 import {editStrAction} from "../../../store/reducers/phraseReduser";
+import { HiOutlineMicrophone } from "react-icons/hi";
+import { openVoiceEditor_Phrase } from "../../../store/reducers/voiceEditorReducer";
 
 /**
  * компонент отвечает за отображение и редактирование строки фразы каждого языка поотдельности
@@ -34,6 +36,8 @@ const StrPhrase = ({str,idPhrase,language, isHover}) => {
         }
     }
 
+    const onClickMicrophone =()=>dispatch(openVoiceEditor_Phrase(idPhrase,str,language))
+
     return (
         <div>
             {isEditable ? (
@@ -52,10 +56,11 @@ const StrPhrase = ({str,idPhrase,language, isHover}) => {
                         <p className="language-p">{language}:</p>
                         <p>{str}</p>
                         <TfiMarkerAlt onClick={clickEdit} className="clickable"/>
+                        <HiOutlineMicrophone className="microphone clickable" onClick={onClickMicrophone}/>
                     </div>
                 ) : (
                     <div className="str-phrase">
-                        {!str && <p style={{ color: '#82aaff', fontSize: '16px', fontFamily: 'Arial' }}>null</p>}
+                        {!str && <p style={{ color: '#82aaff', fontSize: '14px', fontFamily: 'Arial' }}>null</p>}
                         <p>{str}</p>
                     </div>
                 )

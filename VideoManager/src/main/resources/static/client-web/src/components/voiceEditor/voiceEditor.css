@@ -1,0 +1,51 @@
+.voice-editor-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .voice-editor-wrapper {
+    justify-items: center;
+    background-color: #282828;
+    border: 1px solid #303030;
+    border-radius: 4px;
+  }
+  .button-container {
+    display: flex;
+    justify-content: flex-end; /* Выравнивает кнопку вправо */
+  }
+  .speaker_box{
+
+  }
+  .speaker{
+    width: 50px;
+    height: 50px;
+  }
+  .record_box{
+    justify-self: start;
+    justify-items: start;
+    flex-direction: row;
+  }
+  .microphone{
+    font-size: 30px;
+    margin: 10px 0px 10px 10px;
+  }
+
+.recording {
+    animation: pulse 0.5s infinite;
+    color: #6dff72; /* Начальный зеленый цвет */
+  }
+  
+  @keyframes pulse {
+    0% {
+      color: #6dff72; /* Зеленый */
+    }
+    50% {
+      color: #ffffff;
+    }
+  }
+.red_point{
+    color: red;
+    font-size: 25px;
+    margin: 10px 10px 10px 5px;
+}
