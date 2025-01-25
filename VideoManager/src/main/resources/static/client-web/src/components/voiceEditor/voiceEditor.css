@@ -25,8 +25,9 @@
     justify-self: start;
     justify-items: start;
     flex-direction: row;
+    width: 100%;
   }
-  .microphone{
+  .microphone2{
     font-size: 30px;
     margin: 10px 0px 10px 10px;
   }
@@ -48,4 +49,8 @@
     color: red;
     font-size: 25px;
     margin: 10px 10px 10px 5px;
+}
+.play_pause{
+  font-size: 20px;
+  margin: 10px;
 }
