@@ -10,6 +10,7 @@ const ProgressSlider = ({ onChenge, maxValue = 1000, changedSignal }) => {
     setSliderValue(value);
     onChenge(value);
   };
+  useEffect(()=>{onChenge(sliderValue)},[sliderValue])
 
   // Сброс ползунка в дефолтное положение, когда меняется signal
   useEffect(() => {
@@ -23,7 +24,7 @@ const ProgressSlider = ({ onChenge, maxValue = 1000, changedSignal }) => {
       min={0} 
       max={maxValue}
       value={sliderValue}
-      onInput={handleSliderChange}
+      onInput={setSliderValue}
       defaultValue={[0, maxValue]}
     />
   );

@@ -1,49 +1,83 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import toWav from "audiobuffer-to-wav";
 
 export function useAudioPlayer(audioURL,startTime,endTime) {
-  const audioRef = useRef(null); // Хранит объект Audio
+  const audioCutRef = useRef(null); // Хранит обрезанный объект Audio
   const [isPlaying, setIsPlaying] = useState(false); // Отслеживает состояние воспроизведения
-  const [currentTime, setCurrentTime] = useState(0); // Текущее время аудио
 
-  // Обновляем объект Audio при изменении audioURL
-  useEffect(() => {
-    if (audioURL) {
-      // Очищаем предыдущий объект Audio, если он существовал
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
-
-      audioRef.current = new Audio(audioURL);
-      audioRef.current.onended = () => setIsPlaying(false); // Сбрасываем состояние при завершении
-
-      // Обновляем текущее время при воспроизведении
-      audioRef.current.ontimeupdate = () => {
-        setCurrentTime(audioRef.current.currentTime || 0);
-      };
-    }
-  }, [audioURL]);
 
   const play = () => {
-    if (audioRef.current) {
-      audioRef.current.play().then(() => setIsPlaying(true)).catch(console.error);
+
+    if(audioURL && endTime){
+      trimAudio2(audioURL,startTime, endTime).then((trimmedAudioURL) => {
+
+        
+      // Очищаем предыдущий объект audioCutRef, если он существовал
+      if (audioCutRef.current) {
+        audioCutRef.current.pause();
+        audioCutRef.current = null;
+      }
+
+      audioCutRef.current = new Audio(trimmedAudioURL);
+      audioCutRef.current.onended = () => setIsPlaying(false);// Сбрасываем состояние при завершении
+
+      if (audioCutRef.current) {
+        audioCutRef.current.play().then(() => setIsPlaying(true)).catch(console.error);
+      }
+      });
     }
   };
 
   const pause = () => {
-    if (audioRef.current) {
-      audioRef.current.pause();
+    if (audioCutRef.current) {
+      audioCutRef.current.pause();
       setIsPlaying(false);
     }
   };
 
-  const reset = () => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-      setIsPlaying(false);
-    }
-  };
+  const getTrimmedAudio = async ()=>{
+    return await trimAudio2(audioURL, startTime, endTime)
+  }
 
-  return { play, pause, reset, isPlaying, currentTime };
+
+  return { play, pause, isPlaying, getTrimmedAudio };
 }
+
+/**
+ * обрежет wav файл с начала и сконца
+ * вернет ссылку на новый файл
+ */
+const trimAudio2 = async (audioURL, startTime, endTime) => {
+  const response = await fetch(audioURL);
+  const audioData = await response.arrayBuffer();
+
+  // Раскодируем аудиофайл в AudioBuffer
+  const audioContext = new AudioContext();
+  const buffer = await audioContext.decodeAudioData(audioData);
+
+  // Параметры обрезки
+  const sampleRate = buffer.sampleRate;
+  const startSample = Math.floor(startTime * sampleRate); // Начало
+  const endSample = Math.min(Math.floor(endTime * sampleRate), buffer.length); // Конец
+  const trimmedLength = endSample - startSample;
+
+  // Создаём новый AudioBuffer для обрезанного аудио
+  const trimmedBuffer = audioContext.createBuffer(
+    buffer.numberOfChannels,
+    trimmedLength,
+    sampleRate
+  );
+
+  // Копируем данные из исходного AudioBuffer, начиная с startSample
+  for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
+    const channelData = buffer.getChannelData(channel).slice(startSample, endSample);
+    trimmedBuffer.copyToChannel(channelData, channel);
+  }
+
+  // Преобразуем обрезанный AudioBuffer в WAV
+  const wav = toWav(trimmedBuffer);
+  const blob = new Blob([wav], { type: "audio/wav" });
+  const url = URL.createObjectURL(blob);
+
+  return url; // Возвращаем ссылку на обрезанный WAV
+};

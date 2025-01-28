@@ -5,7 +5,7 @@ import './voiceEditor.css';
 import CButton from '../ui/CButton';
 import { PHRASE } from '../../store/reducers/jsonEditorReducer';
 import { closeVoiceEditor } from '../../store/reducers/voiceEditorReducer';
-import { HiOutlineSpeakerWave,HiOutlineSpeakerXMark } from "react-icons/hi2";
+import { HiOutlineSpeakerWave,HiOutlineSpeakerXMark,HiOutlineScissors } from "react-icons/hi2";
 import { HiOutlineMicrophone } from "react-icons/hi";
 import { TbPointFilled } from "react-icons/tb";
 import useAudioRecorder from './useAudioRecorder';
@@ -22,12 +22,13 @@ const VoiceEditor = () => {
   const dispatch = useDispatch();
   const {isOpen,idPhrase,indexWord,typeObject,str,strLang} = useSelector((state) => state.voiceEditorReducer);
   const [voiseUuid,setVoiceUuid] = useState(null)
-  const {isRecording,audioURL,startRecording,stopRecording} = useAudioRecorder()
+  const {isRecording,audioURL,startRecording,stopRecording,setAudioURL} = useAudioRecorder()
   const {duration} = useDuration(audioURL)
   const {startTime,endTime,changeInterval,maxValue} = useInterval(duration)
-  const { play, pause, reset, isPlaying, currentTime } = useAudioPlayer(audioURL,startTime,endTime)
+  const { play, pause, isPlaying, getTrimmedAudio } = useAudioPlayer(audioURL,startTime,endTime)
 
   const onClose = () => dispatch(closeVoiceEditor()); // Закрывает окно
+  const trimAudio=()=> getTrimmedAudio().then(newURL=>setAudioURL(newURL))
 
   const apply =()=>{
     try {
@@ -62,8 +63,8 @@ const VoiceEditor = () => {
                 <HiOutlineMicrophone className={`clickable microphone2 ${isRecording ? 'recording' : ''}`} onClick={onClickRecord}/>
                 {isRecording && <TbPointFilled className='red_point'/>}
                 {!isPlaying ? <CiPlay1 className='clickable play_pause' onClick={play}/> : <CiPause1 className='clickable play_pause' onClick={pause}/>}
+                <HiOutlineScissors className='clicable trim_i' onClick={trimAudio}/>
                 <p>duration: {duration}</p>
-                <p>currentTime: {currentTime}</p>
 
                 <ProgressSlider onChenge={changeInterval} maxValue={maxValue} changedSignal={audioURL}/>
                 <p>startTime: {startTime}</p>

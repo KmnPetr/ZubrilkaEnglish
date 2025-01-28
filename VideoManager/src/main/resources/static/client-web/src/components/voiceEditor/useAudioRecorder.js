@@ -73,6 +73,7 @@ const useAudioRecorder = () => {
     }
   };
 
+
   // Проверяем разрешение на микрофон при инициализации хука
   useEffect(() => {
     const initializePermission = async () => {
@@ -87,6 +88,7 @@ const useAudioRecorder = () => {
     audioURL,
     startRecording,
     stopRecording,
+    setAudioURL
   };
 };
 
