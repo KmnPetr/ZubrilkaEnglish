@@ -1,14 +1,10 @@
+import { copyToClipboard } from "./copyToClipboard";
+
 export const openAiGptRequest =(nativeStr,nativeKey)=>{
     //скопирует запрос строку в буфер
     copyToClipboard(getRuText(nativeStr))
     //перенаправит в чат gpt и задаст ему вопрос
     redirectToChatGPT(getRuText(nativeStr,nativeKey));
-}
-
-function copyToClipboard(text) {
-    navigator.clipboard.writeText(text).catch(err => {
-        console.error("Ошибка при копировании текста:", err);
-    });
 }
 
 

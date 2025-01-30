@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import ModalWindow from '../ui/ModalWindow';
 import { useDispatch, useSelector } from 'react-redux';
 import './voiceEditor.css';
-import CButton from '../ui/CButton';
 import { PHRASE } from '../../store/reducers/jsonEditorReducer';
 import { closeVoiceEditor } from '../../store/reducers/voiceEditorReducer';
 import { HiOutlineSpeakerWave,HiOutlineSpeakerXMark,HiOutlineScissors } from "react-icons/hi2";
@@ -14,13 +13,14 @@ import { CiPlay1,CiPause1 } from "react-icons/ci";
 import { useAudioPlayer } from './useAudioPlayer';
 import { useDuration } from './useDuration';
 import useInterval from './useInterval';
+import Zvukogram from './zvukogram/Zvukogram';
 
 /**
  * модальное окно для редактирования озвучки у фразы или слова
  */
 const VoiceEditor = () => {
   const dispatch = useDispatch();
-  const {isOpen,idPhrase,indexWord,typeObject,str,strLang} = useSelector((state) => state.voiceEditorReducer);
+  const {isOpen,idPhrase,indexWord,typeObject,str,language} = useSelector((state) => state.voiceEditorReducer);
   const [voiseUuid,setVoiceUuid] = useState(null)
   const {isRecording,audioURL,startRecording,stopRecording,setAudioURL} = useAudioRecorder()
   const {duration} = useDuration(audioURL)
@@ -46,11 +46,11 @@ const VoiceEditor = () => {
 
   const onClickRecord=()=> !isRecording ? startRecording() : stopRecording()
 
+
   return (
     <ModalWindow isOpen={isOpen} onClose={onClose} width="70%" height="70%">
       <div className="voice-editor-container">
         <div className="button-container">
-          <CButton text={'Apply'} onClick={apply}/>
         </div>
         <div className="voice-editor-wrapper">
             <h1>{"\""+str+"\""}</h1>
@@ -70,6 +70,7 @@ const VoiceEditor = () => {
                 <p>startTime: {startTime}</p>
                 <p>endTime: {endTime}</p>
             </div>
+            <Zvukogram/>
         </div>
       </div>
     </ModalWindow>
@@ -77,3 +78,6 @@ const VoiceEditor = () => {
 };
 
 export default VoiceEditor;
+
+
+

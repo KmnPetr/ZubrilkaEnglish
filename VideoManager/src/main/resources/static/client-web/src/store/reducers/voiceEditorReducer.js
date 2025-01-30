@@ -7,7 +7,7 @@ const defaultState = {
     indexWord: null, //если voice редактируется у word
     typeObject:null, //"PHRASE" or "WORD"
     str: null,
-    strLang:null
+    language:null
 }
 
 const OPEN_VOICE_EDITOR = 'OPEN_VOICE_EDITOR'
@@ -26,7 +26,7 @@ export const voiceEditorReducer = (state = defaultState, action) => {
                 indexWord: action.indexWord || null,
                 typeObject: action.typeObject,
                 str: action.str,
-                strLang: action.language
+                language: action.language
             }
         case CLOSE_VOICE_EDITOR:
             return defaultState;//закроет окно, удалит все изменения без сохранения
