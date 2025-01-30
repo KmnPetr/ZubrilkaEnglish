@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
+import com.example.ze_adminandroid.utils.TEG
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -58,11 +59,13 @@ class FileManager private constructor(){
      * попросит разрешение на доступ к хранилищу
      */
     fun getPermission(activity: FragmentActivity) {
+        Log.d(TEG,"METHOD: getPermission")
 
         val permissionWrite = Manifest.permission.WRITE_EXTERNAL_STORAGE
         val requestCode = 1
 
         if (ContextCompat.checkSelfPermission(activity, permissionWrite) != PackageManager.PERMISSION_GRANTED) {
+            Log.d(TEG,"METHOD: permissionWrite wasn't granted")
             ActivityCompat.requestPermissions(activity, arrayOf(permissionWrite), requestCode)
         }
     }
