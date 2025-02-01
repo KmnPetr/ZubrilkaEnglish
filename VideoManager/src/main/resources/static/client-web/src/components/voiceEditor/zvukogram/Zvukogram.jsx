@@ -3,16 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import './zvukogram.css'
 import CButton from '../../ui/CButton'
 import { copyToClipboard } from '../../../utils/copyToClipboard';
-import { getListVoices } from '../../../services/zvukogramService';
+import SelectVoice from './selectVoice/SelectVoice';
 
 //сделано наподобие https://coreui.io/react/docs/components/button/#outline-buttons
 const Zvukogram = () => {
     const {isOpen,idPhrase,indexWord,typeObject,str,language} = useSelector((state) => state.voiceEditorReducer);
-    const [voices,setVoices] = useState(null);
+    const [voice,setVoice] = useState(null);
     
-    useEffect(()=>{
-        getListVoices().then(r=>setVoices(r)) //получение списка голосов с сайта звукограмм
-    },[])
 
 
     const goToZvukogram=()=>{
@@ -20,8 +17,9 @@ const Zvukogram = () => {
         redirectToZvukogram(language)
     }
   return (
-    <div>
+    <div className='box'>
         <CButton color='#d3c97e' className='clickable' onClick={goToZvukogram}>Zvukogram</CButton>
+        <SelectVoice onSelect={setVoice} language={language}/>
     </div>
   );
 };
