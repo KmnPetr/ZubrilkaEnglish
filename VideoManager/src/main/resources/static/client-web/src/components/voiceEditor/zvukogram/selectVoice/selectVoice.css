@@ -3,3 +3,16 @@
     flex-direction: row;
     gap: 5px;
 }
+.male_icon{
+    margin-right: 5px;
+    color: aqua;
+}
+.female_icon{
+    margin-right: 5px;
+    color: fuchsia;
+}
+.pro{
+    margin-left: 8px;
+    color: #f9d252;
+    font-size: 12px;
+}
