@@ -14,6 +14,7 @@ import { useAudioPlayer } from './useAudioPlayer';
 import { useDuration } from './useDuration';
 import useInterval from './useInterval';
 import Zvukogram from './zvukogram/Zvukogram';
+import FolderHandler from './folderHandler/FolderHandler';
 
 /**
  * модальное окно для редактирования озвучки у фразы или слова
@@ -47,6 +48,7 @@ const VoiceEditor = () => {
   const onClickRecord=()=> !isRecording ? startRecording() : stopRecording()
 
 
+
   return (
     <ModalWindow isOpen={isOpen} onClose={onClose} width="70%" height="70%">
       <div className="voice-editor-container">
@@ -63,12 +65,13 @@ const VoiceEditor = () => {
                 <HiOutlineMicrophone className={`clickable microphone2 ${isRecording ? 'recording' : ''}`} onClick={onClickRecord}/>
                 {isRecording && <TbPointFilled className='red_point'/>}
                 {!isPlaying ? <CiPlay1 className='clickable play_pause' onClick={play}/> : <CiPause1 className='clickable play_pause' onClick={pause}/>}
-                <HiOutlineScissors className='clicable trim_i' onClick={trimAudio}/>
+                <HiOutlineScissors className='clickable trim_i' onClick={trimAudio}/>
                 <p>duration: {duration}</p>
 
                 <ProgressSlider onChenge={changeInterval} maxValue={maxValue} changedSignal={audioURL}/>
                 <p>startTime: {startTime}</p>
                 <p>endTime: {endTime}</p>
+                <FolderHandler onSelectAudio={(urlAudio)=>console.log('urlAudio: '+urlAudio)}/>
             </div>
             <Zvukogram/>
         </div>
