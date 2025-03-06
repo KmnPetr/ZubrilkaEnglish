@@ -49,5 +49,5 @@ function redirectToZvukogram(language) {
     }
   
     // Открываем URL в новой вкладке
-    window.open(/*finalUrl*/url, '_blank');
+    window.open(url, '_blank');
   }

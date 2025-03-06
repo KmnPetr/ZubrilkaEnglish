@@ -1,17 +1,11 @@
 import React,{useEffect, useState} from "react";
 import './folderHandler.css'
 import { LuFolderOpen } from "react-icons/lu";
-import { FFmpeg } from "@ffmpeg/ffmpeg";
+import { convertMp3ToWav } from "../../../utils/audioConverter";
 
-
-const ffmpeg = new FFmpeg();
 
 
 const FolderHandler=({onSelectAudio})=>{
-    
-  const [audioURL, setAudioURL] = useState(null);
-
-  useEffect(()=>{console.log(audioURL)},[audioURL])
 
   const openFolderAndGetAudio = async () => {
     const input = document.createElement("input");
@@ -24,14 +18,20 @@ const FolderHandler=({onSelectAudio})=>{
       if (!file) return;
 
       const url = URL.createObjectURL(file);
-      setAudioURL(url);
+
+      if (true/*file.type === "audio/mpeg"*/) {
+        console.log("это mp3 файл")
+        convertMp3ToWav(url).then(wavUrl=>{
+          onSelectAudio(wavUrl)
+        })
+        
+      }
     };
   };
 
     return(
         <div className="folder_box">
             <LuFolderOpen className='clickable folder' onClick={openFolderAndGetAudio}/>
-            {audioURL && <audio controls src={audioURL}></audio>}
         </div>
     )
 }

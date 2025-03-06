@@ -170,7 +170,14 @@ class EditWordFragment : Fragment() {
      */
     private fun setLinkVoice() {
         val str:String = binding.foreignWord.text.toString()
-        val str2:String = str.replace(" ", "_").replace("/","_")
+        val str2:String = str
+            .replace(" ", "_")
+            .replace("/","_")
+            .replace("?","7")
+            .replace("!","7")
+            .replace(".","7")
+            .replace("'","7")
+            .replace("`","7")
 
         val prefix:String = binding.prefix.text.toString()
 

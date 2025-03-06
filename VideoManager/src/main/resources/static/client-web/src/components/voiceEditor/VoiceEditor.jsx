@@ -71,7 +71,7 @@ const VoiceEditor = () => {
                 <ProgressSlider onChenge={changeInterval} maxValue={maxValue} changedSignal={audioURL}/>
                 <p>startTime: {startTime}</p>
                 <p>endTime: {endTime}</p>
-                <FolderHandler onSelectAudio={(urlAudio)=>console.log('urlAudio: '+urlAudio)}/>
+                <FolderHandler onSelectAudio={(urlAudio)=>setAudioURL(urlAudio)}/>
             </div>
             <Zvukogram/>
         </div>
