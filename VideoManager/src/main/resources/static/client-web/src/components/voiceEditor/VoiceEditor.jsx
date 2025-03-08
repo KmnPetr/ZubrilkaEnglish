@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ModalWindow from '../ui/ModalWindow';
 import { useDispatch, useSelector } from 'react-redux';
 import './voiceEditor.css';
-import { PHRASE } from '../../store/reducers/jsonEditorReducer';
 import { closeVoiceEditor } from '../../store/reducers/voiceEditorReducer';
 import { HiOutlineSpeakerWave,HiOutlineSpeakerXMark,HiOutlineScissors } from "react-icons/hi2";
 import { HiOutlineMicrophone } from "react-icons/hi";
@@ -15,39 +14,44 @@ import { useDuration } from './useDuration';
 import useInterval from './useInterval';
 import Zvukogram from './zvukogram/Zvukogram';
 import FolderHandler from './folderHandler/FolderHandler';
+import { convertMp3ToWav } from '../../utils/audioConverter';
+import CButton from '../ui/CButton';
+import { saveWavVoiceOnServer } from '../../services/voiceService';
+import { setAudioUuidToPhrases } from '../../store/reducers/phraseReduser';
 
 /**
  * модальное окно для редактирования озвучки у фразы или слова
  */
 const VoiceEditor = () => {
   const dispatch = useDispatch();
-  const {isOpen,idPhrase,indexWord,typeObject,str,language} = useSelector((state) => state.voiceEditorReducer);
+  const {isOpen,idPhrase,indexWord,typeStr,str,language} = useSelector((state) => state.voiceEditorReducer);
   const [voiseUuid,setVoiceUuid] = useState(null)
   const {isRecording,audioURL,startRecording,stopRecording,setAudioURL} = useAudioRecorder()
   const {duration} = useDuration(audioURL)
   const {startTime,endTime,changeInterval,maxValue} = useInterval(duration)
   const { play, pause, isPlaying, getTrimmedAudio } = useAudioPlayer(audioURL,startTime,endTime)
+  const [audioUrlMp3,setAudioUrlMp3] = useState(null) //содержит ссылку на аудио взятое например из звукограмма
+
+  //при получении ссылки на mp3 например из звукограмма переформатирует его в wav
+  useEffect(()=>{
+    convertMp3ToWav(audioUrlMp3)
+    .then(vawUrl=>{
+      setAudioURL(vawUrl)
+    })
+  },[audioUrlMp3])
 
   const onClose = () => dispatch(closeVoiceEditor()); // Закрывает окно
   const trimAudio=()=> getTrimmedAudio().then(newURL=>setAudioURL(newURL))
 
   const apply =()=>{
-    try {
-      switch (typeObject) {
-        case PHRASE:
-          //dispatch(updatePhrase(convertJsonToPhrase(jsonObject,editableJson,nativeLang)))
-          onClose()
-          break;
-        default:console.error("Invalid typeObject")
-      }
-    } catch (error) {
-      //console.error('Invalid JSON string:', error.message);
-    }
+    saveWavVoiceOnServer(audioURL,str)
+    .then(voiceUuid=>{
+      console.log('voiceUuid'+voiceUuid)
+      dispatch(setAudioUuidToPhrases(voiceUuid,typeStr,idPhrase,indexWord))
+    })
   }
 
   const onClickRecord=()=> !isRecording ? startRecording() : stopRecording()
-
-
 
   return (
     <ModalWindow isOpen={isOpen} onClose={onClose} width="70%" height="70%">
@@ -73,7 +77,8 @@ const VoiceEditor = () => {
                 <p>endTime: {endTime}</p>
                 <FolderHandler onSelectAudio={(urlAudio)=>setAudioURL(urlAudio)}/>
             </div>
-            <Zvukogram/>
+            <Zvukogram onChangeAudioUrlMp3={setAudioUrlMp3}/>
+            <CButton onClick={apply}>Apply voice</CButton>
         </div>
       </div>
     </ModalWindow>
@@ -81,6 +86,3 @@ const VoiceEditor = () => {
 };
 
 export default VoiceEditor;
-
-
-

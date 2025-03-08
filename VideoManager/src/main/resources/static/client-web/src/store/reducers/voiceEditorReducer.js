@@ -5,13 +5,13 @@ const defaultState = {
     isOpen:false,
     idPhrase: null,
     indexWord: null, //если voice редактируется у word
-    typeObject:null, //"PHRASE" or "WORD"
+    typeStr:null, //"PHRASE" or "WORD"
     str: null,
     language:null
 }
 
 const OPEN_VOICE_EDITOR = 'OPEN_VOICE_EDITOR'
-const CLOSE_VOICE_EDITOR = 'CLOSE_VOICE_EDITOR';
+const CLOSE_VOICE_EDITOR = 'CLOSE_VOICE_EDITOR'
 
 export const PHRASE = 'PHRASE'
 export const WORD = 'WORD'
@@ -23,8 +23,8 @@ export const voiceEditorReducer = (state = defaultState, action) => {
                 ...defaultState,
                 isOpen: true,
                 idPhrase: action.idPhrase,
-                indexWord: action.indexWord || null,
-                typeObject: action.typeObject,
+                indexWord: action.indexWord,
+                typeStr: action.typeStr,
                 str: action.str,
                 language: action.language
             }
@@ -34,5 +34,5 @@ export const voiceEditorReducer = (state = defaultState, action) => {
     }
 }
 
-export const openVoiceEditor_Phrase = (idPhrase,str,language) => ({type:OPEN_VOICE_EDITOR,idPhrase,str,language,typeObject:PHRASE})
+export const openVoiceEditor = ({idPhrase,indexWord,str,language,typeStr}) => ({type:OPEN_VOICE_EDITOR,idPhrase,indexWord,str,language,typeStr})
 export const closeVoiceEditor = () => ({type:CLOSE_VOICE_EDITOR})

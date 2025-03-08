@@ -21,7 +21,6 @@ export async function getTranslation(videoInfo_uuid) {
 
 // Sending an updated list of phrases to the server
 export async function sendUpdateToServer(phrases,translation_uuid) {
-    console.log("Отправка данных на сервер:", phrases);
 
     try {
         const response = await api.put(`/api/translation/${translation_uuid}/phrases`, phrases,

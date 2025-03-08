@@ -70,7 +70,7 @@ const Phrase =({phrase})=> {
                     <StrPhrase str={phrase.cnStr} idPhrase={phrase.id} language={CN} isHover={isHover}/>
                     <StrPhrase str={phrase.enStr} idPhrase={phrase.id} language={EN} isHover={isHover}/>
                     <StrPhrase str={phrase.ruStr} idPhrase={phrase.id} language={RU} isHover={isHover}/>
-                    {isShowWords && <WordsList words={phrase.words} onChangeWordsList={onChangeWordsList}/>}
+                    {isShowWords && <WordsList words={phrase.words} onChangeWordsList={onChangeWordsList} idPhrase={phrase.id}/>}
                 </div>
             </div>
 

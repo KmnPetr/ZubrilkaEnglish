@@ -12,11 +12,15 @@ export const SET_LIST_PHRASES = 'SET_LIST_PHRASES'
 export const CLEAR = 'CLEAR'
 export const UPDATE_PHRASE = 'UPDATE_PHRASE'
 export const UPDATE_WORDS = 'UPDATE_WORDS'
+export const SET_AUDIO_UUID = 'SET_AUDIO_UUID'
 
 // используемые типы языков
 export const CN = 'cn'
 export const EN = 'en'
 export const RU = 'ru'
+
+export const PHRASE = 'PHRASE'
+export const WORD = 'WORD'
 
 export const phraseReducer = (state = defaultState, action) => {
     switch (action.type) {
@@ -68,6 +72,35 @@ export const phraseReducer = (state = defaultState, action) => {
                 words: action.newWordsList
             } : phrase)
         }
+        case SET_AUDIO_UUID: 
+            return {
+                ...state,
+                phrases: state.phrases.map(phrase=>{
+                    if(phrase.id === action.phraseId){
+                        if(action.typeStr === PHRASE){
+                            return {
+                                ...phrase,
+                                audioUuid: action.audioUuid
+                            }
+                        } else if (action.typeStr === WORD) {
+                            // Обновление слова по индексу
+                            const updatedWords = [...phrase.words];
+                            updatedWords[action.wordIndex] = {
+                                ...updatedWords[action.wordIndex],
+                                audioUuid: action.audioUuid
+                            };
+        
+                            return {
+                                ...phrase,
+                                words: updatedWords
+                            };
+                        }
+                        return phrase
+                    } else {
+                        return phrase
+                    }
+                })
+            }
         default: return state;
     }
 }
@@ -179,3 +212,4 @@ export const setListPhrases = (phrases) => ({type: SET_LIST_PHRASES, phrases: ph
 export const clearPhrases = () => ({type:CLEAR})
 export const updatePhrase =(updatedPhrase)=> ({type:UPDATE_PHRASE,updatedPhrase})
 export const updateWordsList =(newWordsList,phraseId)=> ({type:UPDATE_WORDS,newWordsList,phraseId})
+export const setAudioUuidToPhrases =(audioUuid,typeStr,phraseId,wordIndex)=>({type:SET_AUDIO_UUID,audioUuid,typeStr,phraseId,wordIndex})

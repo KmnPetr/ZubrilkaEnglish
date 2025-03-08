@@ -4,39 +4,42 @@ import {FiCheck, FiX} from "react-icons/fi";
 import {useDispatch} from "react-redux";
 import {editStrAction} from "../../../store/reducers/phraseReduser";
 import { HiOutlineMicrophone } from "react-icons/hi";
-import { openVoiceEditor_Phrase } from "../../../store/reducers/voiceEditorReducer";
+import { openVoiceEditor, PHRASE } from "../../../store/reducers/voiceEditorReducer";
 
 /**
  * компонент отвечает за отображение и редактирование строки фразы каждого языка поотдельности
  * каждая StrPhrase отвечает за свой язык например за китайский
  */
 const StrPhrase = ({str,idPhrase,language, isHover}) => {
-    const dispatch = useDispatch();
-    const [isEditable, setIsEditable] = useState(false);
-    const [inputValue, setInputValue] = useState(str); // Строка, которая будет отображаться и изменяться
+    const dispatch = useDispatch()
+    const [isEditable, setIsEditable] = useState(false)
+    const [inputValue, setInputValue] = useState(str) // Строка, которая будет отображаться и изменяться
 
     const clickEdit = () => {
-        setIsEditable(true);
-    };
+        setIsEditable(true)
+    }
+
     const handleInputChange = (e) => {
-        setInputValue(e.target.value);
+        setInputValue(e.target.value)
     }
 
     const onCancelEdit = () => {
-        setIsEditable(false);
+        setIsEditable(false)
         setInputValue(str)
     }
+
     const onApplyChanges = () => {
         dispatch(editStrAction(idPhrase,language,inputValue))
         setIsEditable(false)
     }
+
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
-            onApplyChanges();
+            onApplyChanges()
         }
     }
 
-    const onClickMicrophone =()=>dispatch(openVoiceEditor_Phrase(idPhrase,str,language))
+    const onClickMicrophone =()=>dispatch(openVoiceEditor({idPhrase,indexWord:null,str,language,typeStr:PHRASE}))
 
     return (
         <div>

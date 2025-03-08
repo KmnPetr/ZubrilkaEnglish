@@ -11,7 +11,7 @@ export const POSITION_END = 'POSITION_END'
 /**
  * Список слов/фраз с возможностью скрывать/показывать
  */
-const WordsList = ({ words,onChangeWordsList }) => {
+const WordsList = ({ words,onChangeWordsList,idPhrase }) => {
 
   const onChangeWord = (updatedWord, index) => {
     const updatedWordsList = words.map((word, i) => 
@@ -60,7 +60,7 @@ const WordsList = ({ words,onChangeWordsList }) => {
                     <ul>
                     {words.map((word, index) => (
                         <li key={index} style={{ marginBottom: "10px" }}>
-                            <Word word={word} index={index} onChangeWord={onChangeWord} addNewWord={addNewWord} onDeleteWord={onDeleteWord}/>
+                            <Word word={word} index={index} onChangeWord={onChangeWord} addNewWord={addNewWord} onDeleteWord={onDeleteWord} idPhrase={idPhrase}/>
                         </li>
                     ))}
                     </ul>

@@ -8,35 +8,40 @@ import { useEffect, useState } from 'react';
 import { getListVoices } from '../../../../services/zvukogramService';
 import { defaultLanguages } from './defaultLanguages';
 import { SlUser,SlUserFemale } from "react-icons/sl";
-import { Autocomplete, TextField,FormControlLabel,Checkbox } from '@mui/material';
+import { Autocomplete, TextField } from '@mui/material';
 
 const CN = 'cn'
 const EN = 'en'
 const RU = 'ru' 
 
-const SelectVoice=({onSelect,language,onSelectUseApi})=>{
+const SelectVoice=({onSelect,language})=>{
     const [lang_selector,setLangSelector] = useState(language)
     const [languages,setLanguages] = useState(defaultLanguages)
     const [selectedLanguage, setSelectedLanguage] = useState(defaultLanguages[0].originKey);
     const [allVoices,setAllVoices] = useState(null);
     const [filteredVoices,setFilteredVoices] = useState([])
     const [selectedVoice,setSelectedVoice] = useState("")
-    const [useApi, setUseApi] = useState(true);
+
+    //получение списка голосов с сайта звукограмм
     useEffect(()=>{
         getListVoices().then(r=>{
-            console.log(r)
             setAllVoices(r);
-        }) //получение списка голосов с сайта звукограмм
+        }) 
     },[])
+    
+    //устанавливает список языков по первому селектору языков
     useEffect(()=>{
         const filteredList = [
             ...defaultLanguages.filter(it => it.family === lang_selector)
           ];
         setLanguages(filteredList)
     },[lang_selector])
+
+    //при изменении языков первый язык устанавливает в выбранный
     useEffect(()=>{
         setSelectedLanguage(languages[0].originKey)
     },[languages])
+
     useEffect(()=>{
         if (allVoices&&allVoices[selectedLanguage]) {
             setFilteredVoices(allVoices[selectedLanguage])
@@ -44,10 +49,13 @@ const SelectVoice=({onSelect,language,onSelectUseApi})=>{
     },[selectedLanguage,allVoices])
 
     useEffect(()=>{
+        console.log(filteredVoices)
         if(filteredVoices&&filteredVoices[0]) setSelectedVoice(filteredVoices[0].voice)
     },[filteredVoices])
 
-    useEffect(()=>{},[selectedVoice])
+    useEffect(()=>{
+        onSelect(selectedVoice)
+    },[selectedVoice])
 
     const handleLanguageChange = (e) => {
         setSelectedLanguage(e.target.value)
@@ -56,11 +64,6 @@ const SelectVoice=({onSelect,language,onSelectUseApi})=>{
         setSelectedVoice(newValue)
         onSelect(newValue)
     }
-
-    const changeUseApi = (event) => {
-        setUseApi(event.target.checked);
-        onSelectUseApi(event.target.checked)
-    };
 
     return(
         <div className="select_voice">
@@ -126,15 +129,6 @@ const SelectVoice=({onSelect,language,onSelectUseApi})=>{
                     </FormControl>
                 </Box>
                 
-                <FormControlLabel
-                    control={
-                        <Checkbox
-                            checked={useApi}          // Состояние чекбокса зависит от useApi
-                            onChange={changeUseApi}  // Обработчик изменения состояния
-                        />
-                    }
-                    label="use api"
-                />
             </ThemeProvider>
         </div>
     )
