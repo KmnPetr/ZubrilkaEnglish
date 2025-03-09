@@ -1,7 +1,6 @@
 import React, {useRef} from "react";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import {useDispatch} from "react-redux";
-import {saveVideoPath} from "../../../store/reducers/videoManagementReducer";
 
 /**
  * Функциональный компонент для отображения видео, над которым идет работа

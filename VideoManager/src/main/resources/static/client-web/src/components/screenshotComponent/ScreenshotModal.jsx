@@ -1,9 +1,9 @@
 import React from 'react';
 import './Screenshot.css';
 import { FiX } from "react-icons/fi";
-import { sendIconToServer } from "../../services/iconService"
+import { sendIconToServer } from "../../api/iconService"
 import {useDispatch} from "react-redux";
-import {iconWasChanged} from "../../store/reducers/networkReducer"
+import {iconWasChanged} from "../../redux/reducers/networkReducer"
 
 const ScreenshotModal = ({ screenshot, onClose,videoInfo_uuid }) => {
     const dispatch = useDispatch();

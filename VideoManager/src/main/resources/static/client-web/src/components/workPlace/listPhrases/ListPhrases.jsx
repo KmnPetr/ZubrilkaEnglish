@@ -2,9 +2,9 @@ import {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import Phrase from "./Phrase";
 import AddNewPhraseAnd from "./AddNewPhraseAnd";
-import {getTranslation} from "../../../services/phrasesService";
-import {setTranslation,clearTranslation} from "../../../store/reducers/translationReducer";
-import {setListPhrases,clearPhrases} from "../../../store/reducers/phraseReduser";
+import {getTranslation} from "../../../api/phrasesService";
+import {setTranslation,clearTranslation} from "../../../redux/reducers/translationReducer";
+import {setListPhrases,clearPhrases} from "../../../redux/reducers/phraseReduser";
 
 const ListPhrases = ({ videoInfo_uuid }) => {
     const dispatch = useDispatch();

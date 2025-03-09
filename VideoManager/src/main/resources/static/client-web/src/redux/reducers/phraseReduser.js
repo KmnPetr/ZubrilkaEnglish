@@ -28,25 +28,16 @@ export const phraseReducer = (state = defaultState, action) => {
             return {...state, phrases: state.phrases.filter((phrase) => phrase.id !== action.phraseId)}
         case EDIT_STR:
 
-            // Определение поля для обновления в зависимости от языка
-            const getFieldName = (lang) => {
-                switch (lang) {
-                    case CN: return 'cnStr';
-                    case EN: return 'enStr';
-                    case RU: return 'ruStr';
-                    default: return null;
-                }
-            };
-
-            const fieldName = getFieldName(action.language);
-
-            return {...state, phrases: state.phrases.map((phrase) => phrase.id === action.phraseId ?
-                    {...phrase, [fieldName]: action.newValue }
+            return {...state, phrases: state.phrases.map((phrase) =>
+                    phrase.id === action.phraseId ?
+                    {...phrase, [action.language]: {...phrase[action.language],str: action.newValue} }
                     :
                     phrase
                 ),
             };
-        case ADD_TO_AND: return {...state, phrases: [...state.phrases, action.payload]};
+        case ADD_TO_AND: return {
+            ...state,
+            phrases: [...state.phrases, action.payload]};
         case ADD_NEW:
             // Добавляем новый элемент и сортируем массив по полю startTime
             const updatedPhrases = [...state.phrases, action.payload].sort((a, b) => a.startTime - b.startTime);
@@ -122,9 +113,6 @@ export const addNewPhraseToEnd = () => {
         // Создаем новую фразу
         const newPhrase = {
             id: Date.now(),
-            cnStr: '',
-            enStr: '',
-            ruStr: '',
             startTime: 0,
             endTime: 0
         };
@@ -150,9 +138,6 @@ export const addNewPhrase = (id, position) => {
         // Создаем новую фразу
         const newPhrase = {
             id: Date.now(),
-            cnStr: '',
-            enStr: '',
-            ruStr: '',
             startTime: 0,
             endTime: 0
         };

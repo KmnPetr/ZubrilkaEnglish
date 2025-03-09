@@ -4,6 +4,8 @@ import lombok.*;
 
 /**
  * более подробно о предназначении объекта в {@code Phrase}
+ * Каждый обьект Phrase это отдельная фраза,предложение героя видео
+ * Она состоит из нескольких Word
  */
 @Getter
 @Setter
@@ -11,7 +13,7 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 public class Word {
-    private String cn;
-    private String en;
-    private String ru;
+    private Str cn;
+    private Str ru;
+    private Str en;
 }

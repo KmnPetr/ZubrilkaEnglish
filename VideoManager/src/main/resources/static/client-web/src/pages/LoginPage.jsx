@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import '../css/LoginPage.css';
-import {login} from "../services/authService";
-import {login_v2} from "../services/authService";
+import {login} from "../api/authService";
+import {login_v2} from "../api/authService";
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 

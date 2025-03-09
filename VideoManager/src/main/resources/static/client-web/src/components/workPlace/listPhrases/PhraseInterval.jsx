@@ -2,8 +2,8 @@ import React from "react";
 import {useDispatch} from "react-redux";
 import {TbChevronsLeft, TbChevronLeft, TbChevronRight, TbChevronsRight} from "react-icons/tb";
 import { IoPlay } from "react-icons/io5";
-import {setIntervalAction} from "../../../store/reducers/videoManagementReducer";
-import {editTime} from "../../../store/reducers/phraseReduser";
+import {setIntervalAction} from "../../../redux/reducers/videoManagementReducer";
+import {editTime} from "../../../redux/reducers/phraseReduser";
 
 /**
  * компонент отвечает за отображение всевозможной информации по интервалу видео к которому пренадлежит фраза

@@ -5,7 +5,7 @@ import FormControl from '@mui/material/FormControl';
 import NativeSelect from '@mui/material/NativeSelect';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
-import { getListVoices } from '../../../../services/zvukogramService';
+import { getListVoices } from '../../../../api/zvukogramService';
 import { defaultLanguages } from './defaultLanguages';
 import { SlUser,SlUserFemale } from "react-icons/sl";
 import { Autocomplete, TextField } from '@mui/material';

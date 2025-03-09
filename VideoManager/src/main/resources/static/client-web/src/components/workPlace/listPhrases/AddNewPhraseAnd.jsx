@@ -1,7 +1,7 @@
 import React from "react";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import {useDispatch} from "react-redux";
-import {addNewPhraseToEnd} from "../../../store/reducers/phraseReduser";
+import {addNewPhraseToEnd} from "../../../redux/reducers/phraseReduser";
 
 /**
  * кнопка имеет больший размер

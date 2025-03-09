@@ -2,10 +2,10 @@ import React, {useEffect} from "react";
 import SelectFileButton from "./SelectFileButton";
 import Video from "./Video";
 import {useDispatch, useSelector} from "react-redux";
-import {downloadVideoByUUID, uploadVideo} from "../../../services/videoService";
+import {downloadVideoByUUID, uploadVideo} from "../../../api/videoService";
 import "./VideoComponent.css"
-import {clearVideo} from "../../../store/reducers/videoReducer"
-import {clearVideoProgress} from "../../../store/reducers/networkReducer"
+import {clearVideo} from "../../../redux/reducers/videoReducer"
+import {clearVideoProgress} from "../../../redux/reducers/networkReducer"
 
 /**
  * Компонент для отображения видео, над которым идет работа

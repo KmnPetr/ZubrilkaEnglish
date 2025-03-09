@@ -3,7 +3,7 @@ import { FiTrash2 } from "react-icons/fi";
 import DeleteVInfDialog from "./DeleteVInfDialog";
 import {useDispatch} from "react-redux";
 import "./listVideo.css"
-import {downloadIcon} from "../../services/iconService"
+import {downloadIcon} from "../../api/iconService"
 
 const VideoInfoItem = ({videoInfo,handleVideoClick,onDelete}) => {
     const dispatch = useDispatch();

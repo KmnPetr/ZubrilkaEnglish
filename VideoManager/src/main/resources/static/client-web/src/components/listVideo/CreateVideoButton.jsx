@@ -1,7 +1,7 @@
 import React from "react";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import "./listVideo.css"
-import {createNewVideo} from "../../services/videoInfoService"
+import {createNewVideo} from "../../api/videoInfoService"
 
 /**
  *  the button for creating a new video

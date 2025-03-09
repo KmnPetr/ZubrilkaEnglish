@@ -3,14 +3,14 @@ import AddNewPhrase from "./AddNewPhrase";
 import { FiTrash2 } from "react-icons/fi";
 import DeleteDialog from "./DeleteDialog";
 import {useDispatch, useSelector} from "react-redux";
-import {CN, EN, removePhraseAction, RU, updateWordsList} from "../../../store/reducers/phraseReduser";
+import {CN, EN, removePhraseAction, RU, updateWordsList} from "../../../redux/reducers/phraseReduser";
 import StrPhrase from "./StrPhrase";
 import PhraseInterval from "./PhraseInterval";
 import { RiOpenaiFill } from "react-icons/ri";
 import {openAiGptRequest} from "../../../utils/openAiGpt"
 import { TbIndentIncrease } from "react-icons/tb";
-import {openJsonEditor} from '/src/store/reducers/jsonEditorReducer.js'
-import { PHRASE } from "../../../store/reducers/jsonEditorReducer";
+import {openJsonEditor} from '/src/redux/reducers/jsonEditorReducer.js'
+import { PHRASE } from "../../../redux/reducers/jsonEditorReducer";
 import WordsList from "./wordsList/WordsList";
 import SideToolbar from "../../ui/sideToolbar/SideToolbar";
 
@@ -20,7 +20,7 @@ const Phrase =({phrase})=> {
     const [isHover, setIsHover] = useState(false);
     const [isDialogVisible, setIsDialogVisible] = useState(false);
     const [isShowWords,setIsShowWords] = useState(false)
-    const nativeLang = `cn`
+    const {native_lang,used_languages} = useSelector(state => state.videoInfoReducer)
 
     const handleMouseEnter =()=> setIsHover(true)
 
@@ -38,11 +38,11 @@ const Phrase =({phrase})=> {
         dispatch(removePhraseAction(phrase.id));
     };
 
-    const gptRequest =()=> openAiGptRequest(getNativeStr(),nativeLang)
+    const gptRequest =()=> openAiGptRequest(getNativeStr(),native_lang)
     
-    const getNativeStr =()=> { return phrase[nativeLang+'Str'] }
+    const getNativeStr =()=> { return phrase[native_lang].str }
 
-    const setJsonText =()=> {dispatch(openJsonEditor(phrase,PHRASE,nativeLang))}
+    const setJsonText =()=> {dispatch(openJsonEditor(phrase,PHRASE,native_lang))}
 
     const onChangeWordsList =(updatedWordsList)=>{
         dispatch(updateWordsList(updatedWordsList,phrase.id));
@@ -67,9 +67,9 @@ const Phrase =({phrase})=> {
 
             <div>
                 <div className="phrase">
-                    <StrPhrase str={phrase.cnStr} idPhrase={phrase.id} language={CN} isHover={isHover}/>
-                    <StrPhrase str={phrase.enStr} idPhrase={phrase.id} language={EN} isHover={isHover}/>
-                    <StrPhrase str={phrase.ruStr} idPhrase={phrase.id} language={RU} isHover={isHover}/>
+                    {used_languages&&used_languages.map(lang=>(
+                        <StrPhrase str={phrase[lang].str} idPhrase={phrase.id} language={lang} isHover={isHover} key={lang}/>
+                    ))}
                     {isShowWords && <WordsList words={phrase.words} onChangeWordsList={onChangeWordsList} idPhrase={phrase.id}/>}
                 </div>
             </div>

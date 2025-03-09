@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import ModalWindow from '../ui/ModalWindow';
 import { useDispatch, useSelector } from 'react-redux';
 import './voiceEditor.css';
-import { closeVoiceEditor } from '../../store/reducers/voiceEditorReducer';
+import { closeVoiceEditor } from '../../redux/reducers/voiceEditorReducer';
 import { HiOutlineSpeakerWave,HiOutlineSpeakerXMark,HiOutlineScissors } from "react-icons/hi2";
 import { HiOutlineMicrophone } from "react-icons/hi";
 import { TbPointFilled } from "react-icons/tb";
@@ -16,8 +16,8 @@ import Zvukogram from './zvukogram/Zvukogram';
 import FolderHandler from './folderHandler/FolderHandler';
 import { convertMp3ToWav } from '../../utils/audioConverter';
 import CButton from '../ui/CButton';
-import { saveWavVoiceOnServer } from '../../services/voiceService';
-import { setAudioUuidToPhrases } from '../../store/reducers/phraseReduser';
+import { saveWavVoiceOnServer } from '../../api/voiceService';
+import { setAudioUuidToPhrases } from '../../redux/reducers/phraseReduser';
 
 /**
  * модальное окно для редактирования озвучки у фразы или слова

@@ -5,11 +5,13 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.zubrilka.VideoManager.models.converters.ListStringToJsonConverter;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.LazyToOne;
 import org.hibernate.annotations.LazyToOneOption;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -36,7 +38,10 @@ public class VideoInfo {
     @Column(name = "ru_name")
     private String ruName;
     @Column(name = "native_lang")
-    private String native_lang;
+    private String native_lang; //язык оригинала видео
+    @Convert(converter = ListStringToJsonConverter.class)
+    @Column(name = "used_languages")
+    private List<String> used_languages;//использованные языки (язык оригинала + языки переводов)
     @Column(name = "link_original")
     private String linkOriginal;
     @Column(name = "translator_uuid", insertable = false, updatable = false)
@@ -48,5 +53,4 @@ public class VideoInfo {
     @JoinColumn(name = "translator_uuid", referencedColumnName = "uuid")
     @JsonIgnore
     private Person translator;
-
 }

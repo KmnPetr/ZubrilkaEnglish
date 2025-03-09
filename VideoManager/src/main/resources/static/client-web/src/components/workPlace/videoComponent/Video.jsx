@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { setToPauseFalse, setToPlayFalse } from "../../../store/reducers/videoManagementReducer";
+import { setToPauseFalse, setToPlayFalse } from "../../../redux/reducers/videoManagementReducer";
 import "./VideoComponent.css"
 
 const Video = ({ videoPath }) => {

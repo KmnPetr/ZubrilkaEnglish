@@ -3,18 +3,13 @@ package com.zubrilka.VideoManager.controllers;
 import com.zubrilka.VideoManager.controllers.validation.NotFoundException;
 import com.zubrilka.VideoManager.dto.VideoInfoDto;
 import com.zubrilka.VideoManager.models.VideoInfo;
-import com.zubrilka.VideoManager.security.jwtWeb.TokenUser;
 import com.zubrilka.VideoManager.services.VideoInfoService;
 import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -55,6 +50,16 @@ public class VideoInfoController {
             @PathParam("fieldName") String fieldName,
             @PathParam("newValue") String newValue) throws NotFoundException {
         return videoInfoService.editVideoInfoField(UUID.fromString(videoInfo_uuid),fieldName,newValue);
+    }
+
+    // Обновляет UsedLanguages требует отдельного эндпоинта,
+    // в отличии от остальных полей json список строк плохо адаптируется для передачи по сети как просто строка
+    @PatchMapping("/update_list_used_lang")
+    public VideoInfo updateUsedLanguagesField(
+            @RequestParam UUID videoInfo_uuid,
+            @RequestBody List<String> listLang) {
+
+        return videoInfoService.editUsedLanguagesField(videoInfo_uuid, listLang);
     }
 
     @PostMapping("/create")

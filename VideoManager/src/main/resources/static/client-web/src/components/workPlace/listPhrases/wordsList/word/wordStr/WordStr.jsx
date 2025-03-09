@@ -2,7 +2,7 @@ import './wordStr.css'
 import EditableField from "../../../../../ui/editableField/EditableField";
 import { useDispatch } from 'react-redux';
 import { HiOutlineMicrophone } from "react-icons/hi";
-import { openVoiceEditor, WORD } from '../../../../../../store/reducers/voiceEditorReducer';
+import { openVoiceEditor, WORD } from '../../../../../../redux/reducers/voiceEditorReducer';
 
 const WordStr = ({str,language,isHover,onChangeStr,idPhrase,indexWord}) => {
   const dispatch = useDispatch()

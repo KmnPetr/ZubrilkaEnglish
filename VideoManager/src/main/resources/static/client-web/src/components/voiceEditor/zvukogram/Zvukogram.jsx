@@ -5,7 +5,7 @@ import CButton from '../../ui/CButton'
 import { copyToClipboard } from '../../../utils/copyToClipboard';
 import SelectVoice from './selectVoice/SelectVoice';
 import { FormControlLabel,Checkbox } from '@mui/material';
-import { synthesizeSpeech } from '../../../services/zvukogramService';
+import { synthesizeSpeech } from '../../../api/zvukogramService';
 
 //сделано наподобие https://coreui.io/react/docs/components/button/#outline-buttons
 const Zvukogram = ({onChangeAudioUrlMp3}) => {

@@ -2,9 +2,9 @@ import {useState} from "react";
 import { TfiMarkerAlt } from "react-icons/tfi";
 import {FiCheck, FiX} from "react-icons/fi";
 import {useDispatch} from "react-redux";
-import {editStrAction} from "../../../store/reducers/phraseReduser";
+import {editStrAction} from "../../../redux/reducers/phraseReduser";
 import { HiOutlineMicrophone } from "react-icons/hi";
-import { openVoiceEditor, PHRASE } from "../../../store/reducers/voiceEditorReducer";
+import { openVoiceEditor, PHRASE } from "../../../redux/reducers/voiceEditorReducer";
 
 /**
  * компонент отвечает за отображение и редактирование строки фразы каждого языка поотдельности

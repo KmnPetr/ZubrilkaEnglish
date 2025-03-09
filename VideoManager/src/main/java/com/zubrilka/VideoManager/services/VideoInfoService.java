@@ -1,15 +1,12 @@
 package com.zubrilka.VideoManager.services;
 
 import com.zubrilka.VideoManager.controllers.validation.NotFoundException;
-import com.zubrilka.VideoManager.dto.VideoInfoDto;
 import com.zubrilka.VideoManager.models.Person;
-import com.zubrilka.VideoManager.models.Translation;
 import com.zubrilka.VideoManager.models.VideoInfo;
 import com.zubrilka.VideoManager.repositories.VideoInfoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -59,11 +56,24 @@ public class VideoInfoService {
             case "linkOriginal":
                 videoInfo.setLinkOriginal(newValue);
                 break;
+            case "native_lang":
+                videoInfo.setNative_lang(newValue);
+                break;
             default:
                 throw new IllegalArgumentException("Updating the " + fieldName + " field is not supported");
         }
 
+        return repository.save(videoInfo);
+    }
 
+
+    // Обновляет UsedLanguages требует отдельного эндпоинта,
+    // в отличии от остальных полей json список строк плохо адаптируется для передачи по сети как просто строка
+    @Transactional
+    public VideoInfo editUsedLanguagesField(UUID videoInfo_uuid, List<String> listLang) {
+        VideoInfo videoInfo = repository.findById(videoInfo_uuid)
+                .orElseThrow(() -> new RuntimeException("VideoInfo not found with uuid: " + videoInfo_uuid));
+        videoInfo.setUsed_languages(listLang);
         return repository.save(videoInfo);
     }
 
@@ -78,6 +88,7 @@ public class VideoInfoService {
                 "New video. The en_name must be defined.",
                 "New video. The ru_name must be defined.",
                 null,
+                List.of(),
                 null,
                 person.getUuid(),
                 username,
@@ -96,5 +107,4 @@ public class VideoInfoService {
         List<VideoInfo> list = repository.findVideosByTranslatorUuid(translator.getUuid());
         return list;
     }
-
 }

@@ -5,11 +5,11 @@ import 'prismjs/themes/prism-okaidia.css'; // Тема подсветки син
 import 'prismjs/components/prism-json'; // Поддержка JSON
 import ModalWindow from '../ui/ModalWindow';
 import { useDispatch, useSelector } from 'react-redux';
-import { closeJsonEditor, updateJsonText } from '/src/store/reducers/jsonEditorReducer.js';
+import { closeJsonEditor, updateJsonText } from '/src/redux/reducers/jsonEditorReducer.js';
 import './JsonEditor.css';
 import CButton from '../ui/CButton';
-import { PHRASE } from '../../store/reducers/jsonEditorReducer';
-import { updatePhrase } from '../../store/reducers/phraseReduser';
+import { PHRASE } from '../../redux/reducers/jsonEditorReducer';
+import { updatePhrase } from '../../redux/reducers/phraseReduser';
 
 const JsonEditor = () => {
   const dispatch = useDispatch();

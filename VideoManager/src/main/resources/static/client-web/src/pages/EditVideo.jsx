@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
 import WorkPlace from "../components/workPlace/WorkPlace";
-import {getVideoInfoByUuid} from "../services/videoService";
+import {getVideoInfoByUuid} from "../api/videoService";
 
 /**
  * the component is a workplace for video editing, more precisely, for the formation of its translation

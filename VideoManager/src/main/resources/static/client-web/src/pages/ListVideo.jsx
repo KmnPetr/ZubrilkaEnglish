@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/ListVideo.css';
-import {downloadListVideoInfo} from "../services/videoInfoService";
+import {downloadListVideoInfo} from "../api/videoInfoService";
 import {useSelector} from "react-redux";
 import CreateVideoButton from "../components/listVideo/CreateVideoButton"
 import VideoInfoItem from '../components/listVideo/VideoInfoItem';
-import {deleteVideoInfo} from "../services/videoInfoService"
+import {deleteVideoInfo} from "../api/videoInfoService"
 
 const ListVideo = () => {
     const navigate = useNavigate();

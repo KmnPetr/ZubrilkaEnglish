@@ -12,6 +12,7 @@ CREATE TABLE video_info (
     en_name VARCHAR(255),
     ru_name VARCHAR(255),
     native_lang VARCHAR(50),
+    used_languages VARCHAR(200),
     link_original VARCHAR(500),
     translator_uuid UUID REFERENCES person(uuid) ON DELETE SET NULL
 );

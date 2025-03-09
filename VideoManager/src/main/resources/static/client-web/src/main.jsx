@@ -4,7 +4,7 @@ import "./css/main.css"
 import "./css/NotFoundPage.css";
 import "./components/workPlace/listPhrases/listPhrases.css"
 import {Provider} from "react-redux";
-import {store} from "./store/initRedux";
+import {store} from "./redux/initRedux";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import ListVideo from "./pages/ListVideo";
