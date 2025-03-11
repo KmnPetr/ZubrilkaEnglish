@@ -71,14 +71,17 @@ export const phraseReducer = (state = defaultState, action) => {
                         if(action.typeStr === PHRASE){
                             return {
                                 ...phrase,
-                                audioUuid: action.audioUuid
+                                [action.language]: {...phrase[action.language],voice_uuid: action.audioUuid}
                             }
                         } else if (action.typeStr === WORD) {
                             // Обновление слова по индексу
                             const updatedWords = [...phrase.words];
                             updatedWords[action.wordIndex] = {
                                 ...updatedWords[action.wordIndex],
-                                audioUuid: action.audioUuid
+                                [action.language]: {
+                                    ...updatedWords[action.wordIndex][action.language],
+                                    voice_uuid: action.audioUuid
+                                }
                             };
         
                             return {
@@ -197,4 +200,4 @@ export const setListPhrases = (phrases) => ({type: SET_LIST_PHRASES, phrases: ph
 export const clearPhrases = () => ({type:CLEAR})
 export const updatePhrase =(updatedPhrase)=> ({type:UPDATE_PHRASE,updatedPhrase})
 export const updateWordsList =(newWordsList,phraseId)=> ({type:UPDATE_WORDS,newWordsList,phraseId})
-export const setAudioUuidToPhrases =(audioUuid,typeStr,phraseId,wordIndex)=>({type:SET_AUDIO_UUID,audioUuid,typeStr,phraseId,wordIndex})
+export const setAudioUuidToPhrases =(audioUuid,typeStr,phraseId,wordIndex,language)=>({type:SET_AUDIO_UUID,audioUuid,typeStr,phraseId,wordIndex,language})

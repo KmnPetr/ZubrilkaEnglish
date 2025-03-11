@@ -16,7 +16,7 @@ const WordStr = ({str,language,isHover,onChangeStr,idPhrase,indexWord}) => {
     <div className="str-word">
         {isHover && (<p className="language-p">{language}:</p>)}
         {!str && !isHover && <p style={{ color: '#82aaff', fontSize: '16px', fontFamily: 'Arial' }}>null</p>}
-        <div style={{flex:'1'}}>
+        <div style={{flex:'1',display:'flex',flexDirection:'row'}}>
           <EditableField str={str} onChange={onChange} showMarker={isHover}/>
           <HiOutlineMicrophone className="microphone clickable" onClick={onClickMicrophone}/>
         </div>

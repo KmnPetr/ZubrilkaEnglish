@@ -1,0 +1,11 @@
+.str_flipper_box{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.arrow {
+    cursor: pointer;
+    color: #ffffff;
+    font-size: 3rem;
+    margin: 1rem;
+}

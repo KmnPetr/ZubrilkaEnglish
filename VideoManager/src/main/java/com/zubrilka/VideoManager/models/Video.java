@@ -28,9 +28,6 @@ public class Video {
     @Column(name = "video_info_uuid", nullable = false)
     private UUID videoInfoUuid;
 
-    @Column(name = "file_name", nullable = false)
-    private String fileName;
-
-    @Column(name = "bytes", nullable = false)
-    private byte[] bytes;
+    @Column(name = "local_link", nullable = false)
+    private String local_link; //ссылка на файл в локальном хранилище сервера
 }

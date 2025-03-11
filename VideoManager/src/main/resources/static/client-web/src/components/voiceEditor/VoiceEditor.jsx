@@ -18,6 +18,7 @@ import { convertMp3ToWav } from '../../utils/audioConverter';
 import CButton from '../ui/CButton';
 import { saveWavVoiceOnServer } from '../../api/voiceService';
 import { setAudioUuidToPhrases } from '../../redux/reducers/phraseReduser';
+import StrFlipper from "./strFlipper/StrFlipper.jsx";
 
 /**
  * модальное окно для редактирования озвучки у фразы или слова
@@ -47,7 +48,7 @@ const VoiceEditor = () => {
     saveWavVoiceOnServer(audioURL,str)
     .then(voiceUuid=>{
       console.log('voiceUuid'+voiceUuid)
-      dispatch(setAudioUuidToPhrases(voiceUuid,typeStr,idPhrase,indexWord))
+      dispatch(setAudioUuidToPhrases(voiceUuid,typeStr,idPhrase,indexWord,language))
     })
   }
 
@@ -80,6 +81,7 @@ const VoiceEditor = () => {
             <Zvukogram onChangeAudioUrlMp3={setAudioUrlMp3}/>
             <CButton onClick={apply}>Apply voice</CButton>
         </div>
+          <StrFlipper className='str_flipper'/>
       </div>
     </ModalWindow>
   );

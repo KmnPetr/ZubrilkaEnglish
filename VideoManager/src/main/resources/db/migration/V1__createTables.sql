@@ -20,8 +20,7 @@ CREATE TABLE video_info (
 CREATE TABLE video (
     uuid UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     video_info_uuid UUID NOT NULL UNIQUE REFERENCES video_info (uuid) ON DELETE CASCADE,
-    file_name VARCHAR NOT NULL,
-    bytes BYTEA NOT NULL
+    local_link VARCHAR(1000)
 );
 
 CREATE TABLE translation (

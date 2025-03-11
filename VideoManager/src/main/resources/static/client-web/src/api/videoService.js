@@ -19,7 +19,10 @@ export async function uploadVideo(blobUrl,videoInfo_uuid,dispatch) {
         formData.append('file', blob, 'firstVideo.mp4'); // Можно указать любое имя файла и тип
 
         // Отправляем FormData на сервер
-        const uploadResponse = await api.post(`/api/video/upload-new?videoInfo_uuid=${videoInfo_uuid}`, formData, {
+        const uploadResponse = await api.post(
+            `/api/video/upload-new?videoInfo_uuid=${videoInfo_uuid}`,
+            formData,
+            {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },

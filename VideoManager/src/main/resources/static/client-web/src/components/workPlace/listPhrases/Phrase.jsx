@@ -3,7 +3,7 @@ import AddNewPhrase from "./AddNewPhrase";
 import { FiTrash2 } from "react-icons/fi";
 import DeleteDialog from "./DeleteDialog";
 import {useDispatch, useSelector} from "react-redux";
-import {CN, EN, removePhraseAction, RU, updateWordsList} from "../../../redux/reducers/phraseReduser";
+import { removePhraseAction, updateWordsList} from "../../../redux/reducers/phraseReduser";
 import StrPhrase from "./StrPhrase";
 import PhraseInterval from "./PhraseInterval";
 import { RiOpenaiFill } from "react-icons/ri";
@@ -68,7 +68,7 @@ const Phrase =({phrase})=> {
             <div>
                 <div className="phrase">
                     {used_languages&&used_languages.map(lang=>(
-                        <StrPhrase str={phrase[lang].str} idPhrase={phrase.id} language={lang} isHover={isHover} key={lang}/>
+                        <StrPhrase str={phrase[lang]?.str} idPhrase={phrase.id} language={lang} isHover={isHover} key={lang}/>
                     ))}
                     {isShowWords && <WordsList words={phrase.words} onChangeWordsList={onChangeWordsList} idPhrase={phrase.id}/>}
                 </div>

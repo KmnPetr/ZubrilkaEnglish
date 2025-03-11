@@ -1,21 +1,20 @@
 package com.zubrilka.VideoManager.controllers;
 
 import com.zubrilka.VideoManager.controllers.validation.NotFoundException;
-import com.zubrilka.VideoManager.models.Video;
-import com.zubrilka.VideoManager.models.VideoInfo;
 import com.zubrilka.VideoManager.services.VideoService;
+import com.zubrilka.VideoManager.util.MediaLocalStorage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.util.StringUtils;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.util.List;
-import java.util.Objects;
+import java.io.InputStream;
 import java.util.UUID;
 
 @RestController
@@ -23,7 +22,7 @@ import java.util.UUID;
 public class VideoController {
     private final VideoService videoService;
     @Autowired
-    public VideoController(VideoService videoService) {
+    public VideoController(VideoService videoService, MediaLocalStorage mediaLocalStorage) {
         this.videoService = videoService;
     }
 
@@ -32,41 +31,36 @@ public class VideoController {
             @RequestParam("videoInfo_uuid") String videoInfoUuid,
             @RequestParam("file") MultipartFile file) throws NotFoundException {
 
-        if (videoInfoUuid==null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Parameter videoInfo_uuid is null");
-        }
-
-        if (file.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Файл не может быть пустым");
-        }
-        String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
-
-        System.out.println("File size: "+file.getSize()+"  filename: "+fileName);
-
-        Video video = null;
-        try {
-            video = new Video(null,UUID.fromString(videoInfoUuid),fileName, file.getBytes());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        videoService.saveVideo(video, UUID.fromString(videoInfoUuid));
+        videoService.saveVideo(file, UUID.fromString(videoInfoUuid));
     }
+
     @GetMapping("/{videoInfoUuid}")
-    public ResponseEntity<byte[]> getVideoById(@PathVariable UUID videoInfoUuid) {
-        Video video = videoService.getVideoByVideoInfoUUID(videoInfoUuid);
+    public ResponseEntity<StreamingResponseBody> getVideoByVideoInfoUUID(@PathVariable UUID videoInfoUuid) throws NotFoundException {
+        BufferedInputStream videoStream = videoService.getVideoByVideoInfoUUID(videoInfoUuid);
 
-        if (video == null) {
-            return ResponseEntity.notFound().build();
-        }
+        StreamingResponseBody stream = outputStream -> {
+            try {
+                byte[] buffer = new byte[8192]; // Буфер для чтения данных
+                int bytesRead;
+                while ((bytesRead = videoStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, bytesRead);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException("Ошибка при передаче видео", e);
+            } finally {
+                try {
+                    videoStream.close(); // Закрытие потока вручную, если необходимо
+                } catch (IOException e) {
+                    // Логирование ошибки при закрытии потока
+                }
+            }
+        };
 
-        return ResponseEntity.ok()
-                .headers(headers -> {
-                    headers.setContentType(MediaType.valueOf("video/mp4"));
-                    headers.set("UUID", video.getUuid().toString());
-                    headers.set("X-Filename", video.getFileName());
-                })
-                .body(video.getBytes());
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_TYPE, "video/mp4");
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=video.mp4");
+
+        return new ResponseEntity<>(stream, headers, HttpStatus.OK);
     }
 
 }
