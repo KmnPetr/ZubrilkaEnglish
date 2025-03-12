@@ -1,9 +1,9 @@
 import './strFlipper.css';
 import { SlArrowLeftCircle,SlArrowRightCircle } from "react-icons/sl";
 import {useDispatch, useSelector} from "react-redux";
-import {PHRASE} from "../../../redux/reducers/phraseReduser.js";
+import {PHRASE, WORD} from "../../../redux/reducers/phraseReduser.js";
 import {openVoiceEditor} from "../../../redux/reducers/voiceEditorReducer.js";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 
 /**
  * компонент содержит логику и кнопки по перелистыванию строк враз и слов к следуюжей строке или предыдущей
@@ -13,32 +13,67 @@ const StrFlipper = () => {
     const {isOpen, idPhrase, indexWord, typeStr, str, language} = useSelector((state) => state.voiceEditorReducer);
     const phrases = useSelector(state => state.phraseReducer.phrases )
     const {used_languages} = useSelector(state => state.videoInfoReducer)
+    const [flatActions, setFlatActions] = useState(null)
+    const [currentIndexAction, setCurrentIndexAction] = useState(null)
 
-    const nextLang = () => {
-        const index = used_languages.indexOf(language)
-        if (index < used_languages.length - 1) return used_languages[index + 1]
-        else return null
-    }
+    //вычислит текущий индекс на основе текущего экшена
+    useEffect(() => {
+        if (!flatActions) return;
 
-    const goPrevious = () => {
-    }
+        const index = flatActions.findIndex(action =>
+            action.idPhrase === idPhrase &&
+            action.indexWord === indexWord &&
+            action.language === language
+        );
+        console.log('index='+index)
+        setCurrentIndexAction(index);
+    },[idPhrase,indexWord,language,flatActions])
 
-    //найдет следующую строку
-    const goNext = () => {
-        if (typeStr === PHRASE) {
-            if (nextLang()) {
-                const nextLang2 = nextLang()
-                const phrase = phrases.find(phrase => phrase.id === idPhrase)
-                const nextStr = phrase[nextLang2].str
-                dispatch(openVoiceEditor({idPhrase, indexWord: null, str:nextStr,language:nextLang2 , typeStr: PHRASE}))
-            } else { /*польше других языков строк нет переходим к следующейфразе*/
-            }
+    //на основе phrases сформирует список str единый и слов и фраз без вложений для более удобного переключения на предыдущий и следующий str
+    useEffect(() => {
+        if (phrases && used_languages) {
+            const flatActions = phrases.flatMap(phrase => {
+                const { id } = phrase;
+
+                // Собираем строки из основной фразы
+                let mainStrings = used_languages.map(lang => ({
+                    idPhrase: id,
+                    indexWord: null, // не слово, значит null
+                    str: phrase[lang]?.str ?? null,
+                    language: lang,
+                    typeStr: PHRASE
+                }));
+
+                // Собираем строки из words
+                let wordStrings = (phrase.words || []).flatMap((word, index) =>
+                    used_languages.map(lang => ({
+                        idPhrase: id,
+                        indexWord: index,
+                        str: word?.[lang]?.str ?? null,
+                        language: lang,
+                        typeStr: WORD
+                    }))
+                );
+
+                return [...mainStrings, ...wordStrings];
+            });
+            setFlatActions(flatActions);
+            console.log('flatActions='+JSON.stringify(flatActions,null,2))
         }
-    }
+    }, [phrases,used_languages]);
+
+    const goPrevious = () => dispatch(openVoiceEditor(flatActions[currentIndexAction - 1]))
+    const goNext = () => dispatch(openVoiceEditor(flatActions[currentIndexAction + 1]))
+    // Определяем, есть ли предыдущий/следующий экшен
     return (
         <div className="str_flipper_box">
-            <SlArrowLeftCircle className='arrow clickable' onClick={goPrevious}/>
-            <SlArrowRightCircle className='arrow clickable' onClick={goNext}/>
+            {currentIndexAction !== null && currentIndexAction !== undefined && currentIndexAction > 0 &&
+                <SlArrowLeftCircle className="arrow clickable" onClick={goPrevious} />
+            }
+            <div className="spacer"></div> {/* Распорка */}
+            {currentIndexAction !== null && currentIndexAction !== undefined && currentIndexAction < flatActions.length - 1 &&
+                <SlArrowRightCircle className="arrow clickable" onClick={goNext} />
+            }
         </div>
     )
 };

@@ -14,6 +14,7 @@ import { updatePhrase } from '../../redux/reducers/phraseReduser';
 const JsonEditor = () => {
   const dispatch = useDispatch();
   const { isOpen,jsonObject, editableJson,typeObject,nativeLang } = useSelector((state) => state.jsonEditorReducer);
+  const {native_lang,used_languages} = useSelector(state => state.videoInfoReducer)
 
   const highlight = (jsonText) => Prism.highlight(jsonText, Prism.languages.json, 'json');
 
@@ -24,7 +25,7 @@ const JsonEditor = () => {
     try {
       switch (typeObject) {
         case PHRASE:
-          dispatch(updatePhrase(convertJsonToPhrase(jsonObject,editableJson,nativeLang)))
+          dispatch(updatePhrase(convertJsonToPhrase(jsonObject,editableJson,native_lang,used_languages)))
           onClose()
           break;
         default:console.error("Invalid typeObject")
@@ -56,23 +57,34 @@ const JsonEditor = () => {
 export default JsonEditor;
 
 //перебираем обьект редактированный фильтруем ключи чтобы лишние ключи не попали в обьект
-const convertJsonToPhrase = (jsonObject, editableJson,nativeLang) => {
+const convertJsonToPhrase = (jsonObject,editableJson,native_lang,used_languages) => {
   let updatedPhrase = jsonObject;
   const editabledObject = JSON.parse(editableJson);
 
-  
-  if (editabledObject.cn !== undefined && editabledObject.cn !== null && editabledObject.cn !== '') updatedPhrase.cnStr = editabledObject.cn
-  if (editabledObject.en !== undefined && editabledObject.en !== null && editabledObject.en !== '') updatedPhrase.enStr = editabledObject.en
-  if (editabledObject.ru !== undefined && editabledObject.ru !== null && editabledObject.ru !== '') updatedPhrase.ruStr = editabledObject.ru
+  used_languages.forEach(lang => {
+    if (!updatedPhrase[lang]) updatedPhrase[lang] = {};
+    const newStr = editabledObject[lang]?.str ?? null;
+    if (newStr !== null && newStr !== '') updatedPhrase[lang].str = newStr
+    if (lang === native_lang){
+      const transcription = editabledObject[lang]?.transcription ?? null;
+      if (transcription !== null && transcription !== '') updatedPhrase[lang].transcription = transcription
+    }
+  })
 
   // Извлечение и обработка массива words
   if (Array.isArray(editabledObject.words)) {
     updatedPhrase.words = editabledObject.words.map(word => {
       // Создаем новый объект только с непустыми ключами
       let filteredWord = {};
-      if (word.cn !== undefined && word.cn !== null && word.cn !== '') filteredWord.cn = word.cn;
-      if (word.en !== undefined && word.en !== null && word.en !== '') filteredWord.en = word.en;
-      if (word.ru !== undefined && word.ru !== null && word.ru !== '') filteredWord.ru = word.ru;
+      used_languages.forEach(lang => {
+        filteredWord[lang] = {};
+        const newStr = word[lang]?.str ?? null;
+        if (newStr !== null && newStr !== '') filteredWord[lang].str = newStr
+        if (lang === native_lang){
+          const transcription = word[lang]?.transcription ?? null;
+          if (transcription !== null && transcription !== '') filteredWord[lang].transcription = transcription
+        }
+      })
       return filteredWord;
     }).filter(word => Object.keys(word).length > 0); // Исключаем пустые объекты
   }

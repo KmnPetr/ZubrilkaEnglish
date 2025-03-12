@@ -38,7 +38,7 @@ const Phrase =({phrase})=> {
         dispatch(removePhraseAction(phrase.id));
     };
 
-    const gptRequest =()=> openAiGptRequest(getNativeStr(),native_lang)
+    const gptRequest =()=> openAiGptRequest(getNativeStr(),native_lang,used_languages)
     
     const getNativeStr =()=> { return phrase[native_lang].str }
 
