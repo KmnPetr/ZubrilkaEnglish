@@ -20,7 +20,6 @@ const FolderHandler=({onSelectAudio})=>{
       const url = URL.createObjectURL(file);
 
       if (true/*file.type === "audio/mpeg"*/) {
-        console.log("это mp3 файл")
         convertMp3ToWav(url).then(wavUrl=>{
           onSelectAudio(wavUrl)
         })

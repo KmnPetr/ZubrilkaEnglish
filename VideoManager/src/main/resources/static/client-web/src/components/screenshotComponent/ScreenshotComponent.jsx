@@ -16,12 +16,11 @@ const ScreenshotComponent = ({videoInfo_uuid}) => {
     
     // Функция для начала выделения
     const startSelection = () => {
-        console.log(`Start selecting   `,coordinatesStart,` ||| `,coordinatesEnd)
+
     };
     
     // Функция для завершения выделения
     const finishSelection = () => {
-        console.log(`Finish selecting   `,coordinatesStart,` ||| `,coordinatesEnd)
 
         takeScreenshot()
 

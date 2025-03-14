@@ -1,4 +1,13 @@
-import { REMOVE_PHRASE, EDIT_STR, ADD_TO_AND, ADD_NEW, EDIT_TIME, UPDATE_PHRASE, UPDATE_WORDS } from './reducers/phraseReduser';
+import {
+    REMOVE_PHRASE,
+    EDIT_STR,
+    ADD_TO_AND,
+    ADD_NEW,
+    EDIT_TIME,
+    UPDATE_PHRASE,
+    UPDATE_WORDS,
+    SET_AUDIO_UUID
+} from './reducers/phraseReduser';
 import {sendUpdateToServer} from "../api/phrasesService"
 
 
@@ -14,7 +23,8 @@ export const phrasesMiddleware = (store) => (next) => (action) => {
         ADD_NEW,
         EDIT_TIME,
         UPDATE_PHRASE,
-        UPDATE_WORDS
+        UPDATE_WORDS,
+        SET_AUDIO_UUID
     ];
 
     if (actionsToSync.includes(action.type)) {

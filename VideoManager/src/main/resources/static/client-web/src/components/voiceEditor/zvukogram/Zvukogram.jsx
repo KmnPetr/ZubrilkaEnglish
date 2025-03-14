@@ -15,11 +15,9 @@ const Zvukogram = ({onChangeAudioUrlMp3}) => {
 
 
     const onClickZvButton =()=>{
-      console.log('voice: '+voice)
       if(useApi){
         synthesizeSpeech(voice,str)
         .then(localUrl=>{
-          console.log(localUrl)
           onChangeAudioUrlMp3(localUrl)
         })
         .catch()

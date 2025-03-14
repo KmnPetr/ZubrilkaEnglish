@@ -19,7 +19,7 @@ const EditVideo = () => {
     const reloadVideoInfo = () => {
         getVideoInfoByUuid(videoInfoUuid)
             .then(response => setVideoInfo(response))
-            .catch(error => console.log(error));
+            .catch(error => console.error(error));
     }
 
 

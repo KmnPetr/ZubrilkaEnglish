@@ -1,11 +1,6 @@
 package com.zubrilka.VideoManager.util;
 
-import com.zubrilka.VideoManager.models.Video;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -102,5 +97,13 @@ public class MediaLocalStorage {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public BufferedInputStream getVoiceAsMp3(String localPath) throws FileNotFoundException {
+        File file = new File(UPLOAD_MEDIA_DIR, localPath);
+        if (!file.exists()) {
+            throw new FileNotFoundException("Файл не найден: " + file.getAbsolutePath());
+        }
+        return new BufferedInputStream(new FileInputStream(file));
     }
 }

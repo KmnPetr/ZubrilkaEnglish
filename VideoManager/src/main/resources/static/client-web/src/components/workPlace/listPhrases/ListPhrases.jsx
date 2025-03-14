@@ -19,7 +19,6 @@ const ListPhrases = ({ videoInfo_uuid }) => {
                 dispatch(setListPhrases(response.phrases))
             })
             .catch(error => {
-                console.log(error);
                 throw error;
             })
         return () => {

@@ -1,0 +1,19 @@
+.str_box{
+    display: flex;
+    align-items: center;
+    margin: 3px;
+}
+.language_p {
+    color: #5796ea;
+    font-size: 14px;
+    margin-right: 5px;
+}
+
+.microphone_str{
+    padding-left: 1em;
+}
+.null_str {
+    color: #82aaff;
+    font-size: 16px;
+    font-family: Arial;
+}

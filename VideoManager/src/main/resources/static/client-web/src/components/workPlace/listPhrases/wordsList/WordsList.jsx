@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import './wordsList.css';
 import Word from "./word/Word";
 import AddWordButton from "../../../ui/addWordButton/AddWordButton";
@@ -13,13 +12,6 @@ export const POSITION_END = 'POSITION_END'
  */
 const WordsList = ({ words,onChangeWordsList,idPhrase }) => {
 
-  const onChangeWord = (updatedWord, index) => {
-    const updatedWordsList = words.map((word, i) => 
-        i === index ? updatedWord : word
-    );
-    
-    onChangeWordsList(updatedWordsList);
-};
     const addNewWord = (position, index) => {
         const updatedWordsList = (() => {
             switch (position) {
@@ -60,7 +52,7 @@ const WordsList = ({ words,onChangeWordsList,idPhrase }) => {
                     <ul>
                     {words.map((word, index) => (
                         <li key={index} style={{ marginBottom: "10px" }}>
-                            <Word word={word} index={index} onChangeWord={onChangeWord} addNewWord={addNewWord} onDeleteWord={onDeleteWord} idPhrase={idPhrase}/>
+                            <Word word={word} index={index} addNewWord={addNewWord} onDeleteWord={onDeleteWord} idPhrase={idPhrase}/>
                         </li>
                     ))}
                     </ul>

@@ -102,8 +102,6 @@ const VideoInfo = ({videoInfo_uuid}) => {
             if(videoInfo.used_languages.includes(lang)&&lang!==videoInfo.native_lang) newUsedLang = newUsedLang.filter(el => el !== lang)
             else if(!videoInfo.used_languages.includes(lang)&&lang!==videoInfo.native_lang) newUsedLang.push(lang)
 
-            console.log(videoInfo.native_lang)
-
             newUsedLang.sort((a, b)=>b===videoInfo.native_lang ? 1 : -1)
 
             //Отправляем на сервер

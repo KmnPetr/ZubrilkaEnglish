@@ -49,7 +49,6 @@ const SelectVoice=({onSelect,language})=>{
     },[selectedLanguage,allVoices])
 
     useEffect(()=>{
-        console.log(filteredVoices)
         if(filteredVoices&&filteredVoices[0]) setSelectedVoice(filteredVoices[0].voice)
     },[filteredVoices])
 

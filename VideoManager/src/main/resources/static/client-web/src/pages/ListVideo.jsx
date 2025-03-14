@@ -38,14 +38,12 @@ const ListVideo = () => {
 
     //отправляет запрос на удаление видео
     const onDeleteVideoInfo =(videoInfoUuid)=> {
-        console.log("onDeleteVideoInfo    " + videoInfoUuid)
         deleteVideoInfo(videoInfoUuid)
         .then(response => {
-            console.log("Удаление видео прошло успешно. Uuid: " + videoInfoUuid)
             downloadList();
         })
         .catch(error => {
-            console.log("Ошибка при попытке удаления видео. Uuid: " + videoInfoUuid)
+            console.error("Ошибка при попытке удаления видео. Uuid: " + videoInfoUuid)
         });
     }
 

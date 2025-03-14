@@ -47,7 +47,6 @@ const VoiceEditor = () => {
   const apply =()=>{
     saveWavVoiceOnServer(audioURL,str)
     .then(voiceUuid=>{
-      console.log('voiceUuid'+voiceUuid)
       dispatch(setAudioUuidToPhrases(voiceUuid,typeStr,idPhrase,indexWord,language))
     })
   }

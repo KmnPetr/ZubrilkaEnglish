@@ -23,18 +23,45 @@ export const PHRASE = 'PHRASE'
 export const WORD = 'WORD'
 
 export const phraseReducer = (state = defaultState, action) => {
+
     switch (action.type) {
         case REMOVE_PHRASE:
             return {...state, phrases: state.phrases.filter((phrase) => phrase.id !== action.phraseId)}
-        case EDIT_STR:
+        case EDIT_STR: {
+            const newPhrase =(oldPhrase)=>{
+                if(action.typeStr===PHRASE){
+                    return {
+                        ...oldPhrase,
+                        [action.language]:{
+                            ...oldPhrase[action.language],
+                            str: action.newStr
+                        }
+                    }
+                } else if(action.typeStr===WORD){
+                    return {
+                        ...oldPhrase,
+                        words: oldPhrase.words.map((word,index)=> index===action.indexWord ? {
+                            ...word,
+                            [action.language]:{
+                                ...word[action.language],
+                                str: action.newStr
+                            }
+                        } : word)
+                    }
+                } else {
+                    console.error('Invalid typeStr: '+action.typeStr)
+                    return oldPhrase;
+                }
+            }
 
             return {...state, phrases: state.phrases.map((phrase) =>
-                    phrase.id === action.phraseId ?
-                    {...phrase, [action.language]: {...phrase[action.language],str: action.newValue} }
-                    :
-                    phrase
+                    phrase.id === action.idPhrase ?
+                        newPhrase(phrase)
+                        :
+                        phrase
                 ),
             };
+        }
         case ADD_TO_AND: return {
             ...state,
             phrases: [...state.phrases, action.payload]};
@@ -71,7 +98,9 @@ export const phraseReducer = (state = defaultState, action) => {
                         if(action.typeStr === PHRASE){
                             return {
                                 ...phrase,
-                                [action.language]: {...phrase[action.language],voice_uuid: action.audioUuid}
+                                [action.language]: {
+                                    ...phrase[action.language],
+                                    voice_uuid: action.audioUuid}
                             }
                         } else if (action.typeStr === WORD) {
                             // Обновление слова по индексу
@@ -101,7 +130,7 @@ export const phraseReducer = (state = defaultState, action) => {
 
 
 export const removePhraseAction = (phraseId) => ({type: REMOVE_PHRASE, phraseId: phraseId})
-export const editStrAction = (phraseId,language,newValue) => ({type: EDIT_STR, phraseId:phraseId,language:language,newValue:newValue})
+export const editStrAction = ({newStr,typeStr,idPhrase,indexWord,language}) => ({type: EDIT_STR, newStr,typeStr,idPhrase,indexWord,language})
 /**
  * добавит фразу в конец списка
  */

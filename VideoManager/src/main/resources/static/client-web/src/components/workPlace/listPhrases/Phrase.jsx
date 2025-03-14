@@ -4,7 +4,6 @@ import { FiTrash2 } from "react-icons/fi";
 import DeleteDialog from "./DeleteDialog";
 import {useDispatch, useSelector} from "react-redux";
 import { removePhraseAction, updateWordsList} from "../../../redux/reducers/phraseReduser";
-import StrPhrase from "./StrPhrase";
 import PhraseInterval from "./PhraseInterval";
 import { RiOpenaiFill } from "react-icons/ri";
 import {openAiGptRequest} from "../../../utils/openAiGpt"
@@ -13,6 +12,7 @@ import {openJsonEditor} from '/src/redux/reducers/jsonEditorReducer.js'
 import { PHRASE } from "../../../redux/reducers/jsonEditorReducer";
 import WordsList from "./wordsList/WordsList";
 import SideToolbar from "../../ui/sideToolbar/SideToolbar";
+import Str from "../../ui/str/Str.jsx";
 
 const Phrase =({phrase})=> {
     const dispatch = useDispatch();
@@ -68,7 +68,7 @@ const Phrase =({phrase})=> {
             <div>
                 <div className="phrase">
                     {used_languages&&used_languages.map(lang=>(
-                        <StrPhrase str={phrase[lang]?.str} idPhrase={phrase.id} language={lang} isHover={isHover} key={lang}/>
+                        <Str str={phrase[lang]} typeStr={PHRASE} idPhrase={phrase.id} language={lang} isHover={isHover} key={lang}/>
                     ))}
                     {isShowWords && <WordsList words={phrase.words} onChangeWordsList={onChangeWordsList} idPhrase={phrase.id}/>}
                 </div>

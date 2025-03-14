@@ -25,7 +25,6 @@ const StrFlipper = () => {
             action.indexWord === indexWord &&
             action.language === language
         );
-        console.log('index='+index)
         setCurrentIndexAction(index);
     },[idPhrase,indexWord,language,flatActions])
 
@@ -58,7 +57,6 @@ const StrFlipper = () => {
                 return [...mainStrings, ...wordStrings];
             });
             setFlatActions(flatActions);
-            console.log('flatActions='+JSON.stringify(flatActions,null,2))
         }
     }, [phrases,used_languages]);
 

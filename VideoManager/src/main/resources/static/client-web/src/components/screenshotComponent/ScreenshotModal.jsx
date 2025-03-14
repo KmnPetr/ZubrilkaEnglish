@@ -28,7 +28,6 @@ const ScreenshotModal = ({ screenshot, onClose,videoInfo_uuid }) => {
     window.open('https://translate.yandex.ru/ocr', '_blank');
   };
   const setAsIcon = () => {
-    console.log('setAsIcon()')
     sendIconToServer(screenshot,videoInfo_uuid)
       .then(()=>dispatch(iconWasChanged()))
     onClose()

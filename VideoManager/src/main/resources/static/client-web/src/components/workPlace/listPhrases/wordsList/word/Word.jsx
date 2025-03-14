@@ -1,24 +1,19 @@
 import { useState } from "react";
 import './word.css'
-import WordStr from "./wordStr/WordStr";
 import AddWordButton from "../../../../ui/addWordButton/AddWordButton";
 import { POSITION_AFTER, POSITION_BEFORE } from "../WordsList";
 import { FiTrash2 } from "react-icons/fi";
 import SideToolbar from "../../../../ui/sideToolbar/SideToolbar";
 import {useSelector} from "react-redux";
+import Str from "../../../../ui/str/Str.jsx";
+import {WORD} from "../../../../../redux/reducers/phraseReduser.js";
 
-const Word = ({word,index,onChangeWord,addNewWord,onDeleteWord,idPhrase}) => {
+const Word = ({word,index,addNewWord,onDeleteWord,idPhrase}) => {
   const [isHover, setIsHover] = useState(false);
     const {native_lang,used_languages} = useSelector(state => state.videoInfoReducer)
 
   const handleMouseEnter =()=> setIsHover(true)
   const handleMouseLeave =()=> setIsHover(false);
-  
-  const onChangeStr =(newStr,language)=> {
-    const updatedWord = { ...word, [language]: {...word[language],str:newStr} };
-    
-    onChangeWord(updatedWord,index)
-  }
 
   const addNewWordButtonClick=(position)=>addNewWord(position,index)
 
@@ -31,7 +26,7 @@ const Word = ({word,index,onChangeWord,addNewWord,onDeleteWord,idPhrase}) => {
       </SideToolbar>
 
         {used_languages&&used_languages.map(lang=>(
-            <WordStr str={word[lang]?.str} language={lang} isHover={isHover} onChangeStr={onChangeStr} idPhrase={idPhrase} indexWord={index} key={lang}/>
+            <Str str={word[lang]} typeStr={WORD} idPhrase={idPhrase} indexWord={index} language={lang} isHover={isHover} key={lang}/>
         ))}
       
       <SideToolbar isShow={isHover} position="bottom" background="#333" z_index={1000}>

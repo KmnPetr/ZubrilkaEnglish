@@ -19,7 +19,6 @@ export const sendIconToServer = async (screenshot,videoInfo_uuid) => {
         },
       });
 
-      console.log('Изображение успешно отправлено:', serverResponse.data);
     } catch (error) {
       console.error('Ошибка при отправке изображения:', error);
     }

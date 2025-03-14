@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import './editableField.css';
 import { FiCheck, FiX } from "react-icons/fi";
 import { TfiMarkerAlt } from "react-icons/tfi";
@@ -6,6 +6,8 @@ import { TfiMarkerAlt } from "react-icons/tfi";
 const EditableField = ({ str, onChange, isStrict, showMarker=false }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [newValue, setValue] = useState(str);
+
+    useEffect(() => {setValue(str)},[str])
 
     const handleBlur = () => {
         if (!isStrict) applyChanges();

@@ -54,10 +54,6 @@ export const synthesizeSpeech=async(voice,text)=> {
         });
         
         if (response.data.status == 1) {
-            console.log("Озвучка завершена успешно:", response.data);
-            console.log("Озвучка завершена успешно:", response.data.file);
-            console.log("Озвучка завершена успешно:", response.data.file_cors);
-
             const filePath = response.data.file_cors
 
             const fileResponse = await fetch(filePath);
