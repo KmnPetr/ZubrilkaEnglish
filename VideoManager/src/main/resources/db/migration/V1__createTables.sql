@@ -3,7 +3,8 @@ CREATE TABLE Person(
     password varchar NOT NULL,
     username varchar(100) UNIQUE NOT NULL,
     role varchar(100) NOT NULL,
-    created_at timestamp
+    created_at timestamp,
+    rating_voices varchar
 );
 
 CREATE TABLE video_info (

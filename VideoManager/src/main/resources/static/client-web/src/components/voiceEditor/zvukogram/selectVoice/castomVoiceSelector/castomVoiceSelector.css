@@ -1,0 +1,67 @@
+.castom_voice_selector_box {
+    border: 1px solid #707070;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    padding: 5px;
+}
+.selectedVoice{
+    width: 250px;
+    position: relative;
+    align-items: center;
+    align-content: center;
+}
+.listVoice {
+    border: 1px solid #707070;
+    border-radius: 10px;
+    background-color: #4e4e4e;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 200px;
+    position: absolute;
+    top: 100%;
+    z-index: 1000;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.arrow_box {
+    border-left: 1px solid #8f8f8f;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    margin-left: auto;
+    width: 30px;
+    height: auto;
+}
+.arrow_c_ls {
+    width: 300px;
+    height: auto;
+}
+.voice_element {
+    display: flex;
+    flex-direction: row;
+    justify-items: center;
+    align-items: center;
+    align-content: center;
+    margin: 2px;
+    padding: 5px;
+}
+.male_icon{
+    margin-right: 5px;
+    color: aqua;
+}
+.female_icon{
+    margin-right: 5px;
+    color: rgb(255, 30, 188);
+}
+.pro{
+    margin-left: 8px;
+    color: #f9d252;
+    font-size: 12px;
+    cursor: pointer;
+}
+.voice_name{
+    cursor: pointer;
+}

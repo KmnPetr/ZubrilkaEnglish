@@ -1,9 +1,9 @@
 import './str.css';
 import EditableField from "../editableField/EditableField.jsx";
 import {HiOutlineMicrophone} from "react-icons/hi";
-import {openVoiceEditor} from "../../../redux/reducers/voiceEditorReducer.js";
+import {openVoiceEditor} from "../../redux/reducers/voiceEditorReducer.js";
 import {useDispatch} from "react-redux";
-import {editStrAction} from "../../../redux/reducers/phraseReduser.js";
+import {editStrAction} from "../../redux/reducers/phraseReduser.js";
 import PlayVoice, {small} from "../playVoice/PlayVoice.jsx";
 
 const Str =({className, style, str, typeStr, idPhrase, indexWord=null, language, isHover})=>{

@@ -57,7 +57,7 @@ class TestFillDB {
         System.err.println("Warning!!! init: TestFillDataBase");
 
 
-        Person adminPerson = new Person(null,passwordEncoder.encode("111"),"111", UserRole.ROLE_ADMIN,new Timestamp(System.currentTimeMillis()),null);
+        Person adminPerson = new Person(null,passwordEncoder.encode("111"),"111", UserRole.ROLE_ADMIN,new Timestamp(System.currentTimeMillis()),null,null);
 
         Person savedPerson = personRepository.save(adminPerson);
         System.out.println("Person uuid: %s".formatted(savedPerson.getUuid()));

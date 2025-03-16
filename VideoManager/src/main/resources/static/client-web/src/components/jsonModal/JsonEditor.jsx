@@ -3,11 +3,11 @@ import Editor from 'react-simple-code-editor';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism-okaidia.css'; // Тема подсветки синтаксиса
 import 'prismjs/components/prism-json'; // Поддержка JSON
-import ModalWindow from '../ui/ModalWindow';
+import ModalWindow from '../../ui/ModalWindow';
 import { useDispatch, useSelector } from 'react-redux';
 import { closeJsonEditor, updateJsonText } from '/src/redux/reducers/jsonEditorReducer.js';
 import './JsonEditor.css';
-import CButton from '../ui/CButton';
+import CButton from '../../ui/CButton';
 import { PHRASE } from '../../redux/reducers/jsonEditorReducer';
 import { updatePhrase } from '../../redux/reducers/phraseReduser';
 

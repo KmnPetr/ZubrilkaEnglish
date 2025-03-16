@@ -25,7 +25,6 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
 
-
     @Value("${spring.profiles.active:default}") // Получение текущего профиля
     private String profile;
 
@@ -33,7 +32,6 @@ public class SecurityConfig {
     public SecurityConfig(JwtAuthenticationFilter jwtAuthFilter) {
         this.jwtAuthFilter = jwtAuthFilter;
     }
-
 
     @Bean
     public SecurityFilterChain securityFilterChain(
@@ -72,7 +70,9 @@ public class SecurityConfig {
                                         "/api/translation/**",
                                         "/api/icon/**",
                                         "/api/audio/**",
-                                        "/api/voice/**"
+                                        "/api/voice/**",
+                                        "/api/person/rating_voices",
+                                        "/api/person/rating_get"
                                 ).hasAnyRole("ADMIN","TRANSLATOR")
                                 .requestMatchers(
                                         "/api/test/free",
@@ -95,7 +95,6 @@ public class SecurityConfig {
 //                        .sessionAuthenticationStrategy((authentication, request, response) -> {})) //нужно чтобы при каждой новой куки аутентификации не создавался новый scrf токен
                 .csrf(csrf->csrf.disable())
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll);
-
 
         return httpSecurity.build();
     }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import './zvukogram.css'
-import CButton from '../../ui/CButton'
+import CButton from '../../../ui/CButton'
 import { copyToClipboard } from '../../../utils/copyToClipboard';
 import SelectVoice from './selectVoice/SelectVoice';
 import { FormControlLabel,Checkbox } from '@mui/material';

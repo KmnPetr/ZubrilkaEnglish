@@ -1,5 +1,4 @@
 export const playAudio = (url) => {
-    console.log('playAudio: ', url, '')
 
     // Создаем аудио элемент
     const audio = new Audio(url);

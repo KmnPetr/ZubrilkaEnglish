@@ -1,5 +1,6 @@
 package com.zubrilka.VideoManager.services;
 
+import com.zubrilka.VideoManager.controllers.validation.NotFoundException;
 import com.zubrilka.VideoManager.controllers.validation.UnauthorizedException;
 import com.zubrilka.VideoManager.models.Person;
 import com.zubrilka.VideoManager.dto.PersonDto;
@@ -17,10 +18,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Map;
 
 
 @Service
 @Slf4j
+@Transactional(readOnly = true)
 public class PersonService implements UserDetailsService, AuthenticationUserDetailsService<PreAuthenticatedAuthenticationToken> {
     private final PersonRepository personRepository;
     private final PasswordEncoder passwordEncoder;
@@ -98,6 +103,23 @@ public class PersonService implements UserDetailsService, AuthenticationUserDeta
         String accessToken = jwtUtil.generateAccessToken(person);
         String refreshToken = jwtUtil.generateRefreshToken(person);
         return convertPersonToPersonDto(person,accessToken,refreshToken);
+    }
+
+    /**
+     * обновит пользовательские настройки rating_voices
+     */
+    @Transactional
+    public void updateRatingVoices(Map<String, Integer> ratingVoices, String username) throws NotFoundException {
+        Person person = personRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("User not found."));
+        person.setRating_voices(ratingVoices);
+        personRepository.save(person);
+    }
+
+    /**
+     * выдаст пользовательские настройки rating_voices
+     */
+    public Map<String, Integer> getRatingVoices(String username) throws NotFoundException {
+        return personRepository.findByUsername(username).orElseThrow(()->new NotFoundException("User not found.")).getRating_voices();
     }
 }
 

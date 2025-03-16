@@ -2,7 +2,6 @@ import api from './api';
 
 //скачает voice
 export const downloadVoiceAsMp3 = async (uuid) => {
-    console.log('downloadVoiceAsMp3')
     try {
         const response = await api.get(`/api/voice/get_mp3/${uuid}`, {
             responseType: "blob" // Получаем бинарные данные
@@ -11,8 +10,6 @@ export const downloadVoiceAsMp3 = async (uuid) => {
         // Создаем URL для загруженного файла
         const blob = new Blob([response.data], { type: "audio/mpeg" });
         const url = URL.createObjectURL(blob);
-
-        console.log('downloadVoiceAsMp3 ',url)
 
         return url;
 

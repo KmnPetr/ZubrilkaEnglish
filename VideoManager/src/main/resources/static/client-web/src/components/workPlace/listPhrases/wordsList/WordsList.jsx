@@ -1,6 +1,6 @@
 import './wordsList.css';
 import Word from "./word/Word";
-import AddWordButton from "../../../ui/addWordButton/AddWordButton";
+import AddWordButton from "../../../../ui/addWordButton/AddWordButton";
 
 export const POSITION_AFTER = 'POSITION_AFTER'
 export const POSITION_BEFORE = 'POSITION_BEFORE'

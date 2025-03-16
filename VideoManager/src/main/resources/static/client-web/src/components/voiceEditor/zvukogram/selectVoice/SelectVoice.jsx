@@ -7,12 +7,12 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
 import { getListVoices } from '../../../../api/zvukogramService';
 import { defaultLanguages } from './defaultLanguages';
-import { SlUser,SlUserFemale } from "react-icons/sl";
-import { Autocomplete, TextField } from '@mui/material';
+import CastomVoiceSelector from "./castomVoiceSelector/CastomVoiceSelector.jsx";
+import {getRatingVoices, updateRatingVoices} from "../../../../api/personService.js";
 
 const CN = 'cn'
 const EN = 'en'
-const RU = 'ru' 
+const RU = 'ru'
 
 const SelectVoice=({onSelect,language})=>{
     const [lang_selector,setLangSelector] = useState(language)
@@ -21,6 +21,34 @@ const SelectVoice=({onSelect,language})=>{
     const [allVoices,setAllVoices] = useState(null);
     const [filteredVoices,setFilteredVoices] = useState([])
     const [selectedVoice,setSelectedVoice] = useState("")
+    const [ratingVoices,setRatingVoices] = useState({})//значения предпочтения голоса, определяется по звездочкам по 3х бальной шкале
+
+
+    //запросит ratingVoices с сервера
+    useEffect(()=>{
+        getRatingVoices()
+            .then(data=>{
+                if (data){
+                    setRatingVoices(data)
+                    setFilteredVoices(sortFilteredVoices(data,filteredVoices))
+                }
+
+            })
+            .catch(err=>{console.error(err)})
+    },[])
+
+    //при получении новых данных рейтинга голосов или при получении нового списка голосов отсортирует по рейтингу
+    const sortFilteredVoices=(ratingVoices,voices)=>{
+        const newFilteredVoices = voices.sort((a, b) => {
+            const ratingA = ratingVoices[a.voice];
+            const ratingB = ratingVoices[b.voice];
+            // Если ratingA или ratingB - null или undefined, присваиваем им минимальное значение
+            const safeRatingA = (ratingA === null || ratingA === undefined) ? -1 : ratingA;
+            const safeRatingB = (ratingB === null || ratingB === undefined) ? -1 : ratingB;
+            return safeRatingB - safeRatingA;
+        });
+        return newFilteredVoices;
+    }
 
     //получение списка голосов с сайта звукограмм
     useEffect(()=>{
@@ -44,7 +72,7 @@ const SelectVoice=({onSelect,language})=>{
 
     useEffect(()=>{
         if (allVoices&&allVoices[selectedLanguage]) {
-            setFilteredVoices(allVoices[selectedLanguage])
+            setFilteredVoices(sortFilteredVoices(ratingVoices,allVoices[selectedLanguage]))
         }
     },[selectedLanguage,allVoices])
 
@@ -59,48 +87,37 @@ const SelectVoice=({onSelect,language})=>{
     const handleLanguageChange = (e) => {
         setSelectedLanguage(e.target.value)
     }
+
     const onSelectVoice =(newValue)=> {
         setSelectedVoice(newValue)
         onSelect(newValue)
     }
 
+    const onClickRating=(event, newValue,voice)=>{
+        const newRatingVoices = { ...ratingVoices, [voice]: newValue };
+        if (newValue === null) delete newRatingVoices[voice];
+
+        setRatingVoices(newRatingVoices);
+        updateRatingVoices({newRatingVoices: newRatingVoices,oldRatingVoices: ratingVoices})
+            .then(()=>{})
+            .catch((oldRatingVoices,error)=>{
+                setRatingVoices(oldRatingVoices);
+                console.error(error)})
+    }
+
     return(
         <div className="select_voice">
 
-            <ThemeProvider theme={darkTheme}>
-                <Autocomplete
-                    options={filteredVoices}
-                    getOptionLabel={(option) => option.voice}
-                    sx={{ width: 250 }}
-                    value={filteredVoices.find(v => v.voice === selectedVoice) || null}
-                    onChange={(e, newValue) => onSelectVoice(newValue ? newValue.voice : null)}
-                    disableClearable
-                    renderOption={(props, option) => (
-                        <li {...props} style={{ display: 'flex', alignItems: 'center' }}>
-                            {option.sex==='male'&&<SlUser className='male_icon'/>}
-                            {option.sex==='female'&&<SlUserFemale className='female_icon'/>}
-                            <p>{option.voice}</p>
-                            {option.pro === '1' && <p className='pro'>pro</p>}
-                        </li>)}
-                    renderInput={(params) => {
-                        const option = filteredVoices.find(v => v.voice === selectedVoice); // Получаем выбранную опцию
-                        return (
-                            <TextField {...params} label="voice" value={selectedVoice || ''}
-                                InputProps={{
-                                    ...params.InputProps,
-                                    startAdornment: option ? (
-                                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                                            {option.sex === 'male' && <SlUser className="male_icon" />}
-                                            {option.sex === 'female' && <SlUserFemale className="female_icon" />}
-                                            {option.pro === '1' && <p className='pro'>pro</p>}
-                                        </div>
-                                    ) : null,
-                                }}
-                            />
-                        );
-                    }}
-                />
+            <CastomVoiceSelector
+                className='c_voice_selector'
+                selectedVoice={filteredVoices.find(v => v.voice === selectedVoice) || null}
+                listVoice={filteredVoices}
+                onSelectVoice={onSelectVoice}
+                onClickRating={onClickRating}
+                ratingVoices={ratingVoices}
+            />
 
+            <ThemeProvider theme={darkTheme}>
                 <Box sx={{ minWidth: 120 }}>
                     <FormControl fullWidth>
                         <InputLabel variant="standard" htmlFor="uncontrolled-native" shrink>language</InputLabel>
@@ -119,6 +136,7 @@ const SelectVoice=({onSelect,language})=>{
                         <InputLabel variant="standard" htmlFor="uncontrolled-native" shrink>selector</InputLabel>
                         <NativeSelect
                         defaultValue={language}
+                        value={language}
                         onChange={(e)=>setLangSelector(e.target.value)}
                         inputProps={{name: 'language_selector',id: 'uncontrolled-native',}}>
                         <option value={CN}>{CN}</option>
@@ -127,7 +145,6 @@ const SelectVoice=({onSelect,language})=>{
                         </NativeSelect>
                     </FormControl>
                 </Box>
-                
             </ThemeProvider>
         </div>
     )

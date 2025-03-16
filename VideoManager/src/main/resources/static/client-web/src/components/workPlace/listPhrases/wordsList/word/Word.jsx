@@ -1,11 +1,11 @@
 import { useState } from "react";
 import './word.css'
-import AddWordButton from "../../../../ui/addWordButton/AddWordButton";
+import AddWordButton from "../../../../../ui/addWordButton/AddWordButton";
 import { POSITION_AFTER, POSITION_BEFORE } from "../WordsList";
 import { FiTrash2 } from "react-icons/fi";
-import SideToolbar from "../../../../ui/sideToolbar/SideToolbar";
+import SideToolbar from "../../../../../ui/sideToolbar/SideToolbar";
 import {useSelector} from "react-redux";
-import Str from "../../../../ui/str/Str.jsx";
+import Str from "../../../../../ui/str/Str.jsx";
 import {WORD} from "../../../../../redux/reducers/phraseReduser.js";
 
 const Word = ({word,index,addNewWord,onDeleteWord,idPhrase}) => {

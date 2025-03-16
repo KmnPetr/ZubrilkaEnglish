@@ -2,6 +2,7 @@ package com.zubrilka.VideoManager.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.zubrilka.VideoManager.models.converters.RatingConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,6 +16,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -41,6 +43,9 @@ public class Person implements UserDetails, Serializable {
     private UserRole role;
     @Column(name = "created_at")
     private Timestamp created_at;
+    @Column(name = "rating_voices")
+    @Convert(converter = RatingConverter.class)
+    private Map<String, Integer> rating_voices;
 
     @OneToMany(mappedBy = "translator", fetch = FetchType.LAZY)
     @JsonIgnore

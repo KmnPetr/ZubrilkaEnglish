@@ -1,14 +1,16 @@
 import './playVoice.css';
 import {HiOutlineSpeakerWave, HiOutlineSpeakerXMark} from "react-icons/hi2";
-import {downloadVoiceAsMp3} from "../../../api/voiceService.js";
-import {playAudio} from "../../../utils/audioUtil.jsx";
+import {downloadVoiceAsMp3} from "../../api/voiceService.js";
+import {playAudio} from "../../utils/audioUtil.jsx";
 
 export const small = 'small_speaker'
+export const medium = 'medium_speaker'
+export const large = 'large_speaker'
+
 const PlayVoice = ({className, style, voiceUuid, size}) => {
     const playVoice = () => {
-        console.log('play')
         downloadVoiceAsMp3(voiceUuid).then(
-            voiceUrl => {playAudio(voiceUrl).onEnd(() => {console.log('end')})}
+            voiceUrl => {playAudio(voiceUrl).onEnd(() => {})}
         )
     }
     return (

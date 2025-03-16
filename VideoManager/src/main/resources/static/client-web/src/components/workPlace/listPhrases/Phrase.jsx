@@ -11,8 +11,8 @@ import { TbIndentIncrease } from "react-icons/tb";
 import {openJsonEditor} from '/src/redux/reducers/jsonEditorReducer.js'
 import { PHRASE } from "../../../redux/reducers/jsonEditorReducer";
 import WordsList from "./wordsList/WordsList";
-import SideToolbar from "../../ui/sideToolbar/SideToolbar";
-import Str from "../../ui/str/Str.jsx";
+import SideToolbar from "../../../ui/sideToolbar/SideToolbar";
+import Str from "../../../ui/str/Str.jsx";
 
 const Phrase =({phrase})=> {
     const dispatch = useDispatch();
