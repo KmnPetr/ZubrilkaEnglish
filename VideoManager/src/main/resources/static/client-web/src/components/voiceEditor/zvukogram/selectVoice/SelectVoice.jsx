@@ -20,9 +20,10 @@ const SelectVoice=({onSelect,language})=>{
     const [selectedLanguage, setSelectedLanguage] = useState(defaultLanguages[0].originKey);
     const [allVoices,setAllVoices] = useState(null);
     const [filteredVoices,setFilteredVoices] = useState([])
-    const [selectedVoice,setSelectedVoice] = useState("")
+    const [selectedVoice,setSelectedVoice] = useState(null/*{voice:'',sex:''}*/)
     const [ratingVoices,setRatingVoices] = useState({})//значения предпочтения голоса, определяется по звездочкам по 3х бальной шкале
 
+    useEffect(()=>{setLangSelector(language)},[language])
 
     //запросит ratingVoices с сервера
     useEffect(()=>{
@@ -77,7 +78,7 @@ const SelectVoice=({onSelect,language})=>{
     },[selectedLanguage,allVoices])
 
     useEffect(()=>{
-        if(filteredVoices&&filteredVoices[0]) setSelectedVoice(filteredVoices[0].voice)
+        if(filteredVoices&&filteredVoices[0]) setSelectedVoice({voice:filteredVoices[0].voice,sex:filteredVoices[0].sex})
     },[filteredVoices])
 
     useEffect(()=>{
@@ -88,9 +89,8 @@ const SelectVoice=({onSelect,language})=>{
         setSelectedLanguage(e.target.value)
     }
 
-    const onSelectVoice =(newValue)=> {
-        setSelectedVoice(newValue)
-        onSelect(newValue)
+    const onSelectVoice =(voice)=> {
+        setSelectedVoice(voice)
     }
 
     const onClickRating=(event, newValue,voice)=>{
@@ -110,7 +110,7 @@ const SelectVoice=({onSelect,language})=>{
 
             <CastomVoiceSelector
                 className='c_voice_selector'
-                selectedVoice={filteredVoices.find(v => v.voice === selectedVoice) || null}
+                selectedVoice={filteredVoices.find(v => v.voice === selectedVoice?.voice) || null}
                 listVoice={filteredVoices}
                 onSelectVoice={onSelectVoice}
                 onClickRating={onClickRating}

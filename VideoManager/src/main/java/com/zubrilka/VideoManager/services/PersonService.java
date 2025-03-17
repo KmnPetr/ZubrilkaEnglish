@@ -61,6 +61,8 @@ public class PersonService implements UserDetailsService, AuthenticationUserDeta
         return new PersonDto(
                 person.getUuid(),
                 person.getUsername(),
+                person.getShort_name(),
+                person.getSex(),
                 person.getRole(),
                 person.getCreated_at(),
                 accessToken,

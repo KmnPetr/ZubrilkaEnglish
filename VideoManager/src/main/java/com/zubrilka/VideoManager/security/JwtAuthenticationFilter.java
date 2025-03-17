@@ -1,7 +1,7 @@
 package com.zubrilka.VideoManager.security;
 
 import com.zubrilka.VideoManager.models.Person;
-import com.zubrilka.VideoManager.models.UserRole;
+import com.zubrilka.VideoManager.enums.UserRole;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -57,6 +57,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                 uuid,
                                 null,
                                 username,
+                                null,
+                                null,
                                 UserRole.valueOf(role),
                                 null,
                                 null,

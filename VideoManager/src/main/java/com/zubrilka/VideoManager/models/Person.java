@@ -1,7 +1,8 @@
 package com.zubrilka.VideoManager.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.zubrilka.VideoManager.enums.Sex;
+import com.zubrilka.VideoManager.enums.UserRole;
 import com.zubrilka.VideoManager.models.converters.RatingConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -38,6 +39,11 @@ public class Person implements UserDetails, Serializable {
     private String password;
     @Column(name = "username")
     private String username;
+    @Column(name = "short_name")
+    private String short_name; //неуникальное значение
+    @Enumerated(EnumType.STRING)
+    @Column(name = "sex")
+    private Sex sex; //типа для озвучки пригодится
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private UserRole role;

@@ -19,7 +19,8 @@ import CButton from '../../ui/CButton';
 import { saveWavVoiceOnServer } from '../../api/voiceService';
 import {PHRASE, setAudioUuidToPhrases, WORD} from '../../redux/reducers/phraseReduser';
 import StrFlipper from "./strFlipper/StrFlipper.jsx";
-import PlayVoice, {large, medium} from "../../ui/playVoice/PlayVoice.jsx";
+import PlayVoice, {large} from "../../ui/playVoice/PlayVoice.jsx";
+import ListOldVoice from "./listOldVoice/ListOldVoice.jsx";
 
 /**
  * модальное окно для редактирования озвучки у фразы или слова
@@ -34,6 +35,8 @@ const VoiceEditor = () => {
   const {startTime,endTime,changeInterval,maxValue} = useInterval(duration)
   const { play, pause, isPlaying, getTrimmedAudio } = useAudioPlayer(audioURL,startTime,endTime)
   const [audioUrlMp3,setAudioUrlMp3] = useState(null) //содержит ссылку на аудио взятое например из звукограмма
+  const [lastUsedVoice,setLastUsedVoice] = useState(null/*{voice: '',sex:''}*/)//последний использованный для озвучки голос нужен для дополнительной информации при сохранении звука на сервере
+  const user = useSelector((state) => state.authReducer.user)
 
     //займется поиском uuid звука
     useEffect(()=>{
@@ -61,13 +64,19 @@ const VoiceEditor = () => {
   const trimAudio=()=> getTrimmedAudio().then(newURL=>setAudioURL(newURL))
 
   const apply =()=>{
-    saveWavVoiceOnServer(audioURL,str)
+    saveWavVoiceOnServer(audioURL,str,lastUsedVoice)
     .then(voiceUuid=>{
       dispatch(setAudioUuidToPhrases(voiceUuid,typeStr,idPhrase,indexWord,language))
     })
   }
 
-  const onClickRecord=()=> !isRecording ? startRecording() : stopRecording()
+  const onClickRecord=()=> {
+      !isRecording ? startRecording() : stopRecording()
+      setLastUsedVoice({voice:user.short_name,sex:user.sex})
+  }
+
+    //присвоит строке voice_uuid из старых ранее созданных voice
+    const onSelectOldVoice=(uuid)=>{console.log('Select old uuid ', uuid)}
 
   return (
     <ModalWindow isOpen={isOpen} onClose={onClose} width="70%" height="70%">
@@ -79,6 +88,8 @@ const VoiceEditor = () => {
                 <h1>{"\""+str+"\""}</h1>
                 <PlayVoice voiceUuid={voiceUuid} size={large}/>
             </div>
+
+            <ListOldVoice str={str} onSelectOldVoice={onSelectOldVoice}/>
 
             <div className='record_box'>
                 <HiOutlineMicrophone className={`clickable microphone2 ${isRecording ? 'recording' : ''}`} onClick={onClickRecord}/>
@@ -92,7 +103,7 @@ const VoiceEditor = () => {
                 <p>endTime: {endTime}</p>
                 <FolderHandler onSelectAudio={(urlAudio)=>setAudioURL(urlAudio)}/>
             </div>
-            <Zvukogram onChangeAudioUrlMp3={setAudioUrlMp3}/>
+            <Zvukogram onChangeAudioUrlMp3={setAudioUrlMp3} setLastUsedVoice={setLastUsedVoice}/>
             <CButton onClick={apply}>Apply voice</CButton>
         </div>
           <StrFlipper className='str_flipper'/>

@@ -27,9 +27,9 @@ const CastomVoiceSelector=({className, style,listVoice,selectedVoice,onSelectVoi
         };
     }, []);
 
-    const onSelectVoice_2=(newValue)=>{
+    const onSelectVoice_2=(voice)=>{
         setIsOpenList(false);
-        onSelectVoice(newValue)
+        onSelectVoice(voice)
     }
 
     return (<div className={`castom_voice_selector_box ${className}`} style={style}>
@@ -62,7 +62,7 @@ export default CastomVoiceSelector;
 const VoiceElement=({voiceObj,onClickVoice,rating,onClickRating})=>{
 
     return(
-      <div className='voice_element' onClick={()=>onClickVoice(voiceObj.voice)}>
+      <div className='voice_element' onClick={()=>onClickVoice({voice:voiceObj.voice,sex:voiceObj.sex})}>
           {voiceObj.sex==='male'&&<SlUser className='male_icon'/>}
           {voiceObj.sex==='female'&&<SlUserFemale className='female_icon'/>}
           <p className='voice_name'>{voiceObj.voice}</p>

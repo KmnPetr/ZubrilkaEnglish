@@ -29,9 +29,11 @@ public class VoiceController {
     @PostMapping("/save_wav_voice")
     public ResponseEntity<UUID> saveWavVoice(
             @RequestParam("file") MultipartFile file,
-            @RequestParam("text") String text) {
+            @RequestParam("text") String text,
+            @RequestParam("voice") String voice,
+            @RequestParam("sex") String sex) {
 
-        return ResponseEntity.ok(voiceService.saveWavVoice(file,text));
+        return ResponseEntity.ok(voiceService.saveWavVoice(file,text,voice,sex));
     }
 
     @GetMapping("/get_mp3/{uuid}")

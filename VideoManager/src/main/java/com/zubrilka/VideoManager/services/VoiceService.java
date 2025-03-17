@@ -1,6 +1,7 @@
 package com.zubrilka.VideoManager.services;
 
 import com.zubrilka.VideoManager.controllers.validation.NotFoundException;
+import com.zubrilka.VideoManager.enums.Sex;
 import com.zubrilka.VideoManager.models.Voice;
 import com.zubrilka.VideoManager.repositories.VoiceRepository;
 import com.zubrilka.VideoManager.util.MediaLocalStorage;
@@ -10,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.nio.file.Paths;
 import java.util.UUID;
 
 @Service
@@ -31,7 +31,7 @@ public class VoiceService {
      * принимает wav файл конвертирует в mp3 сохраняет в локальном хранилище
      */
     @Transactional
-    public UUID saveWavVoice(MultipartFile file, String text){
+    public UUID saveWavVoice(MultipartFile file, String text, String voice, String sex){
 
         UUID uuid = UUID.randomUUID();
 
@@ -40,6 +40,8 @@ public class VoiceService {
         Voice newVoice = new Voice(
                 uuid,
                 text,
+                voice,
+                Sex.fromValue(sex),
                 localStoragePath
         );
         return voiceRepository.save(newVoice).getUuid();

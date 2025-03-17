@@ -8,17 +8,17 @@ import { FormControlLabel,Checkbox } from '@mui/material';
 import { synthesizeSpeech } from '../../../api/zvukogramService';
 
 //сделано наподобие https://coreui.io/react/docs/components/button/#outline-buttons
-const Zvukogram = ({onChangeAudioUrlMp3}) => {
+const Zvukogram = ({onChangeAudioUrlMp3,setLastUsedVoice}) => {
     const {str,language} = useSelector((state) => state.voiceEditorReducer);
-    const [voice,setVoice] = useState(null);
+    const [voice,setVoice] = useState(null/*{voice:'',sex:''}*/);
     const [useApi, setUseApi] = useState(true);
-
 
     const onClickZvButton =()=>{
       if(useApi){
-        synthesizeSpeech(voice,str)
+        synthesizeSpeech(voice.voice,str)
         .then(localUrl=>{
           onChangeAudioUrlMp3(localUrl)
+            setLastUsedVoice(voice)
         })
         .catch()
       } else{
@@ -30,7 +30,6 @@ const Zvukogram = ({onChangeAudioUrlMp3}) => {
         copyToClipboard(str)
         redirectToZvukogram(language)
     }
-    
 
   return (
     <div className='box'>

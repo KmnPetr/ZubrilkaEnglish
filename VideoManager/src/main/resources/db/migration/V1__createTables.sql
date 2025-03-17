@@ -2,6 +2,8 @@ CREATE TABLE Person(
     uuid UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     password varchar NOT NULL,
     username varchar(100) UNIQUE NOT NULL,
+    short_name varchar(100),
+    sex varchar(50),
     role varchar(100) NOT NULL,
     created_at timestamp,
     rating_voices varchar

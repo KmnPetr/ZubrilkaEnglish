@@ -2,7 +2,7 @@ package com.zubrilka.VideoManager.security;
 
 
 import com.zubrilka.VideoManager.models.Person;
-import com.zubrilka.VideoManager.models.UserRole;
+import com.zubrilka.VideoManager.enums.UserRole;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;

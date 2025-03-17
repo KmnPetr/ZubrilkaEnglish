@@ -1,5 +1,7 @@
 package com.zubrilka.VideoManager;
 
+import com.zubrilka.VideoManager.enums.Sex;
+import com.zubrilka.VideoManager.enums.UserRole;
 import com.zubrilka.VideoManager.models.*;
 import com.zubrilka.VideoManager.repositories.PersonRepository;
 import com.zubrilka.VideoManager.repositories.TranslationRepository;
@@ -7,15 +9,11 @@ import com.zubrilka.VideoManager.repositories.VideoInfoRepository;
 import com.zubrilka.VideoManager.repositories.VideoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 /**
  * the class runs the initialization method during a test run of the server under the "local" profile
@@ -57,7 +55,16 @@ class TestFillDB {
         System.err.println("Warning!!! init: TestFillDataBase");
 
 
-        Person adminPerson = new Person(null,passwordEncoder.encode("111"),"111", UserRole.ROLE_ADMIN,new Timestamp(System.currentTimeMillis()),null,null);
+        Person adminPerson = new Person(
+                null,
+                passwordEncoder.encode("111"),
+                "111",
+                "Petr",
+                Sex.MALE,
+                UserRole.ROLE_ADMIN,
+                new Timestamp(System.currentTimeMillis()),
+                null,
+                null);
 
         Person savedPerson = personRepository.save(adminPerson);
         System.out.println("Person uuid: %s".formatted(savedPerson.getUuid()));
