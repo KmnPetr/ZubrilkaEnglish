@@ -1,0 +1,12 @@
+.listOldVoice{
+    width:100%;
+}
+.old_voice {
+    width: auto;
+    padding: 2px;
+    margin: 2px;
+    background: #452020;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}

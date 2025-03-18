@@ -66,7 +66,8 @@ public class PersonService implements UserDetailsService, AuthenticationUserDeta
                 person.getRole(),
                 person.getCreated_at(),
                 accessToken,
-                refreshToken
+                refreshToken,
+                person.getRating_voices()
                 );
     }
 

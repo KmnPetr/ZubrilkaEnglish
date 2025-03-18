@@ -1,6 +1,9 @@
 package com.zubrilka.VideoManager.controllers;
 
 import com.zubrilka.VideoManager.controllers.validation.NotFoundException;
+import com.zubrilka.VideoManager.dto.SimilarVoiceRequestDto;
+import com.zubrilka.VideoManager.dto.VoiceDto;
+import com.zubrilka.VideoManager.models.Voice;
 import com.zubrilka.VideoManager.services.VoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -12,6 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -23,8 +27,16 @@ public class VoiceController {
         this.voiceService = voiceService;
     }
 
-    // Указываем абсолютный путь к папке, где будут сохраняться файлы
-    private static final String UPLOAD_DIR = "C:/Users/Petr/git/VideoManagerStore/voice/";
+
+    /**
+     * запрос на список voice ранее озвученных схожих по тексту
+     * videoInfo_uuid позволит дать дополнительную информацию по сортировке
+     * с целью дать приоритет актерам озвучки ранее использованных в данном переводе видео
+     */
+    @PostMapping("/list_similar_voices")
+    public List<VoiceDto> getListSimilarVoices(@RequestBody SimilarVoiceRequestDto request) throws NotFoundException {
+        return voiceService.findSimilarVoices(request.getText(), request.getTranslation_uuid());
+    }
 
     @PostMapping("/save_wav_voice")
     public ResponseEntity<UUID> saveWavVoice(

@@ -19,9 +19,12 @@ public class Phrase {
     //it is necessary only for the adequate operation of the react.js with the list,
     // most often it is just a point in time at the time of creation
     private Long id;
+
     private Str cn;
     private Str ru;
     private Str en;
+    //TODO при добавлении новых языков их надо добавить в метод findSimilarVoices в VoiceService так как там происходит обход этих полей циклом а рефлексию использовать не хотелось
+
     private Long startTime; //the start time of the phrase in the video
     private Long endTime; //the end time of the phrase in the video
     private List<Word> words;//the list of words that make up the phrase

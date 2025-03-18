@@ -44,3 +44,18 @@ export const saveWavVoiceOnServer = async (voiceUrl,text,{voice,sex}) => {
         console.error("Ошибка загрузки файла:", error);
     }
 };
+
+//запросит с сервера список voice ранее озвученных по тексту похожих
+export const getListSimilarVoices = async ({ text, translation_uuid }) => {
+    try {
+        const response = await api.post(`/api/voice/list_similar_voices`, {
+            text,
+            translation_uuid
+        }, {
+            headers: { 'Content-Type': 'application/json' }
+        });
+        return response.data;
+    } catch (e) {
+        return Promise.reject(e);
+    }
+};

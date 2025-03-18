@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -26,4 +27,5 @@ public class PersonDto {
     private Timestamp created_at;
     private String accessToken;
     private String refreshToken;
+    private Map<String, Integer> rating_voices;
 }

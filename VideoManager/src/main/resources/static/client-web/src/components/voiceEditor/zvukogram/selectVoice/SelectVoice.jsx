@@ -8,13 +8,16 @@ import { useEffect, useState } from 'react';
 import { getListVoices } from '../../../../api/zvukogramService';
 import { defaultLanguages } from './defaultLanguages';
 import CastomVoiceSelector from "./castomVoiceSelector/CastomVoiceSelector.jsx";
-import {getRatingVoices, updateRatingVoices} from "../../../../api/personService.js";
+import {getRatingVoices} from "../../../../api/personService.js";
+import {useDispatch} from "react-redux";
+import {updateRatingVoicesRedux} from "../../../../redux/reducers/authReducer.js";
 
 const CN = 'cn'
 const EN = 'en'
 const RU = 'ru'
 
 const SelectVoice=({onSelect,language})=>{
+    const dispatch = useDispatch()
     const [lang_selector,setLangSelector] = useState(language)
     const [languages,setLanguages] = useState(defaultLanguages)
     const [selectedLanguage, setSelectedLanguage] = useState(defaultLanguages[0].originKey);
@@ -22,6 +25,8 @@ const SelectVoice=({onSelect,language})=>{
     const [filteredVoices,setFilteredVoices] = useState([])
     const [selectedVoice,setSelectedVoice] = useState(null/*{voice:'',sex:''}*/)
     const [ratingVoices,setRatingVoices] = useState({})//значения предпочтения голоса, определяется по звездочкам по 3х бальной шкале
+
+    useEffect(()=>{dispatch(updateRatingVoicesRedux(ratingVoices)) /*пригодится в другом компоненте*/},[ratingVoices])
 
     useEffect(()=>{setLangSelector(language)},[language])
 

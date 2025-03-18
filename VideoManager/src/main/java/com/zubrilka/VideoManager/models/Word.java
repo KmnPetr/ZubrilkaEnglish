@@ -16,4 +16,5 @@ public class Word {
     private Str cn;
     private Str ru;
     private Str en;
+    //TODO при добавлении новых языков их надо добавить в метод findSimilarVoices в VoiceService так как там происходит обход этих полей циклом а рефлексию использовать не хотелось
 }
