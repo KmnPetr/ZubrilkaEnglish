@@ -1,12 +1,20 @@
-.listOldVoice{
-    width:100%;
+.listOldVoice {
+    width: auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin: 10px;
 }
 .old_voice {
     width: auto;
     padding: 2px;
     margin: 2px;
-    background: #452020;
     display: flex;
     flex-direction: row;
     gap: 10px;
+    align-items: center;
+    align-content: center;
+}
+.select_old_V_button{
+    margin:2px;
+    padding:3px;
 }

@@ -26,7 +26,15 @@ const Word = ({word,index,addNewWord,onDeleteWord,idPhrase}) => {
       </SideToolbar>
 
         {used_languages&&used_languages.map(lang=>(
-            <Str str={word[lang]} typeStr={WORD} idPhrase={idPhrase} indexWord={index} language={lang} isHover={isHover} key={lang}/>
+            <Str
+                str={word[lang]}
+                typeStr={WORD}
+                idPhrase={idPhrase}
+                indexWord={index}
+                language={lang}
+                isHover={isHover}
+                key={lang}
+                isNativeLang={lang===native_lang}/>
         ))}
       
       <SideToolbar isShow={isHover} position="bottom" background="#333" z_index={1000}>

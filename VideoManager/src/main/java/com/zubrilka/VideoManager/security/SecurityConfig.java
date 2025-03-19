@@ -72,7 +72,8 @@ public class SecurityConfig {
                                         "/api/audio/**",
                                         "/api/voice/**",
                                         "/api/person/rating_voices",
-                                        "/api/person/rating_get"
+                                        "/api/person/rating_get",
+                                        "/api/card/**"
                                 ).hasAnyRole("ADMIN","TRANSLATOR")
                                 .requestMatchers(
                                         "/api/test/free",

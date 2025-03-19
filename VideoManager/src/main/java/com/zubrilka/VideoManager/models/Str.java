@@ -18,4 +18,5 @@ public class Str {
     private String str;
     private String transcription; //устанавливается только в строке основного языка
     private UUID voice_uuid;
+    private UUID card_uuid; //устанавливается только в строке основного языка
 }

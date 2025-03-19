@@ -76,7 +76,10 @@ const VoiceEditor = () => {
   }
 
     //присвоит строке voice_uuid из старых ранее созданных voice
-    const onSelectOldVoice=(uuid)=>{console.log('Select old uuid ', uuid)}
+    const onSelectOldVoice=(uuid)=>{
+      if(voiceUuid!==uuid) dispatch(setAudioUuidToPhrases(uuid,typeStr,idPhrase,indexWord,language))
+      else dispatch(setAudioUuidToPhrases(null,typeStr,idPhrase,indexWord,language))
+    }
 
   return (
     <ModalWindow isOpen={isOpen} onClose={onClose} width="70%" height="70%">
@@ -84,12 +87,15 @@ const VoiceEditor = () => {
         <div className="button-container">
         </div>
         <div className="voice-editor-wrapper">
+
+            <StrFlipper className='str_flipper'/>
+
             <div style={{display:"flex",flexDirection:"row",alignItems:"center"}}>
                 <h1>{"\""+str+"\""}</h1>
                 <PlayVoice voiceUuid={voiceUuid} size={large}/>
             </div>
 
-            <ListOldVoice str={str} onSelectOldVoice={onSelectOldVoice}/>
+            <ListOldVoice str={str} onSelectOldVoice={onSelectOldVoice} currentVoiceUuid={voiceUuid}/>
 
             <div className='record_box'>
                 <HiOutlineMicrophone className={`clickable microphone2 ${isRecording ? 'recording' : ''}`} onClick={onClickRecord}/>
@@ -106,7 +112,6 @@ const VoiceEditor = () => {
             <Zvukogram onChangeAudioUrlMp3={setAudioUrlMp3} setLastUsedVoice={setLastUsedVoice}/>
             <CButton onClick={apply}>Apply voice</CButton>
         </div>
-          <StrFlipper className='str_flipper'/>
       </div>
     </ModalWindow>
   );

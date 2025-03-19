@@ -68,7 +68,14 @@ const Phrase =({phrase})=> {
             <div>
                 <div className="phrase">
                     {used_languages&&used_languages.map(lang=>(
-                        <Str str={phrase[lang]} typeStr={PHRASE} idPhrase={phrase.id} language={lang} isHover={isHover} key={lang}/>
+                        <Str
+                            str={phrase[lang]}
+                            typeStr={PHRASE}
+                            idPhrase={phrase.id}
+                            language={lang}
+                            isHover={isHover}
+                            key={lang}
+                            isNativeLang={lang===native_lang}/>
                     ))}
                     {isShowWords && <WordsList words={phrase.words} onChangeWordsList={onChangeWordsList} idPhrase={phrase.id}/>}
                 </div>

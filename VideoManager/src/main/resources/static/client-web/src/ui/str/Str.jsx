@@ -5,8 +5,9 @@ import {openVoiceEditor} from "../../redux/reducers/voiceEditorReducer.js";
 import {useDispatch} from "react-redux";
 import {editStrAction} from "../../redux/reducers/phraseReduser.js";
 import PlayVoice, {small} from "../playVoice/PlayVoice.jsx";
+import { FaFileCirclePlus,FaFilePen } from "react-icons/fa6";
 
-const Str =({className, style, str, typeStr, idPhrase, indexWord=null, language, isHover})=>{
+const Str =({className, style, str, typeStr, idPhrase, indexWord=null, language, isHover,isNativeLang=false})=>{
     const dispatch = useDispatch();
 
     const onChange =(newStr)=> {
@@ -22,6 +23,8 @@ const Str =({className, style, str, typeStr, idPhrase, indexWord=null, language,
             <EditableField str={str?.str} onChange={onChange} showMarker={isHover}/>
             {isHover && <HiOutlineMicrophone className="microphone_str clickable" onClick={onClickMicrophone}/>}
             {isHover && <PlayVoice voiceUuid={str?.voice_uuid} size={small}/>}
+            {!str?.card_uuid && isNativeLang && <FaFileCirclePlus className='clickable' style={{color: '#e4c546'}}/>}
+            {str?.card_uuid && isNativeLang && isHover && <FaFilePen className='clickable'/>}
         </div>
     )
 }
