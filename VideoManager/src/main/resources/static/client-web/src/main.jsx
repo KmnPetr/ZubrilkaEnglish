@@ -1,15 +1,15 @@
 import React from "react";
 import * as ReactDOMClient from "react-dom/client"
 import "./css/main.css"
-import "./css/NotFoundPage.css";
-import "./components/workPlace/listPhrases/listPhrases.css"
+import "./pages/notFoundPage/NotFoundPage.css";
+import "./pages/editVideo/workPlace/listPhrases/listPhrases.css"
 import {Provider} from "react-redux";
 import {store} from "./redux/initRedux";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
-import LoginPage from "./pages/LoginPage";
-import ListVideo from "./pages/ListVideo";
-import EditVideo from "./pages/EditVideo";
-import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/loginPage/LoginPage.jsx";
+import ListVideo from "./pages/listVideo/ListVideo.jsx";
+import EditVideo from "./pages/editVideo/EditVideo.jsx";
+import HomePage from "./pages/homePage/HomePage.jsx";
 
 
 const router = createBrowserRouter([

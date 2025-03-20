@@ -11,6 +11,7 @@ import {phrasesMiddleware} from "./middlewares"
 import {jsonEditorReducer} from "./reducers/jsonEditorReducer"
 import { voiceEditorReducer } from "./reducers/voiceEditorReducer";
 import {videoInfoReducer} from "./reducers/videoInfoReducer.js";
+import {cardEditorReducer} from "./reducers/cardEditorReducer.js";
 
 
 
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
     translationReducer: translationReducer,
     jsonEditorReducer: jsonEditorReducer,
     voiceEditorReducer: voiceEditorReducer,
+    cardEditorReducer: cardEditorReducer,
     videoInfoReducer: videoInfoReducer
 })
 

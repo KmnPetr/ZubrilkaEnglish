@@ -1,0 +1,60 @@
+.video-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+
+body {
+    background-color: #1b1b1b;
+    font-family: 'Arial', sans-serif;
+    padding: 20px;
+}
+
+.list-video-container {
+    padding: 20px;
+    background-color: #1e1e2f; /* Тёмный фон для всего контейнера */
+    border-radius: 10px;
+    width: 80%;
+    margin: 0 auto;
+    color: #f1f1f1; /* Светлый текст */
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2); /* Тень для добавления глубины */
+}
+
+.list-video-title {
+    text-align: center;
+    font-size: 2.5em;
+    color: #ffffff;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+/* Стиль для индикатора загрузки */
+.loading {
+    font-size: 18px;
+    color: #007bff; /* Синий цвет для загрузки */
+    text-align: center;
+    padding: 20px;
+    font-weight: bold;
+    animation: blink 1.5s infinite; /* Анимация для эффекта мерцания */
+}
+
+/* Анимация для мерцания текста */
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+.error {
+    font-size: 20px;
+    color: #ff4d4d; /* Красивый приглушенный красный цвет */
+    text-align: center;
+    font-weight: 500;
+    position: absolute; /* Центрирование текста */
+    top: 50%; /* Центрирование по вертикали */
+    left: 50%; /* Центрирование по горизонтали */
+    transform: translate(-50%, -50%); /* Сдвиг для точного центрирования */
+}

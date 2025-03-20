@@ -1,0 +1,8 @@
+.card_editor_box{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.str_card_flipper{
+
+}

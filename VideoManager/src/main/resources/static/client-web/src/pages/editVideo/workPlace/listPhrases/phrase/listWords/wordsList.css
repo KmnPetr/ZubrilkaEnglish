@@ -1,0 +1,19 @@
+.wordsList{
+    background: #333;
+}
+
+
+
+
+.toggle-button {
+    font-size: 12px;
+    color: #eeeeee;
+    user-select: none;
+    margin: 3px;
+  }
+  
+  .wordsList ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
