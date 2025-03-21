@@ -1,0 +1,14 @@
+.card_box {
+    background: #555555;
+    margin: 2px;
+    padding: 2px;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+}
+.useButton {
+    padding: 2px;
+    margin: 2px;
+}

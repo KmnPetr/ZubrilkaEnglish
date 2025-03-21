@@ -47,4 +47,8 @@ public class CardService {
 
         System.err.println("createdCard=%s".formatted(createdCard));
     }
+
+    public List<Card> findSimilarCards(String text) {
+        return cardRepository.findAll();
+    }
 }

@@ -16,7 +16,6 @@ const ListOldVoice=({className,style,str, onSelectOldVoice,currentVoiceUuid})=>{
     useEffect(()=>{
         getListSimilarVoices({ text:str, translation_uuid: uuid})
             .then(listVoice=>{
-                console.log('listVoice=',JSON.stringify(listVoice,null, 2))
                 setSimilarVoices(listVoice);
             })
             .catch(err=>{setSimilarVoices([])})
