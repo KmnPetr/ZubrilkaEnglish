@@ -1,5 +1,6 @@
 package com.zubrilka.VideoManager.services;
 
+import com.zubrilka.VideoManager.controllers.validation.NotFoundException;
 import com.zubrilka.VideoManager.enums.Language;
 import com.zubrilka.VideoManager.enums.LanguageLevel;
 import com.zubrilka.VideoManager.models.Card;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Transactional(readOnly = true)
@@ -50,5 +52,9 @@ public class CardService {
 
     public List<Card> findSimilarCards(String text) {
         return cardRepository.findAll();
+    }
+
+    public Card getCardByUuid(UUID uuid) throws NotFoundException {
+        return cardRepository.findById(uuid).orElseThrow(()->new NotFoundException("Card this uuid %s not found".formatted(uuid)));
     }
 }

@@ -6,7 +6,7 @@ import {
     EDIT_TIME,
     UPDATE_PHRASE,
     UPDATE_WORDS,
-    SET_AUDIO_UUID
+    SET_AUDIO_UUID, SET_CARD_UUID
 } from './reducers/phraseReduser';
 import {sendUpdateToServer} from "../api/phrasesService"
 
@@ -24,7 +24,8 @@ export const phrasesMiddleware = (store) => (next) => (action) => {
         EDIT_TIME,
         UPDATE_PHRASE,
         UPDATE_WORDS,
-        SET_AUDIO_UUID
+        SET_AUDIO_UUID,
+        SET_CARD_UUID
     ];
 
     if (actionsToSync.includes(action.type)) {

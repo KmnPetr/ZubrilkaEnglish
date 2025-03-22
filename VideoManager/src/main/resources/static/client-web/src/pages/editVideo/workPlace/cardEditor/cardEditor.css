@@ -9,3 +9,16 @@
 .listAvailableCard {
     background-color: #3e8fa0;
 }
+.c_new_card_button{
+    color: #ac8744;
+    border-color: #ac8744;
+    padding: 5px;
+}
+.clear_link_button{
+    color: #c3c9ff;
+    border-color: #c3c9ff;
+    padding: 5px;
+}
+.errors_card{
+    color: #c80000;
+}

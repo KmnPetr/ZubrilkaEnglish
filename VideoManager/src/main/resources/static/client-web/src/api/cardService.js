@@ -13,3 +13,10 @@ export const getListCards = async ({ text }) => {
         return Promise.reject(e);
     }
 };
+
+export const getCardByUuid=async (uuid)=>{
+    try{
+        const responce = await api.get(`/api/card/${uuid}`);
+        return responce.data;
+    } catch(e){return Promise.reject(e);}
+}
