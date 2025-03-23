@@ -1,0 +1,15 @@
+.field_card{
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+}
+.field_card_name{
+    color: #5796ea;
+    font-size: 14px;
+}
+.apply_text{
+    color: #5796ea;
+    font-size: 14px;
+    cursor: pointer;
+}

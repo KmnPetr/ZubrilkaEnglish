@@ -4,8 +4,9 @@ import Translation from "./translation/Translation.jsx";
 import {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {setCardUuid} from "../../../../../redux/reducers/phraseReduser.js";
+import {FaCheck} from "react-icons/fa6";
 
-const Card = ({className,card}) =>{
+const Card = ({className,card,usedCardUuid}) =>{
     const dispatch = useDispatch();
     const {idPhrase,indexWord,typeStr,str,language} = useSelector((state) => state.cardEditorReducer);
     const [showDetails, setShowDetails] = useState(false);
@@ -21,7 +22,10 @@ const Card = ({className,card}) =>{
             <CButton className='useButton' onClick={(event)=>{
                 event.stopPropagation();
                 selectCard();
-            }}>use</CButton>
+            }}>
+                <p>use</p>
+                {usedCardUuid===card.uuid && <FaCheck style={{color: 'green', width: '15px', height: 'auto'}}/>}
+            </CButton>
         </div>
 
         {showDetails && <Translation card={card}/>}

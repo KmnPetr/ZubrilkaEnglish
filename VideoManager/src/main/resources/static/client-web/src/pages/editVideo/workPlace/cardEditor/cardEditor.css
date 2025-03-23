@@ -8,6 +8,9 @@
 }
 .listAvailableCard {
     background-color: #3e8fa0;
+    justify-content: center;
+    justify-items: center;
+
 }
 .c_new_card_button{
     color: #ac8744;

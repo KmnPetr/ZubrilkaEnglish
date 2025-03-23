@@ -20,3 +20,11 @@ export const getCardByUuid=async (uuid)=>{
         return responce.data;
     } catch(e){return Promise.reject(e);}
 }
+
+export const createNewCard=async (newCard)=>{
+    try{
+        const responce = await api.post(`/api/card/create_card`,newCard,
+            { headers: { 'Content-Type': 'application/json' } });
+        return responce.data;
+    }catch(e){return Promise.reject(e);}
+}

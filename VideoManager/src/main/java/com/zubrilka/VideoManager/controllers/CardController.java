@@ -4,6 +4,7 @@ import com.zubrilka.VideoManager.controllers.validation.NotFoundException;
 import com.zubrilka.VideoManager.dto.SimilarCardRequestDto;
 import com.zubrilka.VideoManager.models.Card;
 import com.zubrilka.VideoManager.services.CardService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,5 +32,10 @@ public class CardController {
     @GetMapping("/{uuid}")
     public Card getCardByUuid(@PathVariable UUID uuid) throws NotFoundException {
             return cardService.getCardByUuid(uuid);
+    }
+
+    @PostMapping("/create_card")
+    public UUID createCard(@Valid @RequestBody Card card){
+        return cardService.createNew(card);
     }
 }

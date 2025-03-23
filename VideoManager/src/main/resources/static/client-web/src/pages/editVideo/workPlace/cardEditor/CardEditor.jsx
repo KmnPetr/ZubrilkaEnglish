@@ -7,7 +7,7 @@ import StrAndTransl from "./strAndTransl/StrAndTransl.jsx";
 import {useEffect, useState} from "react";
 import {PHRASE, setCardUuid, WORD} from "../../../../redux/reducers/phraseReduser.js";
 import UsedCard from "./usedCard/UsedCard.jsx";
-import {getListCards} from "../../../../api/cardService.js";
+import {createNewCard, getListCards} from "../../../../api/cardService.js";
 import Card from "./card/Card.jsx";
 import CButton from "../../../../ui/cButton/CButton.jsx";
 
@@ -22,12 +22,17 @@ const CardEditor = ()=>{
     const [errors,setErrors]=useState([])
 
     useEffect(()=>{
+        updateListCards()
+    },[str])
+
+    //запросит с сервера список карт похожих по строке на str
+    const updateListCards=()=>{
         getListCards({ text:str})
             .then(listVoice=>{
                 setListCards(listVoice);
             })
             .catch(err=>{setListCards([])})
-    },[str])
+    }
 
     //найдет strObj среди списка фраз
     //strObj может быть как фраза так и Word они похожи по набору переводов на другие языки
@@ -47,7 +52,10 @@ const CardEditor = ()=>{
 
     const onClose = () => dispatch(closeCardEditor());
     const clearLink=()=>dispatch(setCardUuid(null, typeStr, idPhrase, indexWord, language))
-    const createNewCard = () => {
+
+    //запрос на создание новой карточки
+    //перед созданием новой требуется ее обеспечить некоторыми полями из strObj иначе выдаем ошибки валидации
+    const createNewCard_2 = () => {
         const newCard = {
             uuid: null,
             text: strObj[native_lang]?.str,
@@ -75,10 +83,23 @@ const CardEditor = ()=>{
         })
         if (!newCard.voice_uuid) errors2.push(`Voice of line "${native_lang.toUpperCase()}" must not be empty.`)
 
-        if (errors2.length>0) setErrors(errors2)
-        else setErrors([])
+        if (errors2.length > 0) {
+            setErrors(errors2);
+            setTimeout(() => {
+                setErrors(prevErrors =>
+                    prevErrors === errors2 ? [] : prevErrors
+                );
+            }, 3000);}
+        else {
+            setErrors([])
+            createNewCard(newCard)
+                .then((uuidNewCard) => {
+                    dispatch(setCardUuid(uuidNewCard, typeStr, idPhrase, indexWord, language))
+                    updateListCards()
+                })
+                .catch(err=>{console.error(err)})
+        }
 
-        console.log(JSON.stringify(errors2, null, 2));
     };
 
     return (
@@ -86,8 +107,6 @@ const CardEditor = ()=>{
             <div className="card_editor_box">
 
                 <StrCardFlipper className='str_card_flipper'/>
-
-
 
                 <div style={{display:"flex",flexDirection:"column",alignItems:"center",margin:'1rem'}}>
                     {strObj &&
@@ -100,20 +119,27 @@ const CardEditor = ()=>{
                     <div style={{display:"flex",flexDirection:"row",alignItems:"center"}}>
                         {!card_uuid && <p style={{ color: "#e8e33f" }}>There is no link to the card.</p>}
 
-                        {!card_uuid && <CButton className='c_new_card_button' onClick={createNewCard}>Create new card</CButton>}
+                        {!card_uuid && <CButton className='c_new_card_button' onClick={createNewCard_2}>Create new card</CButton>}
                         {card_uuid && <CButton className='clear_link_button' onClick={clearLink}>Clear link</CButton>}
                     </div>
                     <div className='errors_card'>
                         {errors && errors.map((e,i)=>(<p key={i}>{e}</p>))}
                     </div>
 
-                    {card_uuid && <UsedCard card_uuid={card_uuid}/>}
+                    {card_uuid &&
+                        <UsedCard
+                            card_uuid={card_uuid}
+                            strObj={strObj}
+                            typeStr={typeStr}
+                            idPhrase={idPhrase}
+                            indexWord={indexWord}/>}
 
                 </div>
 
                 <div className='listAvailableCard'>
+                    <p>List of available cards</p>
                     {listCards && listCards.map(card => (
-                        <Card key={card.uuid} card={card}/>
+                        <Card key={card.uuid} card={card} usedCardUuid={card_uuid}/>
                     ))}
 
                 </div>

@@ -5,6 +5,7 @@ import com.zubrilka.VideoManager.enums.LanguageLevel;
 import com.zubrilka.VideoManager.models.converters.TranslationConverter;
 import jakarta.persistence.*;
 import lombok.*;
+import jakarta.validation.constraints.*;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -28,14 +29,19 @@ public class Card {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID uuid;
     @Column(name = "text")
+    @NotBlank(message = "Text cannot be blank")
+    @Size(max = 255, message = "Text length must be less than 255 characters")
     private String text;
     @Column(name = "transcription")
+    @NotBlank(message = "Transcription cannot be blank")
+    @Size(max = 255, message = "Transcription length must be less than 255 characters")
     private String transcription;
     @Column(name = "translation")
     @Convert(converter = TranslationConverter.class)
     private EnumMap<Language, List<String>> translation;
     @Column(name = "language")
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "Language must be specified")
     private Language language;
     @Column(name = "level")
     @Enumerated(EnumType.STRING)
