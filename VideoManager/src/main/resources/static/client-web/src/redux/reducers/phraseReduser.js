@@ -14,6 +14,7 @@ export const UPDATE_PHRASE = 'UPDATE_PHRASE'
 export const UPDATE_WORDS = 'UPDATE_WORDS'
 export const SET_AUDIO_UUID = 'SET_AUDIO_UUID'
 export const SET_CARD_UUID = 'SET_CARD_UUID'
+export const EDIT_TRANSCRIPTION = 'EDIT_TRANSCRIPTION'
 
 // используемые типы языков
 export const CN = 'cn'
@@ -56,6 +57,43 @@ export const phraseReducer = (state = defaultState, action) => {
             }
 
             return {...state, phrases: state.phrases.map((phrase) =>
+                    phrase.id === action.idPhrase ?
+                        newPhrase(phrase)
+                        :
+                        phrase
+                ),
+            };
+        }
+        case EDIT_TRANSCRIPTION: {
+            const newPhrase =(oldPhrase)=>{
+                if(action.typeStr===PHRASE){
+                    return {
+                        ...oldPhrase,
+                        [action.language]:{
+                            ...oldPhrase[action.language],
+                            transcription: action.newTranscription
+                        }
+                    }
+                } else if(action.typeStr===WORD){
+                    return {
+                        ...oldPhrase,
+                        words: oldPhrase.words.map((word,index)=> index===action.indexWord ? {
+                            ...word,
+                            [action.language]:{
+                                ...word[action.language],
+                                transcription: action.newTranscription
+                            }
+                        } : word)
+                    }
+                } else {
+                    console.error('Invalid typeStr: '+action.typeStr)
+                    return oldPhrase;
+                }
+            }
+
+            return {
+                ...state,
+                phrases: state.phrases.map((phrase) =>
                     phrase.id === action.idPhrase ?
                         newPhrase(phrase)
                         :
@@ -166,6 +204,7 @@ export const phraseReducer = (state = defaultState, action) => {
 
 export const removePhraseAction = (phraseId) => ({type: REMOVE_PHRASE, phraseId: phraseId})
 export const editStrAction = ({newStr,typeStr,idPhrase,indexWord,language}) => ({type: EDIT_STR, newStr,typeStr,idPhrase,indexWord,language})
+export const editTranscriptionAction=({newTranscription,typeStr,idPhrase,indexWord,language})=>({type:EDIT_TRANSCRIPTION,newTranscription,typeStr,idPhrase,indexWord,language})
 /**
  * добавит фразу в конец списка
  */

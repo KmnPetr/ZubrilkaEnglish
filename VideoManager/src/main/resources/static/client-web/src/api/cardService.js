@@ -28,3 +28,13 @@ export const createNewCard=async (newCard)=>{
         return responce.data;
     }catch(e){return Promise.reject(e);}
 }
+//отправит запрос на добавление новой строки перевода с уже существующей карточке
+export const addNewTranslation=async (strDto)=>{
+    try {
+        const responce = await api.post(
+            `/api/card/add_translation`,
+            strDto,
+            { headers: { 'Content-Type': 'application/json' } });
+        return responce.data;
+    }catch(e){return Promise.reject(e);}
+}

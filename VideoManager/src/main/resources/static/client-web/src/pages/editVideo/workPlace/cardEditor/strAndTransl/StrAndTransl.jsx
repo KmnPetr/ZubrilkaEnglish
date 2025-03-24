@@ -20,7 +20,7 @@ const StrAndTransl=({className,strObj,typeStr,idPhrase,indexWord})=>{
                 indexWord={indexWord}
                 language={lang}
                 isHover={true}
-                isNativeLang={false}/>)}
+                isNativeLang={native_lang===lang}/>)}
     </div>);
 }
 export default StrAndTransl;

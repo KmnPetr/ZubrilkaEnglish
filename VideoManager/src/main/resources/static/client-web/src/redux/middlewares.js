@@ -6,7 +6,7 @@ import {
     EDIT_TIME,
     UPDATE_PHRASE,
     UPDATE_WORDS,
-    SET_AUDIO_UUID, SET_CARD_UUID
+    SET_AUDIO_UUID, SET_CARD_UUID, EDIT_TRANSCRIPTION
 } from './reducers/phraseReduser';
 import {sendUpdateToServer} from "../api/phrasesService"
 
@@ -19,6 +19,7 @@ export const phrasesMiddleware = (store) => (next) => (action) => {
     const actionsToSync = [
         REMOVE_PHRASE,
         EDIT_STR,
+        EDIT_TRANSCRIPTION,
         ADD_TO_AND,
         ADD_NEW,
         EDIT_TIME,

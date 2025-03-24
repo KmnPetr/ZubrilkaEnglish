@@ -1,6 +1,7 @@
 package com.zubrilka.VideoManager.controllers;
 
 import com.zubrilka.VideoManager.controllers.validation.NotFoundException;
+import com.zubrilka.VideoManager.dto.CardTranslDto;
 import com.zubrilka.VideoManager.dto.SimilarCardRequestDto;
 import com.zubrilka.VideoManager.models.Card;
 import com.zubrilka.VideoManager.services.CardService;
@@ -37,5 +38,10 @@ public class CardController {
     @PostMapping("/create_card")
     public UUID createCard(@Valid @RequestBody Card card){
         return cardService.createNew(card);
+    }
+
+    @PostMapping("/add_translation")
+    public Card addTranslationToCard(@Valid @RequestBody CardTranslDto dto) throws NotFoundException {
+        return cardService.addTranslationToCard(dto);
     }
 }
