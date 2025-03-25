@@ -1,9 +1,0 @@
-.translation_str {
-    display: flex;
-    flex-direction: row;
-    gap: 5px;
-}
-.lang_name{
-    color: #5796ea;
-    font-size: 14px;
-}
