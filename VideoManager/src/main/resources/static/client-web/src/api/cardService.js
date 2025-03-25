@@ -38,3 +38,16 @@ export const addNewTranslation=async (strDto)=>{
         return responce.data;
     }catch(e){return Promise.reject(e);}
 }
+
+//запрос ну удаление перевода из используемой карточки
+export const deleteTranslationFromCard = async ({ lang, transl, card_uuid }) => {
+    try {
+        const response = await api.delete(`/api/card/delete_translation`, {
+            headers: { 'Content-Type': 'application/json' },
+            data: { lang, transl, card_uuid } // Передача тела запроса
+        });
+        return response.data;
+    } catch (e) {
+        return Promise.reject(e);
+    }
+};

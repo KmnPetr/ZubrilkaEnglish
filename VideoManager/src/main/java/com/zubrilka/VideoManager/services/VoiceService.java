@@ -70,7 +70,6 @@ public class VoiceService {
      * на основе их Voice с точным совпадением поля text сортируются
      */
     public List<VoiceDto> findSimilarVoices(String text, UUID translation_uuid) throws NotFoundException {
-
         List<Voice> similarVoices = voiceRepository.findSimilarVoices(text, 20);
         Translation translation = translationService.getTranslationByUuid(translation_uuid);
 
@@ -106,10 +105,8 @@ public class VoiceService {
                 .map(Str::getVoice_uuid)
                 .toList();
 
-
         //запросим в БД использованные в переводе voice чтобы взять оттуда актеров озвучки
         List<Voice> used_voices = voiceRepository.findVoicesByUuidsIn(used_voice_uuid);
-
 
         // Сгруппируем голоса актеров и посчитаем количество их использований в переводе
         Map<String, Integer> mapUsedVoices = new HashMap<>();
@@ -119,7 +116,6 @@ public class VoiceService {
             // Если актер уже есть в мапе, увеличиваем количество его использований
             mapUsedVoices.put(voice_actor, mapUsedVoices.getOrDefault(voice_actor, 0) + 1);
         });
-
 
         List<VoiceDto> dtoList = similarVoices.stream().map(voice->{
             Integer priority = mapUsedVoices.getOrDefault(voice.getVoice(),0);

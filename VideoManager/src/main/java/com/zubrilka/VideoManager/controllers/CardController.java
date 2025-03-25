@@ -2,6 +2,7 @@ package com.zubrilka.VideoManager.controllers;
 
 import com.zubrilka.VideoManager.controllers.validation.NotFoundException;
 import com.zubrilka.VideoManager.dto.CardTranslDto;
+import com.zubrilka.VideoManager.dto.DeleteCardTranslDto;
 import com.zubrilka.VideoManager.dto.SimilarCardRequestDto;
 import com.zubrilka.VideoManager.models.Card;
 import com.zubrilka.VideoManager.services.CardService;
@@ -43,5 +44,10 @@ public class CardController {
     @PostMapping("/add_translation")
     public Card addTranslationToCard(@Valid @RequestBody CardTranslDto dto) throws NotFoundException {
         return cardService.addTranslationToCard(dto);
+    }
+
+    @DeleteMapping("/delete_translation")
+    public Card deleteTranslationFromCard(@Valid @RequestBody DeleteCardTranslDto dto) throws NotFoundException {
+        return cardService.deleteTranslationFromCard(dto);
     }
 }

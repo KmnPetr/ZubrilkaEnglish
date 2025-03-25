@@ -7,7 +7,10 @@
 
 }
 .listAvailableCard {
-    background-color: #3e8fa0;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    margin: 0.5rem;
+    padding: 1rem;
     justify-content: center;
     justify-items: center;
 

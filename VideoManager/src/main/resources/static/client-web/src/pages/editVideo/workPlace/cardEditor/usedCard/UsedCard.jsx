@@ -1,8 +1,9 @@
 import './usedCard.css';
 import {useEffect, useState} from "react";
-import {addNewTranslation, getCardByUuid} from "../../../../../api/cardService.js";
+import {addNewTranslation, deleteTranslationFromCard, getCardByUuid} from "../../../../../api/cardService.js";
 import {useDispatch, useSelector} from "react-redux";
 import {editStrAction, editTranscriptionAction} from "../../../../../redux/reducers/phraseReduser.js";
+import { FiTrash2 } from "react-icons/fi";
 
 //используемая на данный момент для строки карта
 const UsedCard=({className,style,card_uuid,strObj,typeStr,idPhrase,indexWord})=>{
@@ -54,6 +55,13 @@ const UsedCard=({className,style,card_uuid,strObj,typeStr,idPhrase,indexWord})=>
             .catch(e=>console.error(e))
     }
 
+    //запрос ну удаление перевода из используемой карточки
+    const deleteTranslationFromCard2=({lang,transl})=>{
+        deleteTranslationFromCard({lang,transl,card_uuid})
+        .then((res)=>setCard(res))
+        .catch(e=>console.error(e))
+    }
+
     return(<div className={`usedCard ${className}`}>
 
         <p style={{fontStyle:'italic'}}>Used Card</p>
@@ -79,6 +87,8 @@ const UsedCard=({className,style,card_uuid,strObj,typeStr,idPhrase,indexWord})=>
                                     <p>{transl}</p>
                                     {card.translation!==strObj[lang]?.str &&
                                         <p className='apply_text clickable no_select' onClick={()=>applyTranslation(lang,transl)}>apply</p>}
+                                    <FiTrash2 className='clickable' onClick={()=>deleteTranslationFromCard2({lang,transl})}/>
+
                                 </div>
                             ))
                         )}

@@ -137,7 +137,7 @@ const CardEditor = ()=>{
                 </div>
 
                 <div className='listAvailableCard'>
-                    <p>List of available cards</p>
+                    <p style={{fontStyle:'italic',margin:'0.5rem'}}>List of available cards</p>
                     {listCards && listCards.map(card => (
                         <Card key={card.uuid} card={card} usedCardUuid={card_uuid}/>
                     ))}
